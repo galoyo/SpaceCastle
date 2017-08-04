@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- _________________________ Application Settings _________________________ -->
+	
+	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.0.0" company="" />
+	
+	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
+		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
+	<app preloader="flixel.system.FlxPreloader" />
+	
+	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
+	<set name="SWF_VERSION" value="11.8" />
+	
+	<!-- ____________________________ Window Settings ___________________________ -->
+	
+	<!--These window settings apply to all targets-->
+	<window width="800" height="600" fps="60" background="#000000" hardware="true" vsync="true" />
+	<!-- include the following at the above code... antialiasing="3" if="cpp"-->
+	
+	<!--HTML5-specific-->
+	<window if="html5" resizable="false" />
+	
+	<!--Desktop-specific-->
+	<window if="desktop" orientation="landscape" fullscreen="true" resizable="true" />
+	
+	<!--Mobile-specific-->
+	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
+	
+	<!-- _____________________________ Path Settings ____________________________ -->
+	
+	<haxedef name="no-inline" if="neko"/>
+	<haxedef name="no-inline" if="windows"/>
+	<haxedef name="no-inline" if="cpp"/>
+	
+	<set name="BUILD_DIR" value="export" />
+	<classpath name="source" />
+	
+	<set name="haxeui-embed-resources" />
+	
+	<assets path="assets" if="flash" exclude="*.ogg" />
+	<assets path="assets" if="windows" exclude="*.mp3" embed="true" />
+	<assets path="assets" if="neko" exclude="*.mp3" embed="true" />
+	
+
+	<assets path="assets/music" rename="music" if="flash">
+		<music path="1.mp3" id="1" />
+		<music path="titleScreen.mp3" id="titleScreen" />
+	</assets>
+
+	<assets path="assets/music" rename="music" if="flash">
+		<music path="2.mp3" id="2" />
+		<music path="3.mp3" id="3" />
+		<music path="4.mp3" id="4" />
+		<music path="5.mp3" id="5" />
+		<music path="6.mp3" id="6" />
+		<music path="7.mp3" id="7" />
+		<music path="20.mp3" id="20" />
+		<music path="21.mp3" id="21" />
+		<music path="22.mp3" id="22" />
+		<music path="23.mp3" id="23" />
+		<music path="24.mp3" id="24" />
+		<music path="boss1.mp3" id="boss1" />
+		<music path="boss2.mp3" id="boss2" />
+		<music path="boss3.mp3" id="boss3" />
+		<music path="gameOverNotCompleted.mp3" id="gameOverNotCompleted" />
+		<music path="powerUp.mp3" id="powerUp" />
+		<music path="powerUp2.mp3" id="powerUp2" />
+		<music path="titleScreen.mp3" id="titleScreen" />
+		<music path="twinkle.mp3" id="twinkle" />
+	</assets>
+
+
+	<assets path="assets/sounds" rename="sounds" if="flash">
+		<sound path="teleport1.mp3" id="teleport1" />
+		<sound path="teleport2.mp3" id="teleport2" />
+		<sound path="click2.mp3" id="click2" />
+		<sound path="switchOn.mp3" id="switchOn" />
+		<sound path="switchOff.mp3" id="switchOff" />
+		<sound path="event.mp3" id="event" />
+		<sound path="bullet.mp3" id="bullet" />
+		<sound path="jump.mp3" id="jump" />
+		<sound path="impact1.mp3" id="ceilingHit" />
+		<sound path="gameover.mp3" id="gameover" />
+		<sound path="hurt.mp3" id="hurt" />
+		<sound path="buzz.mp3" id="buzz" />
+		<sound path="glassyTap.mp3" id="tap" />
+		<sound path="pickup.mp3" id="pickup" />
+		<sound path="click.mp3" id="click" />
+		<sound path="jumpMob.mp3" id="jumpMob" />
+		<sound path="hit.mp3" id="hit" />
+		<sound path="bullet2.mp3" id="bullet2" />
+		<sound path="bullet3.mp3" id="bullet3" />
+		<sound path="bulletUp.mp3" id="bulletUp" />
+		<sound path="bulletDown.mp3" id="bulletDown" />
+		<sound path="water.mp3" id="water" />
+		<sound path="mobBullet.mp3" id="mobBullet" />
+		<sound path="switch.mp3" id="switch" />
+		<sound path="twinkle.mp3" id="twinkle" />
+		<sound path="flameGun.mp3" id="flameGun" />
+		<sound path="ghost.mp3" id="ghost" />
+		<sound path="fallDamage.mp3" id="fallDamage" />
+		<sound path="tick.mp3" id="tick" />
+		<sound path="rope.mp3" id="rope" />
+		<sound path="bulletMob.mp3" id="bulletMob" />
+		<sound path="pipeEnter.mp3" id="pipeEnter" />
+		<sound path="pipeChangeDirection.mp3" id="pipeChangeDirection" />
+		<sound path="cannon.mp3" id="cannon" />
+		<sound path="bulletFreeze.mp3" id="bulletFreeze" />
+		<sound path="bulletFreezeHit.mp3" id="bulletFreezeHit" />
+		<sound path="bulletFreezeMiss.mp3" id="bulletFreezeMiss" />
+		<sound path="hitBounce.mp3" id="hitBounce" />
+		<sound path="dogFlute.mp3" id="dogFlute" />
+		<sound path="siren.mp3" id="siren" />
+		<sound path="hitMonster1.mp3" id="hitMonster1" />
+		<sound path="hitMonster2.mp3" id="hitMonster2" />
+		<sound path="hitMonster3.mp3" id="hitMonster3" />
+		<sound path="hitMonster4.mp3" id="hitMonster4" />
+		<sound path="hitMonster5.mp3" id="hitMonster5" />
+		<sound path="hitMonster6.mp3" id="hitMonster6" />
+		<sound path="hitMonster7.mp3" id="hitMonster7" />
+		<sound path="hitMonster8.mp3" id="hitMonster8" />
+		<sound path="hitMonster9.mp3" id="hitMonster9" />
+		<sound path="hitMonster10.mp3" id="hitMonster10" />
+		<sound path="hitMonster11.mp3" id="hitMonster11" />
+		<sound path="hitMonster12.mp3" id="hitMonster12" />
+		<sound path="hitMonster13.mp3" id="hitMonster13" />
+		<sound path="hitMonster14.mp3" id="hitMonster14" />
+		<sound path="hitMonster15.mp3" id="hitMonster15" />
+		<sound path="hitMonster16.mp3" id="hitMonster16" />
+		<sound path="hitMonster17.mp3" id="hitMonster17" />
+		<sound path="hitMonster18.mp3" id="hitMonster18" />
+		<sound path="ambient1.mp3" id="ambient1" />
+		<sound path="ambient2.mp3" id="ambient2" />
+		<sound path="ambient3.mp3" id="ambient3" />
+		<sound path="ambient4.mp3" id="ambient4" />
+		<sound path="ambient5.mp3" id="ambient5" />
+		<sound path="ambient6.mp3" id="ambient6" />
+		<sound path="ambient7.mp3" id="ambient7" />
+		<sound path="ambient8.mp3" id="ambient8" />
+		<sound path="ambient9.mp3" id="ambient9" />
+		<sound path="backgroundSounds.mp3" id="backgroundSounds" />
+		<sound path="impact1.mp3" id="impact1" />
+		<sound path="menuMove.mp3" id="menuMove" />
+		<sound path="menuSelect.mp3" id="menuSelect" />
+		<sound path="menu.mp3" id="menu" />
+	</assets>
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<haxelib name="flixel" />
+	
+	<!--In case you want to use the addons package-->
+	<haxelib name="flixel-addons" />
+	
+	<!--In case you want to use the ui package-->
+	<haxelib name="flixel-ui"/>
+	
+	<!--In case you want to use nape with flixel-->
+	<!--<haxelib name="nape" />-->	
+	<!-- ______________________________ Haxedefines _____________________________ -->
+	
+	<!--Enable the Flixel core recording system-->
+	<haxedef name="FLX_RECORD" />
+	
+	<!--Disable the right and middle mouse buttons-->
+	<!--<haxedef name="FLX_NO_MOUSE_ADVANCED" />-->
+	
+	<!--Disable the native cursor API on Flash-->
+	<!--<haxedef name="FLX_NO_NATIVE_CURSOR" />-->
+	
+	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
+	<haxedef name="FLX_NO_MOUSE" if="mobile" />
+	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
+	<haxedef name="FLX_NO_TOUCH" if="desktop" />
+	<!--haxedef name="FLX_NO_GAMEPAD" /-->
+	
+	<!--Disable the Flixel core sound tray-->
+	<!--<haxedef name="FLX_NO_SOUND_TRAY" />-->
+	
+	<!--Disable the Flixel sound management code-->
+	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
+	
+	<!--Disable the Flixel core focus lost screen-->
+	<!--<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />-->
+	
+	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+	
+	<!--Enable this for Nape release builds for a serious peformance improvement-->
+	<!--<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />-->
+	
+	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<!-- _________________________________ Custom _______________________________ -->
+	
+	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+	<icon path="assets/icon.jpg" />
+</project>
