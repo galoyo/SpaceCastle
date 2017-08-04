@@ -1,0 +1,1 @@
+Freeze Gun.#Shoots frozen bullets. Plyer is able to stand on frozen characters.

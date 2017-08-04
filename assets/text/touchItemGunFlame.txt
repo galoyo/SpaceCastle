@@ -1,0 +1,1 @@
+You now have the "Gun Flame". This flame will hit everything in its path. However, you can only fire this gun once after a short delay.#@

@@ -1,0 +1,1 @@
+Flying Hat.#Player can fly. Activate by standing on a flying hat tile.
