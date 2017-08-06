@@ -1,6 +1,0 @@
-0: water parameter. the surface of the water is here.
-1: see LAYER 5 INFORMATION.txt. overlay is needed instead of a sprite for faster game speed.
-2: placed over top of the laser image. the laser will start at this tile.
-3: the laser will end at this tile.
-4: water bubble tile. when the mob is swimming, mob overlapping this tile will receive more air.
-8-51: pipes. IMPORTANT, there must be 2 horizontal or 2 vertical pipes that connect to a 3 or 4 way pipe or it will not work. also, there cannot be 2angle (90 degree) pipes placed together.
