@@ -1,9 +1,0 @@
-/root/assets/images/map3UnderlaysSpritesAndSprite.png
-
-#######################################################
-MAIN PLAYER AND ITEMS DISPLAYED IN FRONT OF CHARACTERS.
-#######################################################
-
-0: player.
-
-16-23: cage that the Malas can be in.
