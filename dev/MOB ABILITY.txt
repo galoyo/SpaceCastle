@@ -1,0 +1,13 @@
+mobApple:		walks back and forth on a platform. no bullet ability.
+mobBat:		moves randomly in the air. no bullets ability.
+mobBullet:		only moves horizontally from one side of the screen to the other.
+mobCutter:		moves back/forth by touching a wall. jumps over holes. no bullets.
+mobFish:		moves back/forth by touching a wall. no bullets. different speeds.
+mobGlob:		moves on ceiling, walls or floors. slow movement. no bullets.
+mobSlime:		higher id = faster movement. able to jump. bullets maybe.
+mobSqu:		jump happy mob: no bullets.
+mobWorm:		flies back and forth on an invisible horizontal line.
+boss1a:boss1b:	Runs and jumps randomly.
+boss2:		flies. warps to player when wall is a path obstacle. bullets.
+Doctor:		???
+mobBubble		??? (doctors friend).
