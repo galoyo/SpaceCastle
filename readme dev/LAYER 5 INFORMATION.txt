@@ -1,5 +1,0 @@
-15: water. mobs air is decreased when overlapping this tile
-23: this tile is positioned at and two tiles directly above that at a north-west slope tile at the map editor. in game play, all those tiles now refer to tile 22 which is an empty tile. when a player or mob overlaps these tiles then they are walking on a tiled slope. gravity now need to be set higher in value so that the player or mob will not hop down the slopes.
-31: north-east slope tile. see map-20-20. for an example about how to use this overlay.
-39: south-west slope overlay.
-47: south-east slope overlay.
