@@ -6,3 +6,5 @@ Bosses try to hamper the player from learning the true nature of the doctor. Mos
 This game has an ending but will continue to be programmed. Plans are to have a mini map system, more maps to create, more puzzles, more tile graphics, increased monster difficulty based on weapon used, etc.
 
 Any haxeflixel programmer can help with this project. The Haxeflixel Library is used to make this game. http://haxeflixel.com
+
+Haxeflixel tutorials and more information about the game can be found at the [wiki](https://github.com/galoyo/SpaceCastle/wiki). You can submit bugs or any game related idea/discussion at the [issues](https://github.com/galoyo/SpaceCastle/issues). 
