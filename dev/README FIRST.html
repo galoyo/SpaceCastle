@@ -1,0 +1,251 @@
+if you get a black screen at game start-up when windows build is selected then...
+there has been data added to the savePoint.hx file and the save feature at menuState.hz. try to comment the loadOptions(); at menu.hx. then build again, if you see images at the start of the game then press 4 which is called options and then exit options to save the savePoint data. now everything should be updated, so uncomment the loadOptions();
+--------------------------------------------------------
+ 
+When doing Int calculations in math, haxeflixel converts the result to float. therefore, where b and c are Int, do something like this... var a = std.int(b) / std.int(c);
+
+--------------------------------------------------------
+some code will not work and will not give an error when for example, "animation.add("standing",)" is missing. If at a function there is animation.play("standing") but animation.add("standing") is not there then the code will not give an error and some var = false may not work.
+
+--------------------------------------------------------
+There are four dogs, each with a different id. Place the dogs, each id, at a different map. at each map, hide the other ids. for example, at map 50-50, place a dog with id of 29 some where, then hide the other ids at that map so they can never be found. then at map 50-51 place id 30 and then hide the other ids so they can never be found.
+
+--------------------------------------------------------
+layer 1 will display behind layer 2 mobs but in front of layer 2 items.
+
+--------------------------------------------------------
+at layer 0 of the tile map editor, id 177, that tile will be displayed at a boss level. when the boss is gone then the blocks with those id of 177 will be an empty space.
+
+--------------------------------------------------------
+there are 8 Malas at the map editor, id 8 to 15. The same map coordinates outside and inside the house share the same 8 id. so it is important not to have a Mala with an id of 8 for both house and outside of house or the talk text for those Malas will be the same.
+
+--------------------------------------------------------
+if you are are compiling in neko, c++ but not flash and would like to see a variable at game play time then view the console that is displayed then a trace is loaded, eg, trace("house", houseVar);
+
+--------------------------------------------------------
+an update(elapsed) error means that some where in that function there is an undefined variable.
+
+--------------------------------------------------------
+if particle or emitter is not colliding with an object then do the following at the particle or emitter class...
+allowCollisions = FlxObject.ANY;
+
+--------------------------------------------------------
+the EnemyCastSpriteCollide class handles what mob is colliding with a tile or player and what to do what that happens. the utils class is only needed when a check that collision is at playState. when a check or action is happening at a mob class then the function to handle that mob should happen at a mobs function within that class.
+
+--------------------------------------------------------
+this game was compiled on a slow computer. if you want to have a rain effect in the game then search for this line at playState.hx.
+_rain = new FlxTypedGroup
+and uncomment the block of code.
+
+also, at the main.hx you should increase the frame rate to 60 for a fast computer or 40 if the computer is a bit slow.
+
+--------------------------------------------------------
+if at the tile map editor you cannot delete a mob then delete that area at every layer then paste the mob at the layer 3 and tileset 3.
+
+--------------------------------------------------------
+tilemapExt overlap error... when the player is overlapping an image is that image from layer 1? when making the map at tile map editor is that fence image from layer 1 tiles. if not then when the player is overlapping that image an error will happen.
+
+--------------------------------------------------------
+at the PlayState, the 800x600 background images that only have stars on them are for the castle tiles. all other levels should have a background image of trees, mountains, sand, etc.
+
+--------------------------------------------------------
+place the yellow npc(non-player character) on the map. next place the watering can or the shovel to the right of the npc. next place up to 3 weeds to the right of the watering can or shovel. you can also place the can and shovel to the left of the npc but you cannot place them both left and right of npc.
+
+--------------------------------------------------------
+DISPLAYING DIALOG BOX
+---------------------
+all dialogs are keep at /root/assets/text/
+^ = display the yes/no question.
+# = new line.
+@ = end of file.
+0,1,2,3 = a npc image because that npc is talking.
+
+for example, hello#World@
+the above would display the word "hello" at the dialog box and wait for the "x" key to be pressed. when that key is pressed the dialog box would clear and then display "world".
+
+--------------------------------------------------------
+HEART CONTAINERS
+----------------
+a heart container from the tiled map editor is placed on the map. when picked up it increases the max health by 3.
+
+when picked up, at the picked up function, append "20-41," to the string. 20 refers to the x coordinates while 41 is the y coordinates.
+
+when drawing the new map on the screen, go to the addHeartContainer function. before adding the heart, check to see if the string matches the map coordinate. it is does then do not create the heart on the map. all of this should be done automatically.
+
+when the player saves the game, the heart var(variable) is saved.
+
+--------------------------------------------------------
+change a tile to a tile with an index of 2.
+
+/* var newindex:Int = 2;
+for (h in 0...tilemap.heightInTiles)
+{
+	for (w in 0...tilemap.widthInTiles)
+	{
+		if (tilemap.getTile(w, h) == 1 && tilemap.getTile(w + 1, h) == 8)
+		{
+			tilemap.setTile(w + 1, h, newindex, true);
+		}	
+	}		
+}
+*/		
+
+--------------------------------------------------------
+at root\assets\images, the file map3UnderlaysSpritesAndMobs.png contains mobs and icons to pickup and block that move or traps to avoid, etc. the first set of images in the mobs. scroll down and view the second set of images. the first icon is the ladder. 
+
+at playState.hx, the ladder is created at addLadder(). that function tells the computer to use the ObjectLader class. at that class, there is an image that will be the sprite on the screen. that image is a blank image. the reason is because at the tiled map editor, tilesets 1, there is a ladder underlays that is positioned over top of the blank ladder. the blank ladder still works for collisions. the blank image is smaller then the 32 by 32 block pixels that make up a map. the reason is that gives an effect that the ladder cannot be climbed when touching the side of the ladder seen. so for a ladder to be created at the tiled map editor and seen in the game, two things must be done. first, at tilemap 2, place the ladder on the map, next, at tileset 1, place the underlays ladder over top of that ladder. remember tileset 3 refers to the sprites, while tileset 1 refers to a decoration.
+
+--------------------------------------------------------
+if the games graphics is blurry then at PlayState.hx, remove the following line of code.
+
+FlxG.camera.antialiasing = true;
+
+--------------------------------------------------------
+
+dialog text is displayed when picking up an item, or an action in the game. the dialog box is displayed with the following text that is inside of a file. it is better to have dialog text inside of a file than inside of the games code.
+
+------ dialog.txt ------
+
+This is dialog for box 1.#@Dialog for box 2.#@And so on...#@
+
+inside of your game code use the following:
+
+var dilog_boxes:Array<String> =
+    	openfl.Assets.getText(AssetPaths.dialog.__txt).split("@");
+or try this...
+	openfl.Assets.getText("assets/text/dialog.txt").split("@");
+
+--------------------------------------------------------
+if you need sprite collisions outside of screen bounds, 
+
+set up world bounds as they are quite small by default: http://api.haxeflixel.com/flixel/FlxG.html then search for worldBounds
+
+--------------------------------------------------------
+FOR LOOP: a loop between 16 and 18... the last object is always + 1 more in the for loop. example, 
+for (i in 16...19)
+
+--------------------------------------------------------
+at the level your playing, if all graphics is moving to the left, at playState.hx, if you want to test something without scrolling the background then find this line.
+FlxG.camera.follow(_chaser, FlxCameraFollowStyle.LOCKON);
+and change to
+FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
+
+--------------------------------------------------------
+stillObjects and stillOverlays refers to sprite groups that have no action and do not move.
+
+search for stillObjects at playState.hx for more information.
+
+--------------------------------------------------------
+sprite does not collide? is sprite width and height correct in its class?
+
+--------------------------------------------------------
+Too many arguments at FlxSliceSprite.hx, 
+slices[i] = FlxGraphic.fromFrame(helperFrame, true, null, false);
+was changed to...
+slices[i] = FlxGraphic.fromFrame(helperFrame, true, null);
+
+when a collide check between a sprite that was tweened and a normal sprite, the above error would result.
+
+---------------------------------------------------------
+
+within the ide of flashdevelop, when accessing the menu of "this.", types such as int, string are displayed in color blue while functions are displayed in color red.
+
+---------------------------------------------------------
+
+set acceleration and velocity to a higher value to increase sprite speed.
+---------------------------------------------------------
+
+To make an item such as the "bullet speed increase". Do not be confused with increasing the speed of a bullet. I am talking about creating an item. 
+
+put "public var _itemBulletSpeedIncrease:FlxGroup;" above create(); don't forget to add it at the create(), ex, "_itemBulletSpeedIncrease = new FlxGroup();". next add it at the function "createObjects():Void". next create the function. an example can be seen at "function addItemGun(X:Int, Y:Int):Void". create the collide at update(); at the class, for example, see the ItemGun class. at Reg.hx, add "public static var _itemGotBulletSpeedIncrease:Bool = false;".
+----------------------------------------------------------
+
+tiled map editor. download from http://www.mapeditor.org/
+at /assets/images/ there are six files that the map editor needs.
+and in the order of...
+map0Tiles.png, 
+map1UnderlaysTiles.png
+map2UnderlaysSpritesAndPlayer.png
+map3UnderlaysSpritesAndMobs.png
+map4OverlaysSprites.png
+map5OverlaysTiles.png
+
+load the Map-20-20.tmx from the assets/data dir. at the right side of the screen, there should be six layers, layer 0 tiles, layer 1 underlays tiles, layer 2 player sprites, layer 3 mob sprites, layer 4 overlays sprites and layer 5 overlays tiles.
+
+edit the map then save. then "export" then save as Map-20-20.tmx.
+
+six files will be created at the assets/data dir. 1: "Map-20-20_Layer 1 tiles.csv", 2: "Map-50-50_Layer 2 underlays sprites.csv", ect.
+
+the next time the game is compiled, the new maps will be seen. 
+----------------------------------------------------------
+
+to create a laser beam on the map, go to tileset 3 at the map editor. select the image that is in-between the water and laser parameter. place that image on a tile that the player walks on. next, place the yellow tile from tileset 4, on that tile on the ground. 
+
+About 5 tiles up from where you placed the laser image, place a solid block from tile layer 0 and then place the orange block from tile layer 4 overtop of that block that you just made from tile layer 0.
+
+we need to stop the laser when it hits a tiled block. so one block up from where you placed the orange tile, place the laser beam border image from tileset 3.
+
+----------------------------------------------------------
+
+tip. to import library...
+ctrl + shift + 1
+add imports
+
+libraries are seen at the top of a flashDevelop page. example, at the top of example.hx at the folder /root/source/
+----------------------------------------------------------
+
+each hx file has an update(). this function is called every frame. the "super.something" is the function called first that is the same name as the function where the super is written. an example is that mobTri class is of a type FlxSprite and its update() has a super, where it then goes to the FlxSprite class which is of a type of something.
+
+Method overriding, in object oriented programming, is a language feature that allows a subclass or child class to provide a specific implementation of a method that is already provided by one of its superclasses or parent classes.
+
+so the mobTri has a function called reset() which overrides reset at the class "FlxSprite", or another way to say it is that the function of FlxSprite is now part of the mobTri, we can now add to the super function (FlxSprite) at mobTri and the super.reset() at mobTri in this example will run the code from FlxSprite and any code in the override function will be added to the super.reset. 
+
+so the word override is to say that we add something else to the function that exists at another class.
+----------------------------------------------------------
+Reg.hx, create vars here and they will be public to all classes in the project. at reg.hx, _var:Int = 0; and at another class, if ( reg._var == 0)..
+
+----------------------------------------------------------
+this works:    mobTri.hurt((Reg._gunPower + 1));
+this does not: mobTri.hurt(Reg._gunPower + 1);
+
+.hurt will decrease the health of a mob(monster). notice the double brackets. they are needed when calculation are done this way.
+
+----------------------------------------------------------
+set mobs health at mobs class and mobs hit value (hurt) and gun decrease value at the EnemyCastSpriteCollide function.
+
+----------------------------------------------------------
+Std converts int to float, etc
+type "Std." for more information. if nothing displays then click the mouse on the word Std then hold CTRL on the keyboard the hold SHIFT then press 1. an Std import code should now be near the top of the .hx page. the Std word should now be in a different color. type "Std." to see the pop up menu and read the information about convert int to float as an example.
+
+----------------------------------------------------------
+in case you didn't know, I find it quick and easy to check values with trace using array. trace("val1, val2 " + [val1, val2]; `as long as they are of the same type. if val1 is Float val2 is Int, do [val1, val2 / 1].
+
+no need for "val1: " + val1 + " val2 " + val2;
+
+you can also do trace("var", var);
+
+all other examples can be found here... http://haxeflixel.com/documentation/debugger/
+
+------------------------------------------------------------
+
+Audacity. 
+software used to export sound files to different wav, or ogg.
+
+------------------------------------------------------------
+hudBar.hx
+
+at the hudBar the power var is at the right size of the gun box. that number refers to a power. the higher the value, the more powerful the bullet.
+
+the onChangeCallback is where you can change the power var.
+
+private function changePower():Void
+{
+	if (box.value == 0 && box.power > 0)
+	{
+		box.value = box.max;
+		box.power--;
+	}
+}
+
+and use box.setCallBacks(null, null, changePower) to set the callback for just the onChangeCallback. The first 2 are onEmpty and onFull and you can make functions for those to`.
+------------------------------------------------------------
