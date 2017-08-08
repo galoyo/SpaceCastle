@@ -1,3 +1,4 @@
+<table>
 if you get a black screen at game start-up when windows build is selected then...
 there has been data added to the savePoint.hx file and the save feature at menuState.hz. try to comment the loadOptions(); at menu.hx. then build again, if you see images at the start of the game then press 4 which is called options and then exit options to save the savePoint data. now everything should be updated, so uncomment the loadOptions();
 --------------------------------------------------------
@@ -249,3 +250,4 @@ private function changePower():Void
 
 and use box.setCallBacks(null, null, changePower) to set the callback for just the onChangeCallback. The first 2 are onEmpty and onFull and you can make functions for those to`.
 ------------------------------------------------------------
+</table>
