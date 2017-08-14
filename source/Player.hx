@@ -444,7 +444,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 			if (_playerStandingOnFireBlockTimer.finished == true) hurt(1);
 			
 			if (_playerStandingOnFireBlockTimer.active == false)
-			_playerStandingOnFireBlockTimer.start((1, null, 1);			
+			_playerStandingOnFireBlockTimer.start(1, null, 1);			
 		}
 		//################### END LAVA BLOCK.
 		
