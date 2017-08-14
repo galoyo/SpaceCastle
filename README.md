@@ -9,4 +9,3 @@ Any haxeflixel programmer can help with this project. The Haxeflixel Library is 
 
 Haxeflixel tutorials and more information about the game can be found at the [wiki](https://github.com/galoyo/SpaceCastle/wiki). You can submit bugs or any game related idea/discussion at the [issues](https://github.com/galoyo/SpaceCastle/issues). 
 
-<a href="http://www.indiedb.com/games/space-castle" title="View Space Castle on Indie DB" target="_blank"><img src="http://button.indiedb.com/popularity/medium/games/62925.png" alt="Space Castle" /></a>
