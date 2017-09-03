@@ -1,4 +1,17 @@
 <HTML><HEAD><TITLE>Space Castle</TITLE></HEAD><BODY>
+	if a class is using keyboard keys or buttons then put the following code at the top of update()
+	// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+	InputControls.checkInput();
+<br /><br /><br /> 
+
+then to check for a "z" key press or a "z" button press, add the following underneath the above code...
+	if (InputControls.z.pressed
+<br /><br /><br /> 
+
+or you could use "if (InputControls.z.justPressed" or "if (InputControls.z.justReleased"
+<br /><hr><br /><br /> 
+
+
 	if you get a black screen at game start-up when windows build is selected then...there has been data added to the savePoint.hx file and the save feature at menuState.hz. try to comment the loadOptions(); at menu.hx. then build again, if you see images at the start of the game then press 4 which is called options and then exit options to save the savePoint data. now everything should be updated, so uncomment the loadOptions();
 <br /><hr><br /><br /> 
 	
@@ -30,19 +43,12 @@ some code will not work and will not give an error when for example, "animation.
 	the EnemyCastSpriteCollide class handles what mob is colliding with a tile or player and what to do what that happens. the utils class is only needed when a check that collision is at playState. when a check or action is happening at a mob class then the function to handle that mob should happen at a mobs function within that class.
 <br /><hr><br /><br />
 	
-	this game was compiled on a slow computer. if you want to have a rain effect in the game then search for this line at playState.hx._rain = new FlxTypedGroupand uncomment the block of code.
-also, at the main.hx you should increase the frame rate to 60 for a fast computer or 40 if the computer is a bit slow.
-<br /><hr><br /><br />
-	
 	if at the tile map editor you cannot delete a mob then delete that area at every layer then paste the mob at the layer 3 and tileset 3.
 <br /><hr><br /><br />
 	
 	tilemapExt overlap error... when the player is overlapping an image is that image from layer 1? when making the map at tile map editor is that fence image from layer 1 tiles. if not then when the player is overlapping that image an error will happen.
 <br /><hr><br /><br />
-	
-	at the PlayState, the 800x600 background images that only have stars on them are for the castle tiles. all other levels should have a background image of trees, mountains, sand, etc.
-<br /><hr><br /><br />
-	
+		
 	place the yellow npc(non-player character) on the map. next place the watering can or the shovel to the right of the npc. next place up to 3 weeds to the right of the watering can or shovel. you can also place the can and shovel to the left of the npc but you cannot place them both left and right of npc.
 <br /><hr><br /><br />
 	
@@ -57,7 +63,7 @@ when the player saves the game, the heart var(variable) is saved.
 <br /><hr><br /><br />
 	
 	change a tile to a tile with an index of 2.
-/* var newindex:Int = 2;for (h in 0...tilemap.heightInTiles){ for (w in 0...tilemap.widthInTiles) {  if (tilemap.getTile(w, h) == 1 && tilemap.getTile(w + 1, h) == 8)  {   tilemap.setTile(w + 1, h, newindex, true);  }  }  }*/  
+/* var newindex:Int = 2;for (h in 0...tilemap.heightInTiles){ for (w in 0...tilemap.widthInTiles) {  if (tilemap.getTile(w, h) == 1 && tilemap.getTile(w + 1, h) == 8)  {   tilemap.setTile(w + 1, h, newindex, true);  }  }  }*/  
 <br /><hr><br /><br />
 	
 	at root\assets\images, the file map3UnderlaysSpritesAndMobs.png contains mobs and icons to pickup and block that move or traps to avoid, etc. the first set of images in the mobs. scroll down and view the second set of images. the first icon is the ladder. 
@@ -70,7 +76,7 @@ FlxG.camera.antialiasing = true;
 ------ dialog.txt ------
 This is dialog for box 1.#@Dialog for box 2.#@And so on...#@
 inside of your game code use the following:
-var dilog_boxes:Array<String> =     openfl.Assets.getText(AssetPaths.dialog.__txt).split("@");or try this... openfl.Assets.getText("assets/text/dialog.txt").split("@");
+var dilog_boxes:Array<String> =     openfl.Assets.getText(AssetPaths.dialog.__txt).split("@");or try this... openfl.Assets.getText("assets/text/dialog.txt").split("@");
 <br /><hr><br /><br />
 	
 	if you need sprite collisions outside of screen bounds, 
@@ -80,7 +86,7 @@ set up world bounds as they are quite small by default: http://api.haxeflixel.co
 	FOR LOOP: a loop between 16 and 18... the last object is always + 1 more in the for loop. example, for (i in 16...19)
 <br /><hr><br /><br />
 	
-	at the level your playing, if all graphics is moving to the left, at playState.hx, if you want to test something without scrolling the background then find this line.FlxG.camera.follow(_chaser, FlxCameraFollowStyle.LOCKON);and change toFlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
+	at the level your playing, if all graphics might be moving to the left, at playState.hx. if you want to test something without scrolling the background then find this line.FlxG.camera.follow(_chaser, FlxCameraFollowStyle.LOCKON);and change toFlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
 <br /><hr><br /><br />
 	
 	stillObjects and stillOverlays refers to sprite groups that have no action and do not move.
@@ -105,7 +111,9 @@ tiled map editor. download from http://www.mapeditor.org/at /assets/images/ ther
 load the Map-20-20.tmx from the assets/data dir. at the right side of the screen, there should be six layers, layer 0 tiles, layer 1 underlays tiles, layer 2 player sprites, layer 3 mob sprites, layer 4 overlays sprites and layer 5 overlays tiles.
 edit the map then save. then "export" then save as Map-20-20.tmx.
 six files will be created at the assets/data dir. 1: "Map-20-20_Layer 1 tiles.csv", 2: "Map-50-50_Layer 2 underlays sprites.csv", ect.
-the next time the game is compiled, the new maps will be seen. <br /><hr><br /><br />
+the next time the game is compiled, the new maps will be seen. 
+<br /><hr><br /><br />
+
 to create a laser beam on the map, go to tileset 3 at the map editor. select the image that is in-between the water and laser parameter. place that image on a tile that the player walks on. next, place the yellow tile from tileset 4, on that tile on the ground. 
 About 5 tiles up from where you placed the laser image, place a solid block from tile layer 0 and then place the orange block from tile layer 4 overtop of that block that you just made from tile layer 0.
 we need to stop the laser when it hits a tiled block. so one block up from where you placed the orange tile, place the laser beam border image from tileset 3.
@@ -121,7 +129,7 @@ so the mobTri has a function called reset() which overrides reset at the class "
 so the word override is to say that we add something else to the function that exists at another class.<br /><hr><br /><br />Reg.hx, create vars here and they will be public to all classes in the project. at reg.hx, _var:Int = 0; and at another class, if ( reg._var == 0)..
 <br /><hr><br /><br />
 	
-	this works:    mobTri.hurt((Reg._gunPower + 1));this does not: mobTri.hurt(Reg._gunPower + 1);
+	this works:    mobTri.hurt((Reg._gunPower + 1));this does not: mobTri.hurt(Reg._gunPower + 1);
 .hurt will decrease the health of a mob(monster). notice the double brackets. they are needed when calculation are done this way.
 <br /><hr><br /><br />
 	
@@ -141,5 +149,5 @@ all other examples can be found here... http://haxeflixel.com/documentation/debu
 	hudBar.hx. at the hudBar the power var is at the right size of the gun box. that number refers to a power. the higher the value, the more powerful the bullet.
 	
 the onChangeCallback is where you can change the power var.
-private function changePower():Void{ if (box.value == 0 && box.power > 0) {  box.value = box.max;  box.power--; }}
+private function changePower():Void{ if (box.value == 0 && box.power > 0) {  box.value = box.max;  box.power--; }}
 and use box.setCallBacks(null, null, changePower) to set the callback for just the onChangeCallback. The first 2 are onEmpty and onFull and you can make functions for those to`.</BODY></HTML>
