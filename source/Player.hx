@@ -361,7 +361,9 @@ class Player extends FlxSprite
 	}
 	
 	override public function update(elapsed:Float):Void 
-	{		
+	{	
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
 
 		if (overlapsAt(x, y - 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y - 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
 		Reg._lastArrowKeyPressed = "up";
@@ -385,44 +387,45 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		
 		//######################### CHEAT MODE #########################
 		// ----------------- toggle cheat on / off -------------
-		if (FlxG.keys.anyJustReleased(["T"]) && Reg._cheatModeEnabled == true)
-		{
-			Reg._cheatModeEnabled = false;
-			if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
-		} 
-		else if (FlxG.keys.anyJustReleased(["T"])  && Reg._cheatModeEnabled == false)
-		{
-			Reg._cheatModeEnabled = true;
-			if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
-		}
-		
-		// increase health
-		if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == true)
-		{
-			if ((health + 1) <= Reg._healthMaximum)
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["T"]) && Reg._cheatModeEnabled == true)
 			{
-				health = Std.int(health) + 1;
-				Reg._healthCurrent = health;
-				
+				Reg._cheatModeEnabled = false;
+				if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
+			} 
+			else if (FlxG.keys.anyJustReleased(["T"])  && Reg._cheatModeEnabled == false)
+			{
+				Reg._cheatModeEnabled = true;
 				if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
-			} else if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
-		} 
-		else if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == false)
+			}
+			
+			// increase health
+			if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == true)
+			{
+				if ((health + 1) <= Reg._healthMaximum)
+				{
+					health = Std.int(health) + 1;
+					Reg._healthCurrent = health;
+					
+					if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
+				} else if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
+			} 
+			else if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == false)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
 			}
-			
-		// increase the air left in players lungs.
-		if (FlxG.keys.anyJustReleased(["L"])  && Reg._cheatModeEnabled == true)
-		{
-			Reg.state._playerAirRemainingTimer.loops += 10; Reg._playerAirLeftInLungsMaximum += 10;
-			if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);			
-		} 
-		else if (FlxG.keys.anyJustReleased(["L"]) && Reg._cheatModeEnabled == false)
+				
+			// increase the air left in players lungs.
+			if (FlxG.keys.anyJustReleased(["L"])  && Reg._cheatModeEnabled == true)
+			{
+				Reg.state._playerAirRemainingTimer.loops += 10; Reg._playerAirLeftInLungsMaximum += 10;
+				if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);			
+			} 
+			else if (FlxG.keys.anyJustReleased(["L"]) && Reg._cheatModeEnabled == false)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
 			}
-			
+		#end
 		//####################### END CHEAT MODE #######################
 
 		Reg.state._healthBarPlayer.velocity.x = velocity.x;
@@ -479,12 +482,9 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 				}
 			}				
 			
-			if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dog Flute."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dog Flute."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dog Flute."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dog Flute."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dog Flute."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dog Flute.")
+			if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dog Flute."
+			 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dog Flute."
+			 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dog Flute.")
 			{
 				// if dog exists on map but is not located at top left corner of screen.
 				if (Reg.state.npcDog != null && Reg.state.npcDog.x != 0) 
@@ -498,15 +498,12 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		//----------------------------
 		
 		xForce = 0; yForce = 0;		
-		
+
 		// #################### TOGGLE ANTIGRAVITY ####################
 		// toggle antigravity.
-		if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Antigravity Suit."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Antigravity Suit."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Antigravity Suit."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Antigravity Suit."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Antigravity Suit."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Antigravity Suit.")
+		if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Antigravity Suit."
+		 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Antigravity Suit."
+		 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Antigravity Suit.")
 		{
 			if (inAir == false && Reg._antigravity == false && !overlapsAt(x, y + 16, Reg.state._itemFlyingHatPlatform)) 
 			{
@@ -523,22 +520,16 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 			}
 		}
 	
-		if (FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+		if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
 			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96;
 		}
 		
-		else if (FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump.")
+		else if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+			 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+			 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump.")
 		{
 			// Reg._itemGotJump[0] refers to the first jump item obtained. which is set to true when the game starts. the _jumpForce is how high the player can jump. in this case, the player can jump up two tiles. the next jump item jumps for 3 items, ect. Since the jump force is set for 2 tiles, the _fallAllowedDistanceInPixels is also 2 tiles totaling 64 pixels.
 			Reg._jumpForce = 680; Reg._fallAllowedDistanceInPixels = 64;
@@ -562,12 +553,9 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		// those object start with a var of _using.
 		
 		// change to a different item.
-			if (FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flying Hat."
-			|| FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flying Hat."
-			|| FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flying Hat."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flying Hat."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flying Hat."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flying Hat.")
+			if ( InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flying Hat."
+			  || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flying Hat."
+		      || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flying Hat.")
 			
 			{
 			if (Reg._itemGotFlyingHat == true && Reg._usingFlyingHat == false && Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) != 15 && overlapsAt(x, y+16, Reg.state._itemFlyingHatPlatform))
@@ -589,31 +577,21 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		
 		if(!FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun."
-			|| FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun."
-			|| FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Freeze Gun."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Freeze Gun."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Freeze Gun."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Freeze Gun."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Freeze Gun."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Freeze Gun.")
+			if ( InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
+			  || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
+		      || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun."
+			  || InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
+			  || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
+		      || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun."
+			  || InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Freeze Gun."
+			  || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Freeze Gun."
+		      || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Freeze Gun.")
 		
 			{	
 				if(_mobIsSwimming == false)
 				{
 					// fire the bullet in the direction of up or down depending if antigravity is used or not.
-					if (Reg._antigravity == true && FlxG.keys.anyPressed(["DOWN"]) || Reg._antigravity == false && FlxG.keys.anyPressed(["UP"])
-					|| Reg._antigravity == true && Reg._mouseClickedButtonDown == true || Reg._antigravity == false && Reg._mouseClickedButtonUp == true)
+					if (Reg._antigravity == true && InputControls.down.justPressed || Reg._antigravity == false && InputControls.up.justPressed)
 					{
 						holdingUpKey = true; 
 						shoot(holdingUpKey); 						
@@ -633,9 +611,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 	
 		// how fast the player is moving in the y coor. generally moving in a 
 		// downward direction.
-		if (FlxG.keys.anyJustPressed(["A"])) {running = true; if (Reg._soundEnabled == true) FlxG.sound.play("menu", 1, false); }
 		if( Reg._playerRunningEnabled == true) running = true;
-		if (FlxG.keys.anyJustReleased(["A"])) running = false;
 		
 		// if running then do not run faster then the max speed else set to walk speed.
 		if (running)
@@ -651,26 +627,20 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			if (FlxG.keys.anyPressed(["LEFT"]) || Reg._mouseClickedButtonLeft == true) {xForce--; Reg._arrowKeyInUseTicks = 0; }
-			if (FlxG.keys.anyPressed(["RIGHT"]) || Reg._mouseClickedButtonRight == true) { xForce++; Reg._arrowKeyInUseTicks = 0; }
+			if (InputControls.left.pressed) {xForce--; Reg._arrowKeyInUseTicks = 0; }
+			if (InputControls.right.pressed) { xForce++; Reg._arrowKeyInUseTicks = 0; }
 			
 		}		
 			
 		
 		//---------------------------
 		//########### PLAYER IS JUMPING.
-		if (FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."			
-			|| FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+		if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+			|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
 			if (Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving)
 			|| Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving))
@@ -691,12 +661,9 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		}
 		//--------------------------
 		// ######################## PLAYER IS SWIMMING. #########################
-		else if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Swimming Skill."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Swimming Skill."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Swimming Skill."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Swimming Skill."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Swimming Skill."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Swimming Skill.")
+		else if ( InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Swimming Skill."
+			   || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Swimming Skill."
+		       || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Swimming Skill.")
 		
 			{
 				if ( Reg._usingFlyingHat == false && Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 15 && Reg._itemGotSwimmingSkill == true
@@ -720,7 +687,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		if (!FlxG.overlap(Reg.state._overlayPipe, this))
 		{
 			xForce = FlxMath.bound(xForce, -1, 1);		
-			if (FlxG.keys.anyPressed(["LEFT"]) || Reg._mouseClickedButtonLeft == true || FlxG.keys.anyPressed(["RIGHT"]) || Reg._mouseClickedButtonRight == true) acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
+			if (InputControls.left.pressed || InputControls.right.pressed) acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
 			else acceleration.x = 0;
 			
 			Reg._dogIsInPipe = false;
@@ -756,18 +723,12 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		//############################ Add flying hat, vine, ladder ect to this line.
 		if (!FlxG.overlap(Reg.state._objectVineMoving, this) && !FlxG.overlap(Reg.state._objectLadders, this) &&  Reg._usingFlyingHat == false)
 		{
-			if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."			
-			|| FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+			if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+		   	||  InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+			||  InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+			|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = _gravity;
 			} 		
@@ -775,18 +736,12 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 			{
 				acceleration.y = _gravity;
 			} 
-			else if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."			
-			|| FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+			else if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+			|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = -_gravity;
 				trace("_gravity1", -_gravity);
@@ -872,10 +827,10 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 				if (velocity.x == 0)
 				{
 					if (Reg._antigravity == false && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idle");
-					else if (!FlxG.keys.pressed.UP && !FlxG.keys.pressed.DOWN && Reg._mouseClickedButtonUp == false && Reg._mouseClickedButtonDown == false && Reg._antigravity == false && overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idleOnLadder");
+					else if (!InputControls.up.pressed && !InputControls.down.pressed && Reg._antigravity == false && overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idleOnLadder");
 					
 					if (Reg._antigravity == true && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idle2");					
-					else if (!FlxG.keys.pressed.UP && !FlxG.keys.pressed.DOWN && Reg._mouseClickedButtonUp == false && Reg._mouseClickedButtonDown == false && Reg._antigravity == true && overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idleOnLadder2");
+					else if (!InputControls.up.pressed && !InputControls.down.pressed && Reg._antigravity == true && overlapsAt(x, y, Reg.state._objectLadders)) animation.play("idleOnLadder2");
 				}
 
 				

@@ -25,7 +25,10 @@ class ObjectSign extends FlxSprite
 	{
 		if (isOnScreen())
 		{			
-			if (FlxG.keys.anyJustReleased(["DOWN"]) && overlapsAt(x, y, Reg.state.player) || FlxG.mouse.justReleased == true && Reg._mouseClickedButtonDown == true && overlapsAt(x, y, Reg.state.player))
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			InputControls.checkInput();
+		
+			if (InputControls.down.justReleased && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "objectSign.png";
 				

@@ -20,7 +20,7 @@ class PlayStateDownKey extends PlayStateTouchItems
 		var	_tileY = Std.int(player.y / 32);
 
 		// save game is requested when down key is pressed at the save point.		
-		if(FlxG.keys.anyPressed(["DOWN"]) && FlxG.overlap(savePoint, player) || Reg._mouseClickedButtonDown == true && FlxG.overlap(savePoint, player))
+		if(InputControls.down.pressed && FlxG.overlap(savePoint, player))
 		{
 			Reg.dialogIconFilename = "savePoint.png";
 			Reg.dialogIconText = openfl.Assets.getText("assets/text/saveTheGame.txt").split("#");
@@ -29,7 +29,7 @@ class PlayStateDownKey extends PlayStateTouchItems
 			openSubState(new Dialog());
 		}				
 				
-		else if(FlxG.keys.anyPressed(["DOWN"]) && FlxG.overlap(_objectDoorToHouse, player) || Reg._mouseClickedButtonDown == true && FlxG.overlap(_objectDoorToHouse, player) )
+		else if(InputControls.down.pressed && FlxG.overlap(_objectDoorToHouse, player))
 		{
 			if (Reg._inHouse == "")
 			{
@@ -44,8 +44,8 @@ class PlayStateDownKey extends PlayStateTouchItems
 			FlxG.switchState(new PlayState());
 		} 
 
-		else if (FlxG.keys.anyPressed(["DOWN"]) && Reg.state.tilemap.getTile(_tileX, _tileY) == 77 || FlxG.keys.anyPressed(["DOWN"]) && Reg.state.tilemap.getTile(_tileX, _tileY) == 78
-		|| Reg._mouseClickedButtonDown == true && Reg.state.tilemap.getTile(_tileX, _tileY) == 77 || Reg._mouseClickedButtonDown == true && Reg.state.tilemap.getTile(_tileX, _tileY) == 78) // teleporter
+		else if (InputControls.down.pressed && Reg.state.tilemap.getTile(_tileX, _tileY) == 77
+		      || InputControls.down.pressed && Reg.state.tilemap.getTile(_tileX, _tileY) == 78) // teleporter
 		{
 			Reg.dialogIconFilename = "itemGun1.png";
 			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGun.txt").split("#");
@@ -58,8 +58,8 @@ class PlayStateDownKey extends PlayStateTouchItems
 		
 		//----------------------- TRACKER ---------------------------
 		// emitter the "question mark if there is no action but only when the player is standing on the ground.
-		else if (!FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && FlxG.keys.anyPressed(["UP"]) && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) || !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && FlxG.keys.anyPressed(["DOWN"]) && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) && !FlxG.overlap(_objectSign, player)
-		|| !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && Reg._mouseClickedButtonUp == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) || !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && Reg._mouseClickedButtonDown == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) && !FlxG.overlap(_objectSign, player)) // for npcs overlapping, see an npcs class.
+		else if (InputControls.up.pressed && !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) 
+		      || InputControls.down.pressed && !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) && !FlxG.overlap(npcs, player) && !FlxG.overlap(_objectTeleporter, player) && !FlxG.overlap(_objectSign, player)) // for npcs overlapping, see an npcs class.
 		{
 			if (_ticksTrackerDown == 1)
 			{
@@ -83,8 +83,8 @@ class PlayStateDownKey extends PlayStateTouchItems
 			_ticksTrackerDown = Reg.incrementTicks(_ticksTrackerDown, 60 / Reg._framerate);			
 		}	
 
-		else if (!FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && FlxG.keys.anyPressed(["DOWN"]) && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) || !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && FlxG.keys.anyPressed(["UP"]) && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player)
-		|| !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && Reg._mouseClickedButtonDown == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) || !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && Reg._mouseClickedButtonUp == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player))
+		else if (InputControls.down.pressed && !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player) 
+		      || InputControls.up.pressed && !FlxG.overlap(_objectPlatformMoving, player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, player) && !FlxG.overlap(_objectLadders, player))
 		{
 			
 			// player looking down. scroll the screen until the player is at the top of the screen.

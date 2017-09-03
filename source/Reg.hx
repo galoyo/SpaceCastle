@@ -15,6 +15,10 @@ class Reg
 	//########################################################################
 	// these vars will NOT get saved by saving the game when playing the game.
 	//########################################################################
+	
+	//if a map is within this var then the clouds will be displayed on that map.
+	public static var _displayCloudsCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21";
+	
 	// vars for the button navigation.
 	public static var _testItems:Bool = false; // if true, the Test-Items map will be displayed. this map is used to test the game features. 
 	
@@ -35,15 +39,6 @@ class Reg
 	public static var _playerAirLeftInLungsCurrent:Int = 100; // how much current air the player has.
 	public static var _playerAirLeftInLungs:Int = 100; // used with the air timer to display the air remaining text.
 		
-	public static var _mouseClickedButtonLeft:Bool = false;
-	public static var _mouseClickedButtonRight:Bool = false;
-	public static var _mouseClickedButtonUp:Bool = false;
-	public static var _mouseClickedButtonDown:Bool = false;
-	public static var _mouseClickedButtonZ:Bool = false;
-	public static var _mouseClickedButtonX:Bool = false;
-	public static var _mouseClickedButtonC:Bool = false;
-	public static var _mouseClickedButtonA:Bool = false;
-	
 	public static var _F1KeyUsedFromMenuState:Bool = false; // if true then at dialog.hx, quit the game.
 	public static var _isFallDamage:Bool = false; // this is used for fall damage when invisiblity mode by getting a star from a mob is the result. falling will always give damage to the player regardless if player has star powerup.
 	
@@ -475,16 +470,6 @@ class Reg
 	false, false, false, false, false, false, false, false
 	];
 	
-		// if a buttonNavigator.hx button is pressed then one of these vars are true. then at the playstate or player.hx, if that var is true or a keyboard key is pressed then do whatever at that function.
-		_mouseClickedButtonLeft = false;
-		_mouseClickedButtonRight = false;
-		_mouseClickedButtonUp = false;
-		_mouseClickedButtonDown = false;
-		_mouseClickedButtonZ = false;
-		_mouseClickedButtonX = false;
-		_mouseClickedButtonC = false;
-		_mouseClickedButtonA = false;
-		
 		//-----------------inventory menu.
 		_inventoryGridXTotalSlots = 13; // x coords system.
 		_inventoryGridYTotalSlots = 7;  // y coords system.
@@ -516,6 +501,8 @@ class Reg
 		
 		_inventoryIconNumberMaximum = 1;
 		_deathWhenReachedZero = _deathWhenReachedZeroCurrent = 400;
+		
+		_changeToDayOrNightBgsAtPageLoadTicks = 0;
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################
@@ -571,5 +558,18 @@ class Reg
 		}
 		
 		return ticks;
+	}
+	
+	public static function exitProgram():Void
+	{
+		//#if WEB_EMBED	// enable in project.xml <haxedef name="WEB_EMBED" />
+			//FlxG.openURL(quitURL, "_self"); // quitUrl is url to go to
+		//#else
+			#if cpp
+				Sys.exit(0);
+			#else
+				openfl.system.System.exit(0);
+			#end
+		//#end
 	}
 }

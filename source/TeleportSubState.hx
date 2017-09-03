@@ -7,7 +7,6 @@ import flixel.FlxSubState;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
-import flixel.input.keyboard.FlxKey;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -16,6 +15,10 @@ import flixel.addons.text.FlxTypeText;
 import flixel.util.FlxColor;
 import openfl.system.System;
 import openfl.text.Font;
+
+#if !FLX_NO_KEYBOARD 
+	import flixel.input.keyboard.FlxKey;
+#end
 
 /**
  * @author galoyo
@@ -28,9 +31,10 @@ class TeleportSubState extends FlxSubState
 	private var ticks:Float = 0;
 	private var ticksDelay:Bool = false;
 	
-	private var button1:MouseClickThisButton;
-	private var button2:MouseClickThisButton;
-	private var button3:MouseClickThisButton;
+	public var button1:MouseClickThisButton;
+	public var button2:MouseClickThisButton;
+	public var button3:MouseClickThisButton;
+	public var button4:MouseClickThisButton;
 	
 	public function new():Void
 	{
@@ -103,15 +107,20 @@ class TeleportSubState extends FlxSubState
 	
 	override public function update(elapsed:Float):Void 
 	{		
-		if (FlxG.keys.anyJustReleased(["ONE"])) 
-		{
-			button1Clicked();
-		}
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
 		
-		else if (FlxG.keys.anyJustReleased(["TWO"])) 
-		{
-			button2Clicked();
-		}
+		#if !FLX_NO_KEYBOARD
+			if (FlxG.keys.anyJustReleased(["ONE"])) 
+			{
+				button1Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["TWO"])) 
+			{
+				button2Clicked();
+			}
+		#end
 		
 		ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
 		

@@ -22,7 +22,7 @@ class ObjectTeleporter extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (FlxG.keys.anyPressed(["DOWN"]) || Reg._mouseClickedButtonDown == true) FlxG.overlap(this, Reg.state.player, teleport);
+		if (InputControls.down.pressed) FlxG.overlap(this, Reg.state.player, teleport);
 						
 		super.update(elapsed);
 	}

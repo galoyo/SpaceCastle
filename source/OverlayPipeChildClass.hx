@@ -32,7 +32,13 @@ class OverlayPipeChildClass extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{		
-		if (isOnScreen()) FlxG.overlap(this, Reg.state.player, pipePlayer);
+		if (isOnScreen()) 
+		{
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
+		
+			FlxG.overlap(this, Reg.state.player, pipePlayer);
+		}
 		
 		super.update(elapsed);
 	}	
@@ -98,7 +104,7 @@ class OverlayPipeChildClass extends FlxSprite
 		
 		//##################### CHANGE DIRECTION ######################
 		// at a pipe intersection that player will not moved. the game will wait until a key is pressed. once pressed, the direction the arrow key was pressed is saved so what when moving through a non-pipe intersection the player will move in that direction.
-		if (FlxG.keys.pressed.UP && alignPlayerToPipeOnce == true)
+		if (InputControls.up.pressed && alignPlayerToPipeOnce == true)
 		{
 			// these are the junctions that require an arrow key to be pressed.
 			if (ID == 1 || ID == 7 || ID == 12 || ID == 13) p.y = y - 32;
@@ -108,7 +114,7 @@ class OverlayPipeChildClass extends FlxSprite
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);			
 		}
 		
-		else if (FlxG.keys.pressed.LEFT && alignPlayerToPipeOnce == true)
+		else if (InputControls.left.pressed && alignPlayerToPipeOnce == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 7 || ID == 13) p.x = x - 32;		
 			alignPlayerToPipeOnce = false;
@@ -117,7 +123,7 @@ class OverlayPipeChildClass extends FlxSprite
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);	
 		}
 		
-		else if (FlxG.keys.pressed.DOWN && alignPlayerToPipeOnce == true)
+		else if (InputControls.down.pressed && alignPlayerToPipeOnce == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 7 || ID == 12) p.y = y + 32;
 			alignPlayerToPipeOnce = false;
@@ -126,7 +132,7 @@ class OverlayPipeChildClass extends FlxSprite
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);	
 		}
 		
-		else if (FlxG.keys.pressed.RIGHT && alignPlayerToPipeOnce == true)
+		else if (InputControls.right.pressed && alignPlayerToPipeOnce == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 12 || ID == 13) p.x = x + 32;
 			alignPlayerToPipeOnce = false;

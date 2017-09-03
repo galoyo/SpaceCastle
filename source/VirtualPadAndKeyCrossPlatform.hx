@@ -1,9 +1,9 @@
 package;
 
 #if FLX_NO_KEYBOARD
-import flixel.ui.FlxVirtualPad;
+	import flixel.ui.FlxVirtualPad;
 #else
-import flixel.input.keyboard.FlxKey;
+	import flixel.input.keyboard.FlxKey;
 #end
 
 #if FLX_NO_KEYBOARD
@@ -111,8 +111,8 @@ private function checkInput():Void
 	
 public override function update(elapsed:Float):Void
 {	
-	// this will check input whether it be keys or vpad buttons
-	checkInput();
+	// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+	InputControls.checkInput();
 	
 	// shoot key or vpad shoot button pressed
 	if (_shootPressed)

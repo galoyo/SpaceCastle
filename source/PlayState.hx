@@ -4,6 +4,7 @@ import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.addons.display.FlxBackdrop;
 import flixel.addons.tile.FlxTilemapExt;
 import flixel.effects.particles.FlxEmitter;
 import flixel.graphics.frames.FlxTileFrames;
@@ -222,7 +223,27 @@ class PlayState extends PlayStateDownKey
 		add(_overlayWater);		
 		add(_emitterAirBubble);
 		add(_overlayAirBubble);		
-		add(_overlayPipe);
+		add(_overlayPipe);		
+				
+		// ----------------------------------clouds and rain.		
+		var outside:Bool = displayClouds();
+		
+		if (outside == true && Reg._inHouse == "")
+		{
+			foregroundImage = new FlxBackdrop("assets/images/parallaxclouds.png", 1.5, 0, true, false, 0, 0);
+			foregroundImage.velocity.x = 100;
+			add(foregroundImage);
+	
+			// we're going to have some rain or ash flakes drifting down at different 'levels'. We need a lot of them for the effect to work nicely
+			_rain = new FlxTypedGroup<ObjectRain>();
+			add(_rain);
+		
+			for (i in 0...1200)
+			{
+				_rain.add(new ObjectRain(i % 10));
+			}
+		}
+		//-----------------------------------------------
 		
 		hud = new Hud();		
 		add(hud);		
@@ -330,6 +351,20 @@ class PlayState extends PlayStateDownKey
 		add(_buttonsNavigation);
 		super.create();
 	}
+	
+	function displayClouds():Bool
+	{
+		var paragraph = Reg._displayCloudsCoords.split(",");
+		
+		// loop through the paragraph array. if there is a match then do not display the clouds on the map.
+		for (i in 0...paragraph.length)
+		{	
+			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
+				return true;
+		}
+		
+		return false;
+	}
 		
 	function createLayer0Tilemap():Void
 	{
@@ -384,15 +419,6 @@ class PlayState extends PlayStateDownKey
 			add(background);	
 		}
 		
-		// we're going to have some rain or ash flakes drifting down at different 'levels'. We need a lot of them for the effect to work nicely
-		/*_rain = new FlxTypedGroup<ObjectRain>();
-		add(_rain);
-		
-		for (i in 0...1200)
-		{
-			_rain.add(new ObjectRain(i % 10));
-		}*/
-	
 		tilemap = new FlxTilemapExt();		
 		if (Reg._testItems == false) tilemap.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + "_Layer 0 tiles.csv"), "assets/images/map0Tiles.png", Reg._tileSize, Reg._tileSize);
 		else tilemap.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items_Layer 0 tiles.csv"), "assets/images/map0Tiles.png", Reg._tileSize, Reg._tileSize);
@@ -887,9 +913,6 @@ class PlayState extends PlayStateDownKey
 				}
 			}
 		}	
-		
-	//foregroundImage = new FlxBackdrop("assets/images/foreground.png", 0.5, 0.5, true, true, 0, 0);
-	//add(foregroundImage);
 	}	
 	
 	function createLayer5OverlaysTiles():Void
@@ -1054,7 +1077,10 @@ class PlayState extends PlayStateDownKey
 		if (FlxG.keys.anyJustPressed(["ZERO"])) {replaying = false; FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); }*/
 		//################ END RECORDING DEMO BLOCK #################
 		
-		if (FlxG.keys.anyJustReleased(["A"]) || Reg._mouseClickedButtonA == true)
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
+		
+		if (InputControls.i.justReleased)
 		{
 			openSubState(new Inventory());
 		}
@@ -1099,7 +1125,9 @@ class PlayState extends PlayStateDownKey
 			FlxG.switchState(new PlayState());
 		}
 	
-		if (FlxG.keys.anyJustReleased(["F12"])) FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["F12"])) FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+		#end
 		
 		// play another music if music is not player.
 		if (Reg._musicEnabled == true || Reg._powerUpStopFlicker == true)
@@ -1320,12 +1348,14 @@ class PlayState extends PlayStateDownKey
 		if (Reg._itemGotFlyingHat == true && Reg._usingFlyingHat == true)
 			flyingHat(player);
 		
-		if (FlxG.keys.anyJustReleased(["F1"])) // display exit choices.
-		{ 
-			Reg.exitGameMenu = true;  
-			Reg._F1KeyUsedFromMenuState = false;
-			openSubState(new Dialog()); 				
-		}		
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["M"])) // display main menu choices.
+			{ 
+				Reg.exitGameMenu = true;  
+				Reg._F1KeyUsedFromMenuState = false;
+				openSubState(new Dialog()); 				
+			}		
+		#end
 		
 		// hide this emitter mob hit damage if it is at the top-left corner of screen.
 		if (_emitterMobsDamage.x < 128 && _emitterMobsDamage.y < 128) _emitterMobsDamage.visible = false;
@@ -1460,14 +1490,14 @@ class PlayState extends PlayStateDownKey
 	
 	function flyingHat(p:Player):Void
 	{
-		if (FlxG.keys.anyPressed(["UP"]) || Reg._mouseClickedButtonUp == true) 
+		if (InputControls.up.pressed) 
 		{
 			p.yForce--;p.yForce = FlxMath.bound(p.yForce, -1, 1);		
 			p.acceleration.y = p.yForce * p._yMaxAcceleration;			
 				
 			p.animation.play("flyingHat");
 		}
-		else if (FlxG.keys.anyPressed(["DOWN"]) || Reg._mouseClickedButtonDown == true) 
+		else if (InputControls.down.pressed) 
 		{
 			p.yForce++;p.yForce = FlxMath.bound(p.yForce, -1, 1);		
 			p.acceleration.y = p.yForce * p._yMaxAcceleration;
@@ -1483,5 +1513,12 @@ class PlayState extends PlayStateDownKey
 	{
 		Reg.resetRegVars();
 		FlxG.switchState(new MenuState());
+	}
+	
+	public function mainMenuChoices():Void
+	{
+			Reg.exitGameMenu = true;  
+			Reg._F1KeyUsedFromMenuState = false;
+			openSubState(new Dialog()); 
 	}
 }

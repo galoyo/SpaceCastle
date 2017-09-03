@@ -221,7 +221,7 @@ class PlayStateTouchObjects extends PlayStateMiscellaneous
 	 */
 	function ladderPlayerOverlap(e:FlxSprite, p:Player):Void
 	{
-		if (FlxG.keys.anyPressed(["UP"]) || Reg._mouseClickedButtonUp == true) 
+		if (InputControls.up.pressed) 
 		{
 			p.xForce--; p.xForce = FlxMath.bound(p.xForce, -1, 1);
 			p.yForce = 0;
@@ -235,7 +235,7 @@ class PlayStateTouchObjects extends PlayStateMiscellaneous
 				
 			Reg._arrowKeyInUseTicks = 0;
 		}
-		else if (FlxG.keys.anyPressed(["DOWN"]) || Reg._mouseClickedButtonDown == true) 
+		else if (InputControls.down.pressed) 
 		{
 			p.xForce--; p.xForce = FlxMath.bound(p.xForce, -1, 1);
 			p.yForce = 0;
@@ -270,7 +270,7 @@ class PlayStateTouchObjects extends PlayStateMiscellaneous
 			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);	
 		}
 		
-		if (!FlxG.keys.anyPressed(["LEFT"]) && Reg._mouseClickedButtonLeft == false && !FlxG.keys.anyPressed(["RIGHT"]) && Reg._mouseClickedButtonRight == false)
+		if (!InputControls.left.pressed && !InputControls.right.pressed)
 		{
 			if (p.isTouching(FlxObject.CEILING))
 			{

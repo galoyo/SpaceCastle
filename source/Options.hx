@@ -141,7 +141,7 @@ class Options extends FlxSubState
 		button6 = new MouseClickThisButton(150, 320, "6", 30, 35, null, 16, 0xFFCCFF33, 0, button6Clicked);	
 		button7 = new MouseClickThisButton(150, 360, "7", 30, 35, null, 16, 0xFFCCFF33, 0, button7Clicked);	
 		button8 = new MouseClickThisButton(150, 400, "8", 30, 35, null, 16, 0xFFCCFF33, 0, button8Clicked);	
-		button10 = new MouseClickThisButton(180, 510, "A: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button10Clicked);		
+		button10 = new MouseClickThisButton(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button10Clicked);		
 		button10.screenCenter(X);
 		
 		add(button1);
@@ -158,48 +158,50 @@ class Options extends FlxSubState
 	override public function update(elapsed:Float):Void 
 	{				
 		// toggle music on/off
-		if (FlxG.keys.anyJustReleased(["ONE"])) 
-		{
-			button1Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["TWO"])) 
-		{
-			button2Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["THREE"])) 
-		{
-			button3Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["FOUR"])) // player is running.
-		{
-			button4Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["FIVE"])) // fast text dialog display.
-		{
-			button5Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["SIX"])) // game speed: framerate.
-		{
-			button6Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["SEVEN"])) // player fall damage.
-		{
-			button7Clicked();
-		}
-
-		else if (FlxG.keys.anyJustReleased(["EIGHT"])) // differcuity level.
-		{
-			button8Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["A"])) saveOptions();
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["ONE"])) 
+			{
+				button1Clicked();
+			}
 			
+			else if (FlxG.keys.anyJustReleased(["TWO"])) 
+			{
+				button2Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["THREE"])) 
+			{
+				button3Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["FOUR"])) // player is running.
+			{
+				button4Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["FIVE"])) // fast text dialog display.
+			{
+				button5Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["SIX"])) // game speed: framerate.
+			{
+				button6Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["SEVEN"])) // player fall damage.
+			{
+				button7Clicked();
+			}
+
+			else if (FlxG.keys.anyJustReleased(["EIGHT"])) // differcuity level.
+			{
+				button8Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["Z"])) saveOptions();
+		#end
+		
 		super.update(elapsed);
 	}
 	

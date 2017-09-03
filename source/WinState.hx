@@ -12,7 +12,8 @@ import flixel.util.FlxSpriteUtil;
 
 class WinState extends FlxState
 {
-
+	private var button1:MouseClickThisButton;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -57,15 +58,38 @@ class WinState extends FlxState
 		winText.cursorCharacter = "";
 		add(winText);
 		
-		if (FlxG.keys.justPressed.ANY) Reg.resetRegVars();
+		button1 = new MouseClickThisButton(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		button1.setPosition(0, 500); 
+		button1.screenCenter(X);
+		add(button1);
+		
+		#if !FLX_NO_KEYBOARD
+			if (FlxG.keys.anyJustPressed(["Z"])) 
+			{
+				Reg.resetRegVars(); 
+			}
+		#end
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
-		//FlxG.gamepads.lastActive.anyButton() || 
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
 		
 		// when a key is pressed, go to the function called closed.
-		if (FlxG.keys.justPressed.ANY) {Reg.resetRegVars(); FlxG.resetGame();}
+		#if !FLX_NO_KEYBOARD
+			if (FlxG.keys.anyJustPressed(["Z"])) 
+			{
+				Reg.resetRegVars(); 
+				FlxG.resetGame();
+			}
+		#end
+		
 		super.update(elapsed);
-	}	
+	}
+	
+	private function button1Clicked():Void
+	{
+		Reg.resetRegVars(); FlxG.resetGame();
+	}
 }

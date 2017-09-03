@@ -37,14 +37,14 @@ class PlayerOverlayGunFlame extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{			
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
+		
 		if (Reg._typeOfGunCurrentlyUsed != 1)
 		{
-			if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
-			|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
-			|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
-			|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun.")
+			if (InputControls.z.pressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
+			 || InputControls.x.pressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Flame Gun."
+			 || InputControls.c.pressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Flame Gun.")
 			{	
 				Reg._typeOfGunCurrentlyUsed = 1;
 				Reg.state._gun.visible = false;
@@ -72,7 +72,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 			//###################### NORMAL GRAVITY ######################
 			if (Reg._antigravity == false)
 			{
-				if (FlxG.keys.anyPressed(["UP"]) && Reg.state.player.facing == FlxObject.RIGHT || Reg._mouseClickedButtonUp == true && Reg.state.player.facing == FlxObject.RIGHT)
+				if (InputControls.up.pressed && Reg.state.player.facing == FlxObject.RIGHT)
 				{				
 					angle = 270;	// point the gun in an upward direction.
 					facing = FlxObject.RIGHT;	// face the object in this class in the direction right.
@@ -93,7 +93,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					animation.play("gun");
 				}
 				
-				else if (FlxG.keys.anyPressed(["UP"]) && Reg.state.player.facing == FlxObject.LEFT || Reg._mouseClickedButtonUp == true && Reg.state.player.facing == FlxObject.LEFT)
+				else if (InputControls.up.pressed && Reg.state.player.facing == FlxObject.LEFT)
 				{
 					angle = 90;	// point the gun in an upward direction.
 					facing = FlxObject.LEFT;  
@@ -121,7 +121,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 			//##################### ANITGRAVITY #######################
 			if (Reg._antigravity == true)
 			{
-				if (FlxG.keys.anyPressed(["DOWN"]) && Reg.state.player.facing == FlxObject.RIGHT || Reg._mouseClickedButtonDown == true && Reg.state.player.facing == FlxObject.RIGHT)
+				if (InputControls.down.pressed && Reg.state.player.facing == FlxObject.RIGHT)
 				{				
 					angle = 90;	// point the gun in an upward direction.
 					facing = FlxObject.RIGHT;	// face the object in this class in the direction right.
@@ -142,7 +142,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					animation.play("gun2");
 				}
 				
-				else if (FlxG.keys.anyPressed(["DOWN"]) && Reg.state.player.facing == FlxObject.LEFT || Reg._mouseClickedButtonDown == true && Reg.state.player.facing == FlxObject.LEFT)
+				else if (InputControls.down.pressed && Reg.state.player.facing == FlxObject.LEFT)
 				{
 					angle = 270;	// point the gun in an upward direction.
 					facing = FlxObject.LEFT;  
