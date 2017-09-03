@@ -110,23 +110,20 @@ class Bullet extends FlxSprite
 	
 		//#################### LOAD BULLET IMAGE AGAIN? ################
 		// only load a bullet graphics if...
-		if (FlxG.keys.anyPressed(["Z"]) && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
-		|| FlxG.keys.anyPressed(["X"]) && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
-		|| FlxG.keys.anyPressed(["C"]) && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun."
-		|| Reg._mouseClickedButtonZ == true && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
-		|| Reg._mouseClickedButtonX == true && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
-		|| Reg._mouseClickedButtonC == true && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun.")
+		if (  InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
+		   || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
+		   || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun.")
 		{
-			if (FlxG.keys.anyPressed(["UP"]) && Reg._currentKeyPressed != "up" || Reg._mouseClickedButtonUp == true && Reg._currentKeyPressed != "up") 
+			if (InputControls.up.pressed && Reg._currentKeyPressed != "up") 
 			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "up";}
 					
-			else if (FlxG.keys.anyPressed(["RIGHT"]) && Reg._currentKeyPressed != "right" || Reg._mouseClickedButtonRight == true && Reg._currentKeyPressed != "right") 
+			else if (InputControls.right.pressed && Reg._currentKeyPressed != "right") 
 			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "right";}
 			
-			else if (FlxG.keys.anyPressed(["DOWN"]) && Reg._currentKeyPressed != "down" || Reg._mouseClickedButtonDown == true && Reg._currentKeyPressed != "down") 
+			else if (InputControls.down.pressed && Reg._currentKeyPressed != "down") 
 			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "down";}
 			
-			else if (FlxG.keys.anyPressed(["LEFT"]) && Reg._currentKeyPressed != "left" || Reg._mouseClickedButtonLeft == true && Reg._currentKeyPressed != "left") 
+			else if (InputControls.left.pressed && Reg._currentKeyPressed != "left") 
 			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "left";}
 		}
 		

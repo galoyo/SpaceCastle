@@ -66,10 +66,12 @@ class NpcDog extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{				
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
+		
 		FlxG.collide(Reg.state._objectLadders, this);
 		
-		if (FlxG.keys.anyJustReleased(["DOWN"]) && overlapsAt(x, y, _player) && Reg._dogCarried == false && Reg.state.npcDogLady == null
-		|| FlxG.mouse.justReleased == true && Reg._mouseClickedButtonDown == true && overlapsAt(x, y, _player) && Reg._dogCarried == false && Reg.state.npcDogLady == null)
+		if (InputControls.down.justReleased && overlapsAt(x, y, _player) && Reg._dogCarried == false && Reg.state.npcDogLady == null)
 		{
 			animation.play("idle");
 			
@@ -110,7 +112,7 @@ class NpcDog extends FlxSprite
 		
 		if (Reg.state.npcDogLady != null)
 		{
-			if (FlxG.keys.anyJustPressed(["DOWN"]) && overlapsAt(x, y, Reg.state.npcDogLady) || FlxG.mouse.justReleased == true && Reg._mouseClickedButtonDown == true && overlapsAt(x, y, Reg.state.npcDogLady))				
+			if (InputControls.down.justPressed && overlapsAt(x, y, Reg.state.npcDogLady))				
 			{
 				if (Reg._dogCarried == true)
 				{

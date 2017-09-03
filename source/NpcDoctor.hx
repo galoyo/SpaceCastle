@@ -63,6 +63,9 @@ class NpcDoctor extends FlxSprite
 	{
 		if(isOnScreen())
 		{
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			InputControls.checkInput();
+		
 			if (justTouched(FlxObject.FLOOR)) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
@@ -70,7 +73,7 @@ class NpcDoctor extends FlxSprite
 			} 
 			else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
 				
-			if( FlxG.keys.anyJustPressed(["DOWN"]) && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player) || Reg._mouseClickedButtonDown == true && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player) )
+			if( InputControls.down.justPressed && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "";
 				Reg.dialogIconText = openfl.Assets.getText("assets/text/Map13-15-doctor.txt").split("#");

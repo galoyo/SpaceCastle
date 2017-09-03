@@ -26,6 +26,8 @@ package;
 	 public var _nuggetsHudBox:HudBox;
 	 private var _gunHudBox:HudBox;
 	 
+	 private var mainMenu:MouseClickThisButton;
+	 
 	 /**
 	 * used so that update function is not called when player in inside of the house.
 	 */
@@ -147,6 +149,9 @@ package;
 			_gunHudBox.hidePowerWhenZero = false; 
 			add(_gunHudBox);
 			
+			mainMenu = new MouseClickThisButton(540, 0, "m: Main Menu", 90, 50, null, 16, 0xFFCCFF33, 0, Reg.state.mainMenuChoices);
+		add(mainMenu);
+			
 			// display the map coordinate at the top right corner of the screen.	
 			_displayMapCoordinate = new FlxText(680, 1, 0, "Map " + Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords));
 			// set the properties of the font and then add the font to the screen.
@@ -251,4 +256,5 @@ package;
 			}
 		}
  	}
+	
  }

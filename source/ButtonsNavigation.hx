@@ -11,14 +11,14 @@ import flixel.util.FlxColor;
 
 class ButtonsNavigation extends FlxGroup 
 {
-	public var button1:MouseClickThisButton; // left.
-	public var button2:MouseClickThisButton; // right.
-	public var button3:MouseClickThisButton; // up.
-	public var button4:MouseClickThisButton; // down.
-	public var button5:MouseClickThisButton; // action 1.
-	public var button6:MouseClickThisButton; // action 2.
-	public var button7:MouseClickThisButton; // action 3.
-	public var button8:MouseClickThisButton; // menu, imnventory.
+	public var buttonLeft:MouseClickThisButton; // left.
+	public var buttonRight:MouseClickThisButton; // right.
+	public var buttonUp:MouseClickThisButton; // up.
+	public var buttonDown:MouseClickThisButton; // down.
+	public var buttonZ:MouseClickThisButton; // action key first slot.
+	public var buttonX:MouseClickThisButton; // action key second slot.
+	public var buttonC:MouseClickThisButton; // action key third slot.
+	public var buttonI:MouseClickThisButton; // menu, imnventory.
 	
 	private var zButtonSelectedIcon:FlxSprite; // display the selected item beside the z button.
  	private var xButtonSelectedIcon:FlxSprite; 
@@ -35,37 +35,37 @@ class ButtonsNavigation extends FlxGroup
 		 _background.setPosition(0, 537);
 		 add(_background);
 		 
-		button1 = new MouseClickThisButton(0, 538, "", 60, 62, "assets/images/buttonMenuArrowLeft.png", 28, 0xFFCCFF33, 0);
-		button1.scrollFactor.set(0, 0);
-		add(button1);
+		buttonLeft = new MouseClickThisButton(0, 538, "", 60, 62, "assets/images/buttonMenuArrowLeft.png", 28, 0xFFCCFF33, 0);
+		buttonLeft.scrollFactor.set(0, 0);
+		add(buttonLeft);
 		
-		button2 = new MouseClickThisButton(65, 538, "", 60, 62,  "assets/images/buttonMenuArrowRight.png", 28, 0xFFCCFF33, 0, buttonArrowRight );
-		button2.scrollFactor.set(0, 0);
-		add(button2);
+		buttonRight = new MouseClickThisButton(65, 538, "", 60, 62,  "assets/images/buttonMenuArrowRight.png", 28, 0xFFCCFF33, 0 );
+		buttonRight.scrollFactor.set(0, 0);
+		add(buttonRight);
 		
-		button3 = new MouseClickThisButton(130, 538, "", 60, 62, "assets/images/buttonMenuArrowUp.png", 32, 0xFFCCFF33, 0, buttonArrowUp );
-		button3.scrollFactor.set(0, 0);
-		add(button3);
+		buttonUp = new MouseClickThisButton(130, 538, "", 60, 62, "assets/images/buttonMenuArrowUp.png", 32, 0xFFCCFF33, 0 );
+		buttonUp.scrollFactor.set(0, 0);
+		add(buttonUp);
 		
-		button4 = new MouseClickThisButton(195, 538, "", 60, 62, "assets/images/buttonMenuArrowDown.png", 28, 0xFFCCFF33, 0, buttonArrowDown );
-		button4.scrollFactor.set(0, 0);
-		add(button4);
+		buttonDown = new MouseClickThisButton(195, 538, "", 60, 62, "assets/images/buttonMenuArrowDown.png", 28, 0xFFCCFF33, 0 );
+		buttonDown.scrollFactor.set(0, 0);
+		add(buttonDown);
 		
-		button5 = new MouseClickThisButton(260, 538, "", 84, 62, "assets/images/buttonMenuZ.png", 32, 0xFFCCFF33, 0, buttonZ );
-		button5.scrollFactor.set(0, 0);
-		add(button5);
+		buttonZ = new MouseClickThisButton(260, 538, "", 84, 62, "assets/images/buttonMenuZ.png", 32, 0xFFCCFF33, 0 );
+		buttonZ.scrollFactor.set(0, 0);
+		add(buttonZ);
 		
-		button6 = new MouseClickThisButton(349, 538, "", 84, 62, "assets/images/buttonMenuX.png", 28, 0xFFCCFF33, 0, buttonX );
-		button6.scrollFactor.set(0, 0);
-		add(button6);
+		buttonX = new MouseClickThisButton(349, 538, "", 84, 62, "assets/images/buttonMenuX.png", 28, 0xFFCCFF33, 0 );
+		buttonX.scrollFactor.set(0, 0);
+		add(buttonX);
 		
-		button7 = new MouseClickThisButton(438, 538, "", 84, 62, "assets/images/buttonMenuC.png", 28, 0xFFCCFF33, 0, buttonC );
-		button7.scrollFactor.set(0, 0);
-		add(button7);
+		buttonC = new MouseClickThisButton(438, 538, "", 84, 62, "assets/images/buttonMenuC.png", 28, 0xFFCCFF33, 0 );
+		buttonC.scrollFactor.set(0, 0);
+		add(buttonC);
 		
-		button8 = new MouseClickThisButton(740, 538, "", 60, 62, "assets/images/buttonMenuA.png", 28, 0xFFCCFF33, 0, buttonA );
-		button8.scrollFactor.set(0, 0);
-		add(button8);
+		buttonI = new MouseClickThisButton(740, 538, "", 60, 62, "assets/images/buttonMenuI.png", 28, 0xFFCCFF33, 0 );
+		buttonI.scrollFactor.set(0, 0);
+		add(buttonI);
 		
 		zButtonSelectedIcon = new FlxSprite();
 		zButtonSelectedIcon.setPosition(306, 551); 
@@ -91,70 +91,9 @@ class ButtonsNavigation extends FlxGroup
 	}
 	
 	override public function update(elapsed:Float):Void 
-	{
-		
-		// stop player action when mouse is relesed.
-		if (FlxG.mouse.justReleased == true)
-		{
-			Reg._mouseClickedButtonLeft = false;
-			Reg._mouseClickedButtonRight = false;
-			Reg._mouseClickedButtonUp = false;
-			Reg._mouseClickedButtonDown = false;
-		}
-		
-		Reg._mouseClickedButtonZ = false;
-		Reg._mouseClickedButtonX = false;
-		Reg._mouseClickedButtonC = false;
-		Reg._mouseClickedButtonA = false;
-		
-		// goes to a function that sets a var that once set, at players.hx, the var is used to move player or fire a weapon.
-		if (button1.justPressed == true) buttonArrowLeft();
-		else if (button2.justPressed == true) buttonArrowRight();
-		else if (button3.justPressed == true) buttonArrowUp();
-		else if (button4.justPressed == true) buttonArrowDown();
-
+	{		
 		super.update(elapsed);
 	}
-	
-	private function buttonArrowLeft():Void
-	{
-		Reg._mouseClickedButtonLeft = true;
-	}	
-
-	private function buttonArrowRight():Void
-	{
-		Reg._mouseClickedButtonRight = true;
-	}	
-	
-	private function buttonArrowUp():Void
-	{
-		Reg._mouseClickedButtonUp = true;
-	}	
-	
-	private function buttonArrowDown():Void
-	{
-		Reg._mouseClickedButtonDown = true;
-	}	
-	
-	private function buttonZ():Void
-	{
-		Reg._mouseClickedButtonZ = true;
-	}	
-	
-	private function buttonX():Void
-	{
-		Reg._mouseClickedButtonX = true;
-	}	
-	
-	private function buttonC():Void
-	{
-		Reg._mouseClickedButtonC = true;
-	}	
-	
-	private function buttonA():Void
-	{
-		Reg._mouseClickedButtonA = true;
-	}		
 	
 	// z was pressed so we need to set all this array var to false and set only one to true so that only one item is currently selecyed.
 	public function resetInventoryIconZNumber(item:Int):Void

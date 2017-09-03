@@ -76,18 +76,20 @@ class Instructions extends FlxSubState
 		Instructions6.scrollFactor.set();
 		add(Instructions6);		
 		
-		button1 = new MouseClickThisButton(180, 300, "X: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
+		button1 = new MouseClickThisButton(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
 		button1.screenCenter(X);
 		add(button1);
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{				
-		if (FlxG.keys.justPressed.ANY) 
-		{
-			Reg._ignoreIfMusicPlaying = false;
-			FlxG.switchState(new MenuState());
-		}
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustPressed(["Z"]))
+			{
+				Reg._ignoreIfMusicPlaying = false;
+				FlxG.switchState(new MenuState());
+			}
+		#end
 		
 		super.update(elapsed);
 	}	

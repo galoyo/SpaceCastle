@@ -23,7 +23,7 @@ class MouseClickThisButton extends FlxButton
 	private var _borderColor:FlxColor = 0xFF0000FF;
 	private var _innerColor:FlxColor =  0x330000AA; // FlxColor.TRANSPARENT;
 	
-	public function new(x:Float = 0, y:Float = 0, ?text:String, buttonWidth:Int = 80, buttonHeight:Int = 40, ?graphicAsset:FlxGraphicAsset, textSize:Int = 12, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void)	
+	public function new(x:Float = 0, y:Float = 0, ?text:String, buttonWidth:Int = 80, buttonHeight:Int = 40, ?graphicAsset:FlxGraphicAsset, textSize:Int = 12, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, _innerColor:FlxColor = 0x330000AA)	
 	{	
 		super(x, y, text, onClick);
 		

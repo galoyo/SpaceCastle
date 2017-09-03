@@ -66,8 +66,7 @@ class Boss1 extends EnemyChildClass
 		{
 			
 			//############### PLAYER CHATS WITH MOB ###############
-			if (FlxG.keys.anyJustReleased(["DOWN"]) && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player)
-			|| FlxG.mouse.justReleased == true && Reg._mouseClickedButtonDown == true && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "";
 				

@@ -113,11 +113,13 @@ class Inventory extends FlxSubState
 	}
 	
 	override public function update(elapsed:Float):Void 
-	{								
+	{	
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
 		
 		navigation();
 				
-		if (FlxG.keys.anyJustReleased(["A"]) || Reg._mouseClickedButtonA == true) 
+		if (InputControls.i.justReleased) 
 		{
 			Reg._buttonsNavigationUpdate = true;
 			if (Reg._soundEnabled == true) FlxG.sound.play("menu", 1, false);
@@ -129,7 +131,7 @@ class Inventory extends FlxSubState
 	private function navigation():Void
 	{
 		
-		if (FlxG.keys.anyJustPressed(["LEFT"]) && inventoryItemHighlightedSquare.x > 147 || _buttonsNavigation.button1.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x > 147 )
+		if (InputControls.left.justPressed && inventoryItemHighlightedSquare.x > 147 || _buttonsNavigation.buttonLeft.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x > 147 )
 		{
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x - 36;
 			_buttonDown = true;
@@ -137,7 +139,7 @@ class Inventory extends FlxSubState
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
-		if (FlxG.keys.anyJustPressed(["RIGHT"]) && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180 || _buttonsNavigation.button2.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180)
+		if (InputControls.right.justPressed && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180 || _buttonsNavigation.buttonRight.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180)
 		{
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x + 36;
 			_buttonDown = true;
@@ -145,7 +147,7 @@ class Inventory extends FlxSubState
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
-		if (FlxG.keys.anyJustPressed(["UP"]) && inventoryItemHighlightedSquare.y > 186 ||  _buttonsNavigation.button3.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y > 186)
+		if (InputControls.up.justPressed && inventoryItemHighlightedSquare.y > 186 ||  _buttonsNavigation.buttonUp.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y > 186)
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y - 36;
 			_buttonDown = true;
@@ -154,7 +156,7 @@ class Inventory extends FlxSubState
 			
 		}
 		
-		if (FlxG.keys.anyJustPressed(["DOWN"]) && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186 || _buttonsNavigation.button4.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186)
+		if (InputControls.down.justPressed && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186 || _buttonsNavigation.buttonDown.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186)
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y + 36;
 			_buttonDown = true;
@@ -163,37 +165,37 @@ class Inventory extends FlxSubState
 		}
 		
 		// if item is available and key is pressed then set item to that navigation button.
-		if (FlxG.keys.anyJustPressed(["Z"]) && Reg._inventoryIconNumberMaximum > 0 || Reg._mouseClickedButtonZ == true && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.z.justPressed && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconZNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconZNumber(itemNumberSelected);
 			Reg._inventoryIconZNumber[itemNumberSelected] = true;
 		}
 		
-		if (FlxG.keys.anyJustPressed(["X"]) && Reg._inventoryIconNumberMaximum > 0 || Reg._mouseClickedButtonX == true && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.x.justPressed && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconXNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconXNumber(itemNumberSelected);
 			Reg._inventoryIconXNumber[itemNumberSelected] = true;
 		}
 		
-		if (FlxG.keys.anyJustPressed(["C"]) && Reg._inventoryIconNumberMaximum > 0 || Reg._mouseClickedButtonC == true && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.c.justPressed && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconCNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconCNumber(itemNumberSelected);
 			Reg._inventoryIconCNumber[itemNumberSelected] = true;			
 		}
 		
-		if (_buttonsNavigation.button1.justReleased && _buttonDown)	_buttonDown = false;
-		if (_buttonsNavigation.button2.justReleased && _buttonDown)	_buttonDown = false;
-		if (_buttonsNavigation.button3.justReleased && _buttonDown)	_buttonDown = false;
-		if (_buttonsNavigation.button4.justReleased && _buttonDown)	_buttonDown = false;
+		if (_buttonsNavigation.buttonLeft.justReleased && _buttonDown)	_buttonDown = false;
+		if (_buttonsNavigation.buttonRight.justReleased && _buttonDown)	_buttonDown = false;
+		if (_buttonsNavigation.buttonUp.justReleased && _buttonDown)	_buttonDown = false;
+		if (_buttonsNavigation.buttonDown.justReleased && _buttonDown)	_buttonDown = false;
 
 			
-		_buttonsNavigation.button1.status = FlxButton.NORMAL; // fires once instead of the bug that fires twice. see _buttonDown
-		_buttonsNavigation.button2.status = FlxButton.NORMAL;
-		_buttonsNavigation.button3.status = FlxButton.NORMAL;
-		_buttonsNavigation.button4.status = FlxButton.NORMAL;
+		_buttonsNavigation.buttonLeft.status = FlxButton.NORMAL; // fires once instead of the bug that fires twice. see _buttonDown
+		_buttonsNavigation.buttonRight.status = FlxButton.NORMAL;
+		_buttonsNavigation.buttonUp.status = FlxButton.NORMAL;
+		_buttonsNavigation.buttonDown.status = FlxButton.NORMAL;
 		
 		// output the items text and description.
 		if ( Reg._inventoryIconName[itemNumberSelected] != "") 

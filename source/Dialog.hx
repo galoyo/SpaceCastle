@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.graphics.FlxGraphic;
-import flixel.input.keyboard.FlxKey;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -14,6 +13,10 @@ import flixel.addons.text.FlxTypeText;
 import flixel.util.FlxColor;
 import openfl.system.System;
 import openfl.text.Font;
+
+#if !MOBILE
+	import flixel.input.keyboard.FlxKey;
+#end
 
 /**
  * @author galoyo
@@ -38,6 +41,14 @@ class Dialog extends FlxSubState
 	var iconImageDisplayIt:FlxSprite;
 	var dialogYesNoText:FlxText;
 	
+	private var buttonOK:MouseClickThisButton;
+	private var buttonYes:MouseClickThisButton;
+	private var buttonNo:MouseClickThisButton;
+	
+	private var buttonQuit:MouseClickThisButton;
+	private var buttonTitle:MouseClickThisButton;
+	private var buttonResume:MouseClickThisButton;
+	
 	public var _buttonsNavigation:ButtonsNavigation; // left, right, jump, etc, buttons at the bottom of the screen.
 	
 	private var _shouldTextBeAdvanced:Bool = false;
@@ -52,12 +63,9 @@ class Dialog extends FlxSubState
 		_buttonsNavigation = new ButtonsNavigation();		
 		add(_buttonsNavigation);
 		
-		screenBox = new FlxSprite(10, 10);
-		if (Reg.exitGameMenu == false)
-			screenBox.makeGraphic(FlxG.width, FlxG.height, 0x77000000);
-		else screenBox.loadGraphic("assets/images/exit.jpg", true, 800, 600);
-		
-		screenBox.setPosition(0, 0); 
+		screenBox = new FlxSprite(0, 0);
+		if (Reg.exitGameMenu == false) screenBox.makeGraphic(FlxG.width, FlxG.height, 0x77000000);	
+		else screenBox.makeGraphic(FlxG.width, FlxG.height, 0xCC000000);	
 		screenBox.scrollFactor.set(0, 0);	
 		add(screenBox);
 		
@@ -166,13 +174,38 @@ class Dialog extends FlxSubState
 			yesNoArrow.color = 0xFFFFFFFF;
 			yesNoArrow.exists = false;
 			
-			FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
+			#if !FLX_NO_KEYBOARD
+				FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
+			#end
+			
 			add(yesNoArrow);
 			
-			if (FlxG.keys.anyPressed(["A"])) {}; // trap key press.
+			//---------------------- buttons for mobile. 
+			// ok, yes and no buttons for mobile. these buttons replace the yes/no question that has the moveable arrow key. when using desktop, the arrow key will be used to select yes/no. when using mobile, the buttons will be used.
+			buttonOK = new MouseClickThisButton(80, 300, "OK", 80, 35, null, 16, 0xFFCCFF33, 0, advanceText, 0xFF000044);
+			buttonYes = new MouseClickThisButton(490, 282, "YES", 80, 35, null, 16, 0xFFCCFF33, 0, yesButtonClicked, 0xFF000044);
+			buttonNo = new MouseClickThisButton(580, 282, "No", 80, 35, null, 16, 0xFFCCFF33, 0, noButtonClicked, 0xFF000044);
+			buttonOK.set_visible(false);
+			buttonYes.set_visible(false);
+			buttonNo.set_visible(false);
+			add(buttonOK);
+			add(buttonYes);
+			add(buttonNo);
+			
+			if (InputControls.i.pressed) {}; // trap key press.
 			
 			ticks = 0;
 			nextText();	
+		}
+		
+		else
+		{
+			buttonQuit = new MouseClickThisButton(117, 350, "q: Quit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonQuitClicked);	
+			buttonTitle = new MouseClickThisButton(317, 350, "t: Title", 160, 35, null, 16, 0xFFCCFF33, 0, buttonTitleClicked);	
+			buttonResume = new MouseClickThisButton(517, 350, "r: Resume", 160, 35, null, 16, 0xFFCCFF33, 0, buttonResumeClicked);	
+			add(buttonQuit);
+			add(buttonTitle);
+			add(buttonResume);
 		}
 	}
 	
@@ -180,7 +213,7 @@ class Dialog extends FlxSubState
 	{		
 	
 		typeTheDialogText.delay = 0.005;
-		typeTheDialogText.start(0.002, false, false, ["DOWN"], completedCallback);
+		typeTheDialogText.start(0.002, false, false, null, completedCallback);
 	}
 	
 	private function nextText():Void
@@ -219,6 +252,9 @@ class Dialog extends FlxSubState
 	
 	override public function update(elapsed:Float):Void 
 	{				
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		InputControls.checkInput();
+		
 		ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
 		if (ticks > 15)
 		{
@@ -226,44 +262,41 @@ class Dialog extends FlxSubState
 			if (Reg.exitGameMenu == false)
 			{
 				// this action key is used to display the next paragraph.
-				if (FlxG.keys.anyJustReleased(["Z"]) && Reg.displayDialogYesNo == false  
-				|| Reg._mouseClickedButtonZ == true && Reg.displayDialogYesNo == false
-				|| FlxG.keys.anyJustReleased(["X"]) && Reg.displayDialogYesNo == false  
-				|| Reg._mouseClickedButtonX == true && Reg.displayDialogYesNo == false
-				|| FlxG.keys.anyJustReleased(["C"]) && Reg.displayDialogYesNo == false  
-				|| Reg._mouseClickedButtonC == true && Reg.displayDialogYesNo == false
-				)
-				{
-					_shouldTextBeAdvanced = true;
-					nextText();		
-					_shouldTextBeAdvanced = false;
-				}
-				
-				// these keys are used to navigate the arrow at the yes / no answers.
-				if (FlxG.keys.anyPressed(["RIGHT"]) && Reg.displayDialogYesNo == true || Reg._mouseClickedButtonRight == true && Reg.displayDialogYesNo == true)
-					yesNoArrow.setPosition(572, 283); 
+				#if !FLX_NO_KEYBOARD
+					if (InputControls.z.justReleased && Reg.displayDialogYesNo == false  
+					 || InputControls.x.justReleased && Reg.displayDialogYesNo == false  
+					 || InputControls.c.justReleased && Reg.displayDialogYesNo == false  
+					)
+
+					{
+						_shouldTextBeAdvanced = true;
+						nextText();		
+						_shouldTextBeAdvanced = false;
+					}
+									
+					// these keys are used to navigate the arrow at the yes / no answers.
+					if (InputControls.right.pressed && Reg.displayDialogYesNo == true)
+						yesNoArrow.setPosition(572, 283); 
+						
+					if (InputControls.left.pressed && Reg.displayDialogYesNo == true)
+						yesNoArrow.setPosition(457, 283); 
 					
-				if (FlxG.keys.anyPressed(["LEFT"]) && Reg.displayDialogYesNo == true || Reg._mouseClickedButtonLeft == true && Reg.displayDialogYesNo == true)
-					yesNoArrow.setPosition(457, 283); 
-				
-				// display the arrow key at either the yes or no answer.
-				if (FlxG.keys.anyJustReleased(["Z"]) && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true 
-				|| Reg._mouseClickedButtonZ == true && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true
-				|| FlxG.keys.anyJustReleased(["X"]) && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true 
-				|| Reg._mouseClickedButtonX == true && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true
-				|| FlxG.keys.anyJustReleased(["C"]) && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true 
-				|| Reg._mouseClickedButtonC == true && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true)
-				{
-					Reg._dialogYesNoWasAnswered = true;
-					
-					if (yesNoArrow.x == 457)
-						Reg._dialogAnsweredYes = true;
-					else Reg._dialogAnsweredYes = false;
-					
-					_shouldTextBeAdvanced = false;
-					Reg._ignoreIfMusicPlaying = false;
-					close();
-				}
+					// display the arrow key at either the yes or no answer.
+					if (InputControls.z.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true 
+					 || InputControls.x.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true 
+					 || InputControls.c.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true && _shouldTextBeAdvanced == true )
+					{
+						Reg._dialogYesNoWasAnswered = true;
+						
+						if (yesNoArrow.x == 457)
+							Reg._dialogAnsweredYes = true;
+						else Reg._dialogAnsweredYes = false;
+						
+						_shouldTextBeAdvanced = false;
+						Reg._ignoreIfMusicPlaying = false;
+						close();
+					}
+				#end
 				
 				if ( Reg._dialogFastTextEnabled == true) 
 				{
@@ -272,24 +305,31 @@ class Dialog extends FlxSubState
 			}
 			else
 			{
-				if (FlxG.keys.anyJustPressed(["F1"]))
-				{
-					#if FLX_NO_KEYBOARD
-						#if android // android back button pressed. quit app.
-						if (FlxG.android.getKey(27).justPressed) Sys.exit(0);
-						#end
-					#else
-						System.exit(0);				
-					#end
-				}
-					
-				if (FlxG.keys.anyJustPressed(["F2"])) {Reg.resetRegVars(); FlxG.resetGame();}
-				if (FlxG.keys.anyJustPressed(["F3"])) {Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close();}
+				#if !FLX_NO_KEYBOARD
+					if (FlxG.keys.anyJustPressed(["Q"])) Reg.exitProgram();	
+					if (FlxG.keys.anyJustPressed(["T"])) {Reg.resetRegVars(); FlxG.resetGame();}
+					if (FlxG.keys.anyJustPressed(["R"])) {Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close(); }
+				#end	
 			}
 		}
 		
 		super.update(elapsed);
 	}	
+	
+	private function buttonQuitClicked():Void
+	{
+		Reg.exitProgram();
+	}
+	
+	private function buttonTitleClicked():Void
+	{
+		Reg.resetRegVars(); FlxG.resetGame();		
+	}
+	
+	private function buttonResumeClicked():Void
+	{
+		Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close();
+	}
 	
 	public function dialogYesNo():Void
 	{				
@@ -311,7 +351,54 @@ class Dialog extends FlxSubState
 	{			
 		_shouldTextBeAdvanced = true;
 		
-		if (Reg.displayDialogYesNo == true)
-			dialogYesNo();		
+		#if !FLX_NO_KEYBOARD
+			if (Reg.displayDialogYesNo == true)
+				dialogYesNo();
+		#else
+			dialogBoxYesNo.exists = true;
+			
+			if (Reg.displayDialogYesNo == true)
+			{
+				buttonOK.set_visible(false);
+				buttonYes.set_visible(true);
+				buttonNo.set_visible(true);
+			}
+			else {dialogBoxYesNo.exists = false; buttonOK.set_visible(true);}
+		#end
+	}
+	
+	private function advanceText():Void
+	{
+		_shouldTextBeAdvanced = true;
+		nextText();		
+		_shouldTextBeAdvanced = false;
+	}
+	
+	private function yesButtonClicked():Void
+	{
+		Reg._dialogYesNoWasAnswered = true;
+		Reg._dialogAnsweredYes = true;
+		_shouldTextBeAdvanced = false;
+		Reg._ignoreIfMusicPlaying = false;
+		
+		buttonOK.set_visible(true);
+		buttonYes.set_visible(false);
+		buttonNo.set_visible(false);
+		
+		close();
+	}
+	
+	private function noButtonClicked():Void
+	{
+		Reg._dialogYesNoWasAnswered = true;
+		Reg._dialogAnsweredYes = false;
+		_shouldTextBeAdvanced = false;
+		Reg._ignoreIfMusicPlaying = false;
+		
+		buttonOK.set_visible(true);
+		buttonYes.set_visible(false);
+		buttonNo.set_visible(false);
+		
+		close();
 	}
 }

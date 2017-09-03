@@ -76,6 +76,9 @@ class NpcMalaUnhealthy extends FlxSprite
 	{				
 		if (isOnScreen())
 		{			
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			InputControls.checkInput();
+		
 			var ra:Int = FlxG.random.int(0, 25);			
 			var ticksRandom:Int = FlxG.random.int(15, 40); // used to delay walking.	
 			
@@ -225,7 +228,7 @@ class NpcMalaUnhealthy extends FlxSprite
 			
 			
 			//############### PLAYER CHATS WITH NPC ###############
-			if (FlxG.keys.anyJustReleased(["DOWN"]) && overlapsAt(x, y, Reg.state.player)  || FlxG.mouse.justReleased == true && Reg._mouseClickedButtonDown == true && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "dialogNpcUnhealthy.png";
 				

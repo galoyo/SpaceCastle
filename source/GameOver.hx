@@ -11,6 +11,7 @@ import flixel.util.FlxSpriteUtil;
 
 class GameOver extends FlxState
 {
+	private var button1:MouseClickThisButton;
 
 	override public function create():Void
 	{
@@ -34,15 +35,29 @@ class GameOver extends FlxState
 		Reg.playerXcoordsLast = 0;
 		Reg.playerYcoordsLast = 0;
 		
+		button1 = new MouseClickThisButton(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		button1.setPosition(0, 500); 
+		button1.screenCenter(X);
+		add(button1);
+		
 		if (Reg._musicEnabled == true) FlxG.sound.playMusic("gameOverNotCompleted", 1, false);
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
-		//FlxG.gamepads.lastActive.anyButton() || 
+		#if !FLX_NO_KEYBOARD
+			if (FlxG.keys.anyJustPressed(["Z"])) 
+			{
+				Reg.resetRegVars(); 
+				FlxG.resetGame();
+			}
+		#end
 		
-		// when a key is pressed, go to the function called closed.
-		if (FlxG.keys.justPressed.ANY) {Reg.resetRegVars(); FlxG.resetGame();}
 		super.update(elapsed);
 	}	
+	
+	private function button1Clicked():Void
+	{
+		Reg.resetRegVars(); FlxG.resetGame();
+	}
 }

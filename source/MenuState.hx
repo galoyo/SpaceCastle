@@ -34,6 +34,7 @@ class MenuState extends FlxState
 	private var button2:MouseClickThisButton;
 	private var button3:MouseClickThisButton;
 	private var button4:MouseClickThisButton;
+	private var exitProgram:MouseClickThisButton;
 	
 	// the text when an item is picked up or a char is talking.
 	public var dialog:Dialog;
@@ -110,16 +111,6 @@ class MenuState extends FlxState
 		options.alignment = FlxTextAlign.CENTER;
 		add(options);
 		
-		var version:FlxText;
-		version = new FlxText(600, 530, 0, "Version 0.6.0.0.");
-		// set the properties of the font and then add the font to the screen.
-		version.color = FlxColor.CYAN;
-		version.size = 12;
-		version.scrollFactor.set();
-		version.alignment = FlxTextAlign.CENTER;
-		version.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLUE, 4);
-		add(version);
-		
 		if(Reg._musicEnabled == true) FlxG.sound.playMusic("titleScreen", 1, false);
 		
 		FlxG.scaleMode = new FillScaleMode(); // no black bars at the sides of the game screen.
@@ -131,10 +122,12 @@ class MenuState extends FlxState
 		button2 = new MouseClickThisButton(180, 400, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
 		button3 = new MouseClickThisButton(450, 360, "3: Instructions.", 160, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);
 		button4 = new MouseClickThisButton(450, 400, "4: Options.", 160, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
+		exitProgram = new MouseClickThisButton(600, 530, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
 		add(button1);
 		add(button2);
 		add(button3);
 		add(button4);
+		add(exitProgram);
 	}
 	
 	private function button1Clicked():Void
@@ -187,40 +180,39 @@ class MenuState extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{	
-		if (FlxG.keys.anyJustReleased(["F12"])) 
-		{
-			Reg._ignoreIfMusicPlaying = true;
-			FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["F1"])) // display exit choices.
-		{ 
-			Reg.exitGameMenu = true;  
-			Reg._F1KeyUsedFromMenuState = true;
-			Reg._ignoreIfMusicPlaying = true;
-			openSubState(new Dialog());			
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["ONE"])) 
-		{
-			button1Clicked();
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["TWO"])) 
-		{
+		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["F12"])) 
+			{
+				Reg._ignoreIfMusicPlaying = true;
+				FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["ONE"])) 
+			{
+				button1Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["TWO"])) 
+			{
 
-			button2Clicked();
-		}	
-		
-		else if (FlxG.keys.anyJustReleased(["THREE"])) 
-		{
-			button3Clicked();	
-		}
-		
-		else if (FlxG.keys.anyJustReleased(["FOUR"])) 
-		{
-			button4Clicked();
-		}
+				button2Clicked();
+			}	
+			
+			else if (FlxG.keys.anyJustReleased(["THREE"])) 
+			{
+				button3Clicked();	
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["FOUR"])) 
+			{
+				button4Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["E"])) 
+			{
+				Reg.exitProgram();
+			}
+			#end
 
 		// if music has finished and user has not yet pressed 1 or 2 to play the game then prepare to play the recorded demo.
 		if (Reg._musicEnabled == true)

@@ -34,13 +34,16 @@ class NpcDogLady extends FlxSprite
 	{				
 		if (isOnScreen())
 		{					
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			InputControls.checkInput();
+		
 			if ( Reg._dogCarriedItsID.length == 0)
 			{				
 				//############### PLAYER CHATS WITH NPC ###############
 				if( overlapsAt(x, y, Reg.state.player))
 				{
 					
-					if (FlxG.keys.anyJustPressed(["DOWN"]) && Reg._itemGotDogFlute == false || Reg._mouseClickedButtonDown == true && Reg._itemGotDogFlute == false)
+					if (InputControls.down.justPressed && Reg._itemGotDogFlute == false)
 					{				
 						if(Reg.mapXcoords == 15 && Reg.mapYcoords == 15)	
 						{
@@ -88,7 +91,7 @@ class NpcDogLady extends FlxSprite
 						}
 					}
 					
-					else if (FlxG.keys.anyJustPressed(["DOWN"]) && Reg._itemGotDogFlute == true || Reg._mouseClickedButtonDown == true && Reg._itemGotDogFlute == true)
+					else if (InputControls.down.justPressed && Reg._itemGotDogFlute == true)
 					{				
 						if(Reg.mapXcoords == 15 && Reg.mapYcoords == 15)		
 						{
@@ -105,8 +108,7 @@ class NpcDogLady extends FlxSprite
 			}			
 			//###################### END CHAT #####################
 			
-			if (FlxG.keys.anyJustPressed(["DOWN"]) && Reg._itemGotDogFlute == true && overlapsAt(x, y, Reg.state.player)
-			|| Reg._mouseClickedButtonDown == true && Reg._itemGotDogFlute == true && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justPressed && Reg._itemGotDogFlute == true && overlapsAt(x, y, Reg.state.player))
 			{			
 				if ( Reg._dogCarriedItsID.length == 2)
 				{				

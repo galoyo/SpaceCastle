@@ -96,8 +96,7 @@ class Boss2 extends EnemyChildClass
 				Reg.state.openSubState(new Dialog());					
 			}
 			
-			else if (FlxG.keys.anyJustReleased(["DOWN"]) && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player)
-			|| FlxG.mouse.justReleased && Reg._mouseClickedButtonDown == true && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
+			else if (InputControls.down.justReleased && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "";
 				
