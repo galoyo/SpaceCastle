@@ -25,6 +25,8 @@ class Reg
 	public static var _framerate:Int = 120; // How many frames per second the game should run at.
 	
 	public static var _ignoreIfMusicPlaying:Bool = false; // used to stop demo from playing when the music is stopped because the user pressed a key to open a substate.
+	
+	public static var _bulletSize:Int = 0; // 0 = large. 1 = medium. 2 = small.
 		
 	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; // there are four cartoon backgrounds for the maps and four star backgrounds. those one image set from each two sets of background can display on a map but not at the same time. if this var is set to 10, then for 0 to 10 times the playstate.hx is loaded a cartoon background will display at a map while 11 to 20 times loaded will display a star background at a map. 
 	public static var _changeToDayOrNightBgsAtPageLoadTicks:Int = 0; // do NOT change this var. each time playstate.hx is loaded this var is increased. when it reaches the value of _changeToDayOrNightBgsAtPageLoad then the background umage set will change.
@@ -157,7 +159,7 @@ class Reg
 	
 	public static var _teleportedToHouse:Bool = false; // did the player used the teleporter?
 	
-	public static var _distanceBetweenMaximum:Int = 1100; // the maximum value in pixels that a mob can be from the player before the mob is re-spawned, eg, reset().
+	public static var _distanceBetweenMaximum:Int = 832; // the maximum value in pixels that a mob can be from the player before the mob is re-spawned, eg, reset().
 	
 	public static var _talkedToDoctorAtDogLady:Bool = false; // used to move the player to the waiting room.
 	
@@ -206,7 +208,7 @@ class Reg
 	public static var _boss2Defeated:Bool = false;
 	
 	// Remember to change these values also near the top of this constructor. used to change the map when player walks in a door. in map units.
-	public static var mapXcoords:Float = 20; // should be 20.
+	public static var mapXcoords:Float = 18; // should be 20.
 	public static var mapYcoords:Float = 20; // should be 20. 20-20 is the start map of the game.
 	public static var dogXcoords:Float = 0; // used to remember where the dog was picked up.
 	public static var dogYcoords:Float = 0;
@@ -220,8 +222,8 @@ class Reg
 	false, false, false, false, false, false, false, false
 	];
 	
-	// _gunPower determines if its a double or single bullet, ect
-	public static var _gunPower:Float = 1; // values are 1, 2 or 3.
+	// _gunPower determines if its a double or single bullet, ect. Bullet power increases the higher this value is. values are 1, 2 or 3.
+	public static var _gunPower:Float = 1;
 	
 	// once _gunPowerCollected reaches _gunPowerMaximum, the gunBox power value will increase by one.
 	public static var _gunHudBoxCollectedTriangles:Float = 0;	

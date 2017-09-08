@@ -174,6 +174,7 @@ class PlayState extends PlayStateDownKey
 		add(_healthBars);
 		
 		_objectCage = new FlxGroup();
+		_objectTube = new FlxGroup();
 
 		//########################## Player talks about being unhealthy.
 		if(Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._itemGotSuperBlock[1] == true && Reg._playerFeelsWeak == false)
@@ -609,6 +610,7 @@ class PlayState extends PlayStateDownKey
 						case 21: addCage(x * Reg._tileSize, y * Reg._tileSize, 6); 
 						case 22: addCage(x * Reg._tileSize, y * Reg._tileSize, 7); 
 						case 23: addCage(x * Reg._tileSize, y * Reg._tileSize, 8); 
+						case 24: addTube(x * Reg._tileSize, (y - 1) * Reg._tileSize);
 					}
 				}
 			}
@@ -659,6 +661,8 @@ class PlayState extends PlayStateDownKey
 					switch(objects[x]) {					
 						// ----------------- mobs. 
 						case 0: addBarricade(x * Reg._tileSize, y * Reg._tileSize);				
+						case 1: addMobTube((x - 1) * Reg._tileSize, (y - 1) * Reg._tileSize);	
+						case 2: addMobExplode(x * Reg._tileSize - 2, y * Reg._tileSize);
 						
 						case 5: addBoss2(x * Reg._tileSize, y * Reg._tileSize);
 						case 6: addMobBullet(x * Reg._tileSize + 2, y * Reg._tileSize + 2);
@@ -801,6 +805,7 @@ class PlayState extends PlayStateDownKey
 						case 343: addSpikeFalling(x * Reg._tileSize + 7, y * Reg._tileSize);
 						case 344: addItemAnitgravitySuit(x * Reg._tileSize, y * Reg._tileSize);
 						case 345: addLavaBlock(x * Reg._tileSize, y * Reg._tileSize);
+						
 					}
 				}
 			}
@@ -815,6 +820,7 @@ class PlayState extends PlayStateDownKey
 		add(enemiesNoCollideWithTileMap);
 		add(npcs);	
 		add(_objectCage);
+		add(_objectTube);
 		add(player);
 		
 		
@@ -1012,6 +1018,8 @@ class PlayState extends PlayStateDownKey
 			}
 			else
 			{
+				if (Reg._soundEnabled == true) FlxG.sound.play("bulletUp", 0.50, false);
+				
 				xNewCoords = Reg.playerXcoords;
 				yNewCoords = Reg.playerYcoords;
 			}
@@ -1290,6 +1298,11 @@ class PlayState extends PlayStateDownKey
 		FlxG.collide(_objectBlockOrRock, enemies, EnemyCastSpriteCollide.blockEnemyCollide);
 		FlxG.collide(_objectBlockOrRock, npcs);
 		FlxG.collide(_objectBlockOrRock, tilemap);
+		
+		FlxG.collide(_objectTube, player);
+		FlxG.collide(_objectTube, enemies);
+		FlxG.collide(_objectTube, npcs);
+		FlxG.collide(_objectTube, tilemap);
 	
 		//#################### overlays ############################
 		FlxG.overlap(_objectWaterParameter, player, waterPlayerParameter);

@@ -116,7 +116,10 @@ public override function update(elapsed:Float):Void
 	
 	// shoot key or vpad shoot button pressed
 	if (_shootPressed)
+	{
+		Reg._bulletSize = 0;
 		shoot();
+	}
 	
 	super.update(elapsed);
 }

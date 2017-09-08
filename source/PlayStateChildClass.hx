@@ -53,6 +53,7 @@ class PlayStateChildClass extends FlxUIState
 	
 	public var _objectLadders:FlxGroup; // needs to be in a group by itself.	
 	public var _objectCage:FlxGroup; // this needs to be in a group by itself.
+	public var _objectTube:FlxGroup; // this too.
 	public var _objectDoor:FlxGroup;
 	public var _objectsThatDoNotMove:FlxGroup;	
 	public var _objectDoorToHouse:FlxGroup;	
@@ -76,7 +77,7 @@ class PlayStateChildClass extends FlxUIState
 	public var _rangedWeapon:FlxGroup;
 	public var _jumpingPad:FlxGroup;
 	public var _objectLavaBlock:FlxGroup;
-	
+	public var _tube:FlxGroup;
 	
 	// all still objects are within this group	
 	public var _overlaysThatDoNotMove:FlxGroup;	
@@ -94,11 +95,14 @@ class PlayStateChildClass extends FlxUIState
 	public var mobCutter:MobCutter;
 	public var boss2:Boss2;
 	public var mobBullet:MobBullet;
+	public var mobTube:MobTube;
 	public var mobBat:MobBat;
 	public var mobSqu:MobSqu;
 	public var mobFish:MobFish;
 	public var mobGlob:MobGlob;
 	public var mobWorm:MobWorm;
+	public var mobExplode:MobExplode;
+	
 	public var boss1A:Boss1;
 	public var boss1B:Boss1;
 	public var mobBubble:MobBubble;
@@ -110,7 +114,7 @@ class PlayStateChildClass extends FlxUIState
 	public var npcDog:NpcDog;
 	
 	public var _bullets:FlxTypedGroup<Bullet>;	
-	private var _bulletsMob:FlxTypedGroup<BulletMob>;
+	public var _bulletsMob:FlxTypedGroup<BulletMob>;
 	private var _bulletsObject:FlxTypedGroup<BulletObject>;
 	
 	// player class.
@@ -277,6 +281,14 @@ class PlayStateChildClass extends FlxUIState
 		_healthBars.add(_healthBar);		
 	}
 	
+	public function addMobTube(X:Float, Y:Float):Void
+	{
+		// x and y coords, p = player, _emitterMobsDamage is the effect seen when a mob is hit.
+		mobTube = new MobTube(X, Y, player, _emitterMobsDamage, _emitterDeath, _emitterItemTriangle, _emitterItemDiamond, _emitterItemPowerUp, _emitterItemNugget, _emitterItemHeart, _emitterSmokeRight, _emitterSmokeLeft, _bulletsMob, _emitterBulletHit, _emitterBulletMiss);
+		enemiesNoCollideWithTileMap.add(mobTube);
+	
+	}
+	
 	/**
 	 * moves randomly in the air. no bullets ability.
 	 */
@@ -374,6 +386,19 @@ class PlayStateChildClass extends FlxUIState
 			_healthBar.offset.set( -3, -6);
 			_healthBars.add(_healthBar);
 		}
+	}
+
+	/**
+	 * mobExplode: This mob hangs from the ceiling shooting bullets in an angle. Fly towards player when they are near vertical. occupies two tiles.
+	 */
+	public function addMobExplode(X:Float, Y:Float):Void
+	{
+		mobExplode = new MobExplode(X, Y, player, _emitterMobsDamage, _emitterDeath, _emitterItemTriangle, _emitterItemDiamond, _emitterItemPowerUp, _emitterItemNugget, _emitterItemHeart, _emitterSmokeRight, _emitterSmokeLeft, _bulletsMob, _emitterBulletHit, _emitterBulletMiss);
+		enemies.add(mobExplode);
+		
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, mobExplode, "health", 0, mobExplode.health, false);	
+		_healthBar.offset.set( 0, -12);
+		_healthBars.add(_healthBar);
 	}
 	
 	/**
@@ -1042,12 +1067,21 @@ class PlayStateChildClass extends FlxUIState
 	}
 	
 	/**
-	 * add a lava block the the map. every once in awhile damage will be given to the mob or player that touches this block.
+	 * add a lava block to the map. every once in awhile damage will be given to the mob or player that touches this block.
 	 */
 	public function addLavaBlock(X:Float, Y:Float):Void
 	{
 		_objectLavaBlock.add( new ObjectLavaBlock(X, Y));
 		add(_objectLavaBlock);
+	}
+	
+	/**
+	 * add a tube to the map. a monster exits this tube then flies towards the player.
+	 */
+	public function addTube(X:Float, Y:Float):Void
+	{
+		var tube:ObjectTube = new ObjectTube(X, Y);
+		_objectTube.add(tube); 
 	}
 	
 	// ###############################################################
