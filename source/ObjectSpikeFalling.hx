@@ -24,7 +24,7 @@ class ObjectSpikeFalling extends FlxSprite
 		animation.add("falled", [0,1,2,3,4], 40, false);			
 		
 		allowCollisions = FlxObject.FLOOR;
-		ra = FlxG.random.int(-30, 100);
+		ra = FlxG.random.int(-100, 100);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -34,7 +34,7 @@ class ObjectSpikeFalling extends FlxSprite
 		{
 			
 			// make the spike fall if spike is within the x range of the player.
-			if (ticks == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra) velocity.y = 600 + (ra * 1.5);
+			if (ticks == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra) velocity.y = 950 + (ra * 1.5);
 			
 			// spike not yet fallen to the ground.
 			if (ticks == 0)
@@ -76,11 +76,11 @@ class ObjectSpikeFalling extends FlxSprite
 	}	
 	
 	// enemy hurt damage if hit by this spike
-	private function spikeFallingEnemy(a:FlxSprite, e:FlxSprite):Void
+	private function spikeFallingEnemy(e:FlxSprite, s:FlxSprite):Void
 	{
-		if (FlxSpriteUtil.isFlickering(a) == false)
+		if (FlxSpriteUtil.isFlickering(e) == false)
 		{
-			a.hurt(3);
+			e.hurt(3);
 		}
 	}	
 }

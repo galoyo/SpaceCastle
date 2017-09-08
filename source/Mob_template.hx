@@ -16,7 +16,7 @@ import flixel.util.FlxTimer;
 class Mob_template extends EnemyChildClass
 {
 	private var _bulletTimeForNextFiring:Float = 1; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = -1; // -1 disable, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of the clock.
+	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	
 	public var defaultHealth1:Int = 1;
 	private var maxXSpeed:Int = 300;
@@ -143,6 +143,11 @@ class Mob_template extends EnemyChildClass
 			// just above ticks = 1;
 			freezeMob(_gravity);
 				
+			// bullet
+			_cooldown += elapsed;
+			Reg._bulletSize = 0; // 0 = large. 1 = medium. 2 = small.
+			if (isOnScreen()) shoot();
+		
 			super.update(elapsed);
 		}
 		
@@ -188,10 +193,11 @@ class Mob_template extends EnemyChildClass
 		health = defaultHealth1;
 		visible = true;
 		
-		// one second.
-		_bulletTimeForNextFiring = FlxG.random.float(0.80, 1.20);
-		_cooldown = _gunDelay = _bulletTimeForNextFiring;	// Initialize the cooldown so that we can shoot right away.
-		_bulletFireFormation = _bulletFormationNumber;
+		// bullet.
+		_bulletTimeForNextFiring = FlxG.random.float(0.60, 1.20);
+		_cooldown = FlxG.random.float(0.10, 0.60);		
+		_gunDelay = _bulletTimeForNextFiring;	// Initialize the cooldown so that we can shoot right away.
+		_bulletFireFormation = _bulletFormationNumber;	
 		
 	}
 }

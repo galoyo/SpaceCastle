@@ -16,7 +16,7 @@ import flixel.util.FlxTimer;
 class NpcDoctor extends FlxSprite
 {
 	private var _bulletTimeForNextFiring:Float = 1; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = -1; // -1 disable, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of the clock.
+	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	
 	// used with jumping ability.
 	private var _YjumpingDelay:Float = 100;

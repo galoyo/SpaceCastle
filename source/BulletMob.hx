@@ -57,7 +57,14 @@ class BulletMob extends FlxSprite
 	}
 	
 	public function shoot(x:Int, y:Int, velocityX:Int, velocityY:Int, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter):Void
-	{
+	{	
+		if (Reg._bulletSize == 0) loadGraphic("assets/images/bulletMob.png", true, 24, 24);
+		else loadGraphic("assets/images/bulletSmallMob.png", true, 14, 14);
+		
+		// uncomment if sprite has animation frames. 
+		animation.add("shoot", [0, 1], 40);
+		animation.play("shoot");
+		
 		_emitterBulletHit = emitterBulletHit;
 		_emitterBulletMiss = emitterBulletMiss;
 		

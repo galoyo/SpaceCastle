@@ -123,76 +123,79 @@ class EnemyChildClass extends FlxSprite
 			var ra = FlxG.random.int(1, 18); 
 			if (Reg._soundEnabled == true) FlxG.sound.play("hitMonster" + Std.string(ra), 1, false);
 			
-			if (randShowHeartEmitter == 4) // drop a health heart.
+			if (visible == true)
 			{
-				_emitterItemHeart.focusOn(this);
-				_emitterItemHeart.start(false, Reg._mobDropItemDelay, 1);
-			}
-			
-			//############################################
-			//######## drop a powerUp.
-			if (ra == 5)
-			{
-				if (Reg.state.player.facing == FlxObject.LEFT)
+				if (randShowHeartEmitter == 4) // drop a health heart.
 				{
-					_emitterItemPowerUp.acceleration.start.min.x = 300;
-					_emitterItemPowerUp.acceleration.start.max.x = 500;
-					_emitterItemPowerUp.acceleration.end.min.x = 300;
-					_emitterItemPowerUp.acceleration.end.max.x = 500;
+					_emitterItemHeart.focusOn(this);
+					_emitterItemHeart.start(false, Reg._mobDropItemDelay, 1);
 				}
-				else
+				
+				//############################################
+				//######## drop a powerUp.
+				if (ra == 5)
 				{
-					_emitterItemPowerUp.acceleration.start.min.x = -300;
-					_emitterItemPowerUp.acceleration.start.max.x = -500;
-					_emitterItemPowerUp.acceleration.end.min.x = -300;
-					_emitterItemPowerUp.acceleration.end.max.x = -500;
+					if (Reg.state.player.facing == FlxObject.LEFT)
+					{
+						_emitterItemPowerUp.acceleration.start.min.x = 300;
+						_emitterItemPowerUp.acceleration.start.max.x = 500;
+						_emitterItemPowerUp.acceleration.end.min.x = 300;
+						_emitterItemPowerUp.acceleration.end.max.x = 500;
+					}
+					else
+					{
+						_emitterItemPowerUp.acceleration.start.min.x = -300;
+						_emitterItemPowerUp.acceleration.start.max.x = -500;
+						_emitterItemPowerUp.acceleration.end.min.x = -300;
+						_emitterItemPowerUp.acceleration.end.max.x = -500;
+					}
+					_emitterItemPowerUp.focusOn(this);
+					_emitterItemPowerUp.start(false, Reg._mobDropItemDelay, 1);
 				}
-				_emitterItemPowerUp.focusOn(this);
-				_emitterItemPowerUp.start(false, Reg._mobDropItemDelay, 1);
-			}
-			//########## END POWERUP.
-			
-			// drop a small diamond.
-			if (ra == 10 || ra == 20 || ra == 30)
-			{
-				if (Reg.state.player.facing == FlxObject.LEFT)
+				//########## END POWERUP.
+				
+				// drop a small diamond.
+				if (ra == 10 || ra == 20 || ra == 30)
 				{
-					_emitterItemDiamond.acceleration.start.min.x = -300;
-					_emitterItemDiamond.acceleration.start.max.x = -500;
-					_emitterItemDiamond.acceleration.end.min.x = -300;
-					_emitterItemDiamond.acceleration.end.max.x = -500;
+					if (Reg.state.player.facing == FlxObject.LEFT)
+					{
+						_emitterItemDiamond.acceleration.start.min.x = -300;
+						_emitterItemDiamond.acceleration.start.max.x = -500;
+						_emitterItemDiamond.acceleration.end.min.x = -300;
+						_emitterItemDiamond.acceleration.end.max.x = -500;
+					}
+					else
+					{
+						_emitterItemDiamond.acceleration.start.min.x = 300;
+						_emitterItemDiamond.acceleration.start.max.x = 500;
+						_emitterItemDiamond.acceleration.end.min.x = 300;
+						_emitterItemDiamond.acceleration.end.max.x = 500;
+					}
+					_emitterItemDiamond.focusOn(this);
+					_emitterItemDiamond.start(false, Reg._mobDropItemDelay, 1);
 				}
-				else
+				
+				// drop triangle. once enought is collected then the power of the gun will increase.
+				if (Reg._itemGotGun == true || Reg._itemGotGunFlame == true || Reg._itemGotGunFreeze == true)
 				{
-					_emitterItemDiamond.acceleration.start.min.x = 300;
-					_emitterItemDiamond.acceleration.start.max.x = 500;
-					_emitterItemDiamond.acceleration.end.min.x = 300;
-					_emitterItemDiamond.acceleration.end.max.x = 500;
-				}
-				_emitterItemDiamond.focusOn(this);
-				_emitterItemDiamond.start(false, Reg._mobDropItemDelay, 1);
-			}
-			
-			// drop triangle. once enought is collected then the power of the gun will increase.
-			if (Reg._itemGotGun == true || Reg._itemGotGunFlame == true || Reg._itemGotGunFreeze == true)
-			{
-				if (randShowTriangleOrNuggetEmitter <= 4)
-				{
-					// how many trianles to display.
-					var randAmountofTrianglesEmitted = FlxG.random.int(1, 3);
-						
-					// after mob death drops items.
-					_emitterItemTriangle.focusOn(this);
-					_emitterItemTriangle.start(false, Reg._mobDropItemDelay, randAmountofTrianglesEmitted);
-				}
-				else if (randShowTriangleOrNuggetEmitter > 4 && randShowTriangleOrNuggetEmitter <= 7)
-				{
-					// how many trianles to display.
-					var randAmountofNuggetsEmitted = FlxG.random.int(1, 7);
-						
-					// after mob death drops items.
-					_emitterItemNugget.focusOn(this);
-					_emitterItemNugget.start(false, Reg._mobDropItemDelay, randAmountofNuggetsEmitted);
+					if (randShowTriangleOrNuggetEmitter <= 4)
+					{
+						// how many trianles to display.
+						var randAmountofTrianglesEmitted = FlxG.random.int(1, 3);
+							
+						// after mob death drops items.
+						_emitterItemTriangle.focusOn(this);
+						_emitterItemTriangle.start(false, Reg._mobDropItemDelay, randAmountofTrianglesEmitted);
+					}
+					else if (randShowTriangleOrNuggetEmitter > 4 && randShowTriangleOrNuggetEmitter <= 7)
+					{
+						// how many nugget to display.
+						var randAmountofNuggetsEmitted = FlxG.random.int(1, 7);
+							
+						// after mob death drops items.
+						_emitterItemNugget.focusOn(this);
+						_emitterItemNugget.start(false, Reg._mobDropItemDelay, randAmountofNuggetsEmitted);
+					}
 				}
 			}
 		}
@@ -287,16 +290,16 @@ private function shoot():Void
 				// fire two bullets east and west directions.				
 				if (_bulletFireFormation == 0)
 				{
-					bYVeloc = 0; // move bullet to the left side of the player
-					bXVeloc = -_bulletSpeed;
+					bYVeloc = 0; 				// do not move up or down.
+					bXVeloc = -_bulletSpeed;	// move left.
 					
 					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
 					//###########################
-					// this must be behind the bulletMob.shoot( for the next bulletMob.shoot( to work.
+					// this must be after bulletMob.shoot(), but not after the last one in this "if code block", for the next bulletMob.shoot() to work.
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 
-					bYVeloc = 0; // move bullet to the right side of the player
-					bXVeloc = _bulletSpeed;
+					bYVeloc = 0; 				// do not move up or down.
+					bXVeloc = _bulletSpeed; 	// move right.
 
 					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
 				}
@@ -422,6 +425,20 @@ private function shoot():Void
 					// 50 o-clock
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = -_bulletSpeed;
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+				}
+				// fires two bullets at 20 and 40 minutes of a clock.
+				else if (_bulletFireFormation == 5)
+				{
+					bXVeloc = -_bulletSpeed;
+					bYVeloc = _bulletSpeed;
+					
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob = _bulletsMob.recycle(BulletMob);
+					
+					bXVeloc = _bulletSpeed;
+					bYVeloc = _bulletSpeed;
+					
 					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
 				}
 				

@@ -17,8 +17,7 @@ import flixel.util.FlxTimer;
 class Boss2 extends EnemyChildClass 
 {	
 	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 2; // 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of the clock. -1 for no fire.
-	
+	private var _bulletFormationNumber:Int = 2; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.	
 	public var defaultHealth1:Int = 24;
 	private var _displayNextDialog:Bool = false;
 	private var _dialogDisplayIt:Bool = false; // used to display a dialog only once. 
@@ -157,6 +156,7 @@ class Boss2 extends EnemyChildClass
 						// bullet
 						_bulletFireFormation = 0;
 						_cooldown += elapsed;
+						Reg._bulletSize = 0;
 						shoot();
 					} 
 					else
@@ -177,6 +177,7 @@ class Boss2 extends EnemyChildClass
 						// bullet
 						_bulletFireFormation = 2;
 						_cooldown += elapsed;
+						Reg._bulletSize = 0;
 						shoot();
 					}
 						

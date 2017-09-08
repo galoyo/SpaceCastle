@@ -18,7 +18,7 @@ import flixel.util.FlxTimer;
 class MobGlob extends EnemyChildClass 
 {	
 	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of the clock.
+	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	
 	public var defaultHealth:Int = 2; 
 	
@@ -38,7 +38,7 @@ class MobGlob extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, emitterSmokeRight, emitterSmokeLeft, bulletsMob, emitterBulletHit, emitterBulletMiss);
 			
-		loadGraphic("assets/images/mobGlob.png", true, 32, 32);
+		loadGraphic("assets/images/mobGlob.png", true, 32, 32);		
 		
 		if (id == 1) animation.add("walk", [0, 1, 2, 2, 1], 16);
 		if (id == 2) animation.add("walk", [3, 4, 5, 5, 4], 16);
@@ -48,7 +48,6 @@ class MobGlob extends EnemyChildClass
 		ID = id;
 		
 		// freeze the mob. change its color to blue.
-		setColorTransform(0, 0, 1, 1, 0, 0, 0, 0);
 		setColorTransform(1, 1, 1, 1, 0, 0, 0, 0);
 		
 		pixelPerfectPosition = false;
@@ -115,6 +114,7 @@ class MobGlob extends EnemyChildClass
 		
 		// bullet
 		_cooldown += elapsed;
+		Reg._bulletSize = 0;
 		if(isOnScreen()) shoot();
 			
 		super.update(elapsed);
