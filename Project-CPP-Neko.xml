@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.0.0" company="" />
+	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.1.0" company="" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -41,12 +41,12 @@
 	<assets path="assets" if="windows" exclude="*.mp3" embed="true" />
 	<assets path="assets" if="neko" exclude="*.mp3" embed="true" />
 	
-	<assets path="assets/music" rename="music" unless="flash">
+	<assets path="assets/music" rename="music" unless="flash" embed="true">
 		<music path="1.ogg" id="1" />
 		<music path="titleScreen.ogg" id="titleScreen" />
 	</assets>
 	
-	<assets path="assets/music" rename="music" unless="flash">
+	<assets path="assets/music" rename="music" unless="flash" embed="true">
 		<music path="2.ogg" id="2" />
 		<music path="3.ogg" id="3" />
 		<music path="4.ogg" id="4" />
@@ -68,7 +68,7 @@
 		<music path="twinkle.ogg" id="twinkle" />
 	</assets>	
 	
-	<assets path="assets/sounds" rename="sounds" unless="flash">
+	<assets path="assets/sounds" rename="sounds" unless="flash" embed="true">
 		<sound path="teleport1.ogg" id="teleport1" />
 		<sound path="teleport2.ogg" id="teleport2" />
 		<sound path="click2.ogg" id="click2" />
@@ -172,7 +172,9 @@
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
 	<!--haxedef name="FLX_NO_GAMEPAD" /-->
-	
+
+	<haxedef name="WEB_EMBED" />
+		
 	<!--Disable the Flixel core sound tray-->
 	<!--<haxedef name="FLX_NO_SOUND_TRAY" />-->
 	
