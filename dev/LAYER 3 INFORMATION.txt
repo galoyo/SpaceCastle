@@ -7,7 +7,9 @@
 
 
 0: not used. if this "X" is found at the map then remove it.
-1-4: red "X". replace with new boss.
+1: mobTube: Place this at the right side of Tube. Tube is at layer 3. At the Tile Map Editor, its ID is 24.
+2: mobExplode: This mob hangs from the ceiling shooting bullets in an angle. Fly towards player when they are near vertical. occupies two tiles.
+3-4: red "X". replace with new boss.
 5: boss2. flies. warps to player when wall is a path obstacle. no bullets.
 6: mobBullet. only moves horizontally from one side of the screen to the other.
 7: red "X".

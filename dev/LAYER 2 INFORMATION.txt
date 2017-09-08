@@ -7,3 +7,4 @@ MAIN PLAYER AND ITEMS DISPLAYED IN FRONT OF CHARACTERS.
 0: player.
 
 16-23: cage that the Malas can be in.
+24: tube. a monster exits this tube then flies towards the player. At Tile Map Editor, See layer 3. Put ID 1, the mobTube at the right side of this tube.
