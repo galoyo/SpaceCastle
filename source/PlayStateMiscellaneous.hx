@@ -8,15 +8,15 @@ import flixel.util.FlxTimer;
  * ...
  * @author galoyo
  */
-class PlayStateMiscellaneous extends PlayStateChildClass
+class PlayStateMiscellaneous
 {
 	// this function is called from other classes.
-	public function gameOver(?t:FlxTimer):Void
+	public static function gameOver(?t:FlxTimer):Void
 	{
 		FlxG.switchState(new GameOver());
 	}
 	
-	public function winState(?t:FlxTimer):Void
+	public static function winState(?t:FlxTimer):Void
 	{
 		FlxG.switchState(new WinState());
 	}
@@ -24,7 +24,7 @@ class PlayStateMiscellaneous extends PlayStateChildClass
 	/**
 	 * play a short music before playing the longer music.
 	 */
-	public function playMusicIntro():Void
+	public static function playMusicIntro():Void
 	{
 		if (Reg._inHouse == "")
 		{
@@ -54,7 +54,7 @@ class PlayStateMiscellaneous extends PlayStateChildClass
 	/**
 	 * Play a long 1 minute+ music.
 	 */
-	public function playMusic():Void
+	public static function playMusic():Void
 	{
 		// play random music.
 		
@@ -76,6 +76,8 @@ class PlayStateMiscellaneous extends PlayStateChildClass
 			FlxG.sound.playMusic("6", 0.40, false);
 			if ( _randomMusicNumber == 7) 
 			FlxG.sound.playMusic("7", 0.40, false);
+			if ( _randomMusicNumber == 8) 
+			FlxG.sound.playMusic("8", 0.40, false);
 			
 			FlxG.sound.music.persist = true;
 		} 
@@ -85,7 +87,7 @@ class PlayStateMiscellaneous extends PlayStateChildClass
 	/**
 	 * leave the map and go to another map.
 	 */
-	public function leaveMap(player:Player):Void
+	public static function leaveMap(player:Player):Void
 	{
 		player.getCoords();
 		Reg.beginningOfGame = false;
@@ -123,25 +125,25 @@ class PlayStateMiscellaneous extends PlayStateChildClass
 	/**
 	 * The guideline above the player head refers to the higher area that a jump can accur. The middle guideline refer to minimum player damage if player falls to that line, while the last line refers to player death.
 	 */	
-	public function guidelines():Void
+	public static function guidelines():Void
 	{
 		// the player will receive small health damage one tile below this line.
-		warningFallLine = new FlxSprite(0, 0);
-		warningFallLine.loadGraphic("assets/images/guideline.png", false);
-		warningFallLine.visible = false;
-		add(warningFallLine);
+		Reg.state.warningFallLine = new FlxSprite(0, 0);
+		Reg.state.warningFallLine.loadGraphic("assets/images/guideline.png", false);
+		Reg.state.warningFallLine.visible = false;
+		Reg.state.add(Reg.state.warningFallLine);
 		
 		// lets the player know where the death fall line is. feet touching this line is instant death.		
-		deathFallLine = new FlxSprite(0, 0);
-		deathFallLine.loadGraphic("assets/images/guideline.png", false);
-		deathFallLine.visible = false;
-		add(deathFallLine);
+		Reg.state.deathFallLine = new FlxSprite(0, 0);
+		Reg.state.deathFallLine.loadGraphic("assets/images/guideline.png", false);
+		Reg.state.deathFallLine.visible = false;
+		Reg.state.add(Reg.state.deathFallLine);
 		
 		// this line refers to a maximum height that the player is able to jump.
-		maximumJumpLine = new FlxSprite(0, 0);
-		maximumJumpLine.loadGraphic("assets/images/guideline.png", false);
-		maximumJumpLine.visible = false;
-		add(maximumJumpLine);
+		Reg.state.maximumJumpLine = new FlxSprite(0, 0);
+		Reg.state.maximumJumpLine.loadGraphic("assets/images/guideline.png", false);
+		Reg.state.maximumJumpLine.visible = false;
+		Reg.state.add(Reg.state.maximumJumpLine);
 
 	}
 }

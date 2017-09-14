@@ -1,33 +1,202 @@
 package;
-
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
+import flixel.addons.effects.chainable.FlxTrailEffect;
 import flixel.addons.tile.FlxTilemapExt;
+import flixel.addons.ui.FlxUIState;
 import flixel.effects.particles.FlxEmitter;
-import flixel.graphics.frames.FlxTileFrames;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
-import flixel.math.FlxPoint;
 import flixel.text.FlxText;
-import flixel.tile.FlxTileblock;
 import flixel.tile.FlxTilemap;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
-import haxe.Timer;
-import openfl.Assets; 
-import openfl.display.StageQuality;
+
+
 /**
  * @author galoyo
  */
 
-class PlayState extends PlayStateDownKey
+class PlayState extends FlxUIState
 {
+	public var recording:Bool = false;
+	public var replaying:Bool = false;
+	
+	public var _emitterBulletHit:FlxEmitter;
+	public var _emitterBulletMiss:FlxEmitter;	
+	public var _emitterMobsDamage:FlxEmitter;
+	public var _emitterDeath:FlxEmitter;
+	public var _emitterItemTriangle:FlxEmitter;
+	public var _emitterItemDiamond:FlxEmitter;
+	public var _emitterItemPowerUp:FlxEmitter;
+	public var _emitterItemNugget:FlxEmitter;
+	public var _emitterItemHeart:FlxEmitter;
+	public var _emitterCeilingHit:FlxEmitter;
+	public var _emitterQuestionMark:FlxEmitter;
+	public var _emitterSmokeRight:FlxEmitter;
+	public var _emitterSmokeLeft:FlxEmitter;
+	public var _emitterAirBubble:FlxEmitter;
+	public var _emitterBulletFlame:FlxEmitter;
+	public var _emitterWaterSplash:FlxEmitter;
+	
+	public var _gun:PlayerOverlayGun;
+	public var _gunFlame:PlayerOverlayGunFlame;
+	public var _gunFreeze:PlayerOverlayGunFreeze;
+		
+	public var _itemsThatWerePickedUp:FlxGroup;
+	public var _itemFlyingHatPlatform:FlxGroup;	
+	public var _itemGunFlame:FlxGroup;
+	public var _itemGun:FlxGroup;
+	public var _itemGunFreeze:FlxGroup;
+	
+	public var _objectLadders:FlxGroup; // needs to be in a group by itself.	
+	public var _objectCage:FlxGroup; // this needs to be in a group by itself.
+	public var _objectTube:FlxGroup; // this too.
+	public var _objectDoor:FlxGroup;
+	public var _objectsThatDoNotMove:FlxGroup;	
+	public var _objectsThatMove:FlxGroup;	
+	public var _objectDoorToHouse:FlxGroup;	
+	public var _objectPlatformMoving:FlxGroup;
+	public var _objectGrassWeed:FlxGroup;	
+	public var _objectTreasureChest:ObjectTreasureChest;	
+	public var _objectComputer:ObjectComputer;		
+	public var _objectFireball:FlxGroup;
+	public var _objectFireballTween:FlxGroup;
+	public var _objectBeamLaser:FlxGroup;
+	public var _objectSuperBlock:FlxGroup;
+	public var _objectWaterCurrent:FlxGroup;
+	public var _objectPlatformParameter:FlxGroup;	
+	public var _objectVineMoving:FlxGroup;
+	public var _objectBlockOrRock:FlxGroup; // all blocks that do no damage should be in this group.	
+	public var _objectFireballBlock:FlxGroup;
+	public var _objectWaterParameter:FlxGroup;	
+	public var _objectLaserParameter:FlxGroup;	
+	public var _objectSign:FlxGroup;
+	public var _objectTeleporter:FlxGroup;
+	public var _jumpingPad:FlxGroup;
+	public var _objectLavaBlock:FlxGroup;
+	public var _objectQuickSand:FlxGroup;
+	public var _tube:FlxGroup;
+	
+	// all still objects are within this group	
+	public var _overlaysThatDoNotMove:FlxGroup;	
+	public var _overlayLaserBeam:FlxGroup;		
+	public var _overlayWave:FlxGroup;	
+	public var _overlayWater:FlxGroup;
+	public var _overlayAirBubble:FlxGroup;	
+	public var _overlayPipe:FlxGroup;
+	
+	public var _objectLayer3OverlapOnly:FlxGroup;
+	
+	// These mobs are in the enemies group.
+	public var mobApple:MobApple;
+	public var mobSlime:MobSlime;	
+	public var mobCutter:MobCutter;
+	public var boss2:Boss2;
+	public var mobBullet:MobBullet;
+	public var mobTube:MobTube;
+	public var mobBat:MobBat;
+	public var mobSqu:MobSqu;
+	public var mobFish:MobFish;
+	public var mobGlob:MobGlob;
+	public var mobWorm:MobWorm;
+	public var mobExplode:MobExplode;
+	public var mobSaw:MobSaw;
+	
+	public var boss1A:Boss1;
+	public var boss1B:Boss1;
+	public var mobBubble:MobBubble;
+	public var npcDoctor:NpcDoctor;
+	
+	public var npcMalaUnhealthy:NpcMalaUnhealthy;
+	public var npcMalaHealthy:NpcMalaHealthy;
+	public var npcDogLady:NpcDogLady;
+	public var npcDog:NpcDog;
+	
+	public var _bullets:FlxTypedGroup<Bullet>;	
+	public var _bulletsMob:FlxTypedGroup<BulletMob>;
+	public var _bulletsObject:FlxTypedGroup<BulletObject>;
+	
+	// player class.
+	public var player:Player;
+	
+	public var _healthBars:FlxGroup;
+	public var _healthBarPlayer:HealthBar;
+	public var _bubbleHealthBar:FlxBar;
+	
+	// all mobs that collide will tilemaps are in this group.
+	public var enemies:FlxGroup;
+	// all mobs that do not collide will tilemaps but can collide with other mobs are in this group.	
+	public var enemiesNoCollideWithTileMap:FlxGroup;
+	public var npcs:FlxGroup; //  non-player characters (malas)
+	
+	public var _defenseMobFireball1:FlxSprite;
+	public var _defenseMobFireball2:FlxSprite;
+	public var _defenseMobFireball3:FlxSprite;
+	public var _defenseMobFireball4:FlxSprite;
+	
+	public var _npcShovel:FlxGroup;	
+	public var _npcWateringCan:FlxGroup;
+	
+	public var _trail:FlxTrailEffect;
+	public var _tween:FlxTween;
+	
+	public var background:FlxSprite;
+	public var _playerOnLadder:Bool = false;
+	public var _playerJustExitedLadder:Bool = false;
+	public var _touchingSuperBlock:Bool = false;
+	
+	public var _playWaterSound:Bool = true;
+	public var _playWaterSoundEnemy:Bool = true;
+	
+	public var tilemap:FlxTilemapExt;
+	public var underlays:FlxTilemap;
+	public var overlays:FlxTilemap;
+	public var foregroundImage:FlxBackdrop = new FlxBackdrop();
+	
+	// the inventory system across the top part of the screen.
+	public var hud:Hud;
+	
+	public var _buttonsNavigation:ButtonsNavigation; // left, right, jump, etc, buttons at the bottom of the screen.
+	
+	// the text when an item is picked up or a char is talking.
+	public var dialog:Dialog;
+
+	public var _rain:FlxTypedGroup<ObjectRain>; // a group of flakes
+	//private var _vPad:FlxVirtualPad;
+	
+	public var _ceilingHit:FlxTimer;
+	public var _questionMark:FlxTimer;
+	public var _waterPlayer:FlxTimer;
+	public var _waterEnemy:FlxTimer;
+	public var _playerAirRemainingTimer:FlxTimer;
+	
+	public var _ceilingHitFromMob:Bool;
+	
+	// save point.
+	public var savePoint:FlxGroup;
+	public var _fireballPositionInDegrees:Int;
+	public var airLeftInLungsText:FlxText;
+	public var _talkToHowManyMoreMalas:FlxText;
+	public var _timeRemainingBeforeDeath:FlxText;
+	
+	public var warningFallLine:FlxSprite;
+	public var deathFallLine:FlxSprite;
+	public var maximumJumpLine:FlxSprite;
+	public var _tracker:FlxSprite; // not visible. player looks beyond the game regions.	
+
+	public var ticks = 0;
+	public var _ticksTrackerUp:Float = 0;
+	public var _ticksTrackerDown:Float = 0;
+	
+	public var _dogFound:Bool = false;
+	
 	override public function create():Void
 	{
 		// near the bottom of this constructor, if you plan to use more than 2 dogs then uncomment those two lines with id 3 and 4.
@@ -115,7 +284,7 @@ class PlayState extends PlayStateDownKey
 		_overlayPipe = new FlxGroup();	
 		
 		// draw the map tiles and place the objects and layers on the map.
-		createLayer0Tilemap();
+		PlayStateCreateMap.createLayer0Tilemap();
 		
 		// setup the bullet star emitter		
 		_emitterBulletHit = new FlxEmitter();
@@ -190,10 +359,10 @@ class PlayState extends PlayStateDownKey
 		}
 		//##########################		
 		
-		createLayer1UnderlaysTiles();
-		createLayer2Player();			
-		createSpriteGroups();		
-		createLayer3Sprites();
+		PlayStateCreateMap.createLayer1UnderlaysTiles();
+		PlayStateCreateMap.createLayer2Player();			
+		PlayStateCreateMap.createSpriteGroups();		
+		PlayStateCreateMap.createLayer3Sprites();
 		
 		add(_emitterBulletHit);
 		add(_emitterCeilingHit);
@@ -211,9 +380,9 @@ class PlayState extends PlayStateDownKey
 		add(_emitterSmokeRight);		
 		add(_emitterSmokeLeft);		
 		
-		createOverlaysGroups();
-		createLayer4OverlaySprites();
-		createLayer5OverlaysTiles();
+		PlayStateCreateMap.createOverlaysGroups();
+		PlayStateCreateMap.createLayer4OverlaySprites();
+		PlayStateCreateMap.createLayer5OverlaysTiles();
 		
 		add(_objectWaterParameter);
 		add(_objectLaserParameter);
@@ -233,13 +402,17 @@ class PlayState extends PlayStateDownKey
 		{
 			foregroundImage = new FlxBackdrop("assets/images/parallaxclouds.png", 1.5, 0, true, false, 0, 0);
 			foregroundImage.velocity.x = 100;
+			#if !flash
+				foregroundImage.pixelPerfectRender = true;
+				foregroundImage.useScaleHack = true;
+			#end
 			add(foregroundImage);
 	
 			// we're going to have some rain or ash flakes drifting down at different 'levels'. We need a lot of them for the effect to work nicely
 			_rain = new FlxTypedGroup<ObjectRain>();
 			add(_rain);
 		
-			for (i in 0...1200)
+			for (i in 0...200)
 			{
 				_rain.add(new ObjectRain(i % 10));
 			}
@@ -293,7 +466,7 @@ class PlayState extends PlayStateDownKey
 		_timeRemainingBeforeDeath.visible = false;
 		add(_timeRemainingBeforeDeath);
 		
-		guidelines(); // display the fall/jump guide lines.
+		PlayStateMiscellaneous.guidelines(); // display the fall/jump guide lines.
 		
 		_tracker = new FlxSprite(0, 0);
 		_tracker.makeGraphic(28, 28, 0x00FFFFFF);
@@ -305,9 +478,7 @@ class PlayState extends PlayStateDownKey
 			{
 				FlxG.sound.music.persist = true;
 			}
-			else  
-			playMusicIntro(); // played when entering a house, cave, ect.
-			
+			else  PlayStateMiscellaneous.playMusicIntro(); // played when entering a house, cave, ect.			
 		}	
 		
 		if (Reg._backgroundSounds == true) FlxG.sound.play("backgroundSounds", 0.25, true);
@@ -329,10 +500,10 @@ class PlayState extends PlayStateDownKey
 		//################################################################
 		//check if dog exists on the map. if no dog exists then create the dogs at the top left corner of the screen. There needs to be dogs at each level, some hidden some not, so that a dog can be carried from one map to another. if there are dogs that exists, then there should be one dog that can be found while the other dog cannot. when carried the dog can be seen at another map when there is a dog with the id that is hidden. the following code makes that happen.
 		Reg._dogStopMoving = true;
-		if (Reg._dogExistsAtMap[1] == false) addNpcDog(0, 0, player, 1);
-		if (Reg._dogExistsAtMap[2] == false) addNpcDog(0, 0, player, 2);				
-		//if (Reg._dogExistsAtMap[3] == false) addNpcDog(0, 0, player, 3);
-		//if (Reg._dogExistsAtMap[4] == false) addNpcDog(0, 0, player, 4);	
+		if (Reg._dogExistsAtMap[1] == false) PlayStateAdd.addNpcDog(0, 0, player, 1);
+		if (Reg._dogExistsAtMap[2] == false) PlayStateAdd.addNpcDog(0, 0, player, 2);				
+		//if (Reg._dogExistsAtMap[3] == false) PlayStateAdd.addNpcDog(0, 0, player, 3);
+		//if (Reg._dogExistsAtMap[4] == false) PlayStateAdd.addNpcDog(0, 0, player, 4);	
 		Reg._dogStopMoving = false;
 		
 		if (Reg._transitionEffectEnable == true) Transition.init();
@@ -365,697 +536,8 @@ class PlayState extends PlayStateDownKey
 		}
 		
 		return false;
-	}
-		
-	function createLayer0Tilemap():Void
-	{
-		
-		// the background image.
-		//backdropImage = new FlxBackdrop("assets/images/background7.png", 0, 0, false, false, 0, 0);
-		//add(backdropImage);
-		
-		if (Reg._inHouse == "" ) // not in house.
-		{	
-			//############## background set.
-			var bgSet:Int = 1;
-			
-			// reset the ticks after all the image backgrounds have been displayed. if _changeToDayOrNightBgsAtPageLoad is set to 10 then for 0 to 10 the cartoon bg is displayed while 11 to 20 the stars background is displayed. anything greater than 20 and the ticks are reset back so that once again the cartoon bg can be displayed.
-			if (Reg._changeToDayOrNightBgsAtPageLoadTicks >= Reg._changeToDayOrNightBgsAtPageLoad * 2)
-			Reg._changeToDayOrNightBgsAtPageLoadTicks = 0;
-			
-			Reg._changeToDayOrNightBgsAtPageLoadTicks++;
-			
-			// display the cartoon background until the amount _changeToDayOrNightBgsAtPageLoad and then display the image until the amount of _changeToDayOrNightBgsAtPageLoad * 10;
-			if (Reg._changeToDayOrNightBgsAtPageLoadTicks <= Reg._changeToDayOrNightBgsAtPageLoad)
-			{
-				bgSet = 1;
-			}
-			
-			else if (Reg._changeToDayOrNightBgsAtPageLoadTicks > Reg._changeToDayOrNightBgsAtPageLoad)
-			{
-				bgSet = 2;
-			}
-			//-----------------------------------------------
-			
-			var bg:Int = 0;
-			if (FlxMath.isEven(Reg.mapXcoords) == true && FlxMath.isEven(Reg.mapYcoords) == true) 
-			bg = 1;			
-			if (FlxMath.isOdd(Reg.mapXcoords) == true && FlxMath.isOdd(Reg.mapYcoords) == true) 
-			bg = 2;
-			if (FlxMath.isEven(Reg.mapXcoords) == true && FlxMath.isOdd(Reg.mapYcoords) == true) 
-			bg = 3;
-			if (FlxMath.isOdd(Reg.mapXcoords) == true && FlxMath.isEven(Reg.mapYcoords) == true) 
-			bg = 4;
-			
-			background = new FlxSprite();
-			
-			if (Reg.mapXcoords >= 24 && Reg.mapYcoords >= 24)
-				{
-					FlxG.camera.color = 0xFF999999;
-					background.loadGraphic("assets/images/background2.jpg", false);
-				}
-			else background.loadGraphic("assets/images/background"+bgSet+"-"+bg+".jpg", false);
-			background.scrollFactor.set(0.2,0.2);
-			background.setPosition(0, 0);
-			add(background);	
-		}
-		
-		tilemap = new FlxTilemapExt();		
-		if (Reg._testItems == false) tilemap.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + "_Layer 0 tiles.csv"), "assets/images/map0Tiles.png", Reg._tileSize, Reg._tileSize);
-		else tilemap.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items_Layer 0 tiles.csv"), "assets/images/map0Tiles.png", Reg._tileSize, Reg._tileSize);
-		
-		var levelTiles:FlxTileFrames = FlxTileFrames.fromBitmapAddSpacesAndBorders("assets/images/map0Tiles.png", new FlxPoint( Reg._tileSize, Reg._tileSize), new FlxPoint(4,4), new FlxPoint(4,4));
-		tilemap.frames = levelTiles;
-		// tile tearing problem fix
-		tilemap.useScaleHack = false;
-		
-		// tiles.png has all the tiles for this tilemap. tile frame starts at the top left corner and end bottom right. this code allows the player to jump up from underneth the tile.		
-		
-		// no collision check. the last object is always + 1 more in the for loop.
-		for (i in 16...19) tilemap.setTileProperties(i, FlxObject.NONE);// background castle. tile object can have UP, ANY, NONE...		
-		for (i in 37...46) tilemap.setTileProperties(i, FlxObject.NONE);	
-		for (i in 57...96) tilemap.setTileProperties(i, FlxObject.NONE);
-							 tilemap.setTileProperties(96, FlxObject.RIGHT);
-							 tilemap.setTileProperties(97, FlxObject.ANY);
-							 tilemap.setTileProperties(98, FlxObject.LEFT);
-							 tilemap.setTileProperties(99, FlxObject.ANY);
-		for (i in 100...103) tilemap.setTileProperties(i, FlxObject.NONE);
-							 tilemap.setTileProperties(178, FlxObject.ANY);
-		// house background tiles.
-		for (i in 181...183) tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 189...191) tilemap.setTileProperties(i, FlxObject.NONE);	
-		for (i in 197...199) tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 205...207) tilemap.setTileProperties(i, FlxObject.NONE);
-		
-		// stage background tiles.
-		for (i in 193...196) tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 201...204) tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 217...268) tilemap.setTileProperties(i, FlxObject.ANY);
-		for (i in 281...295) tilemap.setTileProperties(i, FlxObject.ANY); 	// vertical tiles.
-		for (i in 304...736) tilemap.setTileProperties(i, FlxObject.ANY); 	// level 2 tiles.
-		for (i in 736...800) tilemap.setTileProperties(i, FlxObject.NONE);	// textures.
-		
-		var tempNW:Array<Int> = [8,9,10,11,57,59,248, 252,253, 260,262, 305,337,369,401,433,473,497,521,545,569,601,625,649,673,697];
-		var tempNE:Array<Int> = [12,13,14,15,58,60,249, 254,255, 261, 263, 306,338,370,402,434,474,498,522,546,570,602,626,650,674,698];		
-		var tempSW:Array<Int> = [250, 256, 257, 264, 266, 313,345,377,409,441,481,505,529,553,577,609,633,657,681,705];
-		var tempSE:Array<Int> = [251, 258, 259, 265, 267, 314,346,378,410,442,482,506,530,554,578,610,634,658,682,706];
-		
-		tilemap.setSlopes(tempNW, tempNE, tempSW, tempSE);		
-		tilemap.setGentle([253, 254, 257, 258], [252, 255, 256, 259]);
-		tilemap.setSteep([260, 261, 264, 265], [262, 263, 266, 267]);
-		
-		add(tilemap);
-		
-		//set the left cage border to a blank tile.
-		var newindex:Int = 96;
-		for (j in 0...tilemap.heightInTiles)
-		{
-			for (i in 0...tilemap.widthInTiles - 1)
-			{
-				if (tilemap.getTile(i, j) == 97)
-				{
-					tilemap.setTile(i, j, newindex, true);
-				}	
-			}		
-		}
-		
-		//set the right cage border to a blank tile.
-		var newindex:Int = 98;
-		for (j in 0...tilemap.heightInTiles)
-		{
-			for (i in 0...tilemap.widthInTiles - 1)
-			{
-				if (tilemap.getTile(i, j) == 99)
-				{
-					tilemap.setTile(i, j, newindex, true);
-				}	
-			}		
-		}
 	}	
-			
-	function createLayer1UnderlaysTiles():Void
-	{
-		underlays = new FlxTilemap();		
-		if (Reg._testItems == false) underlays.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse +  "_Layer 1 underlays tiles.csv"), "assets/images/map1UnderlaysTiles.png", Reg._tileSize, Reg._tileSize);
-		else underlays.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items_Layer 1 underlays tiles.csv"), "assets/images/map1UnderlaysTiles.png", Reg._tileSize, Reg._tileSize);
-		
-		//for (i in 0...1159) underlays.setTileProperties(i, FlxObject.NONE);	
-		
-		add(underlays);
-		
-		var newindex:Int = 38;
-		for (j in 0...underlays.heightInTiles)
-		{
-			for (i in 0...underlays.widthInTiles - 1)
-			{
-				if (underlays.getTile(i, j) == 39)
-				{
-					underlays.setTile(i, j, newindex, true);
-				}	
-			}		
-		}
-	}
-	
-	function createSpriteGroups():Void
-	{
-		// at this function, objects added to a group will be displayed underneath the player when the player overlaps the object. if you want the reverse then place the add() code somewhere after the mob create function at create() function.
-		
-		_objectsThatDoNotMove = new FlxGroup();
-		add(_objectsThatDoNotMove);	
-		
-		_objectLadders = new FlxGroup();
-		add(_objectLadders);	
-		
-		_objectPlatformMoving = new FlxGroup();
-		add(_objectPlatformMoving);
-		
-		_itemFlyingHatPlatform = new FlxGroup();
-		add(_itemFlyingHatPlatform);
-		
-		_objectDoorToHouse = new FlxGroup();
-		add(_objectDoorToHouse);
-		
-		_objectLayer3OverlapOnly = new FlxGroup();
-		add(_objectLayer3OverlapOnly);
-		
-		_objectBlockOrRock = new FlxGroup();
-		add(_objectBlockOrRock);	
-		
-		_objectSuperBlock = new FlxGroup();
-		add(_objectSuperBlock);
-		
-		_objectWaterCurrent = new FlxGroup();
-		add(_objectWaterCurrent);
-		
-		_objectVineMoving = new FlxGroup();
-		add(_objectVineMoving);
-		
-		_objectSign = new FlxGroup();
-		add(_objectSign);
-		
-		_objectTeleporter = new FlxGroup();
-		add(_objectTeleporter);
-		
-		_rangedWeapon = new FlxGroup();
-		add(_rangedWeapon);
-		
-		_jumpingPad = new FlxGroup();
-		add(_jumpingPad);
-		
-		_objectLavaBlock = new FlxGroup();
-		add(_objectLavaBlock);
-	}
-	
-	function createLayer2Player():Void
-	{					
-		// get the csv file that stores the objects. within the tiled map editot, the objects
-		// graphics are loaded and then an object is displayed on the map. then that map is
-		// exported as .csv file. the follow will get the object data.
-		var objectData:String;
-		
-		if (Reg._testItems == false) objectData = Assets.getText("assets/data/Map-" + Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords) + Reg._inHouse + "_Layer 2 underlays sprites and player.csv");
-		else objectData = Assets.getText("assets/data/Map-Test-Items_Layer 2 underlays sprites and player.csv");
-		// split the object data (object.csv file) into rows where that data is only
-		// seperated with a comma.
-		
-		// y now refers to the number of \n in the csv file. each row of var rows now
-		// contains all the data of that tile maps row but without the line break.
-		var rows:Array<String> = objectData.split("\n");
-		
-		for (y in 0...rows.length) 
-		{
-			if (rows[y].length > 0)
-			{
-				// store the data in another array that does not have any commas within it.
-				var objectsString:Array<String> = rows[y].split(",");
-			
-				// create an array integer.
-				var objects:Array<Float> = new Array();
-			
-				// loop through all the csv data, which is now not seperated by a comma.
-				// the rows still exists with the objectsString. 
-				for (i in 0...objectsString.length) objects.push(Std.parseInt(objectsString[i]));
-				for (x in 0...objects.length) {
-					// x and y refer to the location of the object within the object.csv file.
-					// later these values need to be multiply by the width or height to display
-					// the object at the correct map positions. 
-					// if using tiled map editor, minus 1 for case values.
-					switch(objects[x]) {
-						case 0: addPlayer(x * Reg._tileSize, y * Reg._tileSize); // needed by itself to avoid startup crash.
-						case 16: addCage(x * Reg._tileSize, y * Reg._tileSize, 1); 
-						case 17: addCage(x * Reg._tileSize, y * Reg._tileSize, 2); 
-						case 18: addCage(x * Reg._tileSize, y * Reg._tileSize, 3); 
-						case 19: addCage(x * Reg._tileSize, y * Reg._tileSize, 4); 
-						case 20: addCage(x * Reg._tileSize, y * Reg._tileSize, 5); 
-						case 21: addCage(x * Reg._tileSize, y * Reg._tileSize, 6); 
-						case 22: addCage(x * Reg._tileSize, y * Reg._tileSize, 7); 
-						case 23: addCage(x * Reg._tileSize, y * Reg._tileSize, 8); 
-						case 24: addTube(x * Reg._tileSize, (y - 1) * Reg._tileSize);
-					}
-				}
-			}
-		}
-		
-				
-		enemies = new FlxGroup();	
-		enemiesNoCollideWithTileMap = new FlxGroup();
-		npcs = new FlxGroup();	
-		
-	}
-	
-	function createLayer3Sprites():Void
-	{				
-	
-		// get the csv file that stores the objects. within the tiled map editot, the objects
-		// graphics are loaded and then an object is displayed on the map. then that map is
-		// exported as .csv file. the follow will get the object data.
-		var objectData:String;
-		
-		if (Reg._testItems == false) objectData = Assets.getText("assets/data/Map-" + Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords) + Reg._inHouse + "_Layer 3 underlays sprites and mobs.csv");
-		else objectData = Assets.getText("assets/data/Map-Test-Items_Layer 3 underlays sprites and mobs.csv");
-		// split the object data (object.csv file) into rows where that data is only
-		// seperated with a comma.
-		
-		// y now refers to the number of \n in the csv file. each row of var rows now
-		// contains all the data of that tile maps row but without the line break.
-		var rows:Array<String> = objectData.split("\n");
-		
-			for (y in 0...rows.length) 
-		{
-			if (rows[y].length > 0)
-			{
-				// store the data in another array that does not have any commas within it.
-				var objectsString:Array<String> = rows[y].split(",");
-			
-				// create an array integer.
-				var objects:Array<Float> = new Array();
-			
-				// loop through all the csv data, which is now not seperated by a comma.
-				// the rows still exists with the objectsString. 
-				for (i in 0...objectsString.length) objects.push(Std.parseInt(objectsString[i]));
-				for (x in 0...objects.length) {
-					// x and y refer to the location of the object within the object.csv file.
-					// later these values need to be multiply by the width or height to display
-					// the object at the correct map positions. 
-					// if using tiled map editor, minus 1 for case values.
-					switch(objects[x]) {					
-						// ----------------- mobs. 
-						case 0: addBarricade(x * Reg._tileSize, y * Reg._tileSize);				
-						case 1: addMobTube((x - 1) * Reg._tileSize, (y - 1) * Reg._tileSize);	
-						case 2: addMobExplode(x * Reg._tileSize - 2, y * Reg._tileSize);
-						
-						case 5: addBoss2(x * Reg._tileSize, y * Reg._tileSize);
-						case 6: addMobBullet(x * Reg._tileSize + 2, y * Reg._tileSize + 2);
-						
-						case 8: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 1);
-						case 9: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 2);
-						case 10: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 3);
-						case 11: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 4);
-						case 12: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 5);
-						case 13: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 6);
-						case 14: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 7);
-						case 15: addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 8);
-						
-						case 22: addBoss(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 23: addBoss(x * Reg._tileSize, y * Reg._tileSize - 27, 2);
-						case 24: addNpcMalaHealthy(x * Reg._tileSize, y * Reg._tileSize +4, 1);
-						case 25: addNpcMalaHealthy(x * Reg._tileSize, y * Reg._tileSize +4, 2);
-						case 26: addNpcMalaHealthy(x * Reg._tileSize, y * Reg._tileSize +4, 3);
-						case 27: addMobBubble(x * Reg._tileSize, y * Reg._tileSize);
-						case 28: addNpcDogLady(x * Reg._tileSize, y * Reg._tileSize);
-						case 29: addNpcDog(x * Reg._tileSize, y * Reg._tileSize, player, 1);
-						case 30: addNpcDog(x * Reg._tileSize, y * Reg._tileSize, player, 2);
-						case 31: addNpcDog(x * Reg._tileSize, y * Reg._tileSize, player, 3);
-						case 32: addNpcDog(x * Reg._tileSize, y * Reg._tileSize, player, 4);
-						case 33: addNpcDoctor(x * Reg._tileSize, y * Reg._tileSize);
-						case 49: addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 50: addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 51: addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 52: addMobCutter(x * Reg._tileSize, y * Reg._tileSize - 2, 1);
-						case 53: addMobCutter(x * Reg._tileSize, y * Reg._tileSize - 2, 2);
-						case 54: addMobCutter(x * Reg._tileSize, y * Reg._tileSize - 2, 3);
-						case 57: addMobApple(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 58: addMobApple(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 59: addMobApple(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 60: addMobBat(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 61: addMobBat(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 62: addMobBat(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 65: addMobSqu(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 66: addMobSqu(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 67: addMobSqu(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 68: addMobFish(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 69: addMobFish(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 70: addMobFish(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 73: addMobGlob(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 74: addMobGlob(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 75: addMobGlob(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 76: addMobWorm(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 77: addMobWorm(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 78: addMobWorm(x * Reg._tileSize, y * Reg._tileSize, 3);
-						
-						
-						//------------- items / objects.
-						case 257: addDiamond(x * Reg._tileSize, y * Reg._tileSize);
-						case 258: addDoor(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 259: addItemDoorKey(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 260: addDoor(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 261: addItemDoorKey(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 262: addItemJump(x * Reg._tileSize, y * Reg._tileSize, 1);	
-						case 263: addItemGunFlame(x * Reg._tileSize, y * Reg._tileSize);		
-						case 264: addItemGunRapidFire(x * Reg._tileSize, y * Reg._tileSize);	
-						case 265: addSavePoint(x * Reg._tileSize, y * Reg._tileSize);	
-						// horizontal for id 1 and 2. 3 is vertical.
-						case 266: addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 267: addPlatformMoving(x * Reg._tileSize, (y * Reg._tileSize) - Reg._tileSize, 2);
-						case 268: addObjectFireballBlock(x * Reg._tileSize, y * Reg._tileSize);
-						case 269: addWaterParameter(x * Reg._tileSize, y * Reg._tileSize);
-						case 270: addLaserBeam(x * Reg._tileSize + 4, y * Reg._tileSize);
-						case 271: addLaserParameter(x * Reg._tileSize, y * Reg._tileSize);
-						case 272: addBlockDisappearing(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 273: addBlockDisappearing(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 274: addBlockDisappearing(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 275: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize + 17, 1);
-						case 276: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 277: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 278: addSpikeTrap(x * Reg._tileSize + 17, y * Reg._tileSize, 4);
-						case 279: addFlyingHat(x * Reg._tileSize, y * Reg._tileSize);
-						case 280: addFlyingHatPlatform(x * Reg._tileSize, y * Reg._tileSize);
-						case 281: addHeartContainer(x * Reg._tileSize, y * Reg._tileSize);		
-						case 282: addItemGun(x * Reg._tileSize, y * Reg._tileSize);
-						case 283: addNpcShovel(x * Reg._tileSize, y * Reg._tileSize);
-						case 284: addGrassWeed(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 285: addGrassWeed(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 286: addGrassWeed(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 287: addGrassWeed(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 288: addWateringCan(x * Reg._tileSize, y * Reg._tileSize);
-						case 289: addLadder(x * Reg._tileSize + 12, y * Reg._tileSize - 5, 1);
-						case 290: addDoorHouse(x * Reg._tileSize + 1, y * Reg._tileSize + 1);
-						case 291: addTreasureChest(x * Reg._tileSize, y * Reg._tileSize);
-						case 292: addDoor(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 293: addItemDoorKey(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 294: addDoor(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 295: addItemDoorKey(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 296: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 297: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 298: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 299: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 300: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 5);
-						case 301: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 6);
-						case 302: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 7);
-						case 303: addItemSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 8);
-						case 304: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 305: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 306: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 307: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 308: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 5);
-						case 309: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 6);
-						case 310: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 7);
-						case 311: addObjectSuperBlock(x * Reg._tileSize, y * Reg._tileSize, 8);
-						case 312: addComputer(x * Reg._tileSize, y * Reg._tileSize);
-						case 313: addItemSwimmingSkill(x * Reg._tileSize, y * Reg._tileSize);
-						case 314: addWaterCurrent(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 315: addWaterCurrent(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 316: addWaterCurrent(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 317: addWaterCurrent(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 318: addVineMoving(x * Reg._tileSize + 8, y * Reg._tileSize, 1);
-						case 319: addCannon(x * Reg._tileSize, y * Reg._tileSize - 5, 1);
-						case 320: addCannon(x * Reg._tileSize, y * Reg._tileSize - 5, 2);
-						case 321: addItemGunFreeze(x * Reg._tileSize, y * Reg._tileSize);
-						case 322: addBlockedCracked(x * Reg._tileSize, y * Reg._tileSize);
-						case 323: addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 324: addPlatformParameter(x * Reg._tileSize, y * Reg._tileSize);
-						
-						case 326: addRock(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 327: addRock(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 328: addRock(x * Reg._tileSize, y * Reg._tileSize + 10, 3);
-						case 329: addRock(x * Reg._tileSize, y * Reg._tileSize + 24, 4);
-						case 330: addRock(x * Reg._tileSize, y * Reg._tileSize + 12, 5);
-						case 331: addRock(x * Reg._tileSize, y * Reg._tileSize + 17, 6);
-						case 332: addSign(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 333: addSign(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 334: addTeleporter(x * Reg._tileSize, y * Reg._tileSize);
-						case 335: addDogFlute(x * Reg._tileSize, y * Reg._tileSize);
-						case 336: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 5);
-						case 337: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 6);
-						case 338: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 7);
-						case 339: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 8);
-						case 340: addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize + 10, 9);
-						case 341: addJumpingPad(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 342: addJumpingPad(x * Reg._tileSize + 24, y * Reg._tileSize, 2);
-						case 343: addSpikeFalling(x * Reg._tileSize + 7, y * Reg._tileSize);
-						case 344: addItemAnitgravitySuit(x * Reg._tileSize, y * Reg._tileSize);
-						case 345: addLavaBlock(x * Reg._tileSize, y * Reg._tileSize);
-						
-					}
-				}
-			}
-		}		
-		
-		add(_bullets);
-		add(_bulletsMob);
-		add(_bulletsObject);
-		
-		// player is displayed in front of enemies.
-		add(enemies);
-		add(enemiesNoCollideWithTileMap);
-		add(npcs);	
-		add(_objectCage);
-		add(_objectTube);
-		add(player);
-		
-		
-	}	
-	
-	function createOverlaysGroups():Void
-	{
-		_overlaysThatDoNotMove = new FlxGroup();
-		add(_overlaysThatDoNotMove);
-		_overlayLaserBeam = new FlxGroup();
-		add(_overlayLaserBeam);
-	}
-	
-	function createLayer4OverlaySprites():Void
-	{
-		// get the csv file that stores the objects. within the tiled map editot, the objects
-		// graphics are loaded and then an object is displayed on the map. then that map is
-		// exported as .csv file. the follow will get the object data.
-		var objectData:String;
-		
-		if (Reg._testItems == false)  objectData = Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse +  "_Layer 4 overlays sprites.csv");
-		else objectData = Assets.getText("assets/data/Map-Test-Items_Layer 4 overlays sprites.csv");
-		// split the object data (object.csv file) into rows where that data is only
-		// seperated with a comma.
-		
-		// y now refers to the number of \n in the csv file. each row of var rows now
-		// contains all the data of that tile maps row but without the line break.
-		var rows:Array<String> = objectData.split("\n");
-		
-		for (y in 0...rows.length) {
-			if (rows[y].length > 0)
-			{
-				// store the data in another array that does not have any commas within it.
-				var objectsString:Array<String> = rows[y].split(",");
-			
-				// create an array integer.
-				var objects:Array<Float> = new Array();
-			
-				// loop through all the csv data, which is now not seperated by a comma.
-				// the rows still exists with the objectsString. 
-				for (i in 0...objectsString.length) objects.push(Std.parseInt(objectsString[i]));
-				for (x in 0...objects.length) {
-					// x and y refer to the location of the object within the object.csv file.
-					// later these values need to be multiply by the width or height to display
-					// the object at the correct map positions. 
-					// if using tiled map editor, minus 1 for case values.
-					switch(objects[x]) {
-						case 0: addWave(x * Reg._tileSize, y * Reg._tileSize);
-						// case 1: addWater function is not used. search for waterplayer or read LAYER 5 INFORMATION.txt
-						case 2: addLaserBlock(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 3: addLaserBlock(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 4: addAirBubble(x * Reg._tileSize, y * Reg._tileSize);
-						
-						case 8: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 9: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 10: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 11: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 12: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 5);
-						case 13: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 6);
-						case 14: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 7);
-						
-						case 16: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 8);
-						case 17: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 9);
-						case 18: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 10);
-						case 19: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 11);
-						
-						case 21: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 12);
-						case 22: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 13);
-						
-						case 24: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 14);
-						case 25: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 15);
-						case 26: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 16);
-						case 27: addPipe1(x * Reg._tileSize, y * Reg._tileSize, 17);
-						
-						case 32: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 33: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 34: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 3);
-						case 35: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 4);
-						case 36: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 5);
-						case 37: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 6);
-						case 38: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 7);
-						
-						case 40: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 8);
-						case 41: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 9);
-						case 42: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 10);
-						case 43: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 11);
-						
-						case 45: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 12);
-						case 46: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 13);
-						
-						case 48: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 14);
-						case 49: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 15);
-						case 50: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 16);
-						case 51: addPipe2(x * Reg._tileSize, y * Reg._tileSize, 17);
-					}					
-				}
-			}
-		}	
-	}	
-	
-	function createLayer5OverlaysTiles():Void
-	{				
-		overlays = new FlxTilemap();		
-		if (Reg._testItems == false) overlays.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + "_Layer 5 overlays tiles.csv"), "assets/images/map5OverlaysTiles.png", Reg._tileSize, Reg._tileSize);
-		else overlays.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items_Layer 5 overlays tiles.csv"), "assets/images/map5OverlaysTiles.png", Reg._tileSize, Reg._tileSize);
-		
-		//for (i in 0...4) underlays.setTileProperties(i, FlxObject.NONE);	
-		
-		add(overlays);
 
-		//the folling code will search for the mob walk any direction tile (index 7) and change it into a blank tile so that when the game starts the tile will be blank.
-		
-		// The code loops through the map as it increments by its tile size height and then width. It searches for a tile with an index of 7 and then change that tile into an index of 6.
-		var newindex:Int = 6;
-		for (j in 0...overlays.heightInTiles)
-		{
-			for (i in 0...overlays.widthInTiles - 1)
-			{
-				if (overlays.getTile(i, j) == 7)
-				{
-					overlays.setTile(i, j, newindex, true);
-				}	
-			}		
-		}
-		
-		// change the slope path to an enpty tile but later use this emtpy tile for checking if mob of player is standing on it.
-		for (j in 0...overlays.heightInTiles)
-		{
-			for (i in 0...overlays.widthInTiles - 1)
-			{
-				if (overlays.getTile(i, j) == 23)
-				{
-					overlays.setTile(i, j, 22, true);
-				}	
-				if (overlays.getTile(i, j) == 31)
-				{
-					overlays.setTile(i, j, 30, true);
-				}	
-				if (overlays.getTile(i, j) == 39)
-				{
-					overlays.setTile(i, j, 38, true);
-				}	
-				if (overlays.getTile(i, j) == 47)
-				{
-					overlays.setTile(i, j, 46, true);
-				}	
-			}		
-		}
-		
-		//############# REMOVE BLOCK TO GET ITEMS FROM BOSS ################
-		if (Reg.mapXcoords == 17 && Reg.mapYcoords == 22 && Reg._boss1ADefeated == true || Reg.mapXcoords == 12 && Reg.mapYcoords == 19 && Reg._boss1BDefeated == true || Reg.mapXcoords == 15 && Reg.mapYcoords == 15 && Reg._boss2Defeated == true)
-		{
-			var newindex:Int = 193;
-			for (j in 0...Reg.state.tilemap.heightInTiles)
-			{
-				for (i in 0...Reg.state.tilemap.widthInTiles - 1)
-				{
-					if (Reg.state.tilemap.getTile(i, j) == 177)
-					{
-						Reg.state.tilemap.setTile(i, j, newindex, true);
-					}	
-				}		
-			}	
-		}
-	}
-	
-	// ############################################################
-	//  ADD MOBS TO MAP
-	// ############################################################
-	
-	function addPlayer(X:Int, Y:Int):Void
-	{
-		// when going to the Player constructor, the x and y values will be multiply by the
-		// tile size. currently, these x and y value refers to how many blocks from the
-		// left-right or up-down position of a csv file.
-		var xNewCoords:Float = 0;
-		var yNewCoords:Float = 0;
-		
-		if (Reg._inHouse == "")
-		{
-			if (Reg.beginningOfGame == false && Reg.restoreGameState == false)
-			{
-				// west - to go east door.
-				if (Reg.playerXcoords < 1) {xNewCoords = 23 ; yNewCoords = Reg.playerYcoords; } 
-				
-				// north - to go south door.
-				else if (Reg.playerYcoords < 1) {yNewCoords = 13 ; xNewCoords = Reg.playerXcoords; } 
-				
-				// east - to go west door.
-				else if (Reg.playerXcoords > 24) {xNewCoords = 1 ; yNewCoords = Reg.playerYcoords; } 
-								
-				// south - go to north door.
-				else if (Reg.playerYcoords > 14) {yNewCoords = 1 ; xNewCoords = Reg.playerXcoords;} 		
-				
-			}
-			else
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("bulletUp", 0.50, false);
-				
-				xNewCoords = Reg.playerXcoords;
-				yNewCoords = Reg.playerYcoords;
-			}
-		}
-	
-		// place the player on the map.
-		if (Reg._inHouse == "")
-		{
-			if (Reg.playerXcoordsLast != 0)
-				{player = new Player(Reg.playerXcoordsLast, Reg.playerYcoordsLast, _bullets, _emitterBulletHit, _emitterBulletMiss, _emitterBulletFlame); Reg.playerXcoordsLast = 0; Reg.playerYcoordsLast = 0; }
-			else if (Reg.beginningOfGame == false && Reg.restoreGameState == false)
-				player = new Player(xNewCoords * Reg._tileSize, yNewCoords * Reg._tileSize, _bullets, _emitterBulletHit, _emitterBulletMiss, _emitterBulletFlame);
-			else if (Reg.beginningOfGame == false && Reg.restoreGameState == true)
-				player = new Player(Reg.playerXcoords, Reg.playerYcoords, _bullets, _emitterBulletHit, _emitterBulletMiss, _emitterBulletFlame); 			
-			else player = new Player(X, Y, _bullets, _emitterBulletHit, _emitterBulletMiss, _emitterBulletFlame);
-		}
-		else 
-		{
-			if (Reg._teleportedToHouse == true) 
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("teleport2", 1, false);
-				X += (10 * Reg._tileSize);
-			}
-			player = new Player(X, Y, _bullets, _emitterBulletHit, _emitterBulletMiss, _emitterBulletFlame); 			
-			
-			Reg._teleportedToHouse = false;
-		}
-		
-		Reg.restoreGameState = false;		
-		Reg._playersYLastOnTile = player.y;
-		
-		_healthBarPlayer = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	player, "health", 0, player.health, false);		
-		_healthBarPlayer.setRange(0, Reg._healthMaximum);
-		add(_healthBarPlayer);
-	}
-	
 	// ################################################################
 	// update - camera
 	// ################################################################
@@ -1065,9 +547,9 @@ class PlayState extends PlayStateDownKey
 		FlxG.camera.follow(player, FlxCameraFollowStyle.SCREEN_BY_SCREEN);		
 		
 		// smooth the image.
-		#if cpp
-		FlxG.camera.antialiasing = true;
-		#end
+		//#if cpp
+		//FlxG.camera.antialiasing = true;
+		//#end
 		
 		// do not display anything outside of the current map displayed.
 		FlxG.camera.setScrollBoundsRect(0, -60, tilemap.width - Reg._tileSize + 32, tilemap.height - Reg._tileSize + 155, true);		
@@ -1142,7 +624,7 @@ class PlayState extends PlayStateDownKey
 		{
 			if (FlxG.sound.music.playing == false && Reg._transitionInitialized == true || FlxG.sound.music.playing == false && Reg._transitionEffectEnable == false) 
 			{
-				playMusic();
+				PlayStateMiscellaneous.playMusic();
 				
 				if ( Reg._powerUpStopFlicker == true)
 				{
@@ -1156,33 +638,33 @@ class PlayState extends PlayStateDownKey
 		if (Reg.dialogIconFilename == "savePoint.png" && Reg._dialogAnsweredYes == true)
 		{
 			if (Reg.dialogIconFilename == "savePoint.png")
-				FlxG.overlap(savePoint, player, touchSavePoint);
+				FlxG.overlap(savePoint, player, PlayStateTouchItems.touchSavePoint);
 			
 			Reg._dialogAnsweredYes = false;
 		}
 		
-		downKeyAndTracker(); // Down key and tracker.
+		PlayStateDownKey.downKeyAndTracker(); // Down key and tracker.
 
 		//####################### EMITTERS ############################		
-		FlxG.overlap(_emitterItemTriangle, player, emitterTrianglePlayerOverlap);
-		FlxG.overlap(_emitterItemDiamond, player, emitterDiamondPlayerOverlap);	
-		FlxG.overlap(_emitterItemPowerUp, player, emitterPowerUpPlayerOverlap);	
-		FlxG.overlap(_emitterItemNugget, player, emitterNuggetPlayerOverlap);	
-		FlxG.overlap(_emitterItemHeart, player, emitterHeartPlayerOverlap);	
+		FlxG.overlap(_emitterItemTriangle, player, PlayStateTouchObjects.emitterTrianglePlayerOverlap);
+		FlxG.overlap(_emitterItemDiamond, player, PlayStateTouchObjects.emitterDiamondPlayerOverlap);	
+		FlxG.overlap(_emitterItemPowerUp, player, PlayStateTouchObjects.emitterPowerUpPlayerOverlap);	
+		FlxG.overlap(_emitterItemNugget, player, PlayStateTouchObjects.emitterNuggetPlayerOverlap);	
+		FlxG.overlap(_emitterItemHeart, player, PlayStateTouchObjects.emitterHeartPlayerOverlap);	
 		
 		//############### COLLIDE - OVERLAP STARTS HERE ###############
 				
 		//######################### TWEENS#############################
-		FlxG.collide(_objectFireballBlock, player, fireballBlockPlayer);
+		FlxG.collide(_objectFireballBlock, player, PlayStateTouchObjects.fireballBlockPlayer);
 		FlxG.collide(_objectFireballBlock, enemies);
 		
 		// fireballs that rotate the block.
 		if (FlxSpriteUtil.isFlickering(player) == false)
 		{
-			FlxG.overlap(_objectFireball, player, fireballCollidePlayer);
-			FlxG.overlap(_objectFireballTween, player, fireballCollidePlayer);
+			FlxG.overlap(_objectFireball, player, PlayStateTouchObjects.fireballCollidePlayer);
+			FlxG.overlap(_objectFireballTween, player, PlayStateTouchObjects.fireballCollidePlayer);
 		}		
-			FlxG.overlap(_objectFireball, enemies, fireballCollideEnemy);
+			FlxG.overlap(_objectFireball, enemies, PlayStateTouchObjects.fireballCollideEnemy);
 		
 		
 		//######################### TOUCH ITEMS #######################
@@ -1190,18 +672,18 @@ class PlayState extends PlayStateDownKey
 		// _objectDoor is a group that put all the FlxSprite in to one area.
 		// add the ovelap check to PlayState update() that calls 
 		// the function touchDoor() when player overlaps the door
-		FlxG.overlap(_objectDoor, player, touchDoor);
+		FlxG.overlap(_objectDoor, player, PlayStateTouchObjects.touchDoor);
 		FlxG.collide(_objectDoor, player);
 		FlxG.collide(_objectDoor, enemies);
 		FlxG.collide(_objectDoor, _bullets);	
 		FlxG.collide(_objectDoor, _bulletsMob);	
 		FlxG.collide(_objectDoor, _bulletsObject);
 		
-		FlxG.overlap(_itemsThatWerePickedUp, player, itemPickedUp);
+		FlxG.overlap(_itemsThatWerePickedUp, player, PlayStateTouchItems.itemPickedUp);
 
-		FlxG.overlap(_itemGunFlame, player, touchItemGunFlame);		
-		FlxG.overlap(_itemGun, player, touchItemGun);
-		FlxG.overlap(_itemGunFreeze, player, touchItemGunFreeze);
+		FlxG.overlap(_itemGunFlame, player, PlayStateTouchItems.touchItemGunFlame);		
+		FlxG.overlap(_itemGun, player, PlayStateTouchItems.touchItemGun);
+		FlxG.overlap(_itemGunFreeze, player, PlayStateTouchItems.touchItemGunFreeze);
 				
 		//####################### MISC COLLIDE #######################
 		FlxG.collide(_bullets, tilemap);
@@ -1231,21 +713,21 @@ class PlayState extends PlayStateDownKey
 			{
 				// this code block is needed so that the player cannot just fire the gun in an upward direction repeatedly and kill this mob in under 5 seconds.
 				if(Reg.state.mobBubble.ticksTween != 3)
-				FlxG.overlap(_bullets, enemies, hitEnemy);
+				FlxG.overlap(_bullets, enemies, PlayStateTouchObjects.hitEnemy);
 				
 				FlxSpriteUtil.stopFlickering(mobBubble);
 			}else
 			{
-				FlxG.overlap(_bullets, enemies, hitEnemy);
+				FlxG.overlap(_bullets, enemies, PlayStateTouchObjects.hitEnemy);
 			}
 		}
 		
-		FlxG.overlap(_bulletsMob, player, hitPlayer);
-		FlxG.overlap(_bulletsObject, player, hitPlayer);
-		FlxG.overlap(_emitterBulletFlame, enemies, hitEnemyWithFlame);
+		FlxG.overlap(_bulletsMob, player, PlayStateTouchObjects.hitPlayer);
+		FlxG.overlap(_bulletsObject, player, PlayStateTouchObjects.hitPlayer);
+		FlxG.overlap(_emitterBulletFlame, enemies, PlayStateTouchObjects.hitEnemyWithFlame);
 			
 		if(FlxG.overlap(_objectLadders, player))
-		FlxG.overlap(_objectLadders, player, ladderPlayerOverlap);
+		FlxG.overlap(_objectLadders, player, PlayStateTouchObjects.ladderPlayerOverlap);
 		else if (_playerOnLadder == true)
 		{
 			_playerOnLadder = false;
@@ -1284,17 +766,13 @@ class PlayState extends PlayStateDownKey
 		FlxG.collide(_objectsThatDoNotMove, _bulletsObject);
 		
 		//#################### MOVING PLATFORMS ###################
-		FlxG.collide(_objectPlatformMoving, player, platformMovingPlayer);		
+		FlxG.collide(_objectPlatformMoving, player, PlayStateTouchObjects.platformMovingPlayer);		
 		//FlxG.collide(_objectPlatformMoving, enemies);
 		FlxG.collide(_objectPlatformMoving, tilemap);
 		FlxG.collide(_objectPlatformMoving, _objectPlatformMoving);
 		FlxG.collide(_objectPlatformMoving, _objectBlockOrRock);
 		
-		// spike is now at the ground.
-		//FlxG.overlap(_rangedWeapon, player);
-		//FlxG.overlap(_rangedWeapon, enemies);
-			
-		FlxG.collide(_objectBlockOrRock, player, blockPlayerCollide);
+		FlxG.collide(_objectBlockOrRock, player, PlayStateTouchObjects.blockPlayerCollide);
 		FlxG.collide(_objectBlockOrRock, enemies, EnemyCastSpriteCollide.blockEnemyCollide);
 		FlxG.collide(_objectBlockOrRock, npcs);
 		FlxG.collide(_objectBlockOrRock, tilemap);
@@ -1305,21 +783,22 @@ class PlayState extends PlayStateDownKey
 		FlxG.collide(_objectTube, tilemap);
 	
 		//#################### overlays ############################
-		FlxG.overlap(_objectWaterParameter, player, waterPlayerParameter);
+		FlxG.overlap(_objectWaterParameter, player, PlayStateTouchObjects.waterPlayerParameter);
 		FlxG.overlap(_objectWaterParameter, enemies, EnemyCastSpriteCollide.waterEnemyParameter);		
-		FlxG.overlap(_overlayWave, player, wavePlayer);		
+		FlxG.overlap(_overlayWave, player, PlayStateTouchObjects.wavePlayer);		
 		FlxG.overlap(_overlayWave, enemies, EnemyCastSpriteCollide.waveEnemy);	
-		FlxG.overlap(_overlayAirBubble, player, airBubblePlayerOverlap);		
+		FlxG.overlap(_overlayAirBubble, player, PlayStateTouchObjects.airBubblePlayerOverlap);		
 		FlxG.overlap(_overlayAirBubble, enemies, EnemyCastSpriteCollide.airBubbleEnemyOverlap);	
 		
-		FlxG.overlap(_objectBeamLaser, player, laserBeamPlayer);		
+		FlxG.overlap(_objectBeamLaser, player, PlayStateTouchObjects.laserBeamPlayer);		
 		FlxG.overlap(_objectBeamLaser, enemies, EnemyCastSpriteCollide.laserBeamEnemy);
 		FlxG.collide(_objectBeamLaser, _objectLaserParameter);
-		FlxG.collide(_objectSuperBlock, player, touchSuperBlock);
+		FlxG.collide(_objectSuperBlock, player, PlayStateTouchObjects.touchSuperBlock);
 		FlxG.collide(_objectSuperBlock, enemies);
 		FlxG.collide(_objectsThatDoNotMove, enemies);
 		FlxG.collide(_objectsThatDoNotMove, player);
-				
+		FlxG.collide(_objectsThatDoNotMove, _objectsThatMove);
+		
 		// check if player is in the water. These values are from layer 5. they refer to water overlays. when a player overlaps one of these tiles the air countdown text will be displayed.
 		if (FlxG.overlap(_overlayPipe, player) && player._mobIsSwimming == true 
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 15 // water.
@@ -1336,7 +815,7 @@ class PlayState extends PlayStateDownKey
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 422
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 430
 		|| FlxG.overlap(_objectWaterCurrent, player)
-		) waterPlayer(player);
+		) PlayStateTouchObjects.waterPlayer(player);
 		
 		// if no arrow key was pressed for a lenght of time then show the guidelines.
 		if (Reg._arrowKeyInUseTicks > 30)
@@ -1344,16 +823,22 @@ class PlayState extends PlayStateDownKey
 			if (player._mobIsSwimming == true) Reg._arrowKeyInUseTicks = 0;
 			else
 			{
-				warningFallLine.visible = true;
-				deathFallLine.visible = true;
-				maximumJumpLine.visible = true;
+				if (warningFallLine != null)
+				{
+					warningFallLine.visible = true;
+					deathFallLine.visible = true;
+					maximumJumpLine.visible = true;
+				}
 			}
 		} 
 		else if(Reg._arrowKeyInUseTicks == 0)
 		{
-			warningFallLine.visible = false;
-			deathFallLine.visible = false;
-			maximumJumpLine.visible = false;
+			if (warningFallLine != null)
+			{
+				warningFallLine.visible = false;
+				deathFallLine.visible = false;
+				maximumJumpLine.visible = false;
+			}
 		}
 		
 		Reg._arrowKeyInUseTicks = Reg.incrementTicks(Reg._arrowKeyInUseTicks, 60 / Reg._framerate);
@@ -1473,14 +958,14 @@ class PlayState extends PlayStateDownKey
 		FlxG.overlap(tilemap, player);
 		FlxG.collide(tilemap, player);
 		FlxG.collide(tilemap, player);
-		tilemapPlayerCollide(tilemap, player);
+		PlayStateTouchObjects.tilemapPlayerCollide(tilemap, player);
 		
 		if (FlxG.overlap(tilemap, enemies)) FlxG.collide(tilemap, enemies);
 		FlxG.collide(tilemap, enemies, EnemyCastSpriteCollide.tilemapEnemyCollide);
 		
-		FlxG.collide(tilemap, _emitterItemTriangle, tilemapParticalCollide);
-		FlxG.collide(tilemap, _emitterItemHeart, tilemapParticalCollide);
-		FlxG.collide(tilemap, _emitterItemNugget, tilemapParticalCollide);
+		FlxG.collide(tilemap, _emitterItemTriangle, PlayStateTouchObjects.tilemapParticalCollide);
+		FlxG.collide(tilemap, _emitterItemHeart, PlayStateTouchObjects.tilemapParticalCollide);
+		FlxG.collide(tilemap, _emitterItemNugget, PlayStateTouchObjects.tilemapParticalCollide);
 		FlxG.collide(tilemap, npcs);
 		
 		
@@ -1497,7 +982,7 @@ class PlayState extends PlayStateDownKey
 			p.hasWon = true;
 
 			// goto the funtion that calls the playState.hx file.
-			leaveMap(p);
+			PlayStateMiscellaneous.leaveMap(p);
 		}
 	}
 	

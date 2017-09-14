@@ -208,7 +208,7 @@ class Reg
 	public static var _boss2Defeated:Bool = false;
 	
 	// Remember to change these values also near the top of this constructor. used to change the map when player walks in a door. in map units.
-	public static var mapXcoords:Float = 20; // should be 20.
+	public static var mapXcoords:Float = 18; // should be 20.
 	public static var mapYcoords:Float = 20; // should be 20. 20-20 is the start map of the game.
 	public static var dogXcoords:Float = 0; // used to remember where the dog was picked up.
 	public static var dogYcoords:Float = 0;

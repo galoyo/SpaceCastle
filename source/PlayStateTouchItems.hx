@@ -2,13 +2,12 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.util.FlxTimer;
 
 /**
  * ...
  * @author galoyo
  */
-class PlayStateTouchItems extends PlayStateTouchObjects
+class PlayStateTouchItems
 {
 	//##########################################################
 	// COLLIDE TOUCH ITEMS
@@ -18,7 +17,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 	 * @author galoyo
 	 * Most of the items that the player picks up are in this function.
 	 */
-	private function itemPickedUp(item:FlxSprite, p:Player):Void 
+	public static function itemPickedUp(item:FlxSprite, p:Player):Void 
 	{
 		// ############## ITEM KEY
 		if (Std.is(item, ItemDoorKey))
@@ -62,7 +61,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 				Reg.dialogCharacterTalk[0] = "";
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
-				openSubState(new Dialog());		
+				Reg.state.openSubState(new Dialog());		
 				
 			}
 			
@@ -88,7 +87,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 					
 					// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 					Reg.displayDialogYesNo = false;
-					openSubState(new Dialog());	
+					Reg.state.openSubState(new Dialog());	
 					
 					Reg._itemGotJump[i.ID] = true;					
 					newInventoryItem( openfl.Assets.getText("assets/text/touchItemJump1Description.txt"), Reg.dialogIconFilename);
@@ -114,7 +113,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 				newInventoryItem( openfl.Assets.getText("assets/text/touchItemSwimmingSkillDescription.txt"), Reg.dialogIconFilename);
 				Reg.dialogCharacterTalk[0] = "";
 				Reg.displayDialogYesNo = false;
-				openSubState(new Dialog());
+				Reg.state.openSubState(new Dialog());
 				
 				Reg._itemGotSwimmingSkill = true;
 			}
@@ -137,7 +136,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 				
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
-				openSubState(new Dialog());	
+				Reg.state.openSubState(new Dialog());	
 			}
 			
 			Reg._itemGotGunRapidFire = true;
@@ -155,7 +154,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			Reg._healthMaximum = Reg._healthMaximum + 3;
 			Reg.state.player.health = Reg._healthMaximum; 
 			Reg._healthCurrent = Reg._healthMaximum;
-			hud._healthHudBox.setRange(0, Reg._healthMaximum);
+			Reg.state.hud._healthHudBox.setRange(0, Reg._healthMaximum);
 			
 			i.kill();	
 			
@@ -167,7 +166,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());	
+			Reg.state.openSubState(new Dialog());	
 		}
 		
 		//################## ITEM FLYING HAT
@@ -187,7 +186,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());	
+			Reg.state.openSubState(new Dialog());	
 		}	
 		
 		//################## ITEM DIAMONDS.
@@ -290,7 +289,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 				
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
-				openSubState(new Dialog());		
+				Reg.state.openSubState(new Dialog());		
 				
 				Reg._itemGotSuperBlock[i.ID] = true;
 			}
@@ -312,7 +311,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 				newInventoryItem( openfl.Assets.getText("assets/text/touchItemAntigravitySuitDescription.txt"), Reg.dialogIconFilename);
 				Reg.dialogCharacterTalk[0] = "";
 				Reg.displayDialogYesNo = false;
-				openSubState(new Dialog());
+				Reg.state.openSubState(new Dialog());
 				
 				Reg._itemGotAntigravitySuit = true;
 			}
@@ -324,7 +323,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 	/**
 	 * This function is called when the player picks up the flame gun. The flame gun is a weapon that hits the mob then continues on through its path.
 	 */
-	public function touchItemGunFlame(item:FlxSprite, p:Player):Void 
+	public static function touchItemGunFlame(item:FlxSprite, p:Player):Void 
 	{
 		if (Reg._itemGotGunFlame == false)
 		{
@@ -339,20 +338,20 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());	
+			Reg.state.openSubState(new Dialog());	
 			
 			Reg._itemGotGunFlame = true;
 		}			
 		
 		// particles of different colored squares for a gun.
-		_emitterBulletFlame.setPosition(Reg.playerXcoords, Reg.playerYcoords);
-		add(_emitterBulletFlame);
+		Reg.state._emitterBulletFlame.setPosition(Reg.playerXcoords, Reg.playerYcoords);
+		Reg.state.add(Reg.state._emitterBulletFlame);
 	}
 			
 	/**
 	 * First gun in the game. normal basic pea shooter gun.
 	 */
-	private function touchItemGun(item:FlxSprite, p:Player):Void 
+	public static function touchItemGun(item:FlxSprite, p:Player):Void 
 	{
 		
 		if (Reg._itemGotGun == false)
@@ -368,7 +367,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());	
+			Reg.state.openSubState(new Dialog());	
 			
 			Reg._itemGotGun = true;
 		}
@@ -380,7 +379,7 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 	/**
 	 * This function handles the saving of the game.
 	 */
-	private function touchSavePoint(item:FlxSprite, p:Player):Void 
+	public static function touchSavePoint(item:FlxSprite, p:Player):Void 
 	{
 		if (Std.is(item, SavePoint))
 		{
@@ -391,14 +390,14 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			Reg.dialogCharacterTalk[0] = "";
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());
+			Reg.state.openSubState(new Dialog());
 		}
 	}	
 
 	/**
 	 * Freeze weapon. When a mob is hit with this weapon, the mob will be frozen for a few seconds. At that time, the player can jump on top of the head of the mob without taking damage. The player can use the mob as a ladder to jump up to the next frozen mob.
 	 */
-	private function touchItemGunFreeze(item:FlxSprite, p:Player):Void 
+	public static function touchItemGunFreeze(item:FlxSprite, p:Player):Void 
 	{
 		
 		if (Reg._itemGotGunFreeze == false)
@@ -414,14 +413,14 @@ class PlayStateTouchItems extends PlayStateTouchObjects
 			
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
-			openSubState(new Dialog());	
+			Reg.state.openSubState(new Dialog());	
 			
 			Reg._itemGotGunFreeze = true;
 		}			
 	}
 
 	// when player picks up an item that uses the x or c key, add it to the inventory.
-	public function newInventoryItem(iconName:String, iconFilemame:String):Void
+	public static function newInventoryItem(iconName:String, iconFilemame:String):Void
 	{	var titleAndDescriptionText = iconName.split("#");
 		Reg._inventoryIconName[Reg._inventoryIconNumberMaximum] = titleAndDescriptionText[0];
 		Reg._inventoryIconDescription[Reg._inventoryIconNumberMaximum] = titleAndDescriptionText[1];

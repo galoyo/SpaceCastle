@@ -525,6 +525,8 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
 			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96;
+			
+			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
 		
 		else if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
@@ -533,6 +535,8 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		{
 			// Reg._itemGotJump[0] refers to the first jump item obtained. which is set to true when the game starts. the _jumpForce is how high the player can jump. in this case, the player can jump up two tiles. the next jump item jumps for 3 items, ect. Since the jump force is set for 2 tiles, the _fallAllowedDistanceInPixels is also 2 tiles totaling 64 pixels.
 			Reg._jumpForce = 680; Reg._fallAllowedDistanceInPixels = 64;
+			
+			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
 		
 		if (Reg._antigravity == false) 
@@ -896,7 +900,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		alive = false;
 		
 		// go to the gameOver state.
-		new FlxTimer().start(1.25, Reg.state.gameOver, 1);
+		new FlxTimer().start(1.25, PlayStateMiscellaneous.gameOver, 1);
 
 	}
 	

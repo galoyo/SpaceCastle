@@ -12,8 +12,10 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectSpikeFalling extends FlxSprite 
 {
-	private var ticks:Int;
+	public var ticksSpike:Int;
 	private var ra:Int;
+
+	private var _startY:Float;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -21,7 +23,9 @@ class ObjectSpikeFalling extends FlxSprite
 		
 		loadGraphic("assets/images/objectSpikeFalling.png", true, 18, 54);
 		
-		animation.add("falled", [0,1,2,3,4], 40, false);			
+		animation.add("spikeFalled", [0,1,2,3,4], 40, false);			
+		
+		_startY = y;
 		
 		allowCollisions = FlxObject.FLOOR;
 		ra = FlxG.random.int(-100, 100);
@@ -34,10 +38,10 @@ class ObjectSpikeFalling extends FlxSprite
 		{
 			
 			// make the spike fall if spike is within the x range of the player.
-			if (ticks == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra) velocity.y = 950 + (ra * 1.5);
+			if (ticksSpike == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra && y == _startY) velocity.y = 950 + (ra * 1.5);
 			
 			// spike not yet fallen to the ground.
-			if (ticks == 0)
+			if (ticksSpike == 0)
 			{
 				// player and enemy damage taken, if spike hits them.
 				if (FlxG.overlap(Reg.state.player, this))
@@ -49,11 +53,11 @@ class ObjectSpikeFalling extends FlxSprite
 			}
 		
 			
-			// stop the spike if collides with tilemap, then play the animation that it appears that the spike is goes into the tilemap just a bit.
-			if (FlxG.collide(Reg.state.tilemap, this)) 
+			// stop the spike if collides with tilemap, then play the animation so that it appears that the spike is goes into the tilemap just a bit.
+			if (y != _startY && justTouched(FlxObject.FLOOR))
 			{
 				
-				if (ticks == 0) 
+				if (ticksSpike == 0) 
 				{ 
 					// if spike collides with slope then set spike offset so that the bottom tip of the spike stops at the slope not above the slope.
 					if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
@@ -65,12 +69,12 @@ class ObjectSpikeFalling extends FlxSprite
 					}	
 				
 					velocity.y = 0;
-					animation.play("falled"); 
-					ticks = 1; 
+					if (ticksSpike == 0) animation.play("spikeFalled"); 
+					ticksSpike = 1; 
 					alpha = 0.5;				
 				}
 			}
-			
+						
 			super.update(elapsed);
 		}
 	}	
