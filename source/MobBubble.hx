@@ -364,7 +364,7 @@ class MobBubble extends EnemyChildClass
 		Reg._playerCanShootOrMove = false;
 		
 		super.kill();
-		new FlxTimer().start(0.50, Reg.state.winState, 1);		
+		new FlxTimer().start(0.50, PlayStateMiscellaneous.winState, 1);		
 	}
 	
 	override public function hurt(damage:Float):Void 

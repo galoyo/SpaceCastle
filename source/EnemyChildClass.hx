@@ -545,19 +545,19 @@ private function shoot():Void
 		//############### END JUMP OVER EMPTY TILE ################
 	}
 	
-	function walkButCannotFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool):Void
+	function walkButCannotFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool, offset:Int = 0):Void
 	{
 		// ##################################################
 		// WALKING THEN REVERSE DIRECTION WALL OR BLACK TILE.
 		// ##################################################
-		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 28, Reg.state.tilemap))
+		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27 - offset, y + 28, Reg.state.tilemap))
 		{
 			facing = FlxObject.RIGHT;
 			if(_mobIsSwimming == false) {velocity.x = maxXSpeed; }
 			else {velocity.x = maxXSpeed / Reg._swimmingDelay;} 
 		}
 					
-		if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT ||isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 28, Reg.state.tilemap))
+		if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT ||isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27 + offset, y + 28, Reg.state.tilemap))
 		{
 			facing = FlxObject.LEFT;
 			if(_mobIsSwimming == false) {velocity.x = -maxXSpeed;}

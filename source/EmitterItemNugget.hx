@@ -15,7 +15,7 @@ class EmitterItemNugget extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 2000)
+		for (i in 0... 300)
         {
         	var p = new FlxParticle();
 

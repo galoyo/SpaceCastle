@@ -15,7 +15,7 @@ class EmitterItemTriangle extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 1000)
+		for (i in 0... 300)
         {
         	var p = new FlxParticle();
 		var rand = FlxG.random.int(1, 8);

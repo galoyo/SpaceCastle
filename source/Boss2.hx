@@ -216,7 +216,7 @@ class Boss2 extends EnemyChildClass
 					alive = false;
 					Reg._dialogYesNoWasAnswered = false;
 					Reg._playerHasTalkedToThisMob = false;
-					Reg.state.playMusic(); // back to the normal stage music because boss was defeated
+					PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated
 					kill();
 				}
 			}

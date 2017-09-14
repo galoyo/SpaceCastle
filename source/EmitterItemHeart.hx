@@ -15,7 +15,7 @@ class EmitterItemHeart extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 100)
+		for (i in 0... 15)
         {
         	var p = new FlxParticle();
         	p.loadGraphic("assets/images/itemHeartRefill.png", false,32, 28);

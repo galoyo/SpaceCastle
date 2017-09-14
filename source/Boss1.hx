@@ -361,7 +361,7 @@ class Boss1 extends EnemyChildClass
 					Reg._playerCanShootOrMove = true;	
 					Reg._playerHasTalkedToThisMob = false;
 					
-					Reg.state.playMusic(); // back to the normal stage music because boss was defeated.
+					PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
 					kill();
 				}
 
@@ -404,7 +404,7 @@ class Boss1 extends EnemyChildClass
 						Reg._playerCanShootOrMove = true;
 						Reg._playerHasTalkedToThisMob = false;
 						
-						Reg.state.playMusic(); // back to the normal stage music because boss was defeated.
+						PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
 						kill();
 						
 						// remove block barrier so that player can get item.

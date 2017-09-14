@@ -70,7 +70,7 @@ class NpcDogLady extends FlxSprite
 							Reg.dialogIconFilename = "itemDogFlute.png";
 							Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDogFlute.txt").split("#");
 						
-							Reg.state.newInventoryItem( openfl.Assets.getText("assets/text/touchItemDogFluteDescription.txt"), Reg.dialogIconFilename);
+							PlayStateTouchItems.newInventoryItem( openfl.Assets.getText("assets/text/touchItemDogFluteDescription.txt"), Reg.dialogIconFilename);
 							Reg.dialogCharacterTalk[0] = "";
 							Reg.displayDialogYesNo = false;
 							Reg.state.openSubState(new Dialog());				

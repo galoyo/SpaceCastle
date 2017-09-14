@@ -15,7 +15,7 @@ class EmitterItemPowerUp extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 50)
+		for (i in 0... 70)
         {
         	var p = new FlxParticle();
         	p.loadGraphic("assets/images/itemPowerUp.png", true, 23, 22);

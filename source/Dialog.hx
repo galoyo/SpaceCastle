@@ -45,7 +45,7 @@ class Dialog extends FlxSubState
 	private var buttonYes:MouseClickThisButton;
 	private var buttonNo:MouseClickThisButton;
 	
-	private var buttonQuit:MouseClickThisButton;
+	private var buttonExit:MouseClickThisButton;
 	private var buttonTitle:MouseClickThisButton;
 	private var buttonResume:MouseClickThisButton;
 	
@@ -200,10 +200,10 @@ class Dialog extends FlxSubState
 		
 		else
 		{
-			buttonQuit = new MouseClickThisButton(117, 350, "q: Quit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonQuitClicked);	
+			buttonExit = new MouseClickThisButton(117, 350, "e: Exit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonExitClicked);	
 			buttonTitle = new MouseClickThisButton(317, 350, "t: Title", 160, 35, null, 16, 0xFFCCFF33, 0, buttonTitleClicked);	
 			buttonResume = new MouseClickThisButton(517, 350, "r: Resume", 160, 35, null, 16, 0xFFCCFF33, 0, buttonResumeClicked);	
-			add(buttonQuit);
+			add(buttonExit);
 			add(buttonTitle);
 			add(buttonResume);
 		}
@@ -306,7 +306,7 @@ class Dialog extends FlxSubState
 			else
 			{
 				#if !FLX_NO_KEYBOARD
-					if (FlxG.keys.anyJustPressed(["Q"])) Reg.exitProgram();	
+					if (FlxG.keys.anyJustPressed(["E"])) Reg.exitProgram();	
 					if (FlxG.keys.anyJustPressed(["T"])) {Reg.resetRegVars(); FlxG.resetGame();}
 					if (FlxG.keys.anyJustPressed(["R"])) {Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close(); }
 				#end	
@@ -316,7 +316,7 @@ class Dialog extends FlxSubState
 		super.update(elapsed);
 	}	
 	
-	private function buttonQuitClicked():Void
+	private function buttonExitClicked():Void
 	{
 		Reg.exitProgram();
 	}

@@ -74,7 +74,7 @@ class MobTube extends EnemyChildClass
 		if (isOnScreen() && ticks == 0) 
 		{			
 			// make the mob exit the tube only if the player is not standing on the tube.
-			if (!overlapsAt(x, y - 10, Reg.state.player) && !overlapsAt(x + 10, y - 10, Reg.state.player))
+			if (!overlapsAt(x, y - 10, Reg.state.player) && !overlapsAt(x + 10, y - 10, Reg.state.player) || y != _startY)
 			{
 				ticksMoveUp = Reg.incrementTicks(ticksMoveUp, 60 / Reg._framerate);
 				solid = true;

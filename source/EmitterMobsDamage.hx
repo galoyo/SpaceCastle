@@ -14,7 +14,7 @@ class EmitterMobsDamage extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 100)
+		for (i in 0... 120)
         {
         	var p = new FlxParticle();
         	p.loadGraphic("assets/images/emitterMobsDamage.png", true, 32, 32);

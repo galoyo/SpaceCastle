@@ -34,12 +34,12 @@ class ObjectRain extends FlxSprite
 		alpha = 1;
 		if (_initialized)
 		{
-			x = FlxG.random.int(0, FlxG.width * 4 * _level);
+			x = FlxG.random.int(0, FlxG.width * _level);
 			y = FlxG.random.int( -5, -10);
 		}
 		else
 		{
-			x = FlxG.random.int(0, FlxG.width * 4 * _level);
+			x = FlxG.random.int(0, FlxG.width * _level);
 			y = FlxG.random.int( -10, FlxG.height);
 		}
 		scrollFactor.set(.7 + (_level * .1), 0);

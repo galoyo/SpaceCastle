@@ -172,7 +172,10 @@ class EnemyCastSpriteCollide {
 		{
 			Reg._gunHudBoxCollectedTriangles--;
 			Reg.state.hud.decreaseGunPowerCollected();
-			if(e.alpha == 1) p.hurt(1);
+			
+			// different hurt values depending on which mob hit player.
+			if (Std.is(e, MobSaw)) p.hurt(4);
+			else if(e.alpha == 1) p.hurt(1);
 				
 			// knock player to the right.
 			if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
@@ -650,9 +653,12 @@ class EnemyCastSpriteCollide {
 		
 		if (p.inAir == true)
 		{
-			Reg.state.warningFallLine.visible = false;
-			Reg.state.deathFallLine.visible = false;
-			Reg.state.maximumJumpLine.visible = false;
+			if (Reg.state.warningFallLine != null)
+			{
+				Reg.state.warningFallLine.visible = false;
+				Reg.state.deathFallLine.visible = false;
+				Reg.state.maximumJumpLine.visible = false;
+			}
 		}
 		
 		Reg.state._touchingSuperBlock = false;
@@ -706,31 +712,37 @@ class EnemyCastSpriteCollide {
 		
 		if (Reg._antigravity == false)
 		{
-			// player falling one tile below this line will get small health damage.		
-			Reg.state.warningFallLine.x = p.x - 830;
-			Reg.state.warningFallLine.y = p.y + Reg._fallAllowedDistanceInPixels + 28;
-			
-			// player falling to or passed this line is instant death.		
-			Reg.state.deathFallLine.x = p.x - 830;
-			Reg.state.deathFallLine.y = p.y + Reg._fallAllowedDistanceInPixels + 96 + 58;
-			
-			// player can jump to this line but not passed it.
-			Reg.state.maximumJumpLine.x = p.x - 830;
-			Reg.state.maximumJumpLine.y = p.y - Reg._fallAllowedDistanceInPixels + 28;
+			// player falling one tile below this line will get small health damage.
+			if (Reg.state.warningFallLine != null)
+			{
+				Reg.state.warningFallLine.x = p.x - 830;
+				Reg.state.warningFallLine.y = p.y + Reg._fallAllowedDistanceInPixels + 28;
+				
+				// player falling to or passed this line is instant death.		
+				Reg.state.deathFallLine.x = p.x - 830;
+				Reg.state.deathFallLine.y = p.y + Reg._fallAllowedDistanceInPixels + 96 + 58;
+				
+				// player can jump to this line but not passed it.
+				Reg.state.maximumJumpLine.x = p.x - 830;
+				Reg.state.maximumJumpLine.y = p.y - Reg._fallAllowedDistanceInPixels + 28;
+			}
 		}
 		else if (Reg._antigravity == true)
 		{
 			// player falling one tile below this line will get small health damage.		
-			Reg.state.warningFallLine.x = p.x - 830;
-			Reg.state.warningFallLine.y = p.y - Reg._fallAllowedDistanceInPixels;
-			
-			// player falling to or passed this line is instant death.		
-			Reg.state.deathFallLine.x = p.x - 830;
-			Reg.state.deathFallLine.y = p.y - Reg._fallAllowedDistanceInPixels - 96 - 30;
-			
-			// player can jump to this line but not passed it.
-			Reg.state.maximumJumpLine.x = p.x - 830;
-			Reg.state.maximumJumpLine.y = p.y + Reg._fallAllowedDistanceInPixels;
+			if (Reg.state.warningFallLine != null)
+			{
+					Reg.state.warningFallLine.x = p.x - 830;
+					Reg.state.warningFallLine.y = p.y - Reg._fallAllowedDistanceInPixels;
+				
+				// player falling to or passed this line is instant death.		
+				Reg.state.deathFallLine.x = p.x - 830;
+				Reg.state.deathFallLine.y = p.y - Reg._fallAllowedDistanceInPixels - 96 - 30;
+				
+				// player can jump to this line but not passed it.
+				Reg.state.maximumJumpLine.x = p.x - 830;
+				Reg.state.maximumJumpLine.y = p.y + Reg._fallAllowedDistanceInPixels;
+			}
 		}
 	}
 }

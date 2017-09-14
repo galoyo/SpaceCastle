@@ -15,7 +15,7 @@ class EmitterBulletFlame extends FlxEmitter
 	{
 		super();
 	        
-		for (i in 0... 200)
+		for (i in 0... 400)
         {
         	var p = new FlxParticle();
         	p.makeGraphic(5, 5, 0xFFFFFFFF);
