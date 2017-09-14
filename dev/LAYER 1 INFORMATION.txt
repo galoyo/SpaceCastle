@@ -1,0 +1,7 @@
+/root/assets/images/map1UnderlaysTiles.png
+
+#######################################################
+OBJECTS DISPLAYED BEHIND CHARACTERS.
+#######################################################
+
+39: Object follow path. Place this object on the map then place a mob or object on this path and the mob or object will then only move within those boundries.

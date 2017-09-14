@@ -2,7 +2,7 @@
 96, 98: the cage left and right side borders are placed by these tiles so that the image is empty when game is playing.
 100-102: cage handles.
 217: this block is solid. place underlays at layer 1, which are not solid, over top of this tile to make it appear that an underlay is solid.
-219-238: platform blocks. there blocks are in the air.
+219-238: platform blocks.
 248: north-west slope. if using these slopes, see layer 5 at the slope tiles and an example about where to put those tiles can be seen near the east door of map-20-20.
 249: north-east slope.
 250: south east slope.

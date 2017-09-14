@@ -9,7 +9,8 @@
 0: not used. if this "X" is found at the map then remove it.
 1: mobTube: Place this at the right side of Tube. Tube is at layer 3. At the Tile Map Editor, its ID is 24.
 2: mobExplode: This mob hangs from the ceiling shooting bullets in an angle. Fly towards player when they are near vertical. occupies two tiles.
-3-4: red "X". replace with new boss.
+3: mobSaw1. saw. moves back and forth on a platform.
+4: mobSaw2. saw. velocity 0.
 5: boss2. flies. warps to player when wall is a path obstacle. no bullets.
 6: mobBullet. only moves horizontally from one side of the screen to the other.
 7: red "X".
@@ -27,7 +28,7 @@
 60-62: mobBat 1: moves randomly in the air. no bullets ability.
 65-67: mobSqu. jump happy mob: no bullets.
 68-70: mobFish 1 and 2. moves back/forth by touching a wall. no bullets. different speeds.
-73-75: mobGlob. moves on ceiling, walls or floors. slow movement. maybe bullets.
+73-75: mobGlob. moves on ceiling, walls or floors. slow movement. maybe bullets. place the "object follow path" at layer 1 or 5 and then this object on the path, so that the object will move and follow this path.
 76-78: mobWorm. flying left and right. reversing direction when touching a tile. fires bullets up and down.
 
 
@@ -87,3 +88,4 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 343: falling spikes. the spikes need to be two tiles aways from the, eg `slope nw path` text at map5OverlaysTiles.png.
 344: antigravity suit.
 345: lava.
+346: quick sand.
