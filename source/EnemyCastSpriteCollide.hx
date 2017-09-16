@@ -162,7 +162,7 @@ class EnemyCastSpriteCollide {
 	
 	/**********************************
 	 * this function is called when a mob and player collides. 
-	 */	
+	 */		
 	public static function enemyPlayerCollide(e:FlxSprite, p:Player):Void
 	{
 		var healthDamage:Float = 0; // Initialize player hurt value.
@@ -170,18 +170,100 @@ class EnemyCastSpriteCollide {
 
 		if (e.animation.paused == false)
 		{
-			Reg._gunHudBoxCollectedTriangles--;
-			Reg.state.hud.decreaseGunPowerCollected();
+			// if player is above mob and they both collide...
+			if (Reg._antigravity == false && p.y < e.y && p.inAir == true || Reg._antigravity == true && p.y > e.y && p.inAir == true)
+			{
+				if(FlxSpriteUtil.isFlickering(e) == false)
+				{
+				// kill the mob is health is 0.
+					if((e.health - 1) <= 0)
+						e.kill();
+						
+					// a hit was made so decrease the mobs health.
+					else if (Reg._boss1AIsMala == false || Reg._boss1BIsMala == false || Reg._boss2IsMala == false) e.hurt(1);
+						else e.hurt(1);
+									
+					p.hitEnemy = true;
+					p.bounce();
+					
+					if (Reg._soundEnabled == true) FlxG.sound.play("hitBounce", 1, false);
+					
+					return;
+				} 
+			}
 			
-			// different hurt values depending on which mob hit player.
-			if (Std.is(e, MobSaw)) p.hurt(4);
-			else if(e.alpha == 1) p.hurt(1);
+
+			// if mob is above player and they both collide...
+			else if (Reg._antigravity == false && p.y > e.y || Reg._antigravity == true && p.y < e.y)
+			{
+				// the player's health is decreased by 1.
+				Reg._gunHudBoxCollectedTriangles--;
+				Reg.state.hud.decreaseGunPowerCollected();
 				
-			// knock player to the right.
-			if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
-			else p.velocity.x = -600;
+				// different hurt values depending on which mob hit player.
+				if (Std.is(e, MobSaw)) p.hurt(4);
+				else if (e.alpha == 1) p.hurt(1);
 			
-			return;
+				// if mob is above player at hits in an top-right angle then push player to the left side.
+				if (e.x - p.x > 10)
+					p.velocity.x = -600;
+				
+				// if mob is above player at hits in an top-left angle then push player to the right side.
+				if (p.x - e.x > 10)
+				p.velocity.x = 600;
+				
+				if (Std.is(e, MobApple))
+				{
+					var mob:MobApple = cast(e, MobApple);
+					mob.bounce();
+				}
+				if (Std.is(e, MobCutter))
+				{
+					var mob:MobCutter = cast(e, MobCutter);
+					mob.bounce();		
+				}
+				if (Std.is(e, MobSlime))
+				{
+					var mob:MobSlime = cast(e, MobSlime);
+					mob.bounce();
+				}
+				if (Std.is(e, MobBat))
+				{
+					var mob:MobBat = cast(e, MobBat);
+					mob.bounce();		
+				}
+				if (Std.is(e, MobSqu))
+				{
+					var mob:MobSqu = cast(e, MobSqu);
+					mob.bounce();		
+				}
+				
+				// mobFish dont need air, so do not define it here.
+				
+				// mobGlob does not bounce. MobGlob continues to walk same path. same with mobExplode and mobTube.
+				
+				if (Std.is(e, MobWorm))
+				{
+					var mob:MobWorm = cast(e, MobWorm);
+					mob.bounce();	
+				}					
+				
+				return;
+			}
+	
+			// if player is standing on tile.
+			else
+			{
+				Reg._gunHudBoxCollectedTriangles--;
+				Reg.state.hud.decreaseGunPowerCollected();
+				if(e.alpha == 1) p.hurt(1);
+					
+				// knock player to the right.
+				if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
+				else p.velocity.x = -600;
+				
+				return;
+			}	
 		
 		} else
 			{
@@ -193,6 +275,7 @@ class EnemyCastSpriteCollide {
 			}
 		
 	}
+
 	
 	private static function onTimerWaterEnemy(Timer:FlxTimer):Void
 	{	
