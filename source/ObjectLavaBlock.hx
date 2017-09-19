@@ -32,8 +32,6 @@ class ObjectLavaBlock extends FlxSprite
 	{
 		reset(_startX, _startY);
 		
-		//FlxG.collide(this, Reg.state.player, playerCollide);
-		
 		super.update(elapsed);
 	}
 }

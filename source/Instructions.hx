@@ -49,14 +49,14 @@ class Instructions extends FlxSubState
 		add(Instructions2);
 		
 		var Instructions3 :FlxText;
-		Instructions3 = new FlxText(50, 175, 0, "A: Select item, confirm.");
+		Instructions3 = new FlxText(50, 175, 0, "i: Select item, confirm.");
 		Instructions3.color = FlxColor.WHITE;
 		Instructions3.size = 14;
 		Instructions3.scrollFactor.set();
 		add(Instructions3);		
 	
 		var Instructions4 :FlxText;
-		Instructions4 = new FlxText(50, 200, 0, "F1: key is quit game menu.");
+		Instructions4 = new FlxText(50, 200, 0, "m: key is main menu.");
 		Instructions4.color = FlxColor.WHITE;
 		Instructions4.size = 14;
 		Instructions4.scrollFactor.set();
@@ -69,13 +69,6 @@ class Instructions extends FlxSubState
 		Instructions5.scrollFactor.set();
 		add(Instructions5);
 		
-		var Instructions6 :FlxText;
-		Instructions6 = new FlxText(50, 250, 0, "Holding SHIFT key then press + / - to increase / decrease the volume.");
-		Instructions6.color = FlxColor.WHITE;
-		Instructions6.size = 14;
-		Instructions6.scrollFactor.set();
-		add(Instructions6);		
-		
 		button1 = new MouseClickThisButton(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
 		button1.screenCenter(X);
 		add(button1);
@@ -84,6 +77,12 @@ class Instructions extends FlxSubState
 	override public function update(elapsed:Float):Void 
 	{				
 		#if !FLX_NO_KEYBOARD  
+			if (FlxG.keys.anyJustReleased(["F12"])) 
+			{
+				Reg._ignoreIfMusicPlaying = true;
+				FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+			}
+			
 			if (FlxG.keys.anyJustPressed(["Z"]))
 			{
 				Reg._ignoreIfMusicPlaying = false;

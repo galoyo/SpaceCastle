@@ -7,6 +7,7 @@ import flixel.FlxGame;
 import flixel.util.FlxSave;
 import openfl.Lib;
 import openfl.display.Sprite;
+import openfl.system.Capabilities;
 
 /**
  * @author galoyo
@@ -31,10 +32,10 @@ class Main extends Sprite
 				loadOptions();
 		}
 		
-		
 		super();
 	
 		addChild(new FlxGame(gameWidth, gameHeight, MenuState, zoom, Reg._framerate, Reg._framerate, skipSplash, startFullscreen));
+
 	}
 	
 		

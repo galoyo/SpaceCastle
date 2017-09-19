@@ -5,6 +5,10 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
+import flixel.math.FlxMath;
+import flixel.system.scaleModes.FixedScaleMode;
+import flixel.system.scaleModes.RatioScaleMode;
+import flixel.system.scaleModes.RelativeScaleMode;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
@@ -30,14 +34,23 @@ class MenuState extends FlxState
 	private var ticksDelay:Bool = false;
 	private var ticksSlide:Int;
 	
+	private var _gameMenu:FlxSave;
+	
+	private var _userPressedScaleButton:Bool = false; // used to stop the demo from playing when the user presses the scale button.
+	
 	private var button1:MouseClickThisButton;
 	private var button2:MouseClickThisButton;
 	private var button3:MouseClickThisButton;
 	private var button4:MouseClickThisButton;
 	private var exitProgram:MouseClickThisButton;
-	
+	private var toggleFullScreen:MouseClickThisButton;
+	private var scale:MouseClickThisButton;
 	// the text when an item is picked up or a char is talking.
 	public var dialog:Dialog;
+	
+	private var currentPolicy:FlxText;
+	private var scaleModes:Array<ScaleMode> = [RATIO_DEFAULT, FIXED, RELATIVE, FILL];
+	private var scaleModeIndex:Int = 0;
 	
 	override public function create():Void
 	{
@@ -66,7 +79,7 @@ class MenuState extends FlxState
 		titleOptionsBar = new FlxSprite();
 		titleOptionsBar.loadGraphic("assets/images/titleOptionsBar.png", false);
 		titleOptionsBar.scrollFactor.set();
-		titleOptionsBar.setPosition(0, 348);
+		titleOptionsBar.setPosition(0, 328);
 		add(titleOptionsBar);
 		
 		house = new FlxSprite();
@@ -75,63 +88,57 @@ class MenuState extends FlxState
 		house.setPosition(0, 380);
 		add(house);
 		
-		var newGame:FlxText;
-		newGame = new FlxText(130, 170, 0, "");
-		// set the properties of the font and then add the font to the screen.
-		newGame.color = FlxColor.WHITE;
-		newGame.size = 16;
-		newGame.scrollFactor.set();
-		newGame.alignment = FlxTextAlign.CENTER;
-		add(newGame);
+		if (Reg._musicEnabled == true) FlxG.sound.playMusic("titleScreen", 1, false);
 		
-		var oldGame:FlxText;
-		oldGame = new FlxText(130, 200, 0, "");
-		// set the properties of the font and then add the font to the screen.
-		oldGame.color = FlxColor.WHITE;
-		oldGame.size = 16;
-		oldGame.scrollFactor.set();
-		oldGame.alignment = FlxTextAlign.CENTER;
-		add(oldGame);
+				
+		_gameMenu = new FlxSave(); // initialize		
+		_gameMenu.bind("TSC-MENU"); // bind to the named save slot.	
 		
-		var instructions:FlxText;
-		instructions = new FlxText(460, 170, 0, "");
-		// set the properties of the font and then add the font to the screen.
-		instructions.color = FlxColor.WHITE;
-		instructions.size = 16;
-		instructions.scrollFactor.set();
-		instructions.alignment = FlxTextAlign.CENTER;
-		add(instructions);
-		
-		var options:FlxText;
-		options = new FlxText(460, 200, 0, "");
-		// set the properties of the font and then add the font to the screen.
-		options.color = FlxColor.WHITE;
-		options.size = 16;
-		options.scrollFactor.set();
-		options.alignment = FlxTextAlign.CENTER;
-		add(options);
-		
-		if(Reg._musicEnabled == true) FlxG.sound.playMusic("titleScreen", 1, false);
-		
-		FlxG.scaleMode = new FillScaleMode(); // no black bars at the sides of the game screen.
+		if (_gameMenu.data.scaleModeIndex != null || _gameMenu.data.fullscreen != null)	loadMenu();
 		
 		_gameSave = new FlxSave(); // initialize
 		_gameSave.bind("TSC-SAVED-GAME"); // bind to the named save slot.
 		
-		button1 = new MouseClickThisButton(180, 360, "1: New Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
-		button2 = new MouseClickThisButton(180, 400, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
-		button3 = new MouseClickThisButton(450, 360, "3: Instructions.", 160, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);
-		button4 = new MouseClickThisButton(450, 400, "4: Options.", 160, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
-		exitProgram = new MouseClickThisButton(600, 530, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
+		button1 = 			new MouseClickThisButton(110, 346, "1: New Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		button2 = 			new MouseClickThisButton(110, 394, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
+		button3 = 			new MouseClickThisButton(320, 346, "3: Instructions.", 160, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);
+		button4 = 			new MouseClickThisButton(320, 394, "4: Options.", 160, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
+		toggleFullScreen = 	new MouseClickThisButton(530, 346, "t: Fullscreen.", 160, 35, null, 16, 0xFFCCFF33, 0, toggleFullScreenClicked);
+		if (FlxG.fullscreen == true) toggleFullScreen.text = "t: Window."; 
+		exitProgram = 		new MouseClickThisButton(530, 394, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
+		scale = 			new MouseClickThisButton(10, 280, "s: scale", 90, 35, null, 16, 0xFFCCFF33, 0, scaleClicked);
+		
 		add(button1);
 		add(button2);
 		add(button3);
-		add(button4);
+		add(button4);		
+		add(toggleFullScreen);
 		add(exitProgram);
+		add(scale);
+		
+		var info:FlxText = new FlxText(115, 290, FlxG.width, "Press S key to change the scale mode.");
+		info.setFormat(null, 14, FlxColor.WHITE, LEFT);
+		info.alpha = 0.75;
+		add(info);
+		
+		currentPolicy = new FlxText(460, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
+		currentPolicy.alignment = LEFT;
+		currentPolicy.size = 14;
+		add(currentPolicy);
+		
+		scaleClicked();
+		_userPressedScaleButton = false;
+		
+		#if !FLX_NO_KEYBOARD
+			FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
+			FlxG.mouse.reset;
+		#end
 	}
 	
 	private function button1Clicked():Void
 	{		
+		_userPressedScaleButton = false;
+		
 		if (Reg._musicEnabled == true)
 		{
 			if (FlxG.sound.music.playing == true)
@@ -143,7 +150,7 @@ class MenuState extends FlxState
 			FlxG.sound.playMusic("twinkle", 1, false); 
 			FlxG.sound.music.persist = true;
 		}
-
+		
 		loadPlayState();
 	}
 	
@@ -155,17 +162,18 @@ class MenuState extends FlxState
 		} 
 		else if (_gameSave.data._fallAllowedDistanceInPixels != null && Reg._soundEnabled == true) 
 		{
+			
+			_userPressedScaleButton = false;
 			loadGame();
 		} 
 		
-		else loadGame();
+		else { _userPressedScaleButton = false; loadGame(); }
 	}
 	
 	private function button3Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = true;
-		
-		if (Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false); 
+
 		instructions();	
 	}
 	
@@ -173,8 +181,7 @@ class MenuState extends FlxState
 	private function button4Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = true;
-		
-		if (Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false); 
+
 		openSubState(new Options());
 	}
 	
@@ -212,12 +219,26 @@ class MenuState extends FlxState
 			{
 				Reg.exitProgram();
 			}
+			
+			else if (FlxG.keys.anyJustReleased(["T"])) 
+			{
+				toggleFullScreenClicked();
+			}
+			
+			else if (FlxG.keys.justPressed.S)
+			{
+				scaleClicked();
+			}
+
+			
+			
+			
 			#end
 
 		// if music has finished and user has not yet pressed 1 or 2 to play the game then prepare to play the recorded demo.
 		if (Reg._musicEnabled == true)
 		{
-			if (FlxG.sound.music.playing == false && Reg._ignoreIfMusicPlaying == false)
+			if (FlxG.sound.music.playing == false && Reg._ignoreIfMusicPlaying == false && _userPressedScaleButton == false)
 			{
 				Reg._playRecordedDemo = true; 
 				FlxG.switchState(new PlayState());
@@ -226,6 +247,29 @@ class MenuState extends FlxState
 		
 		super.update(elapsed);
 	}
+	
+	private function setScaleMode(scaleMode:ScaleMode)
+	{
+		currentPolicy.text = scaleMode;
+		
+		FlxG.scaleMode = switch (scaleMode)
+		{
+			case ScaleMode.RATIO_DEFAULT:
+				new RatioScaleMode();
+				
+			case ScaleMode.FIXED:
+				new FixedScaleMode();
+				
+			case ScaleMode.RELATIVE:
+				new RelativeScaleMode(0.75, 0.75);
+				
+			case ScaleMode.FILL:
+				new FillScaleMode();
+	
+		}
+
+	}
+
 	
 	private function instructions():Void
 	{
@@ -246,23 +290,23 @@ class MenuState extends FlxState
 		
 		for (i in 0...4)
 		{
-			Reg._itemGotKey[i] = _gameSave.data._itemGotKey[i]; 	// 4
-			Reg._itemGotJump[i] = _gameSave.data._itemGotJump[i];	// 4
+			Reg._itemGotKey[i] = _gameSave.data._itemGotKey[i]; 
+			Reg._itemGotJump[i] = _gameSave.data._itemGotJump[i];
 		}
 		
 		for (i in 0...8)
 		{
-			Reg._itemGotSuperBlock[i] = _gameSave.data._itemGotSuperBlock[i]; // 8
+			Reg._itemGotSuperBlock[i] = _gameSave.data._itemGotSuperBlock[i]; 
 		}
 		
 		for (i in 0...126)
 		{
-			Reg._inventoryIconZNumber[i] = _gameSave.data._inventoryIconZNumber[i];	// 126
-			Reg._inventoryIconXNumber[i] = _gameSave.data._inventoryIconXNumber[i];	// 126
-			Reg._inventoryIconCNumber[i] = _gameSave.data._inventoryIconCNumber[i];	// 126
+			Reg._inventoryIconZNumber[i] = _gameSave.data._inventoryIconZNumber[i];	
+			Reg._inventoryIconXNumber[i] = _gameSave.data._inventoryIconXNumber[i];	
+			Reg._inventoryIconCNumber[i] = _gameSave.data._inventoryIconCNumber[i];	
 			Reg._inventoryIconName[i] = _gameSave.data._inventoryIconName[i];
-			Reg._inventoryIconDescription[i] = _gameSave.data._inventoryIconDescription[i];// 126
-			Reg._inventoryIconFilemame[i] = _gameSave.data._inventoryIconFilemame[i];	// 126
+			Reg._inventoryIconDescription[i] = _gameSave.data._inventoryIconDescription[i];
+			Reg._inventoryIconFilemame[i] = _gameSave.data._inventoryIconFilemame[i];	
 		}
 		
 		Reg._fallAllowedDistanceInPixels = _gameSave.data._fallAllowedDistanceInPixels;	
@@ -345,6 +389,60 @@ class MenuState extends FlxState
 		FlxG.switchState(new PlayState());
 	}	
 	
+	private function toggleFullScreenClicked():Void
+	{
+		if (toggleFullScreen.text == "t: Fullscreen.") 
+		{
+			toggleFullScreen.text = "t: Window.";
+			FlxG.fullscreen = true;
+		}
+		else 
+		{
+			toggleFullScreen.text = "t: Fullscreen.";
+			FlxG.fullscreen = false;
+		}
+		
+		saveMenu();
+	}	
+	
+	public function scaleClicked():Void
+	{
+		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
+		setScaleMode(scaleModes[scaleModeIndex]);		
+		
+		_gameMenu.data.scaleModeIndex = scaleModeIndex - 1;
+		
+		// save data
+		_gameMenu.flush();
+		_gameMenu.close;
+		
+		_userPressedScaleButton = true;
+	}
+	
+	public function saveMenu():Void
+	{
+		_gameMenu.data.fullscreen = FlxG.fullscreen;
 
+		// save data
+		_gameMenu.flush();
+		_gameMenu.close;
+	}
+	
+	public function loadMenu():Void
+	{
+		scaleModeIndex = _gameMenu.data.scaleModeIndex;
+		FlxG.fullscreen = _gameMenu.data.fullscreen;
+		
+		_gameMenu.close;
+	}
 
+}
+
+@:enum
+abstract ScaleMode(String) to String
+{
+	var RATIO_DEFAULT = "(Ratio)";
+	var FIXED = "(Fixed)";
+	var RELATIVE = "(Relative 75%)";
+	var FILL = "(Fill)";
 }

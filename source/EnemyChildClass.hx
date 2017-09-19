@@ -65,6 +65,8 @@ class EnemyChildClass extends FlxSprite
 	private var _emitterSmokeRight:FlxEmitter;
 	private var _emitterSmokeLeft:FlxEmitter;
 	
+	public var _mobStandingOnFireBlockTimer = new FlxTimer();
+	
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, emitterSmokeRight:FlxEmitter, emitterSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
 	{
 		super(x, y);
@@ -93,7 +95,17 @@ class EnemyChildClass extends FlxSprite
 		{
 			// check if the mob is in water.
 			if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 15) EnemyCastSpriteCollide.waterEnemy(this);
-			
+			//################### LAVA BLOCK.
+			// take damage if on the fire block. 1 damage every 1 second.			
+			if ( Reg.state.tilemap.getTile(Std.int(x / 32), Std.int(y / 32) + 1) >= 233 && Reg.state.tilemap.getTile(Std.int(x / 32), Std.int(y / 32) + 1) <= 238 || FlxG.collide(this, Reg.state._objectLavaBlock))
+			{
+				if (_mobStandingOnFireBlockTimer.finished == true) hurt(1);
+				
+				if (_mobStandingOnFireBlockTimer.active == false)
+				_mobStandingOnFireBlockTimer.start(1, null, 1);			
+			}
+			//################### END LAVA BLOCK.
+		
 			super.update(elapsed);
 		}
 	}		

@@ -88,6 +88,17 @@ class ButtonsNavigation extends FlxGroup
 		findInventoryIconZNumber();
 		findInventoryIconXNumber();
 		findInventoryIconCNumber();
+		
+		#if !FLX_NO_KEYBOARD 
+			buttonLeft.active = false;
+			buttonRight.active = false;
+			buttonUp.active = false;
+			buttonDown.active = false;
+			buttonZ.active = false;
+			buttonX.active = false;
+			buttonC.active = false;
+			buttonI.active = false;
+		#end
 	}
 	
 	override public function update(elapsed:Float):Void 

@@ -200,6 +200,9 @@ class EnemyCastSpriteCollide {
 				Reg._gunHudBoxCollectedTriangles--;
 				Reg.state.hud.decreaseGunPowerCollected();
 				
+				if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
+				else p.velocity.x = -600;
+				
 				// different hurt values depending on which mob hit player.
 				if (Std.is(e, MobSaw)) p.hurt(4);
 				else if (e.alpha == 1) p.hurt(1);
@@ -258,7 +261,6 @@ class EnemyCastSpriteCollide {
 				Reg.state.hud.decreaseGunPowerCollected();
 				if(e.alpha == 1) p.hurt(1);
 					
-				// knock player to the right.
 				if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
 				else p.velocity.x = -600;
 				
