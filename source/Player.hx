@@ -20,6 +20,8 @@ class Player extends FlxSprite
 	public var xForce:Float = 0;
 	public var yForce:Float = 0;
 	private var _dogFound:Bool = false;
+	private var ticksDelayJump:Float; // stop player from moving when jumping incorrectly.
+	private var _incorrectJumping:Bool = false;
 	
 	public var _newY:Float = 0;	// used to keep the player standing still above the mobs head.
 
@@ -41,7 +43,6 @@ class Player extends FlxSprite
 	
 	// is player in the air?
 	public var inAir:Bool = false;
-	public var diamonds:FlxGroup; 	
 	public var hasWon:Bool = false;	
 	public var hitEnemy:Bool = false;
 
@@ -133,7 +134,7 @@ class Player extends FlxSprite
 		
 		_swimming = new FlxTimer();
 		
-		visible = true;
+		visible = true; 
 		
 	}
 	
@@ -367,7 +368,7 @@ class Player extends FlxSprite
 
 		if (overlapsAt(x, y - 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y - 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
 		Reg._lastArrowKeyPressed = "up";
-if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x + 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
+		if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x + 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
 		Reg._lastArrowKeyPressed = "right";
 		if (overlapsAt(x, y + 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y + 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
 		Reg._lastArrowKeyPressed = "down";
@@ -429,10 +430,8 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		//####################### END CHEAT MODE #######################
 
 		Reg.state._healthBarPlayer.velocity.x = velocity.x;
-		Reg.state._healthBarPlayer.velocity.y = velocity.y;		
-		
+		Reg.state._healthBarPlayer.velocity.y = velocity.y;				
 				
-		
 		super.update(elapsed);
 	}
 	
@@ -631,36 +630,69 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			if (InputControls.left.pressed) {xForce--; Reg._arrowKeyInUseTicks = 0; }
-			if (InputControls.right.pressed) { xForce++; Reg._arrowKeyInUseTicks = 0; }
+			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+				|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+				{
+					if (InputControls.left.pressed || InputControls.right.pressed) _incorrectJumping = true;
+				}
 			
+			// holding an arrow key left or right before jumping is not allowed. the reason is because of a bug. when exiting the map from the right side, if holding the right arrow key and then jumping into the next map, the player will fall straight down at that next map. the player will not continue to move in that same direction if that arrow key is still held down. however, if a jump was made before holding an arrow key then when leaving the map the player will continue to move forward at the next map if that arrow key is still held down. this code address the bug by delaying movement when jump in not allowed.
+			if (_incorrectJumping == true) ticksDelayJump = Reg.incrementTicks(ticksDelayJump, 60 / Reg._framerate);
+			
+			if (ticksDelayJump >= 21) 
+			{
+				ticksDelayJump = 0;
+			}
+
+			if (ticksDelayJump >= 20 && _incorrectJumping == true)
+			{	
+				_incorrectJumping = false;
+			}
+			
+			if (_incorrectJumping == false)
+			{
+				if (InputControls.left.pressed) 
+				{ xForce--; Reg._arrowKeyInUseTicks = 0; }
+				if (InputControls.right.pressed)
+				{ xForce++; Reg._arrowKeyInUseTicks = 0; }	
+				
+				ticksDelayJump = 0;
+			}
 		}		
-			
-		
+	
 		//---------------------------
 		//########### PLAYER IS JUMPING.
-		if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
-			|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+		if (!InputControls.left.pressed && !InputControls.right.pressed)
 		{
-			if (Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving)
-			|| Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving))
+			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+				|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("rope", 0.50, false);			
+				if (Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving)
+				|| Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving))
+				{
+					if (Reg._soundEnabled == true) FlxG.sound.play("rope", 0.50, false);			
 
-				Reg._antigravity = false; // cannot swing upside down on vine.
-				velocity.y = -500; 
-			}
-			// normal jump.
-			else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
-			|| Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
-				
-				velocity.y = finalJumpForce;			
+					Reg._antigravity = false; // cannot swing upside down on vine.
+					velocity.y = -500; 
+					_incorrectJumping = false;
+				}
+				// normal jump.
+				else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
+				|| Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
+				{
+					if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
+					
+					velocity.y = finalJumpForce;	
+					_incorrectJumping = false;
+				}
 			}
 		}
 		//--------------------------
@@ -687,12 +719,22 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 				if (_swimming.active == false) _swimming.start(0.12, swimmingOnTimer, 1);
 			}		
 		}
-		
+
 		if (!FlxG.overlap(Reg.state._overlayPipe, this))
 		{
 			xForce = FlxMath.bound(xForce, -1, 1);		
-			if (InputControls.left.pressed || InputControls.right.pressed) acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
-			else acceleration.x = 0;
+			if (InputControls.left.pressed || InputControls.right.pressed)
+			{
+				if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+				 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+				 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+				 || InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+				 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+				 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+					acceleration.x = 0;
+				else acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
+				
+			} else acceleration.x = 0;		
 			
 			Reg._dogIsInPipe = false;
 		} else Reg._dogIsInPipe = true;
@@ -725,7 +767,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 					
 		//############################ IMPORTANT.
 		//############################ Add flying hat, vine, ladder ect to this line.
-		if (!FlxG.overlap(Reg.state._objectVineMoving, this) && !FlxG.overlap(Reg.state._objectLadders, this) &&  Reg._usingFlyingHat == false)
+		if (!InputControls.left.pressed && !InputControls.right.pressed && !FlxG.overlap(Reg.state._objectVineMoving, this) && !FlxG.overlap(Reg.state._objectLadders, this) &&  Reg._usingFlyingHat == false)
 		{
 			if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
 		   	||  InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
@@ -735,6 +777,7 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = _gravity;
+				_incorrectJumping = false;
 			} 		
 			else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
 			{
@@ -748,12 +791,11 @@ if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = -_gravity;
-				trace("_gravity1", -_gravity);
+				_incorrectJumping = false;
 			} 
 			else if ( !isTouching(FlxObject.CEILING) && Reg._antigravity == true) 
 			{
 				acceleration.y = -_gravity;
-				trace("_gravity2", -_gravity);
 			} 
 			else
 			{

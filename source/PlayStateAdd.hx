@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxBackdrop;
 import flixel.addons.effects.chainable.FlxTrailEffect;
@@ -32,20 +33,21 @@ class PlayStateAdd
 		// left-right or up-down position of a csv file.
 		var xNewCoords:Float = 0;
 		var yNewCoords:Float = 0;
+		var facingLeft:Bool = false;
 		
 		if (Reg._inHouse == "")
 		{
 			if (Reg.beginningOfGame == false && Reg.restoreGameState == false)
 			{
 				// west - to go east door.
-				if (Reg.playerXcoords < 1) {xNewCoords = 23 ; yNewCoords = Reg.playerYcoords; } 
+				if (Reg.playerXcoords < 1) {xNewCoords = 23 ; yNewCoords = Reg.playerYcoords; facingLeft = true; } 
 				
 				// north - to go south door.
 				else if (Reg.playerYcoords < 1) {yNewCoords = 13 ; xNewCoords = Reg.playerXcoords; } 
 				
 				// east - to go west door.
-				else if (Reg.playerXcoords > 24) {xNewCoords = 1 ; yNewCoords = Reg.playerYcoords; } 
-								
+				else if (Reg.playerXcoords > 24) {xNewCoords = 1 ; yNewCoords = Reg.playerYcoords; facingLeft = false; } 
+			
 				// south - go to north door.
 				else if (Reg.playerYcoords > 14) {yNewCoords = 1 ; xNewCoords = Reg.playerXcoords;} 		
 				
@@ -82,6 +84,8 @@ class PlayStateAdd
 		
 		Reg.restoreGameState = false;		
 		Reg._playersYLastOnTile = Reg.state.player.y;
+		
+		if (facingLeft == true) Reg.state.player.facing = FlxObject.LEFT;
 		
 		Reg.state._healthBarPlayer = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.player, "health", 0, Reg.state.player.health, false);		
 		Reg.state._healthBarPlayer.setRange(0, Reg._healthMaximum);
@@ -972,7 +976,6 @@ class PlayStateAdd
 	{
 		Reg.state._objectLavaBlock.add( new ObjectLavaBlock(X, Y));
 		Reg.state.add(Reg.state._objectLavaBlock);
-		Reg.state._objectsThatDoNotMove.add(Reg.state._objectLavaBlock);
 	}
 
 	/**

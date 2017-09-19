@@ -69,7 +69,7 @@ class ObjectVineMoving2 extends FlxSprite
 			if (ticks >= 30) {ticks = 0; _isPlayerJumping = false;}
 			
 		}
-		trace("yo", ticks);
+
 		super.update(elapsed);
 	}
 	

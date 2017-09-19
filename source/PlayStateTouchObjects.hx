@@ -37,6 +37,8 @@ class PlayStateTouchObjects
 	
 	public static function emitterDiamondPlayerOverlap(e:FlxParticle, p:Player):Void
 	{
+		Reg._score = Reg._score + 10;
+		e.kill();
 	}
 	
 	public static function emitterPowerUpPlayerOverlap(e:FlxParticle, p:Player):Void

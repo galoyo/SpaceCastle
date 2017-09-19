@@ -521,6 +521,7 @@ class PlayState extends FlxUIState
 		
 		_buttonsNavigation = new ButtonsNavigation();	
 		add(_buttonsNavigation);
+		
 		super.create();
 	}
 	
