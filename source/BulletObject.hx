@@ -12,15 +12,15 @@ import flixel.util.FlxColor;
 
 class BulletObject extends FlxSprite 
 {	
-	private var _emitterBulletHit:FlxEmitter;
-	private var _emitterBulletMiss:FlxEmitter;
+	private var _particleBulletHit:FlxEmitter;
+	private var _particleBulletMiss:FlxEmitter;
 	
-	public function new(emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{		
 		super();
 		
-		_emitterBulletHit = emitterBulletHit;	
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;	
+		_particleBulletMiss = particleBulletMiss;
 		
 		loadGraphic("assets/images/objectFireball.png", true, 16, 16);
 		color = FlxColor.LIME;		
@@ -35,8 +35,8 @@ class BulletObject extends FlxSprite
 		{
 			if (isTouching(FlxObject.FLOOR) || isTouching(FlxObject.WALL) || isTouching(FlxObject.CEILING) || velocity.x == 0 && velocity.y == 0)
 			{
-				_emitterBulletMiss.focusOn(this);
-				_emitterBulletMiss.start(true, 0.2, 1);
+				_particleBulletMiss.focusOn(this);
+				_particleBulletMiss.start(true, 0.2, 1);
 				
 				kill();
 			}
@@ -50,10 +50,10 @@ class BulletObject extends FlxSprite
 		super.update(elapsed);
 	}
 	
-	public function shoot(x:Int, y:Int, gravity:Float, velocityX:Int, velocityY:Int, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter):Void
+	public function shoot(x:Int, y:Int, gravity:Float, velocityX:Int, velocityY:Int, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter):Void
 	{
-		_emitterBulletHit = emitterBulletHit;
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;
+		_particleBulletMiss = particleBulletMiss;
 		
 		// used to reset the bullet to its default position.
 		super.reset(x, y);  

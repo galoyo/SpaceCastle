@@ -19,8 +19,8 @@ class ObjectChildClass extends FlxSprite
 	public var _bulletsObject:FlxTypedGroup<BulletObject>;
 	private var _bulletObject:BulletObject;
 	private var _bulletSpeed:Int = 450;
-	private var _emitterBulletHit:FlxEmitter;
-	private var _emitterBulletMiss:FlxEmitter;	
+	private var _particleBulletHit:FlxEmitter;
+	private var _particleBulletMiss:FlxEmitter;	
 		
 	private var _gunDelay:Float;
 	private var _cooldown:Float;
@@ -34,7 +34,7 @@ class ObjectChildClass extends FlxSprite
 		
 	private var player:Player;
 	
-	public function new(x:Float, y:Float, bulletsObject:FlxTypedGroup<BulletObject>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(x:Float, y:Float, bulletsObject:FlxTypedGroup<BulletObject>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
 		super(x, y);
 		
@@ -42,8 +42,8 @@ class ObjectChildClass extends FlxSprite
 		_startY = y;
 		
 		_bulletsObject = bulletsObject;
-		_emitterBulletHit = emitterBulletHit;
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;
+		_particleBulletMiss = particleBulletMiss;
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -102,7 +102,7 @@ private function shoot():Void
 						bYVeloc = -_bulletSpeed;
 					}
 					
-					_bulletObject.shoot(bulletX, bulletY, gravity, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletObject.shoot(bulletX, bulletY, gravity, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					
 					acceleration.y = 0;
 				}
@@ -111,8 +111,8 @@ private function shoot():Void
 		
 				_cooldown = 0;	// reset the shot clock
 				// emit it
-				_emitterBulletHit.focusOn(_bulletObject);
-				_emitterBulletHit.start(true, 0.05, 1);
+				_particleBulletHit.focusOn(_bulletObject);
+				_particleBulletHit.start(true, 0.05, 1);
 			}
 			else
 			{

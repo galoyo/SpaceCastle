@@ -17,7 +17,7 @@ class EmitterMobsDamage extends FlxEmitter
 		for (i in 0... 120)
         {
         	var p = new FlxParticle();
-        	p.loadGraphic("assets/images/emitterMobsDamage.png", true, 32, 32);
+        	p.loadGraphic("assets/images/particleMobsDamage.png", true, 32, 32);
 			p.animation.add("play", [0,1,2,3,4], 30, false);
 			p.animation.play("play");
         	p.exists = false;

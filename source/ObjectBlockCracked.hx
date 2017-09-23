@@ -14,10 +14,10 @@ class ObjectBlockCracked extends FlxSprite
 	private var _startY:Float;
 	
 	private var _emitterBulletFlame:FlxEmitter;
-	private var _emitterBulletHit:FlxEmitter;
+	private var _particleBulletHit:FlxEmitter;
 	private var _emitterDeath:FlxEmitter;
 	
-	public function new(x:Float, y:Float, emitterBulletFlame:FlxEmitter, emitterDeath:FlxEmitter, emitterBulletHit:FlxEmitter) 
+	public function new(x:Float, y:Float, emitterBulletFlame:FlxEmitter, emitterDeath:FlxEmitter, particleBulletHit:FlxEmitter) 
 	{		
 		super(x, y);
 
@@ -28,7 +28,7 @@ class ObjectBlockCracked extends FlxSprite
 
 		_emitterBulletFlame = emitterBulletFlame;
 		_emitterDeath = emitterDeath;
-		_emitterBulletHit = emitterBulletHit;
+		_particleBulletHit = particleBulletHit;
 		
 		allowCollisions = FlxObject.UP + FlxObject.LEFT + FlxObject.RIGHT; // stop player and mobs from getting stuck in the seam of a rock over top of another rock.
 		immovable = true;

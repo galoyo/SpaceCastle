@@ -14,9 +14,9 @@ class ObjectCannon extends ObjectChildClass
 	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
 	private var _bulletFormationNumber:Int = 0; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	
-	public function new(x:Float, y:Float, id:Int, bulletsObject:FlxTypedGroup<BulletObject>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(x:Float, y:Float, id:Int, bulletsObject:FlxTypedGroup<BulletObject>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
-		super(x, y, bulletsObject, emitterBulletHit, emitterBulletMiss);
+		super(x, y, bulletsObject, particleBulletHit, particleBulletMiss);
 		
 		_startX = x;
 		_startY = y;

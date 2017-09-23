@@ -306,8 +306,8 @@ class EnemyCastSpriteCollide {
 				// set the delay to play the water sound. next time this function is called, the timer function will be called, to set this var as true so that if the mob is in the air and touching the water parameter then the sound will be played.				
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 		
@@ -322,8 +322,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);				
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);				
 			} 	
 		}
 		
@@ -340,8 +340,8 @@ class EnemyCastSpriteCollide {
 
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);				
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);				
 			} 	
 		}
 		
@@ -354,8 +354,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 		
@@ -370,8 +370,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 		
@@ -386,8 +386,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 		
@@ -404,8 +404,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 		
@@ -420,8 +420,8 @@ class EnemyCastSpriteCollide {
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
 				
-				Reg.state._emitterWaterSplash.focusOn(mob);
-				Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
 			} 	
 		}
 	}

@@ -22,12 +22,12 @@ class MobBullet extends EnemyChildClass
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;
 
-	private var _timerEmitterSmokeRight:FlxTimer;
-	private var _timerEmitterSmokeLeft:FlxTimer;
+	private var _timerparticleSmokeRight:FlxTimer;
+	private var _timerparticleSmokeLeft:FlxTimer;
 	
-	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, emitterSmokeRight:FlxEmitter, emitterSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
-		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, emitterSmokeRight, emitterSmokeLeft, bulletsMob, emitterBulletHit, emitterBulletMiss);
+		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
 		// set to false if sprite has no animation frames.
 		loadGraphic("assets/images/mobBullet.png", false, 30, 30);
@@ -85,14 +85,14 @@ class MobBullet extends EnemyChildClass
 			{
 				if (ticks == 1)
 				{
-					_emitterSmokeRight.focusOn(this);				
-					_emitterSmokeRight.start(false, 0.006, 9);
+					_particleSmokeRight.focusOn(this);				
+					_particleSmokeRight.start(false, 0.006, 9);
 				}
 			}
 			else if (ticks == 1)
 			{
-				_emitterSmokeLeft.focusOn(this);
-				_emitterSmokeLeft.start(false, 0.006, 9);
+				_particleSmokeLeft.focusOn(this);
+				_particleSmokeLeft.start(false, 0.006, 9);
 			}
 		}
 		else if (!inRange(_range) && ticks > 0 && Reg._trackerInUse == false) kill();

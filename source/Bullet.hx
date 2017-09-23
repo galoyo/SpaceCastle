@@ -11,15 +11,15 @@ import flixel.effects.particles.FlxEmitter;
 
 class Bullet extends FlxSprite 
 {	
-	// used to store the distance away fron the gun that the emitterBulletHit will emit from.
+	// used to store the distance away fron the gun that the particleBulletHit will emit from.
 	private var	_bulletStar:Float = 0;
 	
 	// distance the bulletStar animation is from the gun.
 	private var	_bulletStarDistance:Int = 30;
 	
 	// emit the _bulletStar animation.
-	private var _emitterBulletHit:FlxEmitter;
-	private var _emitterBulletMiss:FlxEmitter;
+	private var _particleBulletHit:FlxEmitter;
+	private var _particleBulletMiss:FlxEmitter;
 	
 	private var _holdingUpKey:Bool = false;
 	
@@ -38,12 +38,12 @@ class Bullet extends FlxSprite
 		}
 	}
 	
-	public function new(emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{		
 		super();
 		
-		_emitterBulletHit = emitterBulletHit;	
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;	
+		_particleBulletMiss = particleBulletMiss;
 		
 		// load a different graphic depending on the value of reg._gunPower.
 		loadNewBulletImage();
@@ -56,20 +56,20 @@ class Bullet extends FlxSprite
 		// if bullet exists.
 		if (this != null)
 		{
-			// when the bullet is at the distance of the _bullterStar, emit the _emitterBulletHit so that the _bulletStar animation can be seen. Then destroy the animation.
+			// when the bullet is at the distance of the _bullterStar, emit the _particleBulletHit so that the _bulletStar animation can be seen. Then destroy the animation.
 			if (Reg._typeOfGunCurrentlyUsed == 0)
 			{
 				if (_holdingUpKey == true )
 				{	if (Reg._antigravity == false && _bulletStar > y)
 					{
-						_emitterBulletHit.focusOn(this);
-						_emitterBulletHit.start(true, 0.2, 1);
+						_particleBulletHit.focusOn(this);
+						_particleBulletHit.start(true, 0.2, 1);
 						kill();
 					}
 					if (Reg._antigravity == true && _bulletStar < y)
 					{
-						_emitterBulletHit.focusOn(this);
-						_emitterBulletHit.start(true, 0.2, 1);
+						_particleBulletHit.focusOn(this);
+						_particleBulletHit.start(true, 0.2, 1);
 						kill();
 					}
 				}	
@@ -77,8 +77,8 @@ class Bullet extends FlxSprite
 				{
 					if((Reg.state.player.facing == FlxObject.RIGHT && x > _bulletStar) || (Reg.state.player.facing == FlxObject.LEFT && x < _bulletStar))
 					{	
-						_emitterBulletHit.focusOn(this);
-						_emitterBulletHit.start(true, 0.2, 1);
+						_particleBulletHit.focusOn(this);
+						_particleBulletHit.start(true, 0.2, 1);
 						kill();
 					}
 				}
@@ -86,8 +86,8 @@ class Bullet extends FlxSprite
 			
 			if (isTouching(FlxObject.FLOOR) || isTouching(FlxObject.WALL) || isTouching(FlxObject.CEILING))
 			{
-				_emitterBulletMiss.focusOn(this);
-				_emitterBulletMiss.start(true, 0.2, 1);
+				_particleBulletMiss.focusOn(this);
+				_particleBulletMiss.start(true, 0.2, 1);
 				kill();
 			}
 		}
@@ -100,12 +100,12 @@ class Bullet extends FlxSprite
 		super.update(elapsed);
 	}
 	
-	public function shoot(x:Int, y:Int, velocityX:Int, velocityY:Int, holdingUpKey:Bool, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter):Void
+	public function shoot(x:Int, y:Int, velocityX:Int, velocityY:Int, holdingUpKey:Bool, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter):Void
 	{
 		if (Reg._playerCanShootOrMove == false) return;
 		
-		_emitterBulletHit = emitterBulletHit;
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;
+		_particleBulletMiss = particleBulletMiss;
 		_holdingUpKey = holdingUpKey;
 	
 		//#################### LOAD BULLET IMAGE AGAIN? ################

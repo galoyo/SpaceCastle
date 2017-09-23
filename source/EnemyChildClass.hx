@@ -20,8 +20,8 @@ class EnemyChildClass extends FlxSprite
 	public var _bulletsMob:FlxTypedGroup<BulletMob>;
 	private var _bulletMob:BulletMob;
 	private var _bulletSpeed:Int = 350;
-	private var _emitterBulletHit:FlxEmitter;
-	private var _emitterBulletMiss:FlxEmitter;	
+	private var _particleBulletHit:FlxEmitter;
+	private var _particleBulletMiss:FlxEmitter;	
 		
 	private var _gunDelay:Float;
 	private var _cooldown:Float;
@@ -62,12 +62,12 @@ class EnemyChildClass extends FlxSprite
 	private var _emitterItemPowerUp:FlxEmitter;
 	private var _emitterItemNugget:FlxEmitter;
 	private var _emitterItemHeart:FlxEmitter;
-	private var _emitterSmokeRight:FlxEmitter;
-	private var _emitterSmokeLeft:FlxEmitter;
+	private var _particleSmokeRight:FlxEmitter;
+	private var _particleSmokeLeft:FlxEmitter;
 	
 	public var _mobStandingOnFireBlockTimer = new FlxTimer();
 	
-	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, emitterSmokeRight:FlxEmitter, emitterSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter) 
+	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
 		super(x, y);
 		
@@ -82,11 +82,11 @@ class EnemyChildClass extends FlxSprite
 		_emitterItemPowerUp = emitterItemPowerUp;
 		_emitterItemNugget = emitterItemNugget;
 		_emitterItemHeart = emitterItemHeart;
-		_emitterSmokeRight = emitterSmokeRight;
-		_emitterSmokeLeft = emitterSmokeLeft;
+		_particleSmokeRight = particleSmokeRight;
+		_particleSmokeLeft = particleSmokeLeft;
 		_bulletsMob = bulletsMob;
-		_emitterBulletHit = emitterBulletHit;
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;
+		_particleBulletMiss = particleBulletMiss;
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -305,7 +305,7 @@ private function shoot():Void
 					bYVeloc = 0; 				// do not move up or down.
 					bXVeloc = -_bulletSpeed;	// move left.
 					
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					//###########################
 					// this must be after bulletMob.shoot(), but not after the last one in this "if code block", for the next bulletMob.shoot() to work.
 					_bulletMob = _bulletsMob.recycle(BulletMob);
@@ -313,7 +313,7 @@ private function shoot():Void
 					bYVeloc = 0; 				// do not move up or down.
 					bXVeloc = _bulletSpeed; 	// move right.
 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 				
 				// fires two bullets up and down at the same time.
@@ -322,13 +322,13 @@ private function shoot():Void
 					bXVeloc = 0;
 					bYVeloc = -_bulletSpeed;
 					
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 					
 					bXVeloc = 0;
 					bYVeloc = _bulletSpeed;
 					
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 				
 				
@@ -339,25 +339,25 @@ private function shoot():Void
 					// up.
 					bXVeloc = 0; 
 					bYVeloc = -_bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 					
 					// right.
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = 0; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);	
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);	
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 			
 					// down 
 					bXVeloc = 0; 
 					bYVeloc = _bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 
 					// left.
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = 0; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 					
 				//##################################################
@@ -367,25 +367,25 @@ private function shoot():Void
 					// north-east.
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = -_bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// south-east.
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = _bulletSpeed; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);	
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);	
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 			
 					// south-west 
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = _bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 
 					// west-north
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = -_bulletSpeed; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 					
 				//##############################################
@@ -395,49 +395,49 @@ private function shoot():Void
 					// up.
 					bXVeloc = 0; 
 					bYVeloc = -_bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// 10 o-clock.						
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = -_bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// right.
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = 0; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// 20 o-clock.
 					bXVeloc = _bulletSpeed; 
 					bYVeloc = _bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 												
 					// down 
 					bXVeloc = 0; 
 					bYVeloc = _bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// 40 0-clock
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = _bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// left.
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = 0; 
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 						
 					// 50 o-clock
 					bXVeloc = -_bulletSpeed; 
 					bYVeloc = -_bulletSpeed;
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 				// fires two bullets at 20 and 40 minutes of a clock.
 				else if (_bulletFireFormation == 5)
@@ -445,21 +445,21 @@ private function shoot():Void
 					bXVeloc = -_bulletSpeed;
 					bYVeloc = _bulletSpeed;
 					
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 					_bulletMob = _bulletsMob.recycle(BulletMob);
 					
 					bXVeloc = _bulletSpeed;
 					bYVeloc = _bulletSpeed;
 					
-					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _emitterBulletHit, _emitterBulletMiss);
+					_bulletMob.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _particleBulletHit, _particleBulletMiss);
 				}
 				
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletMob", 0.30, false);
 		
 				_cooldown = 0;	// reset the shot clock
 				// emit it
-				_emitterBulletHit.focusOn(_bulletMob);
-				_emitterBulletHit.start(true, 0.05, 1);
+				_particleBulletHit.focusOn(_bulletMob);
+				_particleBulletHit.start(true, 0.05, 1);
 			}
 		//	else
 		//	{
@@ -560,7 +560,7 @@ private function shoot():Void
 	function walkButCannotFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool, offset:Int = 0):Void
 	{
 		// ##################################################
-		// WALKING THEN REVERSE DIRECTION WALL OR BLACK TILE.
+		// WALKING THEN REVERSE DIRECTION WHEN TOUCHING WALL OR NEAR HOLE.
 		// ##################################################
 		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27 - offset, y + 28, Reg.state.tilemap))
 		{
@@ -575,7 +575,22 @@ private function shoot():Void
 			if(_mobIsSwimming == false) {velocity.x = -maxXSpeed;}
 			else {velocity.x = -maxXSpeed / Reg._swimmingDelay;} 
 		}			
-		//######### END WALKING TEHN REVERSE DIRECTION ##########
+		//######### END WALKING THEN REVERSE DIRECTION ##########
+		
+		if (velocity.x == 0)
+		{
+			if (x <= Reg.state.player.x) 
+			{
+				velocity.x = maxXSpeed;
+				facing = FlxObject.RIGHT;
+				
+			}
+			else {
+				velocity.x = -maxXSpeed;
+				facing = FlxObject.LEFT;			
+			}
+		}
+
 	}
 
 	
