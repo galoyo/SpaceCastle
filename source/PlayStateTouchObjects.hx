@@ -177,8 +177,8 @@ class PlayStateTouchObjects
 		// emit the bullet star to anaimate where the mob is at.
 		if (enemy.health > 0 )
 		{
-			Reg.state._emitterBulletHit.focusOn(enemy);
-			Reg.state._emitterBulletHit.start(true, 0.2, 1);
+			Reg.state._particleBulletHit.focusOn(enemy);
+			Reg.state._particleBulletHit.start(true, 0.2, 1);
 		}
 		
 		// destroy the bullet.
@@ -195,8 +195,8 @@ class PlayStateTouchObjects
 		// emit the bullet star to anaimate where the mob is at.
 		if (player.health > 0 )
 		{
-			Reg.state._emitterBulletHit.focusOn(player);
-			Reg.state._emitterBulletHit.start(true, 0.2, 1);
+			Reg.state._particleBulletHit.focusOn(player);
+			Reg.state._particleBulletHit.start(true, 0.2, 1);
 		}
 		
 		// destroy the bullet.
@@ -344,8 +344,8 @@ class PlayStateTouchObjects
 			if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 			Reg.state._playWaterSound = false;
 			
-			Reg.state._emitterWaterSplash.focusOn(p);
-			Reg.state._emitterWaterSplash.start(true, 0.2, 15);
+			Reg.state._particleWaterSplash.focusOn(p);
+			Reg.state._particleWaterSplash.start(true, 0.2, 15);
 		}
 	}	
 	
@@ -424,7 +424,7 @@ class PlayStateTouchObjects
 		
 		if (Reg._antigravity == true && p.isTouching(FlxObject.FLOOR) && Reg.state._touchingSuperBlock == false || Reg._antigravity == false && p.isTouching(FlxObject.CEILING) && Reg.state._touchingSuperBlock == false)
 		{
-			Reg.state._emitterCeilingHit.focusOn(p);
+			Reg.state._particleCeilingHit.focusOn(p);
 			
 			if (!FlxG.overlap(Reg.state._overlayPipe, p))
 			{
@@ -451,7 +451,7 @@ class PlayStateTouchObjects
 	{	
 		// remove this line if you want this emitted when a mob hits the head of player.
 		//if(_ceilingHitFromMob == false) // seems to work best without this line.
-		Reg.state._emitterCeilingHit.start(true, 0.2, 2);
+		Reg.state._particleCeilingHit.start(true, 0.2, 2);
 	
 		Reg.state._ceilingHitFromMob = false;
 	}

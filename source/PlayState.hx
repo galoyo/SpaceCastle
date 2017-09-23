@@ -8,6 +8,7 @@ import flixel.addons.effects.chainable.FlxTrailEffect;
 import flixel.addons.tile.FlxTilemapExt;
 import flixel.addons.ui.FlxUIState;
 import flixel.effects.particles.FlxEmitter;
+import flixel.effects.particles.FlxParticle;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
@@ -26,10 +27,8 @@ import flixel.util.FlxTimer;
 class PlayState extends FlxUIState
 {
 	public var recording:Bool = false;
-	public var replaying:Bool = false;
+	public var replaying:Bool = false;	
 	
-	public var _emitterBulletHit:FlxEmitter;
-	public var _emitterBulletMiss:FlxEmitter;	
 	public var _emitterMobsDamage:FlxEmitter;
 	public var _emitterDeath:FlxEmitter;
 	public var _emitterItemTriangle:FlxEmitter;
@@ -37,13 +36,17 @@ class PlayState extends FlxUIState
 	public var _emitterItemPowerUp:FlxEmitter;
 	public var _emitterItemNugget:FlxEmitter;
 	public var _emitterItemHeart:FlxEmitter;
-	public var _emitterCeilingHit:FlxEmitter;
-	public var _emitterQuestionMark:FlxEmitter;
-	public var _emitterSmokeRight:FlxEmitter;
-	public var _emitterSmokeLeft:FlxEmitter;
-	public var _emitterAirBubble:FlxEmitter;
+	public var _particleSmokeRight:FlxEmitter;
+	public var _particleSmokeLeft:FlxEmitter;	
 	public var _emitterBulletFlame:FlxEmitter;
-	public var _emitterWaterSplash:FlxEmitter;
+	public var _particleWaterSplash:FlxEmitter;
+	public var _emitterSkillDash:FlxEmitter;
+	
+	public var _particleCeilingHit:FlxEmitter;
+	public var _particleQuestionMark:FlxEmitter;
+	public var _particleBulletHit:FlxEmitter;
+	public var _particleBulletMiss:FlxEmitter;	
+	public var _particleAirBubble:FlxEmitter;
 	
 	public var _gun:PlayerOverlayGun;
 	public var _gunFlame:PlayerOverlayGunFlame;
@@ -287,45 +290,44 @@ class PlayState extends FlxUIState
 		PlayStateCreateMap.createLayer0Tilemap();
 		
 		// setup the bullet star emitter		
-		_emitterBulletHit = new FlxEmitter();
-		_emitterBulletHit.maxSize = 50;
-		for (i in 0..._emitterBulletHit.maxSize) _emitterBulletHit.add(new EmitterBulletHit());
-		_emitterBulletHit.lifespan.set(0.2);
+		_particleBulletHit = new FlxEmitter();
+		for (i in 0..._particleBulletHit.maxSize) _particleBulletHit.add(new ParticleBulletHit());
+		_particleBulletHit.lifespan.set(0.2);
 		
-		_emitterCeilingHit = new FlxEmitter();
-		_emitterCeilingHit.maxSize = 5;
-		for (i in 0..._emitterCeilingHit.maxSize) _emitterCeilingHit.add(new EmitterCeilingHit());
-		_emitterCeilingHit.lifespan.set(0.2);
+		_particleCeilingHit = new FlxEmitter();
+		_particleCeilingHit.maxSize = 5;
+		for (i in 0..._particleCeilingHit.maxSize) _particleCeilingHit.add(new ParticleCeilingHit());
+		_particleCeilingHit.lifespan.set(0.2);
 		
-		_emitterQuestionMark = new FlxEmitter();
-		_emitterQuestionMark.maxSize = 20;
-		for (i in 0..._emitterQuestionMark.maxSize) _emitterQuestionMark.add(new EmitterQuestionMark());
-		_emitterQuestionMark.lifespan.set(0.4);
+		_particleQuestionMark = new FlxEmitter();
+		_particleQuestionMark.maxSize = 20;
+		for (i in 0..._particleQuestionMark.maxSize) _particleQuestionMark.add(new ParticleQuestionMark());
+		_particleQuestionMark.lifespan.set(0.4);
 		
-		_emitterBulletMiss = new FlxEmitter();
-		_emitterBulletMiss.maxSize = 50;
-		for (i in 0..._emitterBulletMiss.maxSize) _emitterBulletMiss.add(new EmitterBulletMiss());
-		_emitterBulletMiss.lifespan.set(0.2);	
+		_particleBulletMiss = new FlxEmitter();
+		_particleBulletMiss.maxSize = 50;
+		for (i in 0..._particleBulletMiss.maxSize) _particleBulletMiss.add(new ParticleBulletMiss());
+		_particleBulletMiss.lifespan.set(0.2);	
 		
-		_emitterWaterSplash = new FlxEmitter();
-		_emitterWaterSplash.maxSize = 15;
-		for (i in 0..._emitterWaterSplash.maxSize) _emitterWaterSplash.add(new EmitterWaterSplash());
-		_emitterWaterSplash.lifespan.set(0.2);
+		_particleWaterSplash = new FlxEmitter();
+		_particleWaterSplash.maxSize = 15;
+		for (i in 0..._particleWaterSplash.maxSize) _particleWaterSplash.add(new ParticleWaterSplash());
+		_particleWaterSplash.lifespan.set(0.2);
 		
-		_emitterSmokeRight = new FlxEmitter();
-		_emitterSmokeRight.maxSize = 40; // enough for four mobBullets on the screen at same time.
-		for (i in 0..._emitterSmokeRight.maxSize) _emitterSmokeRight.add(new EmitterSmokeRight());
-		_emitterSmokeRight.lifespan.set(0.15);
+		_particleSmokeRight = new FlxEmitter();
+		_particleSmokeRight.maxSize = 40; // enough for four mobBullets on the screen at same time.
+		for (i in 0..._particleSmokeRight.maxSize) _particleSmokeRight.add(new ParticleSmokeRight());
+		_particleSmokeRight.lifespan.set(0.15);
 		
-		_emitterSmokeLeft = new FlxEmitter();
-		_emitterSmokeLeft.maxSize = 40; // enough for four mobBullets on the screen at same time.
-		for (i in 0..._emitterSmokeLeft.maxSize) _emitterSmokeLeft.add(new EmitterSmokeLeft());
-		_emitterSmokeLeft.lifespan.set(0.15);
+		_particleSmokeLeft = new FlxEmitter();
+		_particleSmokeLeft.maxSize = 40; // enough for four mobBullets on the screen at same time.
+		for (i in 0..._particleSmokeLeft.maxSize) _particleSmokeLeft.add(new ParticleSmokeLeft());
+		_particleSmokeLeft.lifespan.set(0.15);
 		
-		_emitterAirBubble = new FlxEmitter();
-		_emitterAirBubble.maxSize = 40;
-		for (i in 0..._emitterAirBubble.maxSize) _emitterAirBubble.add(new EmitterAirBubble());
-		_emitterAirBubble.lifespan.set(0.2);
+		_particleAirBubble = new FlxEmitter();
+		_particleAirBubble.maxSize = 40;
+		for (i in 0..._particleAirBubble.maxSize) _particleAirBubble.add(new ParticleAirBubble());
+		_particleAirBubble.lifespan.set(0.2);
 		
 		_emitterBulletFlame = new EmitterBulletFlame();
 		_emitterMobsDamage = new EmitterMobsDamage();
@@ -335,6 +337,7 @@ class PlayState extends FlxUIState
 		_emitterItemPowerUp = new EmitterItemPowerUp();
 		_emitterItemNugget = new EmitterItemNugget();
 		_emitterItemHeart = new EmitterItemHeart();
+		_emitterSkillDash = new EmitterSkillDash();
 		
 		_bullets = new FlxTypedGroup<Bullet>(0);
 		_bulletsMob = new FlxTypedGroup<BulletMob>(0);
@@ -364,10 +367,10 @@ class PlayState extends FlxUIState
 		PlayStateCreateMap.createSpriteGroups();		
 		PlayStateCreateMap.createLayer3Sprites();
 		
-		add(_emitterBulletHit);
-		add(_emitterCeilingHit);
-		add(_emitterQuestionMark);
-		add(_emitterBulletMiss);	
+		add(_particleBulletHit);
+		add(_particleCeilingHit);
+		add(_particleQuestionMark);
+		add(_particleBulletMiss);	
 		add(_emitterBulletFlame);
 		add(_emitterMobsDamage);
 		add(_emitterDeath);
@@ -376,9 +379,11 @@ class PlayState extends FlxUIState
 		add(_emitterItemDiamond);
 		add(_emitterItemPowerUp);
 		add(_emitterItemNugget);
-		add(_emitterWaterSplash);
-		add(_emitterSmokeRight);		
-		add(_emitterSmokeLeft);		
+		add(_emitterSkillDash);
+		
+		add(_particleWaterSplash);
+		add(_particleSmokeRight);		
+		add(_particleSmokeLeft);		
 		
 		PlayStateCreateMap.createOverlaysGroups();
 		PlayStateCreateMap.createLayer4OverlaySprites();
@@ -391,7 +396,7 @@ class PlayState extends FlxUIState
 		// add overlay objects after overlay tilemap.
 		add(_overlayWave);
 		add(_overlayWater);		
-		add(_emitterAirBubble);
+		add(_particleAirBubble);
 		add(_overlayAirBubble);		
 		add(_overlayPipe);		
 				
@@ -496,7 +501,7 @@ class PlayState extends FlxUIState
 		
 		if (Reg._backgroundSounds == true) FlxG.sound.play("backgroundSounds", 0.25, true);
 		
-		//################# KEEP THIS CODE AT THE BOTTOM OF THIS FUNCTION.
+		//################# KEEP THIS CODE NEAR THE BOTTOM OF THIS FUNCTION.
 		//################################################################
 		//check if dog exists on the map. if no dog exists then create the dogs at the top left corner of the screen. There needs to be dogs at each level, some hidden some not, so that a dog can be carried from one map to another. if there are dogs that exists, then there should be one dog that can be found while the other dog cannot. when carried the dog can be seen at another map when there is a dog with the id that is hidden. the following code makes that happen.
 		Reg._dogStopMoving = true;

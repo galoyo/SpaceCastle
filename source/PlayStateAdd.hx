@@ -63,12 +63,12 @@ class PlayStateAdd
 		if (Reg._inHouse == "")
 		{
 			if (Reg.playerXcoordsLast != 0)
-				{Reg.state.player = new Player(Reg.playerXcoordsLast, Reg.playerYcoordsLast, Reg.state._bullets, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss, Reg.state._emitterBulletFlame); Reg.playerXcoordsLast = 0; Reg.playerYcoordsLast = 0; }
+				{Reg.state.player = new Player(Reg.playerXcoordsLast, Reg.playerYcoordsLast, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); Reg.playerXcoordsLast = 0; Reg.playerYcoordsLast = 0; }
 			else if (Reg.beginningOfGame == false && Reg.restoreGameState == false)
-				Reg.state.player = new Player(xNewCoords * Reg._tileSize, yNewCoords * Reg._tileSize, Reg.state._bullets, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss, Reg.state._emitterBulletFlame);
+				Reg.state.player = new Player(xNewCoords * Reg._tileSize, yNewCoords * Reg._tileSize, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash);
 			else if (Reg.beginningOfGame == false && Reg.restoreGameState == true)
-				Reg.state.player = new Player(Reg.playerXcoords, Reg.playerYcoords, Reg.state._bullets, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss, Reg.state._emitterBulletFlame); 			
-			else Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss, Reg.state._emitterBulletFlame);
+				Reg.state.player = new Player(Reg.playerXcoords, Reg.playerYcoords, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); 			
+			else Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash);
 		}
 		else 
 		{
@@ -77,7 +77,7 @@ class PlayStateAdd
 				if (Reg._soundEnabled == true) FlxG.sound.play("teleport2", 1, false);
 				X += (10 * Reg._tileSize);
 			}
-			Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss, Reg.state._emitterBulletFlame); 			
+			Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); 			
 			
 			Reg._teleportedToHouse = false;
 		}
@@ -103,7 +103,7 @@ class PlayStateAdd
 		// when power is greater than 1, make it so that monsters at a higher level have a 66 percent chance of appearing.
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobApple = new MobApple(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobApple = new MobApple(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobApple);
 
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobApple, "health", 0, Reg.state.mobApple.health, false);		
@@ -121,7 +121,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobCutter = new MobCutter(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobCutter = new MobCutter(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobCutter);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobCutter, "health", 0, Reg.state.mobCutter.health, false);	
@@ -139,7 +139,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobSlime = new MobSlime(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobSlime = new MobSlime(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobSlime);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobSlime, "health", 0, Reg.state.mobSlime.health, false);		
@@ -154,7 +154,7 @@ class PlayStateAdd
 	{
 		if (Reg._boss2Defeated == false)
 		{
-			Reg.state.boss2 = new Boss2(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.boss2 = new Boss2(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss2);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss2, "health", 0, Reg.state.boss2.health, false);		
@@ -168,7 +168,7 @@ class PlayStateAdd
 	public static function addMobBullet(X:Float, Y:Float):Void
 	{
 		// x and y coords, p = player, _emitterMobsDamage is the effect seen when a mob is hit.
-		Reg.state.mobBullet = new MobBullet(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+		Reg.state.mobBullet = new MobBullet(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemiesNoCollideWithTileMap.add(Reg.state.mobBullet);
 		
 		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBullet, "health", 0, Reg.state.mobBullet.health, false);		
@@ -178,7 +178,7 @@ class PlayStateAdd
 	public static function addMobTube(X:Float, Y:Float):Void
 	{
 		// x and y coords, p = player, _emitterMobsDamage is the effect seen when a mob is hit.
-		Reg.state.mobTube = new MobTube(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+		Reg.state.mobTube = new MobTube(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemiesNoCollideWithTileMap.add(Reg.state.mobTube);
 	
 	}
@@ -193,7 +193,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobBat = new MobBat(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobBat = new MobBat(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobBat);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBat, "health", 0, Reg.state.mobBat.health, false);		
@@ -211,7 +211,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobSqu = new MobSqu(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobSqu = new MobSqu(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobSqu);
 			
 			// the health bar displayed underneath the players legs.
@@ -238,7 +238,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobFish = new MobFish(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobFish = new MobFish(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobFish);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobFish, "health", 0, Reg.state.mobFish.health, false);		
@@ -255,7 +255,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobGlob = new MobGlob(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobGlob = new MobGlob(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobGlob);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobGlob, "health", 0, Reg.state.mobGlob.health, false);	
@@ -273,7 +273,7 @@ class PlayStateAdd
 		
 		if ( ra > 1 && Reg._gunPower >= id && Reg._gunPower > 1 ||  Reg._gunPower == id)
 		{
-			Reg.state.mobWorm = new MobWorm(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobWorm = new MobWorm(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobWorm);
 			
 			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobWorm, "health", 0, Reg.state.mobWorm.health, false);	
@@ -287,7 +287,7 @@ class PlayStateAdd
 	 */
 	public static function addMobExplode(X:Float, Y:Float):Void
 	{
-		Reg.state.mobExplode = new MobExplode(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+		Reg.state.mobExplode = new MobExplode(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemies.add(Reg.state.mobExplode);
 		
 		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobExplode, "health", 0, Reg.state.mobExplode.health, false);	
@@ -300,7 +300,7 @@ class PlayStateAdd
 	 */
 	public static function addMobSaw(X:Float, Y:Float, id:Int):Void
 	{
-		Reg.state.mobSaw = new MobSaw(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+		Reg.state.mobSaw = new MobSaw(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemies.add(Reg.state.mobSaw);
 	}
 	
@@ -311,7 +311,7 @@ class PlayStateAdd
 	{
 		if (Reg._boss1ADefeated == false && id == 1)
 		{
-			Reg.state.boss1A = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.boss1A = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1A);
 			
 		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1A, "health", 0, Reg.state.boss1A.health, false);	
@@ -321,7 +321,7 @@ class PlayStateAdd
 		
 		if (Reg._boss1BDefeated == false && id == 2)
 		{
-			Reg.state.boss1B = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.boss1B = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1B);
 			
 		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1B, "health", 0, Reg.state.boss1B.health, false);	
@@ -346,7 +346,7 @@ class PlayStateAdd
 	{
 		if (Reg._boss1BDefeated == true && Reg.mapXcoords != 12 && Reg.mapYcoords != 19 || Reg._boss1BDefeated == false && Reg.mapXcoords == 12 && Reg.mapYcoords == 19)
 		{
-			Reg.state.mobBubble = new MobBubble(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._emitterSmokeRight, Reg.state._emitterSmokeLeft, Reg.state._bulletsMob, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+			Reg.state.mobBubble = new MobBubble(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		
 			Reg.state.enemies.add(Reg.state.mobBubble);		
 			
@@ -905,7 +905,7 @@ class PlayStateAdd
 	 */	
 	public static function addCannon(X:Float, Y:Float, id:Int):Void
 	{
-		var cannon:ObjectCannon = new ObjectCannon(X, Y, id, Reg.state._bulletsObject, Reg.state._emitterBulletHit, Reg.state._emitterBulletMiss);
+		var cannon:ObjectCannon = new ObjectCannon(X, Y, id, Reg.state._bulletsObject, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state._objectsThatDoNotMove.add(cannon);
 	}
 	
@@ -914,7 +914,7 @@ class PlayStateAdd
 	 */	
 	public static function addBlockedCracked(X:Float, Y:Float):Void
 	{
-		var blockCracked:ObjectBlockCracked = new ObjectBlockCracked(X, Y, Reg.state._emitterBulletFlame, Reg.state._emitterDeath, Reg.state._emitterBulletHit);
+		var blockCracked:ObjectBlockCracked = new ObjectBlockCracked(X, Y, Reg.state._emitterBulletFlame, Reg.state._emitterDeath, Reg.state._particleBulletHit);
 		Reg.state._objectBlockOrRock.add(blockCracked);
 	}
 
@@ -1035,8 +1035,8 @@ class PlayStateAdd
 		var airBubble:OverlayAirBubble = new OverlayAirBubble(X, Y);
 		Reg.state._overlayAirBubble.add(airBubble);
 		
-		Reg.state._emitterAirBubble.focusOn(airBubble);
-		Reg.state._emitterAirBubble.start(false, 0.05, 0);
+		Reg.state._particleAirBubble.focusOn(airBubble);
+		Reg.state._particleAirBubble.start(false, 0.05, 0);
 	}
 	
 	/**

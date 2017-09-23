@@ -62,7 +62,7 @@ class PlayStateDownKey
 		{
 			if (Reg.state._ticksTrackerDown == 1)
 			{
-				Reg.state._emitterQuestionMark.focusOn(Reg.state.player);
+				Reg.state._particleQuestionMark.focusOn(Reg.state.player);
 				Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
 			}
 			
@@ -121,7 +121,7 @@ class PlayStateDownKey
 	 */
 	private static function onTimerQuestionMark(_questionMark:FlxTimer):Void
 	{	
-		Reg.state._emitterQuestionMark.start(true, 1, 1);
+		Reg.state._particleQuestionMark.start(true, 1, 1);
 		if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
 	}
 }

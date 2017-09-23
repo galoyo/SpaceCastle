@@ -20,26 +20,32 @@ class Player extends FlxSprite
 	public var xForce:Float = 0;
 	public var yForce:Float = 0;
 	private var _dogFound:Bool = false;
-	private var ticksDelayJump:Float; // stop player from moving when jumping incorrectly.
-	private var _incorrectJumping:Bool = false;
+	private var _ticksNextJump:Float; // as this var increases, so does the amount of fading gray players when the player does the jump.
+	private var _playerIsDashing:Bool = false; // is the player doing a skill dash which is a fast horizontal attack.
 	
 	public var _newY:Float = 0;	// used to keep the player standing still above the mobs head.
 
 	public var _bullets:FlxTypedGroup<Bullet>;
 	private var _bullet:Bullet;
 	private var _bulletSpeed:Int = 1000;
-	private var _emitterBulletHit:FlxEmitter;
-	private var _emitterBulletMiss:FlxEmitter;
+	private var _particleBulletHit:FlxEmitter;
+	private var _particleBulletMiss:FlxEmitter;
 	private var _emitterBulletFlame:FlxEmitter;
-		
+	private var _emitterSkillDash:FlxEmitter;
+	
 	public var _maxWalkSpeed:Int = 430;
 	public var _maxRunSpeed:Int = 630;
 	public var _gravity:Int = 3500;
-	public var _maxFallSpeed:Int = 23000;	
+		
 	private var _maxAcceleration:Int = 50000;
 	public var _yMaxAcceleration:Int = 1000;
 	public var _drag:Int = 50000;
 	public var _mobIsSwimming:Bool = false;
+	private var _skillDashX = 0; // when not doing a dash attack the value will be zero. when doing a dash attack the velocityX will be its value. 
+	private var _velocityX = 1200; // speed of the horizontal dash.
+	private var _skillDashY = 0; // when not doing a dash attack the value will be zero. when doing a dash attack the velocityY will be its value. 
+	private var _velocityY = 23140; // must be a bit bugger than _maxFallSpeed. this var is 140 in value greater than _maxFallSpeed which will lift the player off the ground about 20 pixels when doing a dash attach.
+	public var _maxFallSpeed:Int = 23000;
 	
 	// is player in the air?
 	public var inAir:Bool = false;
@@ -59,7 +65,7 @@ class Player extends FlxSprite
 	
 	public var _playerStandingOnFireBlockTimer = new FlxTimer();
 	
-	public function new(x:Float, y:Float, bullets:FlxTypedGroup<Bullet>, emitterBulletHit:FlxEmitter, emitterBulletMiss:FlxEmitter, emitterBulletFlame:FlxEmitter) 
+	public function new(x:Float, y:Float, bullets:FlxTypedGroup<Bullet>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter, emitterBulletFlame:FlxEmitter, emitterSkillDash:FlxEmitter) 
 	{
 		// position player sprite at this coor. x and y values are from the cvs file multiplied
 		// by the with / height of the tileset.
@@ -75,9 +81,10 @@ class Player extends FlxSprite
 		offset.set(0, 0);
 		
 		_bullets = bullets;
-		_emitterBulletHit = emitterBulletHit;
-		_emitterBulletMiss = emitterBulletMiss;
+		_particleBulletHit = particleBulletHit;
+		_particleBulletMiss = particleBulletMiss;
 		_emitterBulletFlame = emitterBulletFlame;
+		_emitterSkillDash = emitterSkillDash;
 		
 		_cooldown = _gunDelay = 0.15;	// Initialize the cooldown so that we can shoot right away.
 		
@@ -282,11 +289,11 @@ class Player extends FlxSprite
 					}
 
 
-					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _emitterBulletHit, _emitterBulletMiss);		
+					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _particleBulletHit, _particleBulletMiss);		
 					_cooldown = 0;	// reset the shot clock
 					// emit it
-					_emitterBulletHit.focusOn(_bullet);
-					_emitterBulletHit.start(true, 0.05, 1);
+					_particleBulletHit.focusOn(_bullet);
+					_particleBulletHit.start(true, 0.05, 1);
 				}
 			}
 		
@@ -345,11 +352,11 @@ class Player extends FlxSprite
 					}
 
 
-					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _emitterBulletHit, _emitterBulletMiss);		
+					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _particleBulletHit, _particleBulletMiss);		
 					_cooldown = 0;	// reset the shot clock
 					// emit it
-					_emitterBulletHit.focusOn(_bullet);
-					_emitterBulletHit.start(true, 0.05, 1);
+					_particleBulletHit.focusOn(_bullet);
+					_particleBulletHit.start(true, 0.05, 1);
 				}				
 			}
 		}
@@ -616,18 +623,6 @@ class Player extends FlxSprite
 		// downward direction.
 		if( Reg._playerRunningEnabled == true) running = true;
 		
-		// if running then do not run faster then the max speed else set to walk speed.
-		if (running)
-		{
-			if(_mobIsSwimming == false && visible == true) {maxVelocity.x = _maxRunSpeed; maxVelocity.y = _maxFallSpeed;}
-				else { maxVelocity.x = _maxRunSpeed / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed / Reg._swimmingDelay;} 
-			}
-		else 
-		{
-			if (_mobIsSwimming == false) {maxVelocity.x = _maxWalkSpeed; maxVelocity.y = _maxFallSpeed;}	
-			else {maxVelocity.x = _maxWalkSpeed / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed / Reg._swimmingDelay; }
-		}
-		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
 			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
@@ -637,33 +632,73 @@ class Player extends FlxSprite
 				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
 				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 				{
-					if (InputControls.left.pressed || InputControls.right.pressed) _incorrectJumping = true;
-				}
+					if (InputControls.left.pressed || InputControls.right.pressed) _playerIsDashing = true;
+			}
 			
+			//############################## DASH ATTACK 
 			// holding an arrow key left or right before jumping is not allowed. the reason is because of a bug. when exiting the map from the right side, if holding the right arrow key and then jumping into the next map, the player will fall straight down at that next map. the player will not continue to move in that same direction if that arrow key is still held down. however, if a jump was made before holding an arrow key then when leaving the map the player will continue to move forward at the next map if that arrow key is still held down. this code address the bug by delaying movement when jump in not allowed.
-			if (_incorrectJumping == true) ticksDelayJump = Reg.incrementTicks(ticksDelayJump, 60 / Reg._framerate);
 			
-			if (ticksDelayJump >= 21) 
+			// when the left or right arrow is pressed and then the jump key is pressed, the player will do a dashed attach. the player will quickly dash to the left or right while the player is rising in to the air. 
+			if (_playerIsDashing == true)
+			{				
+				if (InputControls.left.pressed) 
+				{ 
+					_skillDashX = _velocityX; xForce--;
+					if (Reg._antigravity == false) _skillDashY = -_velocityY;
+					else  _skillDashY = _velocityY;
+					
+				}
+				
+				else if (InputControls.right.pressed)
+				{ 
+					_skillDashX = _velocityX; xForce++;
+					if (Reg._antigravity == false) _skillDashY = -_velocityY;
+					else  _skillDashY = _velocityY;
+				}				
+			
+				// the player moves so fast that there is a trail of gray players that fade behind the player.
+				// when player is dashing, the player will lift from the ground or ceiling. if players velocity.y is in motion then do the following.
+				if (_skillDashY != 0)
+				{	_ticksNextJump = Reg.incrementTicks(_ticksNextJump, 60 / Reg._framerate);
+				
+					_emitterSkillDash.focusOn(this);
+					_emitterSkillDash.start(true, 0.03, 1);
+				}
+			}				
+	
+			// when this condition is met. the last trail is complete.
+			if (_ticksNextJump >= 8) 
 			{
-				ticksDelayJump = 0;
+				_ticksNextJump = 0;
 			}
 
-			if (ticksDelayJump >= 20 && _incorrectJumping == true)
+			// stop when the last gray player is displayed, when then max value of the ticks is true and the player is dashing. also stop the dash when the key/button is not pressed, when that condition is true then xForce equals zero. so stop when the max value of the ticks is reached and when key/button is not pressed anymore.
+			if (_ticksNextJump >= 7 && _playerIsDashing == true || xForce == 0 && _playerIsDashing == true)
 			{	
-				_incorrectJumping = false;
+				_playerIsDashing = false;
+				_skillDashX = 0; _skillDashY = 0;
 			}
 			
-			if (_incorrectJumping == false)
-			{
+			//######################### END DASH ATTACK.
+
+			if (_playerIsDashing == false)
+			{			
+				_ticksNextJump = 0;	_skillDashX = 0; _skillDashY = 0;
+				
 				if (InputControls.left.pressed) 
 				{ xForce--; Reg._arrowKeyInUseTicks = 0; }
 				if (InputControls.right.pressed)
 				{ xForce++; Reg._arrowKeyInUseTicks = 0; }	
-				
-				ticksDelayJump = 0;
 			}
+			
+			
+
 		}		
-	
+		
+		// if running then do not run faster then the max speed else set to walk speed.
+		if (_mobIsSwimming == false) {maxVelocity.x = _maxWalkSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
+		else {maxVelocity.x = _maxWalkSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
+		
 		//---------------------------
 		//########### PLAYER IS JUMPING.
 		if (!InputControls.left.pressed && !InputControls.right.pressed)
@@ -682,7 +717,7 @@ class Player extends FlxSprite
 
 					Reg._antigravity = false; // cannot swing upside down on vine.
 					velocity.y = -500; 
-					_incorrectJumping = false;
+					_playerIsDashing = false;
 				}
 				// normal jump.
 				else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
@@ -691,7 +726,7 @@ class Player extends FlxSprite
 					if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
 					
 					velocity.y = finalJumpForce;	
-					_incorrectJumping = false;
+					_playerIsDashing = false;
 				}
 			}
 		}
@@ -734,7 +769,7 @@ class Player extends FlxSprite
 					acceleration.x = 0;
 				else acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
 				
-			} else acceleration.x = 0;		
+			} else if (_skillDashX == 0 ) acceleration.x = 0;		
 			
 			Reg._dogIsInPipe = false;
 		} else Reg._dogIsInPipe = true;
@@ -777,7 +812,7 @@ class Player extends FlxSprite
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = _gravity;
-				_incorrectJumping = false;
+				_playerIsDashing = false;
 			} 		
 			else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
 			{
@@ -791,7 +826,7 @@ class Player extends FlxSprite
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 			{
 				acceleration.y = -_gravity;
-				_incorrectJumping = false;
+				_playerIsDashing = false;
 			} 
 			else if ( !isTouching(FlxObject.CEILING) && Reg._antigravity == true) 
 			{
