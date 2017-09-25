@@ -26,6 +26,8 @@ class MobExplode extends EnemyChildClass
 	// How fast the object is moving.
 	var maxXSpeed:Int = 280;
 	public var _gravity:Int = -4200;
+	private var _gravityResetToThisValue:Int = -4200; // when reset(), this is the _gravity value.
+	
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;	
 	private var _fixedDirection:Int = 0; //  0 = this mob does not have a fixed direction. 1 = left. 2 = right.
@@ -46,7 +48,8 @@ class MobExplode extends EnemyChildClass
 		
 		animation.add("falled", [0,1], 20, true);			
 		
-		allowCollisions = FlxObject.FLOOR;		
+		pixelPerfectPosition = true;
+		allowCollisions = FlxObject.ANY;		
 		
 		properties();
 	}
@@ -67,7 +70,7 @@ class MobExplode extends EnemyChildClass
 		{
 			
 			// make the spike fall if spike is within the x range of the player.
-			if (ticks == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra) 
+			if (ticks == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra && !overlapsAt(x + 14, y + 14, Reg.state._objectQuickSand)) 
 			{
 				velocity.y = 1450 + raSpeed;
 				
@@ -95,7 +98,7 @@ class MobExplode extends EnemyChildClass
 				}
 			}
 			
-			// spike not yet fallen to the ground.
+			// mob not yet fallen to the ground.
 			if (ticks == 0)
 			{
 				// player and enemy damage taken, if spike hits them.
@@ -113,7 +116,7 @@ class MobExplode extends EnemyChildClass
 				
 				if (ticks == 0) 
 				{ 
-					// if spike collides with slope then set spike offset so that the bottom tip of the spike stops at the slope not above the slope.
+					// if mob collides with slope then set mob offset so that the bottom tip of this mob stops at the slope not above the slope.
 					if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
 						|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 30
 						|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 38 
@@ -143,7 +146,7 @@ class MobExplode extends EnemyChildClass
 		}
 	}	
 	
-	// enemy hurt damage if hit by this spike
+	// enemy hurt damage if hit by this mob
 	private function spikeFallingEnemy(e:FlxSprite, s:FlxSprite):Void
 	{
 		if (FlxSpriteUtil.isFlickering(e) == false)
@@ -169,7 +172,9 @@ class MobExplode extends EnemyChildClass
 		_cooldown = FlxG.random.float(0.10, 0.60);		
 		_gunDelay = _bulletTimeForNextFiring;	// Initialize the cooldown so that we can shoot right away.
 		_bulletFireFormation = _bulletFormationNumber;	
-		
+		_gravity = _gravityResetToThisValue;
+		velocity.y = 0;
+		health = defaultHealth;
 		ticks = 0;
 		ticksMove = 0;
 		ticksExplode = 0;
@@ -178,5 +183,6 @@ class MobExplode extends EnemyChildClass
 		ra = FlxG.random.int(80, 110);	
 		ra2 = FlxG.random.int(2, 8);
 		raSpeed = FlxG.random.int(1, 300);
+		
 	}
 }

@@ -560,16 +560,17 @@ private function shoot():Void
 	function walkButCannotFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool, offset:Int = 0):Void
 	{
 		// ##################################################
+		// ##################################################
 		// WALKING THEN REVERSE DIRECTION WHEN TOUCHING WALL OR NEAR HOLE.
 		// ##################################################
-		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27 - offset, y + 28, Reg.state.tilemap))
+		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27 - offset, y + 28, Reg.state.tilemap) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 15, Reg.state._objectQuickSand))
 		{
 			facing = FlxObject.RIGHT;
 			if(_mobIsSwimming == false) {velocity.x = maxXSpeed; }
 			else {velocity.x = maxXSpeed / Reg._swimmingDelay;} 
 		}
 					
-		if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT ||isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27 + offset, y + 28, Reg.state.tilemap))
+		if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT ||isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27 + offset, y + 28, Reg.state.tilemap) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 15, Reg.state._objectQuickSand))
 		{
 			facing = FlxObject.LEFT;
 			if(_mobIsSwimming == false) {velocity.x = -maxXSpeed;}
@@ -577,20 +578,22 @@ private function shoot():Void
 		}			
 		//######### END WALKING THEN REVERSE DIRECTION ##########
 		
-		if (velocity.x == 0)
+		if (!overlapsAt(x, y, Reg.state._objectQuickSand))
 		{
-			if (x <= Reg.state.player.x) 
+			if (velocity.x == 0)
 			{
-				velocity.x = maxXSpeed;
-				facing = FlxObject.RIGHT;
-				
-			}
-			else {
-				velocity.x = -maxXSpeed;
-				facing = FlxObject.LEFT;			
+				if (x <= Reg.state.player.x) 
+				{
+					velocity.x = maxXSpeed;
+					facing = FlxObject.RIGHT;
+					
+				}
+				else {
+					velocity.x = -maxXSpeed;
+					facing = FlxObject.LEFT;			
+				}
 			}
 		}
-
 	}
 
 	
@@ -611,7 +614,7 @@ private function shoot():Void
 						facing = FlxObject.RIGHT;
 					}
 					
-					if (facing == FlxObject.LEFT)
+					if (facing == FlxObject.LEFT && !overlapsAt(x, y + 28, Reg.state._objectQuickSand) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 15, Reg.state._objectQuickSand))
 					{
 						if(_mobIsSwimming == false)	{velocity.x = -maxXSpeed; }
 							else {velocity.x = -maxXSpeed / Reg._swimmingDelay; } 
@@ -619,7 +622,7 @@ private function shoot():Void
 						velocityXOld = velocity.x;
 					}
 				
-					else if (facing == FlxObject.RIGHT)
+					else if (facing == FlxObject.RIGHT && !overlapsAt(x, y + 28, Reg.state._objectQuickSand) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 15, Reg.state._objectQuickSand))
 					{
 						if (_mobIsSwimming == false) {velocity.x = maxXSpeed;}
 							else {velocity.x = maxXSpeed / Reg._swimmingDelay; }				
@@ -884,37 +887,49 @@ private function shoot():Void
 				ticksGame = 0;	
 				
 				var moveSpeed = FlxG.random.int(150, 400);			
-				var moveDistance = FlxG.random.int(-50, 50);
-				
-				// if player y is the same as mob or player y is higher but within for tiles...
+				var moveDistance = FlxG.random.int(-50, 50);		
+
+
 				if (y - Reg.state.player.y < 128 && y - Reg.state.player.y > -128 || y == Reg.state.player.y)
 				{
 					// player is at the left side of the mob and within the distance that the mob will start moving...
 					if (mobHit == true || Reg.state.player.x < x && x - Reg.state.player.x < 120 + moveDistance)
 					{
-						// if mob with id 2 then increase the move speed.
-						if(_mobIsSwimming == false)	{velocity.x = -_extraSpeed - moveSpeed; velocity.y = -_extraSpeed; }
-						else {velocity.x = -_extraSpeed - moveSpeed / Reg._swimmingDelay; velocity.y = - _extraSpeed - -_YjumpingDelay;} 
-					
-						animation.play("jumping");
-						if (Reg._soundEnabled == true) FlxG.sound.play("jumpMob", 0.50, false);
-								
-						acceleration.x = -50000;
-								
-						mobHit = false;
+						if (!overlapsAt(x, y + 14, Reg.state._objectQuickSand))
+						{
+							// if mob with id 2 then increase the move speed.
+							if(_mobIsSwimming == false)	{velocity.x = -_extraSpeed - moveSpeed; velocity.y = -_extraSpeed; }
+							else 
+							{
+								velocity.x = -_extraSpeed - moveSpeed / Reg._swimmingDelay; velocity.y = - _extraSpeed - -_YjumpingDelay;							
+							}
+						
+							animation.play("jumping");
+							if (Reg._soundEnabled == true) FlxG.sound.play("jumpMob", 0.50, false);
+									
+							acceleration.x = -50000;
+									
+							mobHit = false;
+						}
 					}
 					else if (mobHit == true || Reg.state.player.x > x && Reg.state.player.x - x < 120 + moveDistance)
 					{		
-						// if mob with id 2 then increase the move speed.
-						if(_mobIsSwimming == false)	{velocity.x = -_extraSpeed + moveSpeed; velocity.y = -_extraSpeed; }
-						else {velocity.x = -_extraSpeed + moveSpeed / Reg._swimmingDelay; velocity.y = -_extraSpeed - -_YjumpingDelay;} 
-						
-						animation.play("jumping");	
-						if (Reg._soundEnabled == true) FlxG.sound.play("jumpMob", 0.50, false);
-								
-						acceleration.x = 50000;
-								
-						mobHit = false;
+						if (!overlapsAt(x, y + 14, Reg.state._objectQuickSand))
+						{
+							// if mob with id 2 then increase the move speed.
+							if (_mobIsSwimming == false)	
+							{
+								velocity.x = -_extraSpeed + moveSpeed; velocity.y = -_extraSpeed;
+							}
+							else {velocity.x = -_extraSpeed + moveSpeed / Reg._swimmingDelay; velocity.y = -_extraSpeed - -_YjumpingDelay;} 
+							
+							animation.play("jumping");	
+							if (Reg._soundEnabled == true) FlxG.sound.play("jumpMob", 0.50, false);
+									
+							acceleration.x = 50000;
+									
+							mobHit = false;
+						}
 					} 
 				}
 				// stop the mob if not within the move distance, the distance between the player and mob.

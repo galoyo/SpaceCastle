@@ -51,76 +51,60 @@ class ObjectQuickSand extends FlxSprite
 	
 	public static function enemyInQuickSand(t:FlxSprite, e:FlxSprite):Void
 	{
+		if (Std.is(e, MobApple))
+		{
+			var mob:MobApple = cast(e, MobApple);
+			mob.velocity.y = 12;
+			mob.velocity.x = mob.acceleration.x = 0;
+			mob._gravity = 0;	
+		}
+		
+		// mobBat should never be overtop of quicksand.
+		// mobBullet should never be overtop of quicksand.
+				
 		if (Std.is(e, MobCutter))
 		{
 			var mob:MobCutter = cast(e, MobCutter);
-			mob.maxVelocity.y = 12;
 			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-			mob._gravity = 0;
-		}
-		
-		// get the mob that jumped into the water.
-		if (Std.is(e, MobSlime))
-		{
-			var mob:MobSlime = cast(e, MobSlime);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-			mob._gravity = 0;
-		}
-		
-		if (Std.is(e, MobBullet))
-		{
-			var mob:MobBullet = cast(e, MobBullet);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-		}
-		
-		if (Std.is(e, MobBat))
-		{
-			var mob:MobBat = cast(e, MobBat);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-		}
-		
-		if (Std.is(e, MobSqu))
-		{
-			var mob:MobSqu = cast(e, MobSqu);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-			mob._gravity = 0;
-		}
-		
-		// fish do not need air so do not define it here.
-		
-		if (Std.is(e, MobGlob))
-		{
-			var mob:MobGlob = cast(e, MobGlob);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-		}
-		
-		if (Std.is(e, MobWorm))
-		{
-			var mob:MobWorm = cast(e, MobWorm);
-			mob.maxVelocity.y = 12;
-			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
+			mob.velocity.x = mob.acceleration.x = 0;
+			mob._gravity = 0;	
 		}
 		
 		if (Std.is(e, MobExplode))
 		{
 			var mob:MobExplode = cast(e, MobExplode);
-			mob.maxVelocity.y = 12;
 			mob.velocity.y = 12;
-			mob.acceleration.y = 12;
-			mob._gravity = 0;
+			mob.velocity.x = mob.acceleration.x = 0;
+			mob._gravity = 0;			
 		}
+		
+		// mobFish should never be overtop of quicksand.
+		
+		// mobGlob should never be overtop of quicksand.
+		
+		// mobSaw should never be overtop of quicksand.
+		
+		if (Std.is(e, MobSlime))
+		{
+			var mob:MobSlime = cast(e, MobSlime);
+			mob.velocity.y = 12;
+			mob.velocity.x = mob.acceleration.x = 0;
+			mob._gravity = 0;	
+		}
+		
+		if (Std.is(e, MobSqu))
+		{
+			var mob:MobSqu = cast(e, MobSqu);
+			mob.velocity.y = 12;
+			mob.velocity.x = mob.acceleration.x = 0;
+			mob._gravity = 0;	
+		}
+		
+		// mobTube should never be overtop of quicksand.
+		
+		// mobWorm should never be overtop of quicksand.
+		
+
 	}
 	
 }

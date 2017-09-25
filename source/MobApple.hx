@@ -21,6 +21,7 @@ class MobApple extends EnemyChildClass
 	// How fast the object is moving.
 	var maxXSpeed:Int = 280;
 	public var _gravity:Int = 4200;
+	private var _gravityResetToThisValue:Int = 4200; // when reset(), this is the _gravity value.
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;	
 	
@@ -61,6 +62,8 @@ class MobApple extends EnemyChildClass
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip(FlxObject.RIGHT, false, false);
 		
+		_gravity = _gravityResetToThisValue;
+		velocity.y = 0;
 		alive = true;
 		maxVelocity.x = maxXSpeed;
 		angle = 0;

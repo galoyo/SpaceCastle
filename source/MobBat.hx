@@ -21,9 +21,6 @@ class MobBat extends EnemyChildClass
 	
 	public var defaultHealth:Int = 4;
 	
-	// how fast the object can fall.
-	var gravity:Int = 1800;	
-
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;
 
@@ -54,15 +51,13 @@ class MobBat extends EnemyChildClass
 
 		pixelPerfectPosition = false;
 		
-		if (ID == 3) ra = FlxG.random.int(1, 2); // if bat id is 3 then move bat either randonly or up and down.
-		else ra = 0;
-		
 		properties();		
 	}
 	
 	public function properties():Void 
 	{				
 		alive = true;
+
 		angle = 0;
 		_mobIsSwimming = false;
 		visible = true;		
@@ -103,7 +98,7 @@ class MobBat extends EnemyChildClass
 		if(inRange(_range))
 		{
 			
-			if (ID == 1 || ra == 1)
+			/*if (ID == 1 || ra == 1)
 			{
 				ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
 				
@@ -126,14 +121,12 @@ class MobBat extends EnemyChildClass
 					
 					ticks = 1;
 				}	
-			}
-			else if ( ID == 2 || ra == 2)
-			{
-				//------------------ FLY UP/DOWN IN THE AIR WHILE SWAY.
-				flyUpThenDown(maxXSpeed, maxYSpeed);
+			}*/
+			
+			//------------------ FLY UP/DOWN IN THE AIR WHILE SWAY.
+			flyUpThenDown(maxXSpeed, maxYSpeed);
 				
-				ticks = 1;
-			}
+			ticks = 1;
 
 			
 		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);

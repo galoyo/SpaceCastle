@@ -365,6 +365,7 @@ class MenuState extends FlxState
 		Reg._itemXSelectedFromInventoryName = _gameSave.data._itemXSelectedFromInventoryName;
 		Reg._itemCSelectedFromInventoryName = _gameSave.data._itemCSelectedFromInventoryName;
 		Reg._itemGotAntigravitySuit = _gameSave.data._itemGotAntigravitySuit;		
+		Reg._itemGotSkillDash = _gameSave.data._itemGotSkillDash;
 		
 		_gameSave.close;
 		ticksDelay = true;

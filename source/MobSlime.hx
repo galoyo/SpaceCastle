@@ -22,6 +22,7 @@ class MobSlime extends EnemyChildClass
 	public var defaultHealth:Int = 2;
 	
 	public var _gravity:Float = 3000;
+	private var _gravityResetToThisValue:Int = 3000; // when reset(), this is the _gravity value.
 	
 	// this var must be in integers of 32.
 	var maxSpeed:Int = 480;	
@@ -42,7 +43,7 @@ class MobSlime extends EnemyChildClass
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter)
 	{
-		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);		
+		super(x + 10, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);		
 	
 		// id 1 is the easy green mob while 2 is the hard red mob.
 		loadGraphic("assets/images/mobSlime.png", true, 28, 28);
@@ -82,6 +83,9 @@ class MobSlime extends EnemyChildClass
 		// the mob image only has right facing frame. this code flips the image when facing in the direction of left.
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip(FlxObject.RIGHT, false, false);
+		
+		_gravity = _gravityResetToThisValue;
+		velocity.y = 0;
 		
 		// set the image to face in the right direction.
 		facing = FlxObject.RIGHT;

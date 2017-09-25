@@ -23,8 +23,9 @@ class Mob_template extends EnemyChildClass
 	private var maxSpeed:Int = 250;
 	
 	// how fast the object can fall.
-	var _gravity:Int = 4400;	
-
+	public var _gravity:Int = 4400;	
+	private var _gravityResetToThisValue:Int = 4200; // when reset(), this is the _gravity value.
+	
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;
 	private var velocityXOld:Float; // used to store the direction that the mob was moving.	
@@ -187,6 +188,7 @@ class Mob_template extends EnemyChildClass
 		velocityXOld = velocity.x;
 		
 		// used with jumping ability.
+		_gravity = _grav
 		acceleration.y = _gravity;	
 		
 		angle = 0;

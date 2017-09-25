@@ -23,7 +23,7 @@ class MobCutter extends EnemyChildClass
 	
 	// how fast the object can fall.
 	public var _gravity:Int = 4400;	
-
+	private var _gravityResetToThisValue:Int = 4400; // when reset(), this is the _gravity value.
 	public var inAir:Bool = false;
 	public var _mobIsSwimming:Bool = false;
 
@@ -57,7 +57,9 @@ class MobCutter extends EnemyChildClass
 	{				
 		setFacingFlip(FlxObject.LEFT, true, false);
 		setFacingFlip(FlxObject.RIGHT, false, false);
-		
+				
+		_gravity = _gravityResetToThisValue;
+		velocity.y = 0;
 		alive = true;
 		angle = 0;
 		_mobIsSwimming = false;
