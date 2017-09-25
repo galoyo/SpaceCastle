@@ -89,3 +89,4 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 344: antigravity suit.
 345: lava.
 346: quick sand.
+347: dash attack. the player will quickly dash to the left or right while the player is rising in the air.
