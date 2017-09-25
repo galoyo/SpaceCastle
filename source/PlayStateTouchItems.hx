@@ -316,7 +316,28 @@ class PlayStateTouchItems
 				Reg._itemGotAntigravitySuit = true;
 			}
 		}
-		
+
+			//############## ITEM SKILL DASH.
+		if (Std.is(item, ItemSkillDash))
+		{
+			var i:ItemSkillDash = cast(item, ItemSkillDash);
+			
+			if (Reg._itemGotSkillDash == false)
+			{
+				if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1, false);
+				i.kill();
+				
+				Reg.dialogIconFilename = "itemSkillDash.png";
+				Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSkillDash.txt").split("#");
+			
+				newInventoryItem( openfl.Assets.getText("assets/text/touchItemSkillDashDescription.txt"), Reg.dialogIconFilename);
+				Reg.dialogCharacterTalk[0] = "";
+				Reg.displayDialogYesNo = false;
+				Reg.state.openSubState(new Dialog());
+				
+				Reg._itemGotSkillDash = true;
+			}
+		}
 		
 	}
 	

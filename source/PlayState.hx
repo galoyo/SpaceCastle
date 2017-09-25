@@ -58,6 +58,8 @@ class PlayState extends FlxUIState
 	public var _itemGun:FlxGroup;
 	public var _itemGunFreeze:FlxGroup;
 	
+	// other items are made at reg.hx.
+	
 	public var _objectLadders:FlxGroup; // needs to be in a group by itself.	
 	public var _objectCage:FlxGroup; // this needs to be in a group by itself.
 	public var _objectTube:FlxGroup; // this too.

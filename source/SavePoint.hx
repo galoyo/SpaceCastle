@@ -123,6 +123,7 @@ class SavePoint extends FlxSprite
 		_gameSave.data._itemXSelectedFromInventoryName = Reg._itemXSelectedFromInventoryName;
 		_gameSave.data._itemCSelectedFromInventoryName = Reg._itemCSelectedFromInventoryName;
 		_gameSave.data._itemGotAntigravitySuit = Reg._itemGotAntigravitySuit;		
+		_gameSave.data._itemGotSkillDash = Reg._itemGotSkillDash;
 		
 		if (Reg.state.player.facing == FlxObject.LEFT)
 			Reg.facingDirectionRight = false;

@@ -33,7 +33,7 @@ class Player extends FlxSprite
 	private var _emitterBulletFlame:FlxEmitter;
 	private var _emitterSkillDash:FlxEmitter;
 	
-	public var _maxWalkSpeed:Int = 430;
+	// public var _maxWalkSpeed:Int = 430;
 	public var _maxRunSpeed:Int = 630;
 	public var _gravity:Int = 3500;
 		
@@ -625,20 +625,20 @@ class Player extends FlxSprite
 		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
-				|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dash Skill."
+				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dash Skill."
+				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dash Skill.")
 				{
-					if (InputControls.left.pressed || InputControls.right.pressed) _playerIsDashing = true;
+					if (InputControls.left.pressed  && inAir == false || InputControls.right.pressed && inAir == false)
+					{
+						_playerIsDashing = true;
+					}
 			}
 			
 			//############################## DASH ATTACK 
 			// holding an arrow key left or right before jumping is not allowed. the reason is because of a bug. when exiting the map from the right side, if holding the right arrow key and then jumping into the next map, the player will fall straight down at that next map. the player will not continue to move in that same direction if that arrow key is still held down. however, if a jump was made before holding an arrow key then when leaving the map the player will continue to move forward at the next map if that arrow key is still held down. this code address the bug by delaying movement when jump in not allowed.
 			
-			// when the left or right arrow is pressed and then the jump key is pressed, the player will do a dashed attach. the player will quickly dash to the left or right while the player is rising in to the air. 
+			// when the left or right arrow is pressed and then the jump key is pressed, the player will do a dashed attach. the player will quickly dash to the left or right while the player is rising in the air. 
 			if (_playerIsDashing == true)
 			{				
 				if (InputControls.left.pressed) 
@@ -696,40 +696,38 @@ class Player extends FlxSprite
 		}		
 		
 		// if running then do not run faster then the max speed else set to walk speed.
-		if (_mobIsSwimming == false) {maxVelocity.x = _maxWalkSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
-		else {maxVelocity.x = _maxWalkSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
+		if (_mobIsSwimming == false) {maxVelocity.x = _maxRunSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
+		else {maxVelocity.x = _maxRunSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
 		
 		//---------------------------
 		//########### PLAYER IS JUMPING.
-		if (!InputControls.left.pressed && !InputControls.right.pressed)
+		if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
+			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
+			|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
+			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
-			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
-				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
-				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
-				|| InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
-				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
-				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
+			if (Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving)
+			|| Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving))
 			{
-				if (Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving)
-				|| Reg._usingFlyingHat == false && FlxG.overlap(this, Reg.state._objectVineMoving))
-				{
-					if (Reg._soundEnabled == true) FlxG.sound.play("rope", 0.50, false);			
+				if (Reg._soundEnabled == true) FlxG.sound.play("rope", 0.50, false);			
 
-					Reg._antigravity = false; // cannot swing upside down on vine.
-					velocity.y = -500; 
-					_playerIsDashing = false;
-				}
-				// normal jump.
-				else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
-				|| Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
-				{
-					if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
-					
-					velocity.y = finalJumpForce;	
-					_playerIsDashing = false;
-				}
+				Reg._antigravity = false; // cannot swing upside down on vine.
+				velocity.y = -500; 
+				_playerIsDashing = false;
+			}
+			// normal jump.
+			else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
+			|| Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
+			{
+				if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
+				
+				velocity.y = finalJumpForce;	
+				_playerIsDashing = false;
 			}
 		}
+
 		//--------------------------
 		// ######################## PLAYER IS SWIMMING. #########################
 		else if ( InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Swimming Skill."

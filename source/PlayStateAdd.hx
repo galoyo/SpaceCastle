@@ -729,6 +729,18 @@ class PlayStateAdd
 		}
 	}
 	
+	/**
+	 * Add a player skill dash to the map. The player will quickly dash to the left or right while rising in the air.
+	 */
+	public static function addItemSkillDash(X:Float, Y:Float):Void
+	{		
+		if (Reg._itemGotSkillDash == false)
+		{
+			Reg.state._itemsThatWerePickedUp.add(new ItemSkillDash(X, Y));
+			Reg.state.add(Reg.state._itemsThatWerePickedUp);
+		}
+	}
+	
 	// ################################################################
 	// ####### OBJECTS
 	// ################################################################
@@ -979,7 +991,7 @@ class PlayStateAdd
 	}
 
 	/**
-	 * add a quick sand block to the map. player slowly enters the sand player needs to jump.
+	 * add a quicksand block to the map. player slowly enters the sand player needs to jump.
 	 */
 	public static function addQuickSand(X:Float, Y:Float):Void
 	{

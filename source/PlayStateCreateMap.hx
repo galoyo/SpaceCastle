@@ -464,7 +464,8 @@ class PlayStateCreateMap
 						case 343: PlayStateAdd.addSpikeFalling(x * Reg._tileSize + 7, y * Reg._tileSize);
 						case 344: PlayStateAdd.addItemAnitgravitySuit(x * Reg._tileSize, y * Reg._tileSize);
 						case 345: PlayStateAdd.addLavaBlock(x * Reg._tileSize, y * Reg._tileSize);			
-						case 346: PlayStateAdd.addQuickSand(x * Reg._tileSize, y * Reg._tileSize);			
+						case 346: PlayStateAdd.addQuickSand(x * Reg._tileSize, y * Reg._tileSize);		
+						case 347: PlayStateAdd.addItemSkillDash(x * Reg._tileSize, y * Reg._tileSize);		
 					}
 				}
 			}
