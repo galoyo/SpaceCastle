@@ -515,6 +515,9 @@ class Reg
 		_deathWhenReachedZero = _deathWhenReachedZeroCurrent = 400;
 		
 		_changeToDayOrNightBgsAtPageLoadTicks = 0;
+		
+		_playerInsideCar = false;
+		_carMovingEast = true;
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################
