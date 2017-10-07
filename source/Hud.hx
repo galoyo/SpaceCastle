@@ -2,6 +2,7 @@ package;
 
  import flixel.FlxBasic;
  import flixel.FlxG;
+ import flixel.FlxObject;
  import flixel.FlxSprite;
  import flixel.group.FlxGroup;
  import flixel.text.FlxText;
@@ -179,7 +180,7 @@ package;
 		super.update(elapsed);	
 		
 		// display the gun hub box if not inside the house.
-		if (Reg._inHouse == "" )
+		if (Reg._inHouse == "" && Reg._update == true )
 		{
 			if (_atHouse == false )
 			{
@@ -194,9 +195,50 @@ package;
 				_healthHudBox.valueSuffix = " / " + Std.string(Reg._healthMaximum);			
 						
 				// update the map and man coordinate at the top right corner of the screen.
-				_displayMapCoordinate.text = "Map " + Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords);
-				_displayManCoordinate.text = "Man " + Std.string(Std.int(Reg.state.player.x / Reg._tileSize)) + "-" + Std.string(Std.int(Reg.state.player.y / Reg._tileSize));
-				//--------------------------------
+				if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 
+				 || Reg.mapXcoords == 24 && Reg.mapYcoords == 19 
+				 || Reg.mapXcoords == 25 && Reg.mapYcoords == 19 
+				 || Reg.mapXcoords == 26 && Reg.mapYcoords == 19)
+				{
+					var carMap:Int = 0;
+					var playerMap:Int = 0;
+					
+					if (Reg._playerInsideCar == true)
+					{
+					// the parallax car map is 100 tiles wide. since the normal map is one forth that amount, make that map x coords at the top right side of screen increase by one when the car drives every 25 tiles so it will give an effect tht the car is driving passed four maps.
+					if (Std.int(Reg.state._objectCar.x / Reg._tileSize) >= 74) carMap = 3; 
+					else if (Std.int(Reg.state._objectCar.x / Reg._tileSize) >= 49) carMap = 2;
+					else if (Std.int(Reg.state._objectCar.x / Reg._tileSize) >= 24) carMap = 1;
+					
+					var carMapCoords:Float = Reg.mapXcoords + carMap;
+					
+					var carOffset = 0;
+					if (Reg.state._objectCar.facing == FlxObject.LEFT) carOffset = 4;
+					var carManOffset = Std.int(Reg.state._objectCar.x  / Reg._tileSize) + carOffset;
+					
+						_displayMapCoordinate.text = "Map " + Std.string(carMapCoords) + "-" + Std.string(Reg.mapYcoords);
+						_displayManCoordinate.text = "Man " + Std.string(carManOffset) + "-" + Std.string(Std.int(Reg.state._objectCar.y / Reg._tileSize));
+					}
+					
+					else
+					{
+						if (Std.int(Reg.state.player.x / Reg._tileSize) >= 74) playerMap = 3; 
+						else if (Std.int(Reg.state.player.x / Reg._tileSize) >= 49) playerMap = 2;
+						else if (Std.int(Reg.state.player.x / Reg._tileSize) >= 24) playerMap = 1;
+					
+						var playerMapCoords:Float = Reg.mapXcoords + playerMap;
+						
+						_displayMapCoordinate.text = "Map " + Std.string(playerMapCoords) + "-" + Std.string(Reg.mapYcoords);
+						_displayManCoordinate.text = "Man " + Std.string(Std.int(Reg.state.player.x / Reg._tileSize)) + "-" + Std.string(Std.int(Reg.state.player.y / Reg._tileSize));
+					}
+				}
+				
+				else
+				{
+					_displayMapCoordinate.text = "Map " + Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords);
+					_displayManCoordinate.text = "Man " + Std.string(Std.int(Reg.state.player.x / Reg._tileSize)) + "-" + Std.string(Std.int(Reg.state.player.y / Reg._tileSize));
+					//--------------------------------
+				}
 			}
 		}
 	}

@@ -12,7 +12,7 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectSpikeFalling extends FlxSprite 
 {
-	public var ticksSpike:Int;
+	public var ticksSpike:Float = 0;
 	private var ra:Int;
 
 	private var _startY:Float;
@@ -40,7 +40,7 @@ class ObjectSpikeFalling extends FlxSprite
 			// make the spike fall if spike is within the x range of the player.
 			if (ticksSpike == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra && y == _startY) velocity.y = 950 + (ra * 1.5);
 			
-			// spike not yet fallen to the ground.
+			// spike not yet falling to the ground.
 			if (ticksSpike == 0)
 			{
 				// player and enemy damage taken, if spike hits them.
@@ -53,7 +53,7 @@ class ObjectSpikeFalling extends FlxSprite
 			}
 		
 			
-			// stop the spike if collides with tilemap, then play the animation so that it appears that the spike is goes into the tilemap just a bit.
+			// stop the spike if collides with tilemap, then play the animation so that it appears that the spike enters a bit in to the tilemap.
 			if (y != _startY && justTouched(FlxObject.FLOOR))
 			{
 				
