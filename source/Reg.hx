@@ -17,7 +17,7 @@ class Reg
 	//########################################################################
 	
 	//if a map is within this var then the clouds will be displayed on that map.
-	public static var _displayCloudsCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21";
+	public static var _displayCloudsCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
 	// vars for the button navigation.
 	public static var _testItems:Bool = false; // if true, the Test-Items map will be displayed. this map is used to test the game features. 
@@ -27,6 +27,12 @@ class Reg
 	public static var _ignoreIfMusicPlaying:Bool = false; // used to stop demo from playing when the music is stopped because the user pressed a key to open a substate.
 	
 	public static var _bulletSize:Int = 0; // 0 = large. 1 = medium. 2 = small.
+	
+	public static var _playerInsideCar:Bool = false; // used to determine if player is walking or riding to the castle.
+	
+	public static var _carMovingEast:Bool = true; // used to determine what direction the car is moving in. If true then the car is moving east, else moving west.
+	
+	public static var _stopDreamsMusic:Bool = false; // do not know how to stop a particular music from playing so this is used instead of some code.
 		
 	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; // there are four cartoon backgrounds for the maps and four star backgrounds. those one image set from each two sets of background can display on a map but not at the same time. if this var is set to 10, then for 0 to 10 times the playstate.hx is loaded a cartoon background will display at a map while 11 to 20 times loaded will display a star background at a map. 
 	public static var _changeToDayOrNightBgsAtPageLoadTicks:Int = 0; // do NOT change this var. each time playstate.hx is loaded this var is increased. when it reaches the value of _changeToDayOrNightBgsAtPageLoad then the background umage set will change.
@@ -46,6 +52,9 @@ class Reg
 	
 	// used to stop the players flicker. if true then at the next music stop, the players flicker will also stop.
 	public static var _powerUpStopFlicker:Bool = false;
+	
+	// used to stop some classes from updating;
+	public static var _update:Bool = true;
 	
 	public static var _gravityOnSlopes:Int = 100000; // gravity on slopes.
 	

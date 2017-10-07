@@ -420,7 +420,7 @@ class PlayStateTouchObjects
 	 */
 	public static function tilemapPlayerCollide(t:FlxTilemap, p:Player):Void
 	{
-		if (p.justTouched(FlxObject.FLOOR)) Reg._arrowKeyInUseTicks = 0; // do not show the players guidelines.
+		if (p.justTouched(FlxObject.FLOOR)) Reg._arrowKeyInUseTicks = 0; 
 		
 		if (Reg._antigravity == true && p.isTouching(FlxObject.FLOOR) && Reg.state._touchingSuperBlock == false || Reg._antigravity == false && p.isTouching(FlxObject.CEILING) && Reg.state._touchingSuperBlock == false)
 		{

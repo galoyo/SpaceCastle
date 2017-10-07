@@ -56,16 +56,16 @@ class PlayStateDownKey
 		}				
 		
 		//----------------------- TRACKER ---------------------------
-		// emitter the "question mark if there is no action but only when the player is standing on the ground.
-		else if (InputControls.up.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) 
-		      || InputControls.down.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player)) // for npcs overlapping, see an npcs class.
+		// emitter the "question mark if there is no action.
+		else if (InputControls.up.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectCar, Reg.state.player)
+		      || InputControls.down.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player) && !FlxG.overlap(Reg.state._objectCar, Reg.state.player)) // for npcs overlapping, see an npcs class.
 		{
 			if (Reg.state._ticksTrackerDown == 1)
 			{
 				Reg.state._particleQuestionMark.focusOn(Reg.state.player);
 				Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
 			}
-			
+			/*
 			// player looking down. scroll the screen until the player is at the top of the screen.
 			if (Reg._inHouse == "" && Reg.state._tracker.y - Reg.state.player.y < 224 && Reg.state._ticksTrackerDown > 25 && Reg.state.player.animation.name == "idle" || Reg._inHouse == "" && Reg.state._tracker.y - Reg.state.player.y < 192 && Reg.state._ticksTrackerDown > 25 && Reg.state.player.animation.name == "idle2") 
 			{				
@@ -77,11 +77,14 @@ class PlayStateDownKey
 				
 			}
 			else Reg.state._tracker.velocity.y = 0; // stop scrolling the screen when player is at the top of the screen.
+			*/
 			
 			Reg._arrowKeyInUseTicks = 0;
-			Reg.state._ticksTrackerDown = Reg.incrementTicks(Reg.state._ticksTrackerDown, 60 / Reg._framerate);			
+			Reg.state._ticksTrackerDown = Reg.incrementTicks(Reg.state._ticksTrackerDown, 60 / Reg._framerate);	
+			
 		}	
 
+		/*
 		else if (InputControls.down.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) 
 		      || InputControls.up.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player))
 		{
@@ -100,7 +103,7 @@ class PlayStateDownKey
 			
 			Reg._arrowKeyInUseTicks = 0;
 			Reg.state._ticksTrackerUp = Reg.incrementTicks(Reg.state._ticksTrackerUp, 60 / Reg._framerate); 			
-		}	
+		} */	
 		else 
 		{	// no down key is pressed so reset tracker back to the players location.
 			Reg.state._ticksTrackerUp = 0;
@@ -109,9 +112,14 @@ class PlayStateDownKey
 			
 			if(Reg._trackerInUse == true) Reg.state._questionMark.cancel();
 			
-			FlxG.camera.follow(Reg.state.player, FlxCameraFollowStyle.SCREEN_BY_SCREEN);
-
+			/*
+			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
+			FlxG.camera.follow(Reg.state.player, FlxCameraFollowStyle.NO_DEAD_ZONE);	// make the camera follow the player.	
+		else 
+			FlxG.camera.follow(Reg.state.player, FlxCameraFollowStyle.SCREEN_BY_SCREEN); // make player walk to sides of screen.
+			*/
 		}
+		
 		//---------------------- END OF TRACKER -----------------------
 		//###################### END OF DOWN KEY ######################
 	}

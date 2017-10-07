@@ -59,14 +59,18 @@ class PlayStateCreateMap
 			Reg.state.background = new FlxSprite();
 			
 			if (Reg.mapXcoords >= 24 && Reg.mapYcoords >= 24)
-				{
-					FlxG.camera.color = 0xFF999999;
-					Reg.state.background.loadGraphic("assets/images/background2.jpg", false);
-				}
-			else Reg.state.background.loadGraphic("assets/images/background"+bgSet+"-"+bg+".jpg", false);
-			Reg.state.background.scrollFactor.set(0.2,0.2);
-			Reg.state.background.setPosition(0, 0);
-			Reg.state.add(Reg.state.background);	
+			{
+				FlxG.camera.color = 0xFF999999;
+				Reg.state.background.loadGraphic("assets/images/background2.jpg", false);
+			}
+			else if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19){} // trap the parallax car scene. 
+			else
+			{
+				Reg.state.background.loadGraphic("assets/images/background"+bgSet+"-"+bg+".jpg", false);
+				Reg.state.background.scrollFactor.set(0.2,0.2);
+				Reg.state.background.setPosition(0, 0);
+				Reg.state.add(Reg.state.background);
+			}
 		}
 		
 		Reg.state.tilemap = new FlxTilemapExt();		
@@ -114,9 +118,8 @@ class PlayStateCreateMap
 		Reg.state.tilemap.setSlopes(tempNW, tempNE, tempSW, tempSE);		
 		Reg.state.tilemap.setGentle([253, 254, 257, 258], [252, 255, 256, 259]);
 		Reg.state.tilemap.setSteep([260, 261, 264, 265], [262, 263, 266, 267]);
-		
 		Reg.state.add(Reg.state.tilemap);
-		
+
 		//set the left cage border to a blank tile.
 		var newindex:Int = 96;
 		for (j in 0...Reg.state.tilemap.heightInTiles)
@@ -465,7 +468,9 @@ class PlayStateCreateMap
 						case 344: PlayStateAdd.addItemAnitgravitySuit(x * Reg._tileSize, y * Reg._tileSize);
 						case 345: PlayStateAdd.addLavaBlock(x * Reg._tileSize, y * Reg._tileSize);			
 						case 346: PlayStateAdd.addQuickSand(x * Reg._tileSize, y * Reg._tileSize);		
-						case 347: PlayStateAdd.addItemSkillDash(x * Reg._tileSize, y * Reg._tileSize);		
+						case 347: PlayStateAdd.addItemSkillDash(x * Reg._tileSize, y * Reg._tileSize);
+						case 348: PlayStateAdd.addCar(x * Reg._tileSize, y * Reg._tileSize - 33);
+						case 349: PlayStateAdd.addRockFalling(x * Reg._tileSize, y * Reg._tileSize - 100);
 					}
 				}
 			}
@@ -481,6 +486,7 @@ class PlayStateCreateMap
 		Reg.state.add(Reg.state.npcs);	
 		Reg.state.add(Reg.state._objectCage);
 		Reg.state.add(Reg.state._objectTube);
+		Reg.state.add(Reg.state._objectCar);
 		Reg.state.add(Reg.state.player);
 		
 		

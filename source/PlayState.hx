@@ -87,7 +87,7 @@ class PlayState extends FlxUIState
 	public var _jumpingPad:FlxGroup;
 	public var _objectLavaBlock:FlxGroup;
 	public var _objectQuickSand:FlxGroup;
-	public var _tube:FlxGroup;
+	public var _objectCar:ObjectCar;
 	
 	// all still objects are within this group	
 	public var _overlaysThatDoNotMove:FlxGroup;	
@@ -163,7 +163,7 @@ class PlayState extends FlxUIState
 	public var tilemap:FlxTilemapExt;
 	public var underlays:FlxTilemap;
 	public var overlays:FlxTilemap;
-	public var foregroundImage:FlxBackdrop = new FlxBackdrop();
+	public var foregroundImage:FlxBackdrop;	
 	
 	// the inventory system across the top part of the screen.
 	public var hud:Hud;
@@ -204,6 +204,8 @@ class PlayState extends FlxUIState
 	
 	override public function create():Void
 	{
+		Reg._update = true;
+		
 		// near the bottom of this constructor, if you plan to use more than 2 dogs then uncomment those two lines with id 3 and 4.
 		
 		// Multiple overlap between two objects. https://github.com/HaxeFlixel/flixel/issues/1247 uncomment the following to fix the issue. might lose small cpu preformance. you don't use many callbacks so this is currently not a concern.
@@ -226,6 +228,20 @@ class PlayState extends FlxUIState
 				FlxG.sound.volume = 1;
 				camera.visible = true;
 			}
+		}
+		
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
+		{
+			var parallaxCar1 = new FlxBackdrop("assets/images/parallaxForest1.png", 0.4, 0, true, false, 0, 0);
+			var parallaxCar2 = new FlxBackdrop("assets/images/parallaxForest2.png", 0.6, 0, true, false, 0, 0);
+			var parallaxCar3 = new FlxBackdrop("assets/images/parallaxForest3.png", 0.8, 0, true, false, 0, 0);
+			var parallaxCar4 = new FlxBackdrop("assets/images/parallaxForest4.png", 1, 0, true, false, 0, 0);
+	
+			add(parallaxCar1);
+			add(parallaxCar2);
+			add(parallaxCar3);
+			add(parallaxCar4);
+						
 		}
 			
 		// reset important dog vars.
@@ -405,7 +421,9 @@ class PlayState extends FlxUIState
 		// ----------------------------------clouds and rain.		
 		var outside:Bool = displayClouds();
 		
-		if (outside == true && Reg._inHouse == "")
+		// trap this because != does not work. this is for the parallax var scene.
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19) {}
+		else if (outside == true && Reg._inHouse == "")
 		{
 			foregroundImage = new FlxBackdrop("assets/images/parallaxclouds.png", 1.5, 0, true, false, 0, 0);
 			foregroundImage.velocity.x = 100;
@@ -478,8 +496,22 @@ class PlayState extends FlxUIState
 		_tracker = new FlxSprite(0, 0);
 		_tracker.makeGraphic(28, 28, 0x00FFFFFF);
 		add(_tracker);
+		
+		if (Reg._stopDreamsMusic == true) {FlxG.sound.music.stop(); Reg._stopDreamsMusic = false;}
+		
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
+		{
+			if (FlxG.sound.music.playing == true) FlxG.sound.music.stop();
+			
+			if (Reg._playerInsideCar == false) 
+			{
+				FlxG.sound.playMusic("dreams1", 1, false);
+				Reg._stopDreamsMusic = true;
+			}
+			else FlxG.sound.playMusic("dreams2", 1, false);
+		}
 	
-		if (Reg._musicEnabled == true && Reg._transitionInitialized == true || Reg._musicEnabled == true && Reg._transitionEffectEnable == false) 
+		else if (Reg._musicEnabled == true && Reg._transitionInitialized == true || Reg._musicEnabled == true && Reg._transitionEffectEnable == false) 
 		{
 			if (Reg.mapXcoords == 24 && Reg.mapYcoords >= 21 && Reg.mapYcoords <= 24 ) 
 			{
@@ -487,8 +519,6 @@ class PlayState extends FlxUIState
 			}
 			else  PlayStateMiscellaneous.playMusicIntro(); // played when entering a house, cave, ect.			
 		}	
-		
-		if (Reg._backgroundSounds == true) FlxG.sound.play("backgroundSounds", 0.25, true);
 		
 		if (Reg.mapXcoords == 24 && Reg.mapYcoords >= 21 && Reg.mapYcoords <= 24)
 		{
@@ -551,14 +581,16 @@ class PlayState extends FlxUIState
 	// ################################################################
 	function setCamera():Void
 	{
-		// make the camera follow the player in a platformer game.
-		FlxG.camera.follow(player, FlxCameraFollowStyle.SCREEN_BY_SCREEN);		
 		
-		// smooth the image.
-		//#if cpp
-		//FlxG.camera.antialiasing = true;
-		//#end
-		
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 )
+		{
+			if (Reg._playerInsideCar == true)
+				FlxG.camera.follow(_objectCar, FlxCameraFollowStyle.TOPDOWN);	// make the camera follow the car.
+			else FlxG.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
+		}
+		else 
+			FlxG.camera.follow(player, FlxCameraFollowStyle.SCREEN_BY_SCREEN); // make player walk to sides of screen.
+			
 		// do not display anything outside of the current map displayed.
 		FlxG.camera.setScrollBoundsRect(0, -60, tilemap.width - Reg._tileSize + 32, tilemap.height - Reg._tileSize + 155, true);		
 
@@ -912,18 +944,42 @@ class PlayState extends FlxUIState
 		// change to the next map when player is at the edge of the screen simular to how zelda does it.
 		if (alive == true)
 		{
-			if (Reg.state.player.x < 2)
+			if (Reg.state.player.x < 2 && Reg._playerInsideCar == false || Reg.mapXcoords == 23 && Reg.mapYcoords == 19 && Reg.state._objectCar != null && Reg.state._objectCar.x < - 152 && Reg._playerInsideCar == true || Reg.state._objectCar != null && Reg.mapXcoords != 23 && Reg.state._objectCar.x < - 2 && Reg._playerInsideCar == true)
 			{
-				Reg.beginningOfGame = false;
 				Reg.state.player.getCoords();
+				
+				if (Reg.mapXcoords == 27 && Reg.mapYcoords == 19 )
+				{
+					Reg.mapXcoords--; Reg.mapXcoords--; Reg.mapXcoords--;					
+				}
+				
+				Reg.beginningOfGame = false;
+				
 				Reg.mapXcoords--;
 				Reg._dogOnMap = false;
 				Reg._playerAirLeftInLungsCurrent = Reg._playerAirLeftInLungs;
 				Reg._deathWhenReachedZeroCurrent = Reg._deathWhenReachedZero;
+				Reg._update = false;
 				FlxG.switchState(new PlayState());
 			}
 			
-			if (Reg.state.player.x > 770)
+			// parallax car.
+			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
+			{
+				if (Reg.state.player.x > 3160 && Reg._playerInsideCar == false || Reg.state._objectCar != null &&  Reg.state._objectCar.x > 3198 && Reg._playerInsideCar == true)
+				{
+					Reg.beginningOfGame = false;
+					Reg.state.player.getCoords();
+					Reg.mapXcoords++; Reg.mapXcoords++; Reg.mapXcoords++; Reg.mapXcoords++;
+					Reg._dogOnMap = false;
+					Reg._playerAirLeftInLungsCurrent = Reg._playerAirLeftInLungs;
+					Reg._deathWhenReachedZeroCurrent = Reg._deathWhenReachedZero;
+					Reg._update = false;
+					FlxG.switchState(new PlayState());
+				}
+			}
+			
+			else if (Reg.state.player.x > 770 && Reg._playerInsideCar == false || Reg.state._objectCar != null &&  Reg.state._objectCar.x + 116 > 770 && Reg.mapXcoords == 22 && Reg.mapYcoords == 19 )
 			{
 				Reg.beginningOfGame = false;
 				Reg.state.player.getCoords();
@@ -931,10 +987,11 @@ class PlayState extends FlxUIState
 				Reg._dogOnMap = false;
 				Reg._playerAirLeftInLungsCurrent = Reg._playerAirLeftInLungs;
 				Reg._deathWhenReachedZeroCurrent = Reg._deathWhenReachedZero;
+				Reg._update =  false;
 				FlxG.switchState(new PlayState());
 			}
 			
-			if (Reg.state.player.y < 2)
+			if (Reg.state.player.y < 2 && Reg._playerInsideCar == false )
 			{
 				Reg.beginningOfGame = false;
 				Reg.state.player.getCoords();
@@ -943,10 +1000,11 @@ class PlayState extends FlxUIState
 				Reg._playerAirLeftInLungsCurrent = Reg._playerAirLeftInLungs;
 				Reg._deathWhenReachedZeroCurrent = Reg._deathWhenReachedZero;
 				Reg.state._timeRemainingBeforeDeath.visible = false;
+				Reg._update =  false;
 				FlxG.switchState(new PlayState());
 			}
 			
-			if (Reg.state.player.y > 450)
+			if (Reg.state.player.y > 450 && Reg._playerInsideCar == false )
 			{
 				Reg.beginningOfGame = false;
 				Reg.state.player.getCoords();
@@ -955,6 +1013,7 @@ class PlayState extends FlxUIState
 				Reg._playerAirLeftInLungsCurrent = Reg._playerAirLeftInLungs;
 				Reg._deathWhenReachedZeroCurrent = Reg._deathWhenReachedZero;
 				Reg.state._timeRemainingBeforeDeath.visible = false;
+				Reg._update =  false;
 				FlxG.switchState(new PlayState());
 			}
 		}
@@ -975,6 +1034,8 @@ class PlayState extends FlxUIState
 		FlxG.collide(tilemap, _emitterItemHeart, PlayStateTouchObjects.tilemapParticalCollide);
 		FlxG.collide(tilemap, _emitterItemNugget, PlayStateTouchObjects.tilemapParticalCollide);
 		FlxG.collide(tilemap, npcs);
+		FlxG.collide(tilemap, _objectsThatMove);
+		
 		
 		
 	}	

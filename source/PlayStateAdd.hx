@@ -40,7 +40,7 @@ class PlayStateAdd
 			if (Reg.beginningOfGame == false && Reg.restoreGameState == false)
 			{
 				// west - to go east door.
-				if (Reg.playerXcoords < 1) {xNewCoords = 23 ; yNewCoords = Reg.playerYcoords; facingLeft = true; } 
+				if (Reg.playerXcoords < 1) {xNewCoords = Reg.state.tilemap.width / Reg._tileSize - 2 ; yNewCoords = Reg.playerYcoords; facingLeft = true; } 
 				
 				// north - to go south door.
 				else if (Reg.playerYcoords < 1) {yNewCoords = 13 ; xNewCoords = Reg.playerXcoords; } 
@@ -966,6 +966,14 @@ class PlayStateAdd
 		Reg.state.add(Reg.state._objectsThatMove);
 	}
 	
+	/**
+	 * add a rock falls from the sky at 4, 6 and 8 o'clock.
+	 */	
+	public static function addRockFalling(X:Float, Y:Float):Void
+	{
+		Reg.state._objectsThatMove.add( new ObjectRockFalling(X, Y));
+		Reg.state.add(Reg.state._objectsThatMove);
+	}
 	
 	public static function addJumpingPad(X:Float, Y:Float, id:Int):Void
 	{
@@ -1006,6 +1014,24 @@ class PlayStateAdd
 	{
 		var tube:ObjectTube = new ObjectTube(X, Y);
 		Reg.state._objectTube.add(tube); 
+	}
+	
+	/**
+	 * add a car. the car is used to travel from one city to the next.
+	 */	
+	public static function addCar(X:Float, Y:Float):Void
+	{
+		if (Reg.mapXcoords == 22 && Reg.mapYcoords == 19) {Reg._playerInsideCar = false;  Reg._carMovingEast = true; X = Reg.state.tilemap.width - 214; }
+		
+		if (Reg.mapXcoords == 27 && Reg.mapYcoords == 19) {Reg._carMovingEast = false; Reg._playerInsideCar = false; }
+		
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19) 
+		{
+			if (Reg._carMovingEast == false) X = Reg.state.tilemap.width - 214; // - 150 - 64; // driving to direction west.
+			else X = 64;			
+		}
+		
+		Reg.state._objectCar = new ObjectCar(X, Y);
 	}
 	
 	// ###############################################################

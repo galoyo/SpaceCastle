@@ -22,6 +22,7 @@ class Player extends FlxSprite
 	private var _dogFound:Bool = false;
 	private var _ticksNextJump:Float; // as this var increases, so does the amount of fading gray players when the player does the jump.
 	private var _playerIsDashing:Bool = false; // is the player doing a skill dash which is a fast horizontal attack.
+	private var _jumping:Bool = false; // is the player jumping. used with the skill dash to only allow one dash per jump.
 	
 	public var _newY:Float = 0;	// used to keep the player standing still above the mobs head.
 
@@ -364,81 +365,109 @@ class Player extends FlxSprite
 	
 	public function getCoords():Void 
 	{
-		Reg.playerXcoords = this.x / Reg._tileSize;
-		Reg.playerYcoords = this.y / Reg._tileSize;
+		if (Reg._playerInsideCar == false)
+		{
+			Reg.playerXcoords = this.x / Reg._tileSize;
+			Reg.playerYcoords = this.y / Reg._tileSize;
+		}
+		else
+		{
+			if (Reg.state._objectCar != null && Reg.state._objectCar.facing == FlxObject.RIGHT) Reg.playerXcoords = Reg.state._objectCar.x + 116 / Reg._tileSize;
+			else Reg.playerXcoords = Reg.state._objectCar.x / Reg._tileSize;
+			Reg.playerYcoords = Reg.state._objectCar.y / Reg._tileSize;
+		}
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{	
-		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
-		InputControls.checkInput();
-
-		if (overlapsAt(x, y - 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y - 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
-		Reg._lastArrowKeyPressed = "up";
-		if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x + 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
-		Reg._lastArrowKeyPressed = "right";
-		if (overlapsAt(x, y + 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y + 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
-		Reg._lastArrowKeyPressed = "down";
-		if (overlapsAt(x - 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x - 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
-		Reg._lastArrowKeyPressed = "left";
-		
-		// hide players healthbar if overlays are in front of player. we don not want the player to be seen or known where player is located at.
-		if ( overlapsAt(x, y, Reg.state.overlays)) Reg.state._healthBarPlayer.visible = false;
-			else Reg.state._healthBarPlayer.visible = true;
-		
-		// bullet
-		_cooldown += elapsed;
-		
-		if (alive && !hasWon && Reg._playerCanShootOrMove == true ) controls();
-		if (!hasWon) animate();
-		levelConstraints();	
-		
-		//######################### CHEAT MODE #########################
-		// ----------------- toggle cheat on / off -------------
-		#if !FLX_NO_KEYBOARD  
-			if (FlxG.keys.anyJustReleased(["T"]) && Reg._cheatModeEnabled == true)
+		if (Reg._playerInsideCar == true)
+		{
+			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 // parallax car scene. if true, // player not in use. therefore, don't do player things in this update(). 
+			 || Reg.mapXcoords == 24 && Reg.mapYcoords == 19 // ""
+			 || Reg.mapXcoords == 25 && Reg.mapYcoords == 19 // ""
+			 || Reg.mapXcoords == 26 && Reg.mapYcoords == 19 // ""
+			)
 			{
-				Reg._cheatModeEnabled = false;
-				if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
+				Reg.state.warningFallLine.visible = false;
+				Reg.state.deathFallLine.visible = false;
+				Reg.state.maximumJumpLine.visible = false;
 			} 
-			else if (FlxG.keys.anyJustReleased(["T"])  && Reg._cheatModeEnabled == false)
-			{
-				Reg._cheatModeEnabled = true;
-				if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
-			}
 			
-			// increase health
-			if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == true)
-			{
-				if ((health + 1) <= Reg._healthMaximum)
-				{
-					health = Std.int(health) + 1;
-					Reg._healthCurrent = health;
-					
-					if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
-				} else if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
-			} 
-			else if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == false)
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
-			}
-				
-			// increase the air left in players lungs.
-			if (FlxG.keys.anyJustReleased(["L"])  && Reg._cheatModeEnabled == true)
-			{
-				Reg.state._playerAirRemainingTimer.loops += 10; Reg._playerAirLeftInLungsMaximum += 10;
-				if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);			
-			} 
-			else if (FlxG.keys.anyJustReleased(["L"]) && Reg._cheatModeEnabled == false)
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
-			}
-		#end
-		//####################### END CHEAT MODE #######################
+			Reg.state.player.velocity.x = 400;
+		}
+		
+		else
+		{
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			InputControls.checkInput();
 
-		Reg.state._healthBarPlayer.velocity.x = velocity.x;
-		Reg.state._healthBarPlayer.velocity.y = velocity.y;				
+			if (overlapsAt(x, y - 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y - 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
+			Reg._lastArrowKeyPressed = "up";
+			if (overlapsAt(x + 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x + 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
+			Reg._lastArrowKeyPressed = "right";
+			if (overlapsAt(x, y + 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y + 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
+			Reg._lastArrowKeyPressed = "down";
+			if (overlapsAt(x - 15, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x - 45, y, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 
+			Reg._lastArrowKeyPressed = "left";
+			
+			// hide players healthbar if overlays are in front of player. we do not want the player to be seen or known where player is located at.
+			if ( overlapsAt(x, y, Reg.state.overlays) || Reg.mapXcoords == 23 && Reg.mapYcoords == 19) Reg.state._healthBarPlayer.visible = false;
+				else Reg.state._healthBarPlayer.visible = true;
+			
+			// bullet
+			_cooldown += elapsed;
+			
+			if (alive && !hasWon && Reg._playerCanShootOrMove == true ) controls();
+			if (!hasWon) animate();
+			levelConstraints();	
+			
+			//######################### CHEAT MODE #########################
+			// ----------------- toggle cheat on / off -------------
+			#if !FLX_NO_KEYBOARD  
+				if (FlxG.keys.anyJustReleased(["T"]) && Reg._cheatModeEnabled == true)
+				{
+					Reg._cheatModeEnabled = false;
+					if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
+				} 
+				else if (FlxG.keys.anyJustReleased(["T"])  && Reg._cheatModeEnabled == false)
+				{
+					Reg._cheatModeEnabled = true;
+					if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
+				}
 				
+				// increase health
+				if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == true)
+				{
+					if ((health + 1) <= Reg._healthMaximum)
+					{
+						health = Std.int(health) + 1;
+						Reg._healthCurrent = health;
+						
+						if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);
+					} else if (Reg._soundEnabled == true) FlxG.sound.play("switchOff", 1, false);
+				} 
+				else if (FlxG.keys.anyJustReleased(["H"])  && Reg._cheatModeEnabled == false)
+				{
+					if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
+				}
+					
+				// increase the air left in players lungs.
+				if (FlxG.keys.anyJustReleased(["L"])  && Reg._cheatModeEnabled == true)
+				{
+					Reg.state._playerAirRemainingTimer.loops += 10; Reg._playerAirLeftInLungsMaximum += 10;
+					if (Reg._soundEnabled == true) FlxG.sound.play("switchOn", 1, false);			
+				} 
+				else if (FlxG.keys.anyJustReleased(["L"]) && Reg._cheatModeEnabled == false)
+				{
+					if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false);
+				}
+			#end
+			//####################### END CHEAT MODE #######################
+
+			Reg.state._healthBarPlayer.velocity.x = velocity.x;
+			Reg.state._healthBarPlayer.velocity.y = velocity.y;				
+		}
+	
 		super.update(elapsed);
 	}
 	
@@ -447,13 +476,13 @@ class Player extends FlxSprite
 	{			
 		
 		//################### LAVA BLOCK.
-		// take damage if on the fire block. 1 damage every 1 second.			
+		// take damage if on the fire block.		
 		if ( Reg.state.tilemap.getTile(Std.int(x / 32), Std.int(y / 32) + 1) >= 233 && Reg.state.tilemap.getTile(Std.int(x / 32), Std.int(y / 32) + 1) <= 238 || FlxG.collide(this, Reg.state._objectLavaBlock))
 		{
 			if (_playerStandingOnFireBlockTimer.finished == true) hurt(1);
 			
 			if (_playerStandingOnFireBlockTimer.active == false)
-			_playerStandingOnFireBlockTimer.start(1, null, 1);			
+			_playerStandingOnFireBlockTimer.start(0.25, null, 1);			
 		}
 		//################### END LAVA BLOCK.
 		
@@ -525,12 +554,13 @@ class Player extends FlxSprite
 				Reg._currentKeyPressed = "NULL";
 			}
 		}
-	
+		
 		if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Super Jump 1."
 			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
-			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96;
+			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96; 
+			if (inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
@@ -541,6 +571,7 @@ class Player extends FlxSprite
 		{
 			// Reg._itemGotJump[0] refers to the first jump item obtained. which is set to true when the game starts. the _jumpForce is how high the player can jump. in this case, the player can jump up two tiles. the next jump item jumps for 3 items, ect. Since the jump force is set for 2 tiles, the _fallAllowedDistanceInPixels is also 2 tiles totaling 64 pixels.
 			Reg._jumpForce = 680; Reg._fallAllowedDistanceInPixels = 64;
+			if (inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
@@ -625,15 +656,17 @@ class Player extends FlxSprite
 		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			if (   InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dash Skill."
-				|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dash Skill."
-				|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dash Skill.")
-				{
-					if (InputControls.left.pressed  && inAir == false || InputControls.right.pressed && inAir == false)
-					{
-						_playerIsDashing = true;
-					}
-			}
+			if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dash Skill."
+			 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dash Skill."
+			 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dash Skill.")
+			{							
+				if (_playerIsDashing == false && isTouching(FlxObject.FLOOR) || _playerIsDashing == false && isTouching(FlxObject.CEILING) || _jumping == true) 
+				{ 
+					if (InputControls.left.pressed || InputControls.right.pressed) _playerIsDashing = true;
+						
+				} 
+
+			}	
 			
 			//############################## DASH ATTACK 
 			// holding an arrow key left or right before jumping is not allowed. the reason is because of a bug. when exiting the map from the right side, if holding the right arrow key and then jumping into the next map, the player will fall straight down at that next map. the player will not continue to move in that same direction if that arrow key is still held down. however, if a jump was made before holding an arrow key then when leaving the map the player will continue to move forward at the next map if that arrow key is still held down. this code address the bug by delaying movement when jump in not allowed.
@@ -662,7 +695,7 @@ class Player extends FlxSprite
 				{	_ticksNextJump = Reg.incrementTicks(_ticksNextJump, 60 / Reg._framerate);
 				
 					_emitterSkillDash.focusOn(this);
-					_emitterSkillDash.start(true, 0.03, 1);
+					_emitterSkillDash.start(true, 0.05, 1);
 				}
 			}				
 	
@@ -675,8 +708,13 @@ class Player extends FlxSprite
 			// stop when the last gray player is displayed, when then max value of the ticks is true and the player is dashing. also stop the dash when the key/button is not pressed, when that condition is true then xForce equals zero. so stop when the max value of the ticks is reached and when key/button is not pressed anymore.
 			if (_ticksNextJump >= 7 && _playerIsDashing == true || xForce == 0 && _playerIsDashing == true)
 			{	
-				_playerIsDashing = false;
-				_skillDashX = 0; _skillDashY = 0;
+				if ( !isTouching(FlxObject.FLOOR) || !isTouching(FlxObject.CEILING))
+				{
+					_playerIsDashing = false;
+					_skillDashX = 0; _skillDashY = 0;
+				}
+				
+				_jumping = false;
 			}
 			
 			//######################### END DASH ATTACK.
@@ -950,6 +988,7 @@ class Player extends FlxSprite
 		
 		velocity.x = acceleration.x = 0; // stop the motion of the player.
 		velocity.y = acceleration.y = 0;
+		if (Reg.state._objectCar != null) Reg.state._objectCar.velocity.x = 0;
 		
 		if (alive == true)
 		{
@@ -964,7 +1003,7 @@ class Player extends FlxSprite
 			else
 			{
 				FlxTween.tween(scale, { x:1.2, y:1.2 }, 0.7, { ease:FlxEase.elasticOut } );
-
+				if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19) visible = false;
 				if (Reg._soundEnabled == true) FlxG.sound.playMusic("gameover", 1, false);
 				
 				new FlxTimer().start(0.05, killOnTimer,30);
@@ -989,21 +1028,26 @@ class Player extends FlxSprite
 	{	
 		// rotate object.
 		angle += 5;
-		
+
 		if(Reg._itemGotGun)
 		Reg.state._gun.visible = false;
 	}
 	
 	override public function hurt(damage:Float):Void 
 	{
-		if (FlxSpriteUtil.isFlickering(this) == false || Reg._isFallDamage == true)
+		if (FlxSpriteUtil.isFlickering(this) == false && Reg._playerInsideCar == false || Reg._isFallDamage == true || Reg.state._objectCar != null && FlxSpriteUtil.isFlickering(Reg.state._objectCar) == false && Reg._playerInsideCar == true)
 		{
 			if (damage > 0)
 			{
-				FlxSpriteUtil.flicker(this, Reg._mobHitFlicker, 0.04);
+				if (Reg._playerInsideCar == true && Reg.state._objectCar != null)
+				{
+					Reg.state._objectCar.velocity.x = 0; FlxSpriteUtil.flicker(Reg.state._objectCar, Reg._mobHitFlicker / 2, 0.04);
+					
+				}
+				else FlxSpriteUtil.flicker(this, Reg._mobHitFlicker, 0.04);
 				
-				if(Reg.mapXcoords != 24 && Reg.mapYcoords != 25)
-					FlxG.cameras.shake(0.005, 0.3);
+				if (Reg.mapXcoords == 24 && Reg.mapYcoords == 25) {}; // trap
+				else FlxG.cameras.shake(0.005, 0.3);
 			
 				if (Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels <= 0)
 					if (Reg._soundEnabled == true) FlxG.sound.play("hurt", 1, false);
