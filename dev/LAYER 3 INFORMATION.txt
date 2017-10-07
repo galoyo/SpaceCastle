@@ -90,3 +90,5 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 345: lava.
 346: quick sand.
 347: dash attack. the player will quickly dash to the left or right while the player is rising in the air.
+348: car. need car to make it to the other side of the boulevard (trees on both sides of the street).
+349: falling rock. currently at the parallax car scene. map 23-19.
