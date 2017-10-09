@@ -11,4 +11,6 @@ Any haxeflixel programmer can help with this project. The Haxeflixel Library is 
 
 Haxeflixel tutorials and more information about the game can be found at the [wiki](https://github.com/galoyo/SpaceCastle/wiki). You can submit bugs or any game related idea/discussion at the [issues](https://github.com/galoyo/SpaceCastle/issues). 
 
-If you like the Space Castle then fork it because, who knows, this repo might be removed one day.
+If you like the Space Castle then fork it because, who knows, this repository might be removed one day.
+
+Space Castle news is at the first paragraph of the wiki.
