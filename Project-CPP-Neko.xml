@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.2.0" company="" />
+	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.3.0" company="" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -14,7 +14,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 	
 	<!--These window settings apply to all targets-->
-	<window width="800" height="600" fps="60" background="#000000" hardware="true" vsync="true" />
+	<window width="0" height="0" fps="60" background="#000000" hardware="true" vsync="true" />
 	<!-- include the following at the above code... antialiasing="3" if="cpp"-->
 	
 	<!--HTML5-specific-->
@@ -53,7 +53,7 @@
 		<music path="5.ogg" id="5" />
 		<music path="6.ogg" id="6" />
 		<music path="7.ogg" id="7" />
-		<music path="8.mp3" id="8" />
+		<music path="8.ogg" id="8" />
 		<music path="20.ogg" id="20" />
 		<music path="21.ogg" id="21" />
 		<music path="22.ogg" id="22" />
@@ -67,6 +67,8 @@
 		<music path="powerUp2.ogg" id="powerUp2" />
 		<music path="titleScreen.ogg" id="titleScreen" />
 		<music path="twinkle.ogg" id="twinkle" />
+		<music path="theFieldOfDreams.ogg" id="dreams1" />
+		<music path="theFieldOfDreams2.ogg" id="dreams2" />
 	</assets>	
 	
 	<assets path="assets/sounds" rename="sounds" unless="flash" embed="true">
