@@ -57,8 +57,7 @@ class Dialog extends FlxSubState
 	{
 		super();
 		
-		if (Reg._F1KeyUsedFromMenuState == false)
-			Reg.state._playerAirRemainingTimer.active = false;
+		Reg.state._playerAirRemainingTimer.active = false;
 		
 		_buttonsNavigation = new ButtonsNavigation();		
 		add(_buttonsNavigation);

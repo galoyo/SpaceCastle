@@ -212,7 +212,7 @@ class EnemyChildClass extends FlxSprite
 			}
 		}
 	
-		// wait until the emitter is finished then set the mob at the top left cornet fo screen and hide it, to prepare it for a respawn.
+		// wait until the timer is finished then set the mob at the top left corner of screen and hide it, to prepare it for a respawn.
 		new FlxTimer().start(Reg._mobsDelayAfterDeath, onTimer, 1);
 	}
 	

@@ -162,7 +162,7 @@ class Mob_template extends EnemyChildClass
 		allowCollisions = FlxObject.ANY;
 		properties();
 		
-		_spawnTimeElapsed = 0;	// reset the spawn timer
+		_spawnTimeElapsed = 0;	// this is the amount of time that the mob cannot be hit by the player.
 		FlxSpriteUtil.flicker(this, Reg._mobResetFlicker, 0.02, true);
 	}	
 	

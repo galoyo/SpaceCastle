@@ -258,6 +258,7 @@ package;
 				_gunHudBox.value = Reg._gunHudBoxCollectedTriangles;			
 				_gunHudBox.power--; Reg._gunPower = _gunHudBox.power;
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletDown", 1, false);
+				
 				Reg._gunPowerIncreasedOrDecreased = true;
 			}	
 			// when power is zero, do not let the gun power collected value drop below zero.
@@ -281,6 +282,7 @@ package;
 					_gunHudBox.value = Reg._gunHudBoxCollectedTriangles;			
 					
 					if (Reg._soundEnabled == true) FlxG.sound.play("bulletUp", 1, false);
+					
 					Reg._gunPowerIncreasedOrDecreased = true;
 					_gunHudBox.valuePrefix = "";
 					_gunHudBox.showValue = true;

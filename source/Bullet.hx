@@ -108,33 +108,13 @@ class Bullet extends FlxSprite
 		_particleBulletMiss = particleBulletMiss;
 		_holdingUpKey = holdingUpKey;
 	
-		//#################### LOAD BULLET IMAGE AGAIN? ################
-		// only load a bullet graphics if...
-		if (  InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
-		   || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Gun."
-		   || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Gun.")
-		{
-			if (InputControls.up.pressed && Reg._currentKeyPressed != "up") 
-			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "up";}
-					
-			else if (InputControls.right.pressed && Reg._currentKeyPressed != "right") 
-			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "right";}
-			
-			else if (InputControls.down.pressed && Reg._currentKeyPressed != "down") 
-			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "down";}
-			
-			else if (InputControls.left.pressed && Reg._currentKeyPressed != "left") 
-			{Reg._gunPowerIncreasedOrDecreased = true; Reg._currentKeyPressed = "left";}
-		}
-		
 		if (Reg._gunPowerIncreasedOrDecreased == true)
 		{
 			loadNewBulletImage();	// load a different graphic depending on the value of reg._gunPower.
 			Reg._gunPowerIncreasedOrDecreased = false;				
-		} 	else if (Reg._currentKeyPressed != "") {loadNewBulletImage(); Reg._currentKeyPressed = "left";}
-		//################ END LOAD BULLET IMAGE AGAIN #################		
-
-		// if bullet exists and is moving to the left when set the distance the bullet can travel.
+		} 
+		
+		// set the distance the bullet can travel when shooting in the up direction.
 		if (_holdingUpKey == true)
 		{
 			if(Reg._antigravity == false)
