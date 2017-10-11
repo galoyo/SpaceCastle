@@ -1,4 +1,12 @@
 package;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircle;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileSquare;
+import flixel.addons.transition.TransitionData;
+import flixel.addons.transition.TransitionFade;
+import openfl.display.StageQuality;
+
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -9,8 +17,10 @@ import flixel.addons.tile.FlxTilemapExt;
 import flixel.addons.ui.FlxUIState;
 import flixel.effects.particles.FlxEmitter;
 import flixel.effects.particles.FlxParticle;
+import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.tweens.FlxTween;
@@ -212,24 +222,6 @@ class PlayState extends FlxUIState
 		//FlxG.worldDivisions = 1;
 		FlxG.worldBounds.set(); 
 		
-		// display the diamond transition effect before a map is displayed?
-		if (Reg._transitionEffectEnable == true)
-		{
-			// bad hack to load the initialize the transition.
-			if (Reg._transitionInitialized == false)
-			{
-				camera.visible = false;
-				FlxG.sound.volume = 0;
-				Transition.init();
-				FlxG.switchState(new PlayState());
-			} 
-			else
-			{
-				FlxG.sound.volume = 1;
-				camera.visible = true;
-			}
-		}
-		
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
 		{
 			var parallaxCar1 = new FlxBackdrop("assets/images/parallaxForest1.png", 0.4, 0, true, false, 0, 0);
@@ -250,9 +242,6 @@ class PlayState extends FlxUIState
 			Reg._dogExistsAtMap[i] = false;
 		}
 		Reg._dogIsVisible = true;
-		
-		// stop vertical lines on tilemap when player is in motion.
-		FlxG.camera.pixelPerfectRender = true; 
 		
 		// some music that is invalid need to be saved with the free program Audacity.
 		// music1.ogg must be in the music folder for this music to play.
@@ -418,21 +407,13 @@ class PlayState extends FlxUIState
 		add(_overlayAirBubble);		
 		add(_overlayPipe);		
 				
-		// ----------------------------------clouds and rain.		
-		var outside:Bool = displayClouds();
+		// ---------------------------------- rain.		
+		var outside:Bool = displayRain();
 		
 		// trap this because != does not work. this is for the parallax var scene.
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19) {}
 		else if (outside == true && Reg._inHouse == "")
 		{
-			foregroundImage = new FlxBackdrop("assets/images/parallaxclouds.png", 1.5, 0, true, false, 0, 0);
-			foregroundImage.velocity.x = 100;
-			#if !flash
-				foregroundImage.pixelPerfectRender = true;
-				foregroundImage.useScaleHack = true;
-			#end
-			add(foregroundImage);
-	
 			// we're going to have some rain or ash flakes drifting down at different 'levels'. We need a lot of them for the effect to work nicely
 			_rain = new FlxTypedGroup<ObjectRain>();
 			add(_rain);
@@ -461,7 +442,7 @@ class PlayState extends FlxUIState
 		_gunFreeze = new PlayerOverlayGunFreeze(Reg.state.player.x+15, Reg.state.player.y+21);
 		add(_gunFreeze);
 				
-		FlxG.camera.bgColor = 0xFF0000FF;		
+		FlxG.camera.bgColor = FlxColor.TRANSPARENT;	
 		setCamera();
 		
 		airLeftInLungsText = new FlxText();
@@ -511,7 +492,7 @@ class PlayState extends FlxUIState
 			else FlxG.sound.playMusic("dreams2", 1, false);
 		}
 	
-		else if (Reg._musicEnabled == true && Reg._transitionInitialized == true || Reg._musicEnabled == true && Reg._transitionEffectEnable == false) 
+		else if (Reg._musicEnabled == true) 
 		{
 			if (Reg.mapXcoords == 24 && Reg.mapYcoords >= 21 && Reg.mapYcoords <= 24 ) 
 			{
@@ -543,18 +524,23 @@ class PlayState extends FlxUIState
 		//if (Reg._dogExistsAtMap[4] == false) PlayStateAdd.addNpcDog(0, 0, player, 4);	
 		Reg._dogStopMoving = false;
 		
-		if (Reg._transitionEffectEnable == true) Transition.init();
-		
 		//##################### RECORDING CODE BLOCK ####################
 		// if you want to play the recorded demo then uncomment this block only after you have recording a demo located at the top of update() function at this file. if you uncomment this block then you need to comment the recording code block at the top of the update() function at this file.
 		if (Reg._playRecordedDemo == true)
 		{			
 			Reg._playRecordedDemo = false;
+			Reg._noTransitionEffectDemoPlaying = true;
 			
-			if (Reg._transitionInitialized == true) FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(),["ANY"],0,replayCallback);
-			else FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"),new PlayState(),["ANY"],0,replayCallback); 
+			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(),["ANY"],0,replayCallback);
+
 		}
 		//##################### END OF RECORDING CODE BLOCK ####################
+		
+		// display the diamond transition effect before a map is displayed?
+		if (Reg._transitionEffectEnable == true && Reg._noTransitionEffectDemoPlaying == false)
+		{
+			init();
+		}
 		
 		_buttonsNavigation = new ButtonsNavigation();	
 		add(_buttonsNavigation);
@@ -562,11 +548,11 @@ class PlayState extends FlxUIState
 		super.create();
 	}
 	
-	function displayClouds():Bool
+	function displayRain():Bool
 	{
-		var paragraph = Reg._displayCloudsCoords.split(",");
+		var paragraph = Reg._displayRainCoords.split(",");
 		
-		// loop through the paragraph array. if there is a match then do not display the clouds on the map.
+		// loop through the paragraph array. if there is a match then do not display the rain on the map.
 		for (i in 0...paragraph.length)
 		{	
 			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
@@ -662,7 +648,7 @@ class PlayState extends FlxUIState
 		// play another music if music is not player.
 		if (Reg._musicEnabled == true || Reg._powerUpStopFlicker == true)
 		{
-			if (FlxG.sound.music.playing == false && Reg._transitionInitialized == true || FlxG.sound.music.playing == false && Reg._transitionEffectEnable == false) 
+			if (FlxG.sound.music.playing == false) 
 			{
 				PlayStateMiscellaneous.playMusic();
 				
@@ -890,7 +876,6 @@ class PlayState extends FlxUIState
 			if (FlxG.keys.anyJustReleased(["M"])) // display main menu choices.
 			{ 
 				Reg.exitGameMenu = true;  
-				Reg._F1KeyUsedFromMenuState = false;
 				openSubState(new Dialog()); 				
 			}		
 		#end
@@ -1085,7 +1070,105 @@ class PlayState extends FlxUIState
 	public function mainMenuChoices():Void
 	{
 			Reg.exitGameMenu = true;  
-			Reg._F1KeyUsedFromMenuState = false;
 			openSubState(new Dialog()); 
+	}
+	
+	public static function init():Void
+	{
+		//If this is the first time we've run the program, we initialize the TransitionData
+		
+		//When we set the default static transIn/transOut values, on construction all 
+		//FlxTransitionableStates will use those values if their own transIn/transOut states are null
+		FlxTransitionableState.defaultTransIn = new TransitionData();
+		//FlxTransitionableState.defaultTransOut = new TransitionData();
+		
+		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		diamond.persist = true;
+		diamond.destroyOnNoUse = false;
+		
+		FlxTransitionableState.defaultTransIn.tileData = { asset:diamond, width:32, height:32 };
+		//FlxTransitionableState.defaultTransOut.tileData = { asset:diamond, width:32, height:32 };
+		
+		//Of course, this state has already been constructed, so we need to set a transOut value for it right now:
+		//transOut = FlxTransitionableState.defaultTransOut;
+
+		matchUI(false);
+	}
+	
+	public static function matchUI(matchData:Bool=true):Void
+	{
+		var in_duration:Float = 0.3; // draw speed.
+		var in_type:String = "tiles";
+		var in_tile:String = "diamond";
+		var in_tile_text:String = "diamond";
+		var in_color:FlxColor = FlxColor.BLACK;
+		var in_dir:String = "nw";
+		
+		/*var out_duration:Float = 1;
+		var out_type:String = "tiles";
+		var out_tile:String = "diamond";
+		var out_tile_text:String = "diamond";
+		var out_color:FlxColor = FlxColor.BLACK;
+		var out_dir:String = "se";
+		*/
+		FlxTransitionableState.defaultTransIn.color = in_color;
+		FlxTransitionableState.defaultTransIn.type = cast in_type;
+		setDirectionFromStr(in_dir, FlxTransitionableState.defaultTransIn.direction);
+		FlxTransitionableState.defaultTransIn.duration = in_duration;
+		FlxTransitionableState.defaultTransIn.tileData.asset = getDefaultAsset(in_tile);
+		/*
+		FlxTransitionableState.defaultTransOut.color = out_color;
+		FlxTransitionableState.defaultTransOut.type = cast out_type;
+		setDirectionFromStr(out_dir, FlxTransitionableState.defaultTransOut.direction);
+		FlxTransitionableState.defaultTransOut.duration = 1;
+		FlxTransitionableState.defaultTransOut.tileData.asset = getDefaultAsset(out_tile);
+		*/
+		
+	}
+	
+	public static function getDefaultAssetStr(c:FlxGraphic):String
+	{
+		return switch (c.assetsClass)
+		{
+			case GraphicTransTileCircle: "circle";
+			case GraphicTransTileSquare: "square";
+			case GraphicTransTileDiamond, _: "diamond";
+		}
+	}
+	
+	public static function getDefaultAsset(str):FlxGraphic
+	{
+		var graphicClass:Class<Dynamic> = switch (str)
+		{
+			case "circle": GraphicTransTileCircle;
+			case "square": GraphicTransTileSquare;
+			case "diamond", _: GraphicTransTileDiamond;
+		}
+		
+		var graphic:FlxGraphic = FlxGraphic.fromClass(cast graphicClass);
+		graphic.persist = true;
+		graphic.destroyOnNoUse = false;
+		return graphic;
+	}
+			
+	public static function setDirectionFromStr(str:String,p:FlxPoint=null):FlxPoint
+	{
+		if (p == null)
+		{
+			p = new FlxPoint();
+		}
+		switch (str)
+		{
+			case "n": p.set(0, -1);
+			case "s": p.set(0, 1);
+			case "w": p.set(-1, 0);
+			case "e": p.set(1, 0);
+			case "nw": p.set( -1, -1);
+			case "ne": p.set(1, -1);
+			case "sw":p.set( -1, 1);
+			case "se":p.set(1, 1);
+			default: p.set(0, 0);
+		}
+		return p;
 	}
 }

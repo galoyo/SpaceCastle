@@ -6,108 +6,128 @@ import flixel.math.FlxMath;
  * @author galoyo
  */
 
+//######################## NOTES ################################
+// change _gunPower back to 1;
+	
+// The invalid operation errors on Neko come from uninitialized variables (int, bool, float), since these are by default null on Neko. to fix do this, var test:int = 0; the 0 initializes the variables.
+//###############################################################
+
 class Reg
 {
-	// change _gunPower back to 1;
-	
-	// The invalid operation errors on Neko come from uninitialized variables (int, bool, float), since these are by default null on Neko. to fix do this, var test:int = 0; the 0 initializes the variables.
-	
+
 	//########################################################################
 	// these vars will NOT get saved by saving the game when playing the game.
 	//########################################################################
 	
-	//if a map is within this var then the clouds will be displayed on that map.
-	public static var _displayCloudsCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
+	/**
+	* if a map is within this var then the rain will be displayed on that map.
+	*/
+	public static var _displayRainCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
-	// vars for the button navigation.
-	public static var _testItems:Bool = false; // if true, the Test-Items map will be displayed. this map is used to test the game features. 
+	/**
+	* if set to true then the Test-Items.map will be displayed. That map is used to test the game features. mapXcoords and mapYcoords vars do not need to be changed when setting this var to true.
+	*/
+	public static var _testItems:Bool = false; 
 	
-	public static var _framerate:Int = 120; // How many frames per second the game should run at.
+	/**
+	* How many frames per second the game should update.
+	*/
+	public static var _framerate:Int = 120;
 	
-	public static var _ignoreIfMusicPlaying:Bool = false; // used to stop demo from playing when the music is stopped because the user pressed a key to open a substate.
+	/**
+	 * Size of the bullet that objects and mobs use. Currently only two types of bullets are in use. 0 = large, and a value of 1 or 2 refers to a small bullet.
+	 */
+	public static var _bulletSize:Int = 0;
 	
-	public static var _bulletSize:Int = 0; // 0 = large. 1 = medium. 2 = small.
+	/**
+	 * used to determine if player is walking or using the car. See map 23-19.
+	 */
+	public static var _playerInsideCar:Bool = false;
 	
-	public static var _playerInsideCar:Bool = false; // used to determine if player is walking or riding to the castle.
+	/**
+	 * used to determine what direction the car is moving in. If true then the car is moving east, else moving west.
+	 */
+	public static var _carMovingEast:Bool = true;
 	
-	public static var _carMovingEast:Bool = true; // used to determine what direction the car is moving in. If true then the car is moving east, else moving west.
-	
-	public static var _stopDreamsMusic:Bool = false; // do not know how to stop a particular music from playing so this is used instead of some code.
-		
-	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; // there are four cartoon backgrounds for the maps and four star backgrounds. those one image set from each two sets of background can display on a map but not at the same time. if this var is set to 10, then for 0 to 10 times the playstate.hx is loaded a cartoon background will display at a map while 11 to 20 times loaded will display a star background at a map. 
-	public static var _changeToDayOrNightBgsAtPageLoadTicks:Int = 0; // do NOT change this var. each time playstate.hx is loaded this var is increased. when it reaches the value of _changeToDayOrNightBgsAtPageLoad then the background umage set will change.
-	
-	public static var _deathWhenReachedZeroCurrent:Int = 400; // used in the castle waiting room for a player death countdown. if player has not left the castle within this time then the player will die. 
-	public static var _deathWhenReachedZero:Int = 400;
-	
-	public static var _lastArrowKeyPressed:String = ""; // mainly used to remember the last direction of the player in the pipe so that the player can continue in the pipe when the pipe extends two or more maps.
-		
-	public static var _playerAirIsDecreasing:Bool = true; // player is in water if true so don't start air timer the second time.
-	public static var _playerAirLeftInLungsMaximum:Int = 100; // how much maximum air the player has.
-	public static var _playerAirLeftInLungsCurrent:Int = 100; // how much current air the player has.
-	public static var _playerAirLeftInLungs:Int = 100; // used with the air timer to display the air remaining text.
-		
-	public static var _F1KeyUsedFromMenuState:Bool = false; // if true then at dialog.hx, quit the game.
-	public static var _isFallDamage:Bool = false; // this is used for fall damage when invisiblity mode by getting a star from a mob is the result. falling will always give damage to the player regardless if player has star powerup.
-	
-	// used to stop the players flicker. if true then at the next music stop, the players flicker will also stop.
-	public static var _powerUpStopFlicker:Bool = false;
-	
-	// used to stop some classes from updating;
-	public static var _update:Bool = true;
-	
-	public static var _gravityOnSlopes:Int = 100000; // gravity on slopes.
-	
-	public static var _transitionEffectEnable:Bool = false; // enable the transition diamond effects that is seen just before a map is displayed. 
-	
-	public static var _transitionInitialized:Bool = false; // used to display the diamond effects. they appear and disappear before the map is displayed.
-	
-	// this var holds the current parent playstate.hx. DO NOT change the name of this var.
-	public static var state:PlayState;	
-	
-	public static var _currentKeyPressed:String = ""; // used to slow the reloading of the bullet image.
-	
-	public static var _playerGravitySetToZero:Bool = false; // this var is true then standing on a mob that is frozon.
-		
-	public static var _mobIsFrozenFor:Int = 0; // how many ticks is the mob frozen for? increase value to increase the length of time the mob stays frozen.
-	
-	// the number of total coins in a level. each coin collected will minus 1 from this total.
-	public static var diamondsRemaining:Int = 0;	
-	
-	public static var _playRecordedDemo:Bool = false;
-	
-	public static var _justTouched:Bool = false;
-	
-	// how fast the player moves within the pipes.
-	public static var _pipeVelocityX:Float = 1200;
-	public static var _pipeVelocityY:Float = 1200;
-	
-	// these are the dialog body text with information about the iten picked up and the icon file name.
-	public static var dialogIconText:Array<String>;
-	public static var dialogIconFilename:String = "";
-	public static var dialogCharacterTalk:Array<String> = [
-	"", "", ""
-	];
-	
-	public static var _blockDisappearingDelay:Float = 10; // delay in ticks.
+	/**
+	 * there are four cartoon backgrounds for the maps and four star backgrounds. When this var is set to 10, then for 0 to 10 times that the player goes to a map the playstate.hx will load a cartoon background, and at 11 to 20 times a map is load a star background will be displayed. 
+	 */
+	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; 	
 
-	// when dead, mobs rotate and fall tot he ground. this is the seconds used to set mobs x and y to 0 and to make them not visable.	
+	/**
+	 * used in the castle waiting room for a player death countdown. if player has not left the castle within this time then its game over. See map-24-25.tmx at /assets/data/
+	 */
+	public static var _deathWhenReachedZeroCurrent:Int = 400; 
+	public static var _deathWhenReachedZero:Int = 400;	// this vars value should be the same as above.
+	
+	/**
+	 * mainly used to remember the last direction of the player in the pipe so that the player can continue in the pipe when the pipe extends two or more maps.
+	 */
+	public static var _lastArrowKeyPressed:String = "";
+		
+	//------------------
+	// The following three vars should have the same values. 
+	/**
+	 * how much maximum air the player can have in lungs.
+	 */
+	public static var _playerAirLeftInLungsMaximum:Int = 100;
+	/**
+	 * how much current air the player has left in lungs.
+	 */
+	public static var _playerAirLeftInLungsCurrent:Int = 100;
+	/**
+	 * used with the air timer to display the air remaining text. value must be the same as the two values above.
+	 */
+	public static var _playerAirLeftInLungs:Int = 100;
+	//------------------
+	
+	/**
+	 * before a map is shown, a black screen is displayed in front of the map where the player is at. moving from the bottom-right corner to the top-left corner is small diamond shapes that appear. those diamond shape is part of the map where the player is at. this var nust be enabled to display the transition diamond effect for each map. 
+	 */	
+	public static var _transitionEffectEnable:Bool = true;
+
+	/**
+	 * how many ticks the mob frozen for. increase value to increase the length of time the mob stays frozen. 0 = 1.33 seconds. 40 = 2 seconds. 100 = 3 seconds. Do not use a negative value.
+	 */		
+	public static var _mobIsFrozenFor:Int = 0;
+
+	//------------------------
+	/**
+	 * how fast the player moves within the pipes horizontally.
+	 */
+	public static var _pipeVelocityX:Float = 1200;
+	/**
+	 * how fast the player moves within the pipes vertically.
+	 */	
+	public static var _pipeVelocityY:Float = 1200;
+	//------------------------
+	
+	/**
+	 * The tick amount to delay the disappearing block from displaying on screen. delay in ticks. 60 = 1 second. 40 ticks is added on to this value.
+	 */
+	public static var _blockDisappearingDelay:Float = 10;
+
+	// // This var is used to delay a respawn. wait until the timer is finished then set the mob at the top left corner of screen and hide it to prepare it for a respawn. this is the seconds used to set mobs x and y coords to 0 and then set the mob as not visable.	
 	public static var _mobsDelayAfterDeath = 1;
 	
-	// triangles collected increases gun power but cannot go beyond this value.
+	//------------------------
+	//The following two gunhud values must be the same.
+	/**
+	 * triangles collected increases gun power but cannot go beyond this value.
+	 */
 	public static var _gunHudBoxMaximumTriangles:Float = 10;
-	
+	/**
+	 * How many triangles need to be collected before the next powerup occurs.
+	 */
 	public static var _gunHudBoxCollectedTrianglesIncreaseBy:Int = 10;
+	//------------------------
+
 	
-	public static var _gunHudBoxDisplayMaximumText:Bool = false;
-	
-	// used to only load a bullet image once every time a gun power up or down or every time an arrow key is pressed.
-	public static var _gunPowerIncreasedOrDecreased:Bool = false;
 	
 	// seconds the mob flickers when hit.
 	public static var _mobHitFlicker:Float = 0.4;
 	
-	// when the mob dies and then respawns.
+	// When the mob respawned, this is the amount of time that the mob cannot be hit by the player.
 	public static var _mobResetFlicker:Float = 0.4;
 	
 	public static var _spawnTime:Float = 1.2;
@@ -198,6 +218,102 @@ class Reg
 	
 	public static var _buttonsNavigationUpdate:Bool = false; // used to update X and C buttons at playstate.hx once only when inventory menu is closed.
 	
+	//##################################################################
+	//############## These vars value must NOT be changed. #############
+	//##################################################################
+	
+	/**
+	* DO NOT change the value of this var. It is used to determine if a substate should be displayed or if a demo should be played. Removing this var from all code will result in the demo playing when a substate at main menu is displayed.
+	*/
+	public static var _ignoreIfMusicPlaying:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Used to stop a particular music from playing. This "dream" music is played only at the parallax car scene. This var makes that happen.
+	 */
+	public static var _stopDreamsMusic:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. each time playstate.hx is loaded this var is increased. when it reaches the value of Reg._changeToDayOrNightBgsAtPageLoad then the background image will change from cartoon to stars and then back again.
+	 */
+	public static var _changeToDayOrNightBgsAtPageLoadTicks:Int = 0;
+	
+	/**
+	 * Do NOT change the value of this var. Player is in water and the player's air is decreasing. This var is used to remember that state.
+	 */
+	public static var _playerAirIsDecreasing:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. When player picks up a star powerup, player will not take damage from mobs but will still take damage when fallimg from a great distance. This var is used to take health away but only once per fall.
+	 */
+	public static var _isFallDamage:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. used to stop the player's flicker. if true then the player's flicker will stop when the powerup music stops playing.
+	 */
+	public static var _powerUpStopFlicker:Bool = false;	
+		
+	/**
+	 * Do NOT change the value of this var. When set to false this var can be used to stop a function or code block from updating. see Hud.hx for an example about how it is used in a function. without this var at Hud.hx, when playomg the game, the Map coords at the top right corner will display the next map value just before loading that map. An undesired result.
+	 */
+	public static var _update:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. Without this var, the player jumps down instead of walking down the tiled slope. This high value stops that from happening. Instead the player will seem to walk down the slope because of a high gravity.
+	 */
+	public static var _gravityOnSlopes:Int = 100000;
+	
+	/**
+	 * Do NOT change the value of this var. When value is true at playState.hx, this var is used to disable the transition effect when the recorded demo is playing. recorded demos will be broken when played more than once if the transition effect is allowed to plays with the demos. at menuState, a demo will be played when the introduction music ends.
+	 */
+	public static var _noTransitionEffectDemoPlaying = false;
+		
+	/**
+	 * Do NOT change the value of this var. this var holds the parent state. If a class is public at playState.hx then it can be accessed at playState.hx using the code "Reg.state." then select the public class from the popup box.
+	 */
+	public static var state:PlayState;	
+	
+	/**
+	 * Do NOT change the value of this var. the value of this var will be true then player us standing on a frozon mob. The mob can be frozen with the freeze gun.
+	 */
+	public static var _playerGravitySetToZero:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. the number of total diamonds at a map. This var is initialized for neko builds. The value is determined at playStateAdd.hx.
+	 */ 
+	public static var diamondsRemaining:Int = 0;
+		
+	/**
+	 * Do NOT change the value of this var. This var will be true if user has not pressed a key/button before music stops at menuState. the recorded demo will play when the introduction music stops at MenuState.hx.
+	 */
+	public static var _playRecordedDemo:Bool = false;
+	
+	//---------------------
+	/**
+	 * Do NOT change the value of this var. The message displayed after player picks up an item or when talking to an NPC.
+	 */
+	public static var dialogIconText:Array<String>;
+	/**
+	 * Do NOT change the value of this var. This is the image filename of the item that the player picked up. The image is displayed at the dialog.
+	 */
+	public static var dialogIconFilename:String = "";
+	
+	/**
+	 * Do NOT change the value of this var. This is the image filename of a NPC or player currently talking at the Dialog.hx. The image is displayed at the dialog. search for "boss1B-ID1-Map12-19C.txt" at Boss1.hx for an example about how to use this var.
+	 */
+	public static var dialogCharacterTalk:Array<String> = [
+	"", "", ""
+	];
+	//---------------------
+	
+	/**
+	 * Do NOT change the value of this var. This var will be true when the maximum amount of triangles are collected. The word "Maximum" at the gun hudBox will then be seen.
+	 */
+	public static var _gunHudBoxDisplayMaximumText:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Triangle collected increase gun power when the maximum amount of triangles collected for that power-up level is reached. The collected triangles decrease when player is hit. this var is used to load a new bullet image when gun power increases or decreases in level.
+	 */
+	public static var _gunPowerIncreasedOrDecreased:Bool = false;
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
@@ -208,7 +324,7 @@ class Reg
 	
 	public static var _nuggets:Int = 0;
 	
-	public static var _playerFallDamage:Bool = true; // should the player take fall damage when falling to the ground beyond the tile limit?
+	public static var _playerFallDamage:Bool = true; // If true then the player well take fall damage when falling to the ground beyond the tile fall limit.
 	
 	public static var _differcuityLevel:Int = 2; // how easy will the mobs be to defeat. 1:easy, 2:normal, 3:hard
 	

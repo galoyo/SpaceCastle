@@ -544,14 +544,12 @@ class Player extends FlxSprite
 			{
 				Reg._antigravity = true;
 				Reg._playersYLastOnTile = y;
-				Reg._currentKeyPressed = "NULL";
 			}
 			
 			else if(inAir == false && Reg._antigravity == true)
 			{
 				Reg._antigravity = false;
 				Reg._playersYLastOnTile = y;
-				Reg._currentKeyPressed = "NULL";
 			}
 		}
 		
@@ -632,13 +630,12 @@ class Player extends FlxSprite
 				if(_mobIsSwimming == false)
 				{
 					// fire the bullet in the direction of up or down depending if antigravity is used or not.
-					if (Reg._antigravity == true && InputControls.down.justPressed || Reg._antigravity == false && InputControls.up.justPressed)
+					if (Reg._antigravity == true && InputControls.down.pressed || Reg._antigravity == false && InputControls.up.pressed)
 					{
 						holdingUpKey = true; 
 						shoot(holdingUpKey); 						
 					}	
-					else if (Reg._antigravity == true|| Reg._antigravity == false
-					|| Reg._antigravity == true || Reg._antigravity == false)
+					else 
 					{
 						holdingUpKey = false;  
 						shoot(holdingUpKey);
@@ -1035,7 +1032,7 @@ class Player extends FlxSprite
 	
 	override public function hurt(damage:Float):Void 
 	{
-		if (FlxSpriteUtil.isFlickering(this) == false && Reg._playerInsideCar == false || Reg._isFallDamage == true || Reg.state._objectCar != null && FlxSpriteUtil.isFlickering(Reg.state._objectCar) == false && Reg._playerInsideCar == true)
+		if (FlxSpriteUtil.isFlickering(this) == false && Reg._playerInsideCar == false || Reg._playerFallDamage == true && Reg._isFallDamage == true || Reg.state._objectCar != null && FlxSpriteUtil.isFlickering(Reg.state._objectCar) == false && Reg._playerInsideCar == true)
 		{
 			if (damage > 0)
 			{

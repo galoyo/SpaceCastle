@@ -50,7 +50,6 @@ class PlayerOverlayGunFlame extends FlxSprite
 				Reg.state._gun.visible = false;
 				Reg.state._gunFlame.visible = true; 
 				Reg.state._gunFreeze.visible = false; 
-				Reg._currentKeyPressed = "NULL";
 				visible = true;
 				Reg._playerCanShoot = false;
 				ticks = 0;
