@@ -212,12 +212,6 @@ class EnemyChildClass extends FlxSprite
 			}
 		}
 	
-		// wait until the timer is finished then set the mob at the top left corner of screen and hide it, to prepare it for a respawn.
-		new FlxTimer().start(Reg._mobsDelayAfterDeath, onTimer, 1);
-	}
-	
-	private function onTimer(Timer:FlxTimer):Void
-	{	
 		allowCollisions = FlxObject.NONE;
 		
 		alive = false;			// set the mob as not alive then it can be rotated at death.
@@ -241,7 +235,7 @@ class EnemyChildClass extends FlxSprite
 	{
 	//	if (FlxSpriteUtil.isFlickering(this) == false)
 	//	{
-		if (Reg._playerCanShootOrMove == true)
+		if (Reg._playerCanShootAndMove == true)
 		{
 			if (damage > 0)
 			{

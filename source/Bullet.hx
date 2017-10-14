@@ -23,7 +23,20 @@ class Bullet extends FlxSprite
 	
 	private var _holdingUpKey:Bool = false;
 	
-	public function loadNewBulletImage():Void
+	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
+	{		
+		super();
+		
+		_particleBulletHit = particleBulletHit;	
+		_particleBulletMiss = particleBulletMiss;
+		
+		// load a different graphic depending on the value of reg._gunPower.
+		loadNewBulletImage();
+			
+		exists = false; // we don't want this to exist yet.				
+	}
+	
+	private function loadNewBulletImage():Void
 	{
 		if(Reg._typeOfGunCurrentlyUsed == 2)
 			loadGraphic("assets/images/bulletFreeze.png", false, 16, 16);
@@ -38,24 +51,14 @@ class Bullet extends FlxSprite
 		}
 	}
 	
-	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
-	{		
-		super();
-		
-		_particleBulletHit = particleBulletHit;	
-		_particleBulletMiss = particleBulletMiss;
-		
-		// load a different graphic depending on the value of reg._gunPower.
-		loadNewBulletImage();
-			
-		exists = false; // we don't want this to exist yet.				
-	}
-	
+
 	override public function update(elapsed:Float):Void 
 	{
 		// if bullet exists.
 		if (this != null)
 		{
+			loadNewBulletImage();
+			
 			// when the bullet is at the distance of the _bullterStar, emit the _particleBulletHit so that the _bulletStar animation can be seen. Then destroy the animation.
 			if (Reg._typeOfGunCurrentlyUsed == 0)
 			{
@@ -102,18 +105,12 @@ class Bullet extends FlxSprite
 	
 	public function shoot(x:Int, y:Int, velocityX:Int, velocityY:Int, holdingUpKey:Bool, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter):Void
 	{
-		if (Reg._playerCanShootOrMove == false) return;
+		if (Reg._playerCanShootAndMove == false) return;
 		
 		_particleBulletHit = particleBulletHit;
 		_particleBulletMiss = particleBulletMiss;
 		_holdingUpKey = holdingUpKey;
 	
-		if (Reg._gunPowerIncreasedOrDecreased == true)
-		{
-			loadNewBulletImage();	// load a different graphic depending on the value of reg._gunPower.
-			Reg._gunPowerIncreasedOrDecreased = false;				
-		} 
-		
 		// set the distance the bullet can travel when shooting in the up direction.
 		if (_holdingUpKey == true)
 		{

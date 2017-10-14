@@ -123,24 +123,24 @@ class MobBubble extends EnemyChildClass
 					x+6, 
 					y+6,
 					36, 0,
-					true, Reg.fireballRandom, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut});
+					true, Reg.fireballSpeed, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut});
 					
 					_tween2 = FlxTween.circularMotion(Reg.state._defenseMobFireball2,
 					x+6, 
 					y+6,
 					36, 90,
-					false, Reg.fireballRandom, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut });
+					false, Reg.fireballSpeed, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut });
 					
 					_tween3 = FlxTween.circularMotion(Reg.state._defenseMobFireball3,
 					x+6, 
 					y+6,
 					36, 180,
-					true, Reg.fireballRandom, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut});
+					true, Reg.fireballSpeed, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut});
 					_tween4 = FlxTween.circularMotion(Reg.state._defenseMobFireball4,
 					x+6, 
 					y+6,
 					36, 270,
-					false, Reg.fireballRandom, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut });
+					false, Reg.fireballSpeed, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut });
 				
 					ticksTween = 1;
 					ra = FlxG.random.int(0, 2);
@@ -361,7 +361,7 @@ class MobBubble extends EnemyChildClass
 
 	override public function kill():Void 
 	{
-		Reg._playerCanShootOrMove = false;
+		Reg._playerCanShootAndMove = false;
 		
 		super.kill();
 		new FlxTimer().start(0.50, PlayStateMiscellaneous.winState, 1);		

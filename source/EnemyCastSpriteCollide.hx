@@ -196,17 +196,16 @@ class EnemyCastSpriteCollide {
 			// if mob is above player and they both collide...
 			else if (Reg._antigravity == false && p.y > e.y || Reg._antigravity == true && p.y < e.y)
 			{
-				// the player's health is decreased by 1.
-				Reg._gunHudBoxCollectedTriangles--;
-				Reg.state.hud.decreaseGunPowerCollected();
-				
-				if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
-				else p.velocity.x = -600;
+				//if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
+				//else p.velocity.x = -600;
 				
 				// different hurt values depending on which mob hit player.
-				if (Std.is(e, MobSaw)) p.hurt(4);
-				else if (e.alpha == 1) p.hurt(1);
-			
+				if (FlxSpriteUtil.isFlickering(e) == false)
+				{
+					if (Std.is(e, MobSaw)) p.hurt(4);
+					else if (e.alpha == 1) p.hurt(1);
+				}
+				
 				// if mob is above player at hits in an top-right angle then push player to the left side.
 				if (e.x - p.x > 10)
 					p.velocity.x = -600;
@@ -257,12 +256,14 @@ class EnemyCastSpriteCollide {
 			// if player is standing on tile.
 			else
 			{
-				Reg._gunHudBoxCollectedTriangles--;
-				Reg.state.hud.decreaseGunPowerCollected();
-				if(e.alpha == 1) p.hurt(1);
+				if (FlxSpriteUtil.isFlickering(e) == false)
+				{
+					if (Std.is(e, MobSaw)) p.hurt(4);
+					else if (e.alpha == 1) p.hurt(1);
+				}
 					
-				if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
-				else p.velocity.x = -600;
+				//if (p.facing == FlxObject.LEFT) p.velocity.x = 600;
+				//else p.velocity.x = -600;
 				
 				return;
 			}	

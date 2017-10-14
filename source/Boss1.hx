@@ -288,7 +288,7 @@ class Boss1 extends EnemyChildClass
 				acceleration.x = 0;
 				acceleration.y = 5000;
 				allowCollisions = FlxObject.FLOOR;
-				Reg._playerCanShootOrMove = false;		
+				Reg._playerCanShootAndMove = false;		
 				_bulletFormationNumber = -1; // do not fire bullet when mob is defeated.
 				
 				if(Reg.mapXcoords == 17 && Reg.mapYcoords == 22)	
@@ -358,7 +358,7 @@ class Boss1 extends EnemyChildClass
 						}		
 					}					
 					
-					Reg._playerCanShootOrMove = true;	
+					Reg._playerCanShootAndMove = true;	
 					Reg._playerHasTalkedToThisMob = false;
 					
 					PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
@@ -401,7 +401,7 @@ class Boss1 extends EnemyChildClass
 						Reg.state._defenseMobFireball3.visible = false;
 						Reg.state._defenseMobFireball4.visible = false;
 						
-						Reg._playerCanShootOrMove = true;
+						Reg._playerCanShootAndMove = true;
 						Reg._playerHasTalkedToThisMob = false;
 						
 						PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
