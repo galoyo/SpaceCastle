@@ -51,7 +51,7 @@ class OverlayPipeChildClass extends FlxSprite
 		Reg._playersYLastOnTile = p.y; // no fall damage when exiting pipe from the bottom.
 		Reg.state._ticksTrackerDown = 0; // no tracker when leaving pipes.
 		Reg.state._ticksTrackerUp = 0;
-		Reg._arrowKeyInUseTicks = 0; // no gulde lines displayed when leaving a pipe.
+		Reg._guildlineInUseTicks = 0; // no gulde lines displayed when leaving a pipe.
 		
 		if (p._setPlayerOffset == false) 
 		{

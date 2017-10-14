@@ -233,7 +233,7 @@ class PlayStateTouchObjects
 			if (Reg._antigravity == false) p.animation.play("walkOnLadder");
 				else p.animation.play("walkOnLadder2");
 				
-			Reg._arrowKeyInUseTicks = 0;
+			Reg._guildlineInUseTicks = 0;
 		}
 		else if (InputControls.down.pressed) 
 		{
@@ -247,7 +247,7 @@ class PlayStateTouchObjects
 			if (Reg._antigravity == false) p.animation.play("walkOnLadder");
 				else p.animation.play("walkOnLadder2");
 				
-			Reg._arrowKeyInUseTicks = 0;
+			Reg._guildlineInUseTicks = 0;
 		}
 		else { p.velocity.y = 0; p.acceleration.y = 0; }
 		
@@ -420,7 +420,7 @@ class PlayStateTouchObjects
 	 */
 	public static function tilemapPlayerCollide(t:FlxTilemap, p:Player):Void
 	{
-		if (p.justTouched(FlxObject.FLOOR)) Reg._arrowKeyInUseTicks = 0; 
+		if (p.justTouched(FlxObject.FLOOR)) Reg._guildlineInUseTicks = 0; 
 		
 		if (Reg._antigravity == true && p.isTouching(FlxObject.FLOOR) && Reg.state._touchingSuperBlock == false || Reg._antigravity == false && p.isTouching(FlxObject.CEILING) && Reg.state._touchingSuperBlock == false)
 		{

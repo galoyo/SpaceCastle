@@ -350,7 +350,7 @@ class PlayStateAdd
 		
 			Reg.state.enemies.add(Reg.state.mobBubble);		
 			
-			Reg.fireballRandom = FlxG.random.float( 0.90, 1.10);
+			Reg.fireballSpeed = FlxG.random.float( 0.90, 1.10);
 			
 			Reg.state._defenseMobFireball1 = new DefenseMobFireball(0,0);
 			Reg.state.add(Reg.state._defenseMobFireball1);
@@ -812,7 +812,7 @@ class PlayStateAdd
 		Reg.state._objectFireballBlock.add(new ObjectFireballBlock(X, Y));
 		Reg.state.add(Reg.state._objectFireballBlock);	
 		
-		Reg.fireballRandom = FlxG.random.float( 0.95, 1.15);
+		Reg.fireballSpeed = FlxG.random.float( 0.95, 1.15);
 		Reg.state._fireballPositionInDegrees = 359;			
 		
 		// add the four different fireball sprites at the fireball block.

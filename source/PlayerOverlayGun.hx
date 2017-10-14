@@ -51,7 +51,7 @@ class PlayerOverlayGun extends FlxSprite
 				Reg.state._gun.visible = true;
 				Reg.state._gunFlame.visible = false; 
 				Reg.state._gunFreeze.visible = false; 
-				Reg._playerCanShootOrMove = false; 
+				Reg._playerCanShootAndMove = false; 
 				ticks = 0;
 			} 
 		}

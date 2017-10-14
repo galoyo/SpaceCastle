@@ -20,12 +20,12 @@ class Reg
 	//########################################################################
 	
 	/**
-	* if a map is within this var then the rain will be displayed on that map.
+	* If a map is within this var then the rain will be displayed on that map.
 	*/
 	public static var _displayRainCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
 	/**
-	* if set to true then the Test-Items.map will be displayed. That map is used to test the game features. mapXcoords and mapYcoords vars do not need to be changed when setting this var to true.
+	* If set to true then the Test-Items.map will be displayed. That map is used to test the game features. mapXcoords and mapYcoords vars do not need to be changed when setting this var to true.
 	*/
 	public static var _testItems:Bool = false; 
 	
@@ -40,28 +40,28 @@ class Reg
 	public static var _bulletSize:Int = 0;
 	
 	/**
-	 * used to determine if player is walking or using the car. See map 23-19.
+	 * Used to determine if player is walking or using the car. See map 23-19.
 	 */
 	public static var _playerInsideCar:Bool = false;
 	
 	/**
-	 * used to determine what direction the car is moving in. If true then the car is moving east, else moving west.
+	 * Used to determine what direction the car is moving in. If true then the car is moving east, else moving west.
 	 */
 	public static var _carMovingEast:Bool = true;
 	
 	/**
-	 * there are four cartoon backgrounds for the maps and four star backgrounds. When this var is set to 10, then for 0 to 10 times that the player goes to a map the playstate.hx will load a cartoon background, and at 11 to 20 times a map is load a star background will be displayed. 
+	 * There are four cartoon backgrounds for the maps and four star backgrounds. When this var is set to 10, then for 0 to 10 times that the player goes to a map the playstate.hx will load a cartoon background, and at 11 to 20 times a map is load a star background will be displayed. 
 	 */
 	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; 	
 
 	/**
-	 * used in the castle waiting room for a player death countdown. if player has not left the castle within this time then its game over. See map-24-25.tmx at /assets/data/
+	 * Used in the castle waiting room for a player death countdown. If player has not left the castle within this time then its game over. See map-24-25.tmx at /assets/data/
 	 */
 	public static var _deathWhenReachedZeroCurrent:Int = 400; 
-	public static var _deathWhenReachedZero:Int = 400;	// this vars value should be the same as above.
+	public static var _deathWhenReachedZero:Int = 400;	// This vars value should be the same as above.
 	
 	/**
-	 * mainly used to remember the last direction of the player in the pipe so that the player can continue in the pipe when the pipe extends two or more maps.
+	 * Mainly used to remember the last direction of the player in the pipe so that the player can continue in the pipe when the pipe extends two or more maps.
 	 */
 	public static var _lastArrowKeyPressed:String = "";
 		
@@ -72,48 +72,45 @@ class Reg
 	 */
 	public static var _playerAirLeftInLungsMaximum:Int = 100;
 	/**
-	 * how much current air the player has left in lungs.
+	 * How much current air the player has left in lungs.
 	 */
 	public static var _playerAirLeftInLungsCurrent:Int = 100;
 	/**
-	 * used with the air timer to display the air remaining text. value must be the same as the two values above.
+	 * Uued with the air timer to display the air remaining text. Value must be the same as the two values above.
 	 */
 	public static var _playerAirLeftInLungs:Int = 100;
 	//------------------
 	
 	/**
-	 * before a map is shown, a black screen is displayed in front of the map where the player is at. moving from the bottom-right corner to the top-left corner is small diamond shapes that appear. those diamond shape is part of the map where the player is at. this var nust be enabled to display the transition diamond effect for each map. 
+	 * Before a map is shown, a black screen is displayed in front of the map where the player is at. Moving from the bottom-right corner to the top-left corner is small diamond shapes that appear. Those diamond shape is part of the map where the player is at. This var nust be enabled to display the transition diamond effect for each map. 
 	 */	
 	public static var _transitionEffectEnable:Bool = true;
 
 	/**
-	 * how many ticks the mob frozen for. increase value to increase the length of time the mob stays frozen. 0 = 1.33 seconds. 40 = 2 seconds. 100 = 3 seconds. Do not use a negative value.
+	 * How many ticks the mob frozen for. increase value to increase the length of time the mob stays frozen. 0 = 1.33 seconds. 40 = 2 seconds. 100 = 3 seconds. Do not use a negative value.
 	 */		
 	public static var _mobIsFrozenFor:Int = 0;
 
 	//------------------------
 	/**
-	 * how fast the player moves within the pipes horizontally.
+	 * How fast the player moves within the pipes horizontally.
 	 */
 	public static var _pipeVelocityX:Float = 1200;
 	/**
-	 * how fast the player moves within the pipes vertically.
+	 * How fast the player moves within the pipes vertically.
 	 */	
 	public static var _pipeVelocityY:Float = 1200;
 	//------------------------
 	
 	/**
-	 * The tick amount to delay the disappearing block from displaying on screen. delay in ticks. 60 = 1 second. 40 ticks is added on to this value.
+	 * The tick amount to delay the disappearing block from displaying on screen. Delay in ticks. 60 = 1 second. 40 ticks is added on to this value.
 	 */
 	public static var _blockDisappearingDelay:Float = 10;
 
-	// // This var is used to delay a respawn. wait until the timer is finished then set the mob at the top left corner of screen and hide it to prepare it for a respawn. this is the seconds used to set mobs x and y coords to 0 and then set the mob as not visable.	
-	public static var _mobsDelayAfterDeath = 1;
-	
 	//------------------------
 	//The following two gunhud values must be the same.
 	/**
-	 * triangles collected increases gun power but cannot go beyond this value.
+	 * Triangles collected increases gun power but cannot go beyond this value.
 	 */
 	public static var _gunHudBoxMaximumTriangles:Float = 10;
 	/**
@@ -122,69 +119,73 @@ class Reg
 	public static var _gunHudBoxCollectedTrianglesIncreaseBy:Int = 10;
 	//------------------------
 
-	
-	
-	// seconds the mob flickers when hit.
+	/**
+	 * Seconds the mob flickers after hit. The mob cannot receive damage When flickering.
+	 */
 	public static var _mobHitFlicker:Float = 0.4;
 	
-	// When the mob respawned, this is the amount of time that the mob cannot be hit by the player.
+	/**
+	 * After a respawn, the amount of time that the mob cannot be hit by the player.
+	 */
 	public static var _mobResetFlicker:Float = 0.4;
 	
-	public static var _spawnTime:Float = 1.2;
+	/**
+	 * A monster, after defeated, will reappear at this value in seconds.
+	 */
+	public static var _spawnTime:Float = 3.2;	
 	
-	public static var _tileSize:Int = 32;
-	
-	// this is the speed the mon rotates at death.
+	/**
+	 * A monster will not move when its health is zero. Therefore, before a respawn, this is the amount in degrees that the monster will rotate around its center point.
+	 */
 	public static var _angleDefault:Float = 10;
 	
+	/**
+	 * A monster will drop an item, such as, a triangle, diamond, nugget, or health when this time in seconds is reached.
+	 */
 	public static var _mobDropItemDelay:Float = 0.07;
+
+	/**
+	 * Fireball that revolves around an object. Duration of movement in seconds. Good values are about 0.08 to 0.15
+	 */ 
+	public static var fireballSpeed:Float = 0.10;
 	
-	// used to position the player on the map. if true then the player will be displayed at the save point.
-	public static var restoreGameState:Bool = false;
-	
-	public static var displayDialogYesNo:Bool = false;
-	
-	public static var facingDirectionRight:Bool = true;
-	
-	public static var _dialogAnsweredYes:Bool = false;
-	public static var _dialogYesNoWasAnswered:Bool = false;
-	
-	// random value used for the speed of the fireball sprites.
-	public static var fireballRandom:Float = 0.10;
-	
-	// the amount of delay when a mob is moving in the water. this value divides the velocity.
+	/**
+	 * How much slower will the player/monster be in water than on land. Velocity will equal velocity devided by this value.
+	 */ 
 	public static var _swimmingDelay:Float = 1.60;
 	
-	// speed the invisible chaser is moving.
-	public static var _chaserVelocity:Float = 130;
-	
-	public static var _playersYLastOnTile:Float = 0;
-
-	public static var _playerYNewFallTotal:Float = 0; 
-	
-	public static var _trackerInUse:Bool = false; // player can look beyond the players currently view region.
-	public static var _arrowKeyInUseTicks:Float = 0; // show the guildlines if ticks are high in value.
-	
-	// display the quit to system / quit to main menu / resume text.
+	/**
+	 * When true, display the exit game, go back to title and resume game sub menu.
+	 */
 	public static var exitGameMenu:Bool = false;
 	
 	//------------------------
-	// the speed of a vine depends on a random value of minimum and maximum values set at playState. to be used at the objectVineMoving class.
-	public static var _vineMovingSpeed:Float = 0;
-	public static var _vineMovingMinimumSpeed:Float = 0.40; // used in a random value at playState.
+	/**
+	 * This will determine how fast a vine moves. Used in a random value at PlayState.hx. Example, Reg._vineMovingSpeed = FlxG.random.float(Reg._vineMovingMinimumSpeed, Reg._vineMovingMaximumSpeed);
+	 */
+	public static var _vineMovingMinimumSpeed:Float = 0.40;
 	public static var _vineMovingMaximumSpeed:Float = 0.50;
-	public static var _vineToggleMovementSpeed:Bool = false; // every second vine moves faster.
 	//------------------------
 	
-	public static var _antigravity:Bool = false;
+	//------------------------
+	/**
+	 * Bumping into this monster when var is true will not cause any player damage. When mob is fighting then this var will be false.
+	 */
 	public static var _boss1AIsMala:Bool = true;
+	
+	/**
+	 * True when this boss is willing to talk.
+	 */
 	public static var _boss1BIsMala:Bool = true;
-	public static var _boss2IsMala:Bool = true; // bumping into this mob when var is true will not cause any player damage.
 	
-	public static var _playerHasTalkedToThisMob:Bool = false; //used to determine when talk has ended. 	
+	/**
+	 * True when this boss is willing to talk.
+	 */
+	public static var _boss2IsMala:Bool = true;
+	//------------------------
 	
-	public static var _playerCanShoot:Bool = true;
-	public static var _playerCanShootOrMove:Bool = true;
+
+
 	
 	public static var _teleportedToHouse:Bool = false; // did the player used the teleporter?
 	
@@ -233,7 +234,7 @@ class Reg
 	public static var _stopDreamsMusic:Bool = false;
 	
 	/**
-	 * Do NOT change the value of this var. each time playstate.hx is loaded this var is increased. when it reaches the value of Reg._changeToDayOrNightBgsAtPageLoad then the background image will change from cartoon to stars and then back again.
+	 * Do NOT change the value of this var. Each time playstate.hx is loaded this var is increased. When it reaches the value of Reg._changeToDayOrNightBgsAtPageLoad then the background image will change from cartoon to stars and then back again.
 	 */
 	public static var _changeToDayOrNightBgsAtPageLoadTicks:Int = 0;
 	
@@ -248,12 +249,12 @@ class Reg
 	public static var _isFallDamage:Bool = false;
 	
 	/**
-	 * Do NOT change the value of this var. used to stop the player's flicker. if true then the player's flicker will stop when the powerup music stops playing.
+	 * Do NOT change the value of this var. Used to stop the player's flicker. If true then the player's flicker will stop when the powerup music stops playing.
 	 */
 	public static var _powerUpStopFlicker:Bool = false;	
 		
 	/**
-	 * Do NOT change the value of this var. When set to false this var can be used to stop a function or code block from updating. see Hud.hx for an example about how it is used in a function. without this var at Hud.hx, when playomg the game, the Map coords at the top right corner will display the next map value just before loading that map. An undesired result.
+	 * Do NOT change the value of this var. When set to false this var can be used to stop a function or code block from updating. see Hud.hx for an example about how it is used in a function. Without this var at Hud.hx, when playomg the game, the Map coords at the top right corner will display the next map value just before loading that map. An undesired result.
 	 */
 	public static var _update:Bool = true;
 	
@@ -263,7 +264,7 @@ class Reg
 	public static var _gravityOnSlopes:Int = 100000;
 	
 	/**
-	 * Do NOT change the value of this var. When value is true at playState.hx, this var is used to disable the transition effect when the recorded demo is playing. recorded demos will be broken when played more than once if the transition effect is allowed to plays with the demos. at menuState, a demo will be played when the introduction music ends.
+	 * Do NOT change the value of this var. When value is true at playState.hx, this var is used to disable the transition effect when the recorded demo is playing. Recorded demos will be broken when played more than once if the transition effect is allowed to plays with the demos. At menuState, a demo will be played when the introduction music ends.
 	 */
 	public static var _noTransitionEffectDemoPlaying = false;
 		
@@ -273,36 +274,46 @@ class Reg
 	public static var state:PlayState;	
 	
 	/**
-	 * Do NOT change the value of this var. the value of this var will be true then player us standing on a frozon mob. The mob can be frozen with the freeze gun.
+	 * Do NOT change the value of this var. The value of this var will be true then player is standing on a frozon mob. The mob can be frozen with the freeze gun.
 	 */
 	public static var _playerGravitySetToZero:Bool = false;
 	
 	/**
-	 * Do NOT change the value of this var. the number of total diamonds at a map. This var is initialized for neko builds. The value is determined at playStateAdd.hx.
+	 * Do NOT change the value of this var. The number of total diamonds at a map. This var is initialized for neko builds. The value is determined at playStateAdd.hx.
 	 */ 
 	public static var diamondsRemaining:Int = 0;
 		
 	/**
-	 * Do NOT change the value of this var. This var will be true if user has not pressed a key/button before music stops at menuState. the recorded demo will play when the introduction music stops at MenuState.hx.
+	 * Do NOT change the value of this var. This var will be true if user has not pressed a key/button before music stops at menuState. The recorded demo will play when the introduction music stops at MenuState.hx.
 	 */
 	public static var _playRecordedDemo:Bool = false;
 	
 	//---------------------
 	/**
+	 * Do NOT change the value of this var. If you plan to have an NPC ask the user a questiopn, this var will need to be set to true. When this var is true, at Dialog.hx, a "yes and no" text/button will be displayed above the dialog text box when the question is asked.  
+	 */
+	public static var displayDialogYesNo:Bool = false;
+	
+	/**
 	 * Do NOT change the value of this var. The message displayed after player picks up an item or when talking to an NPC.
+	 * eg, Reg.dialogIconText = openfl.Assets.getText("assets/text/Map13-15B-doctor.txt").split("#");
 	 */
 	public static var dialogIconText:Array<String>;
-	/**
+	
+	 /**
 	 * Do NOT change the value of this var. This is the image filename of the item that the player picked up. The image is displayed at the dialog.
 	 */
 	public static var dialogIconFilename:String = "";
 	
 	/**
-	 * Do NOT change the value of this var. This is the image filename of a NPC or player currently talking at the Dialog.hx. The image is displayed at the dialog. search for "boss1B-ID1-Map12-19C.txt" at Boss1.hx for an example about how to use this var.
+	 * Do NOT change the value of this var. This is the image filename of a NPC or player currently talking at the Dialog.hx. The image is displayed at the dialog. Search for "boss1B-ID1-Map12-19C.txt" at Boss1.hx for an example about how to use this var.
 	 */
 	public static var dialogCharacterTalk:Array<String> = [
 	"", "", ""
-	];
+	];	
+	
+	public static var _dialogAnsweredYes:Bool = false; 		// Do NOT change the value of this var.
+	public static var _dialogYesNoWasAnswered:Bool = false; // Do NOT change the value of this var.
 	//---------------------
 	
 	/**
@@ -311,9 +322,73 @@ class Reg
 	public static var _gunHudBoxDisplayMaximumText:Bool = false;
 	
 	/**
-	 * Do NOT change the value of this var. Triangle collected increase gun power when the maximum amount of triangles collected for that power-up level is reached. The collected triangles decrease when player is hit. this var is used to load a new bullet image when gun power increases or decreases in level.
+	 * Do NOT change the value of this var. The width/height of a map tile in pixels.
 	 */
-	public static var _gunPowerIncreasedOrDecreased:Bool = false;
+	public static var _tileSize:Int = 32;
+	
+	/**
+	 * Do NOT change the value of this var. Used when "load game" at the MenuState.hx is selected. if true then the player will be displayed on the map at the save point.
+	 */	
+	public static var restoreGameState:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. This var is used to remember the direction the player is facing when the game is saved. 
+	 */
+	public static var facingDirectionRight:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. This var keeps the last known standing location. Example, player is currently standing at Y value of 100 . If player jumps or falls to an area that is below 100 then this var will be minus the player's landing Y location. Players damage will then be calculated.
+	 */
+	public static var _playersYLastOnTile:Float = 0;
+
+	/**
+	 * Do NOT change the value of this var. This var is used to determine the players fall damage. Reg._playerYNewFallTotal = players.y - Reg._playersYLastOnTile; If this vars values is within the allowed fall value then player will not receive any damage when landing on the ground.
+	 */
+	public static var _playerYNewFallTotal:Float = 0; 
+
+	/**
+	 * Do NOT change the value of this var. The player will look beyond the currently view region when user presses and holds down the arrow key. 
+	 */
+	public static var _trackerInUse:Bool = false;  
+	
+	/**
+	 * Do NOT change the value of this var. Show the guildlines if this var is too high in value.
+	 */
+	public static var _guildlineInUseTicks:Float = 0;
+	
+	//------------------------
+	/**
+	 * Do NOT change the value of this var. The speed of a vine depends on a random value of the _vineMovingMinimumSpeed and _vineMovingMaximumSpeed values set at PlayState.hx to be used at the objectVineMoving class.
+	 */ 
+	public static var _vineMovingSpeed:Float = 0;
+	
+	/**
+	 * Do NOT change the value of this var. When var is false, make every other vine move faster.
+	 */
+	public static var _vineToggleMovementSpeed:Bool = false;
+	//------------------------
+	
+	/**
+	 * Do NOT change the value of this var. When this var is true then the player's gravity will be reversed.
+	 */
+	public static var _antigravity:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Used to determine when a conversation with a mob has ended. usually used in a boss.
+	 */
+	public static var _playerHasTalkedToThisMob:Bool = false;
+	
+	//------------------------
+	/**
+	 * Do NOT change the value of this var. If value is true then the player can fire a gun.
+	 */
+	public static var _playerCanShoot:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. If value is true then the player can fire a gun and move.
+	 */
+	public static var _playerCanShootAndMove:Bool = true;
+	//------------------------
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
@@ -350,7 +425,9 @@ class Reg
 	// _gunPower determines if its a double or single bullet, ect. Bullet power increases the higher this value is. values are 1, 2 or 3.
 	public static var _gunPower:Float = 1;
 	
-	// once _gunPowerCollected reaches _gunPowerMaximum, the gunBox power value will increase by one.
+	/**
+	 * The amount of triangles that the player has collected. Triangles sometimes drop from a monster when monster is defeated. When player picks up enough triangles when gun will increase in power and bullet will then be more powerful. Bullets will hurt monsters health at damage times gun power.
+	 */ 
 	public static var _gunHudBoxCollectedTriangles:Float = 0;	
 	
 	// normal gun has a value of 0. flame gun has a value of 1, ect.

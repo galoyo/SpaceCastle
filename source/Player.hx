@@ -417,7 +417,7 @@ class Player extends FlxSprite
 			// bullet
 			_cooldown += elapsed;
 			
-			if (alive && !hasWon && Reg._playerCanShootOrMove == true ) controls();
+			if (alive && !hasWon && Reg._playerCanShootAndMove == true ) controls();
 			if (!hasWon) animate();
 			levelConstraints();	
 			
@@ -721,9 +721,9 @@ class Player extends FlxSprite
 				_ticksNextJump = 0;	_skillDashX = 0; _skillDashY = 0;
 				
 				if (InputControls.left.pressed) 
-				{ xForce--; Reg._arrowKeyInUseTicks = 0; }
+				{ xForce--; Reg._guildlineInUseTicks = 0; }
 				if (InputControls.right.pressed)
-				{ xForce++; Reg._arrowKeyInUseTicks = 0; }	
+				{ xForce++; Reg._guildlineInUseTicks = 0; }	
 			}
 			
 			
@@ -914,7 +914,7 @@ class Player extends FlxSprite
 				
 			Reg._trackerInUse = false;
 			Reg.state._tracker.y = y;
-			Reg._arrowKeyInUseTicks = 0;
+			Reg._guildlineInUseTicks = 0;
 
 			velocity.y = velocity.y * 0.5; // set the gravity in case player is in the air and using the flying hat.
 		}
@@ -1036,6 +1036,9 @@ class Player extends FlxSprite
 		{
 			if (damage > 0)
 			{
+				Reg._gunHudBoxCollectedTriangles--;
+				Reg.state.hud.decreaseGunPowerCollected();
+				
 				if (Reg._playerInsideCar == true && Reg.state._objectCar != null)
 				{
 					Reg.state._objectCar.velocity.x = 0; FlxSpriteUtil.flicker(Reg.state._objectCar, Reg._mobHitFlicker / 2, 0.04);

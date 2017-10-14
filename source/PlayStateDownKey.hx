@@ -79,7 +79,7 @@ class PlayStateDownKey
 			else Reg.state._tracker.velocity.y = 0; // stop scrolling the screen when player is at the top of the screen.
 			*/
 			
-			Reg._arrowKeyInUseTicks = 0;
+			Reg._guildlineInUseTicks = 0;
 			Reg.state._ticksTrackerDown = Reg.incrementTicks(Reg.state._ticksTrackerDown, 60 / Reg._framerate);	
 			
 		}	
@@ -101,7 +101,7 @@ class PlayStateDownKey
 			}
 			else Reg.state._tracker.velocity.y = 0; // stop scrolling the screen when player is at the top of the screen.
 			
-			Reg._arrowKeyInUseTicks = 0;
+			Reg._guildlineInUseTicks = 0;
 			Reg.state._ticksTrackerUp = Reg.incrementTicks(Reg.state._ticksTrackerUp, 60 / Reg._framerate); 			
 		} */	
 		else 

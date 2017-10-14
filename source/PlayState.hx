@@ -298,6 +298,7 @@ class PlayState extends FlxUIState
 		
 		// setup the bullet star emitter		
 		_particleBulletHit = new FlxEmitter();
+		_particleBulletHit.maxSize = 50;
 		for (i in 0..._particleBulletHit.maxSize) _particleBulletHit.add(new ParticleBulletHit());
 		_particleBulletHit.lifespan.set(0.2);
 		
@@ -844,9 +845,9 @@ class PlayState extends FlxUIState
 		) PlayStateTouchObjects.waterPlayer(player);
 		
 		// if no arrow key was pressed for a lenght of time then show the guidelines.
-		if (Reg._arrowKeyInUseTicks > 30)
+		if (Reg._guildlineInUseTicks > 30)
 		{
-			if (player._mobIsSwimming == true) Reg._arrowKeyInUseTicks = 0;
+			if (player._mobIsSwimming == true) Reg._guildlineInUseTicks = 0;
 			else
 			{
 				if (warningFallLine != null)
@@ -857,7 +858,7 @@ class PlayState extends FlxUIState
 				}
 			}
 		} 
-		else if(Reg._arrowKeyInUseTicks == 0)
+		else if(Reg._guildlineInUseTicks == 0)
 		{
 			if (warningFallLine != null)
 			{
@@ -867,7 +868,7 @@ class PlayState extends FlxUIState
 			}
 		}
 		
-		Reg._arrowKeyInUseTicks = Reg.incrementTicks(Reg._arrowKeyInUseTicks, 60 / Reg._framerate);
+		Reg._guildlineInUseTicks = Reg.incrementTicks(Reg._guildlineInUseTicks, 60 / Reg._framerate);
 		
 		if (Reg._itemGotFlyingHat == true && Reg._usingFlyingHat == true)
 			flyingHat(player);
@@ -1057,7 +1058,7 @@ class PlayState extends FlxUIState
 			p.animation.play("flyingHat");
 		} else p.velocity.y = 300;
 		
-		Reg._arrowKeyInUseTicks = 0;		
+		Reg._guildlineInUseTicks = 0;		
 		Reg._playersYLastOnTile = p.y;  // no fall damage;
 	}
 	
