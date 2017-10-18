@@ -36,9 +36,11 @@ class MobCutter extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
-		//########################################################
 		_startX = x;
 		_startY = y;
+		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
 		
 		loadGraphic("assets/images/mobCutter.png", true, 28, 28);
 		
@@ -46,8 +48,7 @@ class MobCutter extends EnemyChildClass
 		if (id == 2) animation.add("walk", [3, 4, 5, 4], 12);
 		if (id == 3) animation.add("walk", [6, 7, 8, 7], 12);
 		animation.play("walk");	
-
-		ID = id;
+		
 		pixelPerfectPosition = false;
 		
 		properties();		
@@ -80,7 +81,7 @@ class MobCutter extends EnemyChildClass
 		velocityXOld = velocity.x;
 		
 		angle = 0;
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		visible = true;
 		
 		_airLeftInLungs = _airLeftInLungsMaximum;

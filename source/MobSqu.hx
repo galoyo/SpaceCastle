@@ -33,6 +33,9 @@ class MobSqu extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		loadGraphic("assets/images/mobSqu.png", true, 28, 28);
 		
 		if (id == 1) animation.add("jump", [0, 1, 2, 1], 12);
@@ -40,7 +43,6 @@ class MobSqu extends EnemyChildClass
 		if (id == 3) animation.add("jump", [6, 7, 8, 7], 12);
 		animation.play("jump");	
 		
-		ID = id;
 		pixelPerfectPosition = false;
 		
 			properties();		
@@ -75,7 +77,7 @@ class MobSqu extends EnemyChildClass
 		
 		acceleration.y = _gravity;		
 		_airLeftInLungs = _airLeftInLungsMaximum;
-		health = (defaultHealth * ID) * Reg._differcuityLevel;	
+		health = (defaultHealth * ID) * Reg._difficultyLevel;	
 	}
 	
 	override public function update(elapsed:Float):Void 

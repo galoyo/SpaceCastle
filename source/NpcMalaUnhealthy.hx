@@ -48,9 +48,11 @@ class NpcMalaUnhealthy extends FlxSprite
 		_xLeftBoundry = x - 64;
 		_xRightBoundry = x + 64;
 		
-		loadGraphic("assets/images/npcMalaUnhealthy.png", true, 28, 28);
-		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
+		
+		loadGraphic("assets/images/npcMalaUnhealthy.png", true, 28, 28);
+
 		_playerTimeRemainingTimer = new FlxTimer();
 		
 		if (FlxG.random.int(0, 2) == 0) _isWalking = true;
@@ -584,7 +586,7 @@ class NpcMalaUnhealthy extends FlxSprite
 					if (Reg._soundEnabled == true) FlxG.sound.play("click", 1, false);
 					Reg.state._talkToHowManyMoreMalas.visible = false;
 					
-					// now that the player has talked to the malas, set some var so begin the shaking of the screen and then the doctor appears.
+					// now that the player has talked to the malas, set some var so begin the shaking of the screen and then the countdown.
 					Reg._talkToDoctorAt24_25Map = true;
 				}
 			}
@@ -620,7 +622,7 @@ class NpcMalaUnhealthy extends FlxSprite
 					Reg.state.openSubState(new Dialog());							
 					
 				}
-				Reg._talkToDoctorAt24_25Map == true;
+				// Reg._talkToDoctorAt24_25Map = true;
 				
 				var ex = FlxG.random.int(0, 300); // time it takes the doctor to teleport a mala (extra time).
 				
@@ -690,7 +692,7 @@ class NpcMalaUnhealthy extends FlxSprite
 				Reg.state.player.kill();
 			}		
 
-			//##----------------------------------------------------
+			//####################################################
 		}
 		
 		super.update(elapsed);	

@@ -39,10 +39,12 @@ class MobSaw extends EnemyChildClass
 		_startX = x;
 		_startY = y;		
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		if (id == 1) loadGraphic("assets/images/mobSaw1.png", true, 64, 64);	
 		else loadGraphic("assets/images/mobSaw2.png", true, 64, 32);
 		
-		ID = id;
 		pixelPerfectPosition = false;
 		
 		setFacingFlip(FlxObject.LEFT, true, false);
@@ -67,7 +69,7 @@ class MobSaw extends EnemyChildClass
 		if (ID == 2) acceleration.y = _gravity;	
 		else immovable = true;
 		
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		_airLeftInLungs = _airLeftInLungsMaximum;
 		
 		// mob starts moving in direction of the player.

@@ -68,7 +68,7 @@ class MobBubble extends EnemyChildClass
 		maxVelocity.x = maxXSpeed;		
 		
 		acceleration.y = 0;		
-		health = defaultHealth1 * Reg._differcuityLevel;
+		health = defaultHealth1 * Reg._difficultyLevel;
 		
 		if (Reg._boss1BDefeated == false) visible = false; 
 		allowCollisions = FlxObject.ANY;

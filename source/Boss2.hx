@@ -76,7 +76,7 @@ class Boss2 extends EnemyChildClass
 		_gunDelay = _bulletTimeForNextFiring;	// Initialize the cooldown so that we can shoot right away.
 		_bulletFireFormation = _bulletFormationNumber;	
 		
-		health = defaultHealth1 * Reg._differcuityLevel;
+		health = defaultHealth1 * Reg._difficultyLevel;
 		Reg.displayDialogYesNo = false;
 	}
 	

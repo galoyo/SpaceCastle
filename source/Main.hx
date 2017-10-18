@@ -46,13 +46,12 @@ class Main extends Sprite
 		
 		Reg._musicEnabled = _gameOptions.data._musicEnabled;
 		Reg._soundEnabled = _gameOptions.data._soundEnabled;
-		Reg._backgroundSounds = _gameOptions.data._backgroundSounds;
-		Reg._playerRunningEnabled = _gameOptions.data._playerRunningEnabled;
+		Reg._backgroundSoundsEnabled = _gameOptions.data._backgroundSoundsEnabled;
 		Reg._dialogFastTextEnabled = _gameOptions.data._dialogFastTextEnabled;
 		Reg._cheatModeEnabled = _gameOptions.data._cheatModeEnabled;
 		Reg._framerate = _gameOptions.data.framerate;
 		Reg._playerFallDamage = _gameOptions.data._playerFallDamage;
-		Reg._differcuityLevel = _gameOptions.data._differcuityLevel;
+		Reg._difficultyLevel = _gameOptions.data._difficultyLevel;
 		
 		_gameOptions.close;
 	}

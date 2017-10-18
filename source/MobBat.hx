@@ -37,12 +37,12 @@ class MobBat extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
-		// set to false if sprite has no animation frames.
-		loadGraphic("assets/images/mobBat.png", true, 28, 28);
-		
-		// ID text states that it is not used for another, yet id it very useful;
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
 		
+		// set to false if sprite has no animation frames.
+		loadGraphic("assets/images/mobBat.png", true, 28, 28);
+				
 		// uncomment if sprite has animation frames. 
 		if (id == 1) animation.add("walk", [0, 1, 2, 3, 4, 3, 2, 1], 60);
 		if (id == 2) animation.add("walk", [5, 6, 7, 8, 9, 8, 7, 6], 60);
@@ -80,7 +80,7 @@ class MobBat extends EnemyChildClass
 		velocityYOld = velocity.y;	
 		
 		_airLeftInLungs = _airLeftInLungsMaximum;
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 	}
 	
 	override public function update(elapsed:Float):Void 

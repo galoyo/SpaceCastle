@@ -114,7 +114,7 @@ class EnemyChildClass extends FlxSprite
 	{
 		// get the distance between the mob and the player.
 		var distance = FlxMath.distanceBetween(this, Reg.state.player);
-		if ( distance < Reg._distanceBetweenMaximum) return true;
+		if ( distance < Reg._mobDistanceFromPlayer) return true;
 			else return false;
 	}
 	

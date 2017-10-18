@@ -45,6 +45,9 @@ class MobSlime extends EnemyChildClass
 	{
 		super(x + 10, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);		
 	
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		// id 1 is the easy green mob while 2 is the hard red mob.
 		loadGraphic("assets/images/mobSlime.png", true, 28, 28);
 		
@@ -74,7 +77,6 @@ class MobSlime extends EnemyChildClass
 		}		
 		pixelPerfectPosition = false;		
 	
-		ID = id;
 		properties(ID);
 	}
 	
@@ -95,7 +97,7 @@ class MobSlime extends EnemyChildClass
 		angle = 0;
 		_mobIsSwimming = false;
 		visible = true;
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		_airLeftInLungs = _airLeftInLungsMaximum;
 		
 		// when this mob is placed somewhere on the map loaded at PlayState (addMobSlime(x, y, 1), its id, the last value, such as 1 is passed to this classe and used here to set the properties of the mob.  

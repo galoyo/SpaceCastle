@@ -38,14 +38,15 @@ class MobGlob extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 			
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		loadGraphic("assets/images/mobGlob.png", true, 32, 32);		
 		
 		if (id == 1) animation.add("walk", [0, 1, 2, 2, 1], 16);
 		if (id == 2) animation.add("walk", [3, 4, 5, 5, 4], 16);
 		if (id == 3) animation.add("walk", [6, 7, 8, 8, 7], 16);
 		animation.play("walk");
-		
-		ID = id;
 		
 		// freeze the mob. change its color to blue.
 		setColorTransform(1, 1, 1, 1, 0, 0, 0, 0);
@@ -80,7 +81,7 @@ class MobGlob extends EnemyChildClass
 			_directionMobIsMoving = "left";
 		}
 		
-		health = (defaultHealth * ID) * Reg._differcuityLevel; 
+		health = (defaultHealth * ID) * Reg._difficultyLevel; 
 		allowCollisions = FlxObject.ANY;
 		_airLeftInLungs = _airLeftInLungsMaximum;
 		ticksWalkAnyDirection = 0;

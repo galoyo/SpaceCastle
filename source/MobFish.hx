@@ -30,14 +30,15 @@ class MobFish extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		loadGraphic("assets/images/mobFish.png", true, 36, 20);
 
 		if (id == 1) animation.add("swim", [0, 1, 2, 1], 15);
 		if (id == 2) animation.add("swim", [3, 4, 5, 4], 15);
 		if (id == 3) animation.add("swim", [6, 7, 8, 4], 15);
 		animation.play("swim");	
-		
-		ID = id;
 		
 		pixelPerfectPosition = false;
 		
@@ -75,7 +76,7 @@ class MobFish extends EnemyChildClass
 		acceleration.y = 0;		
 		
 		_airLeftInLungs = _airLeftInLungsMaximum;
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 	}
 	
 	override public function update(elapsed:Float):Void 

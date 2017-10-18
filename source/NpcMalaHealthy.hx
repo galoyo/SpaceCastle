@@ -34,12 +34,13 @@ class NpcMalaHealthy extends FlxSprite
 		_startx = x;
 		_starty = y;
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		_xLeftBoundry = x - 60;
 		_xRightBoundry = x + 60;
 		
 		loadGraphic("assets/images/npcMalaHealthy.png", true, 28, 28);
-		
-		ID = id;
 		
 		if (FlxG.random.int(0, 2) == 0) _isWalking = true;
 			else _isWalking = false;

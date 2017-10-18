@@ -64,6 +64,9 @@ class MobWorm extends EnemyChildClass
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		// set to false if sprite has no animation frames.
 		loadGraphic("assets/images/mobWorm.png", true, 50, 37);
 		
@@ -74,7 +77,6 @@ class MobWorm extends EnemyChildClass
 		
 		animation.play("flying");	
 
-		ID = id;
 		pixelPerfectPosition = false;
 		
 		properties();		
@@ -104,7 +106,7 @@ class MobWorm extends EnemyChildClass
 		maxVelocity.x = maxXSpeed;		
 		velocityXOld = velocity.x;		
 		
-		health = (defaultHealth * ID) * Reg._differcuityLevel;
+		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		_airLeftInLungs = _airLeftInLungsMaximum;
 		acceleration.y = 0; drag.y = 50000;	
 	}

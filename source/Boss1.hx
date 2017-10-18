@@ -15,49 +15,83 @@ import flixel.util.FlxTimer;
 
 class Boss1 extends EnemyChildClass
 {
-	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 0; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this boss to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float;
 	
-	// used with jumping ability.
-	private var _YjumpingDelay:Float = 100;
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */
+	private var _bulletFormationNumber:Int = 0;
+	
+	/**
+	 * Used to change boss from Mala to monster.
+	 */
 	private var ticksDelay:Float = 0;
+	
+	/**
+	 * Used to delay the boss dialog.
+	 */
 	private var ticksDialog:Float = 0;
 	
+	/**
+	 * The health of this boss.
+	 */
 	public var defaultHealth:Int = 8;
+	
+	/**
+	 * The X velocity of this boss. Used to move boss to the left then to the right and then back again. 
+	 */
 	private var maxXSpeed:Int = 415;
+	
+	/**
+	 * If true then boss is not touching a tile. This var is in code but not used for anything.
+	 */
 	public var inAir:Bool = false;
 		
-	private var _playedMusic:Bool = false; // play the boss music only once when trying to defeat the boss.
+	/**
+	 * Play the boss music when the battle between the player and this boss begins.
+	 */
+	private var _playedMusic:Bool = false;
 		
-	// how fast the object can fall.
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 4400;	
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 		
+		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
+		ID = id;
+		
 		if(id == 1) loadGraphic("assets/images/boss1A.png", true, 28, 28);
 			else loadGraphic("assets/images/boss1B.png", true, 56, 56);
-
+		
+		// The animation of this mob. The image is made of 32 x 32 blocks and haxeflixel reads those blocks the same way as a person reading a book. The first 32 x 32 block is the zero value of this walk animation. 
 		animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 12);
 		
 		pixelPerfectPosition = false;
 		
+		// By default, the boss is facing at the direction of right. When this image begins to move left then the image will flip to face the direction of left.
 		setFacingFlip(FlxObject.LEFT, true, false);
-		setFacingFlip(FlxObject.RIGHT, false, false);				
+		setFacingFlip(FlxObject.RIGHT, false, false);		
 		
-		ID = id;
-		acceleration.y = _gravity;
-			
-		if(id == 1) health = defaultHealth * Reg._differcuityLevel;
-			else health = Std.int((defaultHealth * 2.7) * Reg._differcuityLevel);
-		
-		ticksDelay = 0;
-		ticksDialog = 0;
-		_cooldown = FlxG.random.float(0.10, 0.60);	
-
+		// Set the direction this mob is facing.
 		if (ID == 1) facing = FlxObject.LEFT;
 		else facing = FlxObject.RIGHT;
+		
+		// A negative value of _gravity can be used for anti-gravity. Acceleration.y has a positive value. Therefore the boss will fall to the ground.
+		acceleration.y = _gravity;
+		
+		// ID is used here to give the second appearance of this boss a higher health than the first  appearance of this boss. The health is timed by the difficulty of the game. The game difficulty can be set when the program starts at the options screen.
+		if(id == 1) health = defaultHealth * Reg._difficultyLevel;
+			else health = Std.int((defaultHealth * 2.7) * Reg._difficultyLevel);
+		
+		// Initialize the cooldown so weapon can fire at this time.
+		_cooldown = FlxG.random.float(0.10, 0.60);		
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -428,7 +462,5 @@ class Boss1 extends EnemyChildClass
 
 		// delete the enemy when at the bottom of screen.
 		if (y > Reg.state.tilemap.height) super.kill();
-	}
-	
-	
+	}	
 }

@@ -54,7 +54,7 @@ class NpcDoctor extends FlxSprite
 		Reg.displayDialogYesNo = false;
 		Reg._dialogYesNoWasAnswered = false;
 		Reg._dialogAnsweredYes = false;
-		Reg._talkedToDoctorAtDogLady = false;
+		Reg._talkedToDoctorNearDogLady = false;
 		
 		properties(); // gravity, direction facing, is alive, ect and health vars.		
 	}
@@ -88,7 +88,7 @@ class NpcDoctor extends FlxSprite
 			if (Reg.displayDialogYesNo == true && Reg._dialogYesNoWasAnswered == true && Reg._dialogAnsweredYes == false && overlapsAt(x, y, Reg.state.player))
 			{						
 				ticks = 10;
-				Reg._talkedToDoctorAtDogLady = true; // used to move the player to the waiting room.
+				Reg._talkedToDoctorNearDogLady = true; // used to move the player to the waiting room.
 			}
 			
 			if (ticks == 6  && overlapsAt(x, y, Reg.state.player))
