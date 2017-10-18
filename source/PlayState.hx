@@ -513,7 +513,7 @@ class PlayState extends FlxUIState
 				
 		}  
 		
-		if (Reg._backgroundSounds == true) FlxG.sound.play("backgroundSounds", 0.25, true);
+		if (Reg._backgroundSoundsEnabled == true) FlxG.sound.play("backgroundSounds", 0.25, true);
 		
 		//################# KEEP THIS CODE NEAR THE BOTTOM OF THIS FUNCTION.
 		//################################################################
@@ -629,9 +629,9 @@ class PlayState extends FlxUIState
 		}
 		
 		// talked to the doctor?
-		if (Reg._talkedToDoctorAtDogLady == true)
+		if (Reg._talkedToDoctorNearDogLady == true)
 		{
-			Reg._talkedToDoctorAtDogLady = false;
+			Reg._talkedToDoctorNearDogLady = false;
 			Reg._dogOnMap = false;
 			Reg.mapXcoords = 24;
 			Reg.mapYcoords = 25;

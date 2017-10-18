@@ -71,7 +71,7 @@ class Options extends FlxSubState
 		options2.color = FlxColor.WHITE;
 		options2.size = 14;
 		options2.scrollFactor.set();
-		if (Reg._backgroundSounds == true) options2.text = "Background Sounds [ON].";
+		if (Reg._backgroundSoundsEnabled == true) options2.text = "Background Sounds [ON].";
 		else
 		{
 			options2.text = "Background Sounds [OFF].";
@@ -125,9 +125,9 @@ class Options extends FlxSubState
 		add(options7);
 		
 		options8 = new FlxText(190, 407, 0, "");
-		if (Reg._differcuityLevel == 1) options8.text = "Differcuity Level [EASY].";
-		if (Reg._differcuityLevel == 2) options8.text = "Differcuity Level [NORMAL].";
-		if (Reg._differcuityLevel == 3) options8.text = "Differcuity Level [HARD].";
+		if (Reg._difficultyLevel == 1) options8.text = "Difficulty Level [EASY].";
+		if (Reg._difficultyLevel == 2 || Reg._difficultyLevel == null) options8.text = "Difficulty Level [NORMAL].";
+		if (Reg._difficultyLevel == 3) options8.text = "Difficulty Level [HARD].";
 		options8.color = FlxColor.WHITE;
 		options8.size = 14;
 		options8.scrollFactor.set();
@@ -194,7 +194,7 @@ class Options extends FlxSubState
 				button7Clicked();
 			}
 
-			else if (FlxG.keys.anyJustReleased(["EIGHT"])) // differcuity level.
+			else if (FlxG.keys.anyJustReleased(["EIGHT"])) // difficulty level.
 			{
 				button8Clicked();
 			}
@@ -209,14 +209,14 @@ class Options extends FlxSubState
 	{
 		if (Reg._musicEnabled == true) 
 		{
-			if(Reg._backgroundSounds == true) FlxG.sound.play("twinkle", 1, false);
+			if(Reg._backgroundSoundsEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options1.text = "Music [OFF].";
 			Reg._musicEnabled = false;
 			FlxG.sound.music.stop();
 		}
 		else
 		{
-			if(Reg._backgroundSounds == true) FlxG.sound.play("twinkle", 1, false);
+			if(Reg._backgroundSoundsEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options1.text = "Music [ON].";
 			Reg._musicEnabled = true;
 			
@@ -224,24 +224,24 @@ class Options extends FlxSubState
 			
 			// can only play one music track so if this sound is enabled then diable the background sound.
 			options2.text = "Background Sounds [OFF].";
-			Reg._backgroundSounds = false;
+			Reg._backgroundSoundsEnabled = false;
 		}
 	}
 
 	private function button2Clicked():Void
 	{
-		if (Reg._backgroundSounds == true) 
+		if (Reg._backgroundSoundsEnabled == true) 
 		{
 			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options2.text = "Background Sounds [OFF].";
-			Reg._backgroundSounds = false;
+			Reg._backgroundSoundsEnabled = false;
 			FlxG.sound.music.stop();
 		}
 		else
 		{
 			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options2.text = "Background Sounds [ON].";
-			Reg._backgroundSounds = true;
+			Reg._backgroundSoundsEnabled = true;
 			FlxG.sound.playMusic("backgroundSounds", 0.25, false);
 			
 			// can only be one music track played so if the background sound is enabled then diable the music.
@@ -305,18 +305,19 @@ class Options extends FlxSubState
 
 	public function saveOptions():Void
 	{		
+		if ( Reg._difficultyLevel == null) Reg._difficultyLevel = 2;
+		
 		_gameOptions = new FlxSave(); // initialize
 		_gameOptions.bind("TSC-SAVED-OPTIONS"); // bind to the named save slot.			
 		
 		_gameOptions.data._musicEnabled = Reg._musicEnabled;
 		_gameOptions.data._soundEnabled = Reg._soundEnabled;
-		_gameOptions.data._backgroundSounds = Reg._backgroundSounds;
-		_gameOptions.data._playerRunningEnabled = Reg._playerRunningEnabled;
+		_gameOptions.data._backgroundSoundsEnabled = Reg._backgroundSoundsEnabled;
 		_gameOptions.data._dialogFastTextEnabled = Reg._dialogFastTextEnabled;
 		_gameOptions.data._cheatModeEnabled = Reg._cheatModeEnabled;
 		_gameOptions.data.framerate = Reg._framerate;
 		_gameOptions.data._playerFallDamage = Reg._playerFallDamage;
-		_gameOptions.data._differcuityLevel = Reg._differcuityLevel;
+		_gameOptions.data._difficultyLevel = Reg._difficultyLevel;
 		
 		// save options
 		_gameOptions.flush();
@@ -372,12 +373,12 @@ class Options extends FlxSubState
 		
 	private function button8Clicked():Void
 	{
-		Reg._differcuityLevel++;
-		if (Reg._differcuityLevel == 4) Reg._differcuityLevel = 1;
+		Reg._difficultyLevel++;
+		if (Reg._difficultyLevel == 4) Reg._difficultyLevel = 1;
 		
-		if (Reg._differcuityLevel == 1) options8.text = "Differcuity Level [EASY].";
-		if (Reg._differcuityLevel == 2) options8.text = "Differcuity Level [NORMAL].";
-		if (Reg._differcuityLevel == 3) options8.text = "Differcuity Level [HARD].";
+		if (Reg._difficultyLevel == 1) options8.text = "Difficulty Level [EASY].";
+		if (Reg._difficultyLevel == 2) options8.text = "Difficulty Level [NORMAL].";
+		if (Reg._difficultyLevel == 3) options8.text = "Difficulty Level [HARD].";
 
 	}
 	

@@ -58,7 +58,6 @@ class Player extends FlxSprite
 
 	public var finalJumpForce:Float;
 	public var holdingUpKey:Bool = false;
-	private var running:Bool = false;	
 	
 	private var _swimming:FlxTimer;
 	private var _swimmingTimerIsComplete:Bool = true;
@@ -87,7 +86,7 @@ class Player extends FlxSprite
 		_emitterBulletFlame = emitterBulletFlame;
 		_emitterSkillDash = emitterSkillDash;
 		
-		_cooldown = _gunDelay = 0.15;	// Initialize the cooldown so that we can shoot right away.
+		_cooldown = _gunDelay = 0.15;	// Initialize the cooldown so weapon can fire at this time.
 		
 		// flip the players sprite when player is moving at the left driection of screen.
 		setFacingFlip(FlxObject.LEFT, true, false);
@@ -143,7 +142,6 @@ class Player extends FlxSprite
 		_swimming = new FlxTimer();
 		
 		visible = true; 
-		
 	}
 	
 	public function shoot(holdingUpKey:Bool):Void 
@@ -496,7 +494,7 @@ class Player extends FlxSprite
 		// play the flute.
 		if (Reg._itemGotDogFlute == true)
 		{
-			// usewd to hold the location of where the dog was picked up. if this var matches the coords where a dog should exist then the dogFound var will be false.
+			// used to hold the location of where the dog was picked up. if this var matches the coords where a dog should exist then the dogFound var will be false.
 			var _dogNoLongerAtMap2 = Reg._dogNoLongerAtMap.split(",");			
 			
 			if (Reg.state.npcDogLady != null) _dogFound = false;
@@ -647,9 +645,6 @@ class Player extends FlxSprite
 			}
 		}
 	
-		// how fast the player is moving in the y coor. generally moving in a 
-		// downward direction.
-		if( Reg._playerRunningEnabled == true) running = true;
 		
 		if (!FlxG.overlap(Reg.state._objectWaterCurrent, this) && !FlxG.overlap(Reg.state._overlayPipe, this))
 		{
@@ -730,7 +725,7 @@ class Player extends FlxSprite
 
 		}		
 		
-		// if running then do not run faster then the max speed else set to walk speed.
+		// do not run faster then the max speed else set to walk speed.
 		if (_mobIsSwimming == false) {maxVelocity.x = _maxRunSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
 		else {maxVelocity.x = _maxRunSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
 		
@@ -960,8 +955,6 @@ class Player extends FlxSprite
 		}
 	}
 	
-	// checks that the walking and running speed of the player never going faster
-	// then its constraints and that the player is alive else go to the kill() function.
 	function levelConstraints():Void
 	{
 		// if player is at the boundries of the left side of screen then bounce off of
@@ -1056,7 +1049,7 @@ class Player extends FlxSprite
 			}
 			
 			Reg._isFallDamage = false;
-			super.hurt(damage);	
+			super.hurt(damage);	// decrease health.
 		}
 	}
 	

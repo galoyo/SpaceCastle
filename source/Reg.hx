@@ -9,7 +9,9 @@ import flixel.math.FlxMath;
 //######################## NOTES ################################
 // change _gunPower back to 1;
 	
-// The invalid operation errors on Neko come from uninitialized variables (int, bool, float), since these are by default null on Neko. to fix do this, var test:int = 0; the 0 initializes the variables.
+// The invalid operation errors on Neko come from uninitialized variables (int, bool, float), since these are by default null on Neko.
+
+	// Checking for null errors are important. The build error on neko, the invalid operation, come from uninitialized variables. To fix do var foo:int = 0. The 0 initializes that variable.
 //###############################################################
 
 class Reg
@@ -54,11 +56,17 @@ class Reg
 	 */
 	public static var _changeToDayOrNightBgsAtPageLoad:Int = 10; 	
 
+	//------------------
 	/**
 	 * Used in the castle waiting room for a player death countdown. If player has not left the castle within this time then its game over. See map-24-25.tmx at /assets/data/
 	 */
 	public static var _deathWhenReachedZeroCurrent:Int = 400; 
-	public static var _deathWhenReachedZero:Int = 400;	// This vars value should be the same as above.
+	
+	/**
+	 * This vars value should be the same as above. Game over when this countdown var reaches zero.
+	 */
+	public static var _deathWhenReachedZero:Int = 400;
+	//------------------
 	
 	/**
 	 * Mainly used to remember the last direction of the player in the pipe so that the player can continue in the pipe when the pipe extends two or more maps.
@@ -184,40 +192,16 @@ class Reg
 	public static var _boss2IsMala:Bool = true;
 	//------------------------
 	
+	/**
+	 * If mobs distance is greater than this value in pixels from the player then the mob is re-spawned/reset().
+	 */
+	public static var _mobDistanceFromPlayer:Int = 832;
+	
 
-
-	
-	public static var _teleportedToHouse:Bool = false; // did the player used the teleporter?
-	
-	public static var _distanceBetweenMaximum:Int = 832; // the maximum value in pixels that a mob can be from the player before the mob is re-spawned, eg, reset().
-	
-	public static var _talkedToDoctorAtDogLady:Bool = false; // used to move the player to the waiting room.
-	
-	public static var ticksDoctor:Float = 0; // used to delay the siren sound and screen shake effect and to display a help message from the doctor.
-	public static var ticksTeleport:Float = 0;
-	
+	/**
+	 * Number of Malas that the Doctor will save at the waiting room. Values can be 1 to 8.
+	 */
 	public static var _numberOfMalasToSave:Int = FlxG.random.int(3, 6);
-	
-	// dogs need to exist at every map or else when a dog is carried by player from one map to the next, the dog will not be overtop of the player. The reason is because there is not dog sprite on the map. This var is used at the the end of "playState.hx finction create" to check if the dog exists. if no dog exist then a dog will be created at 0-0 map coords and this var will be set to true.
-	public static var _dogExistsAtMap:Array<Bool> = [
-	false, false, false, false
-	];
-	
-	// when a dog does not exist at a map then the above var needs to be true by setting the sprites at the top left corner. The problem is that the second id of the dog will make the dog run back and forth. this var stops.
-	public static var _dogStopMoving:Bool = false;
-	
-	// if dog is invisible then the flute should play a buzz sound.
-	public static var _dogIsVisible:Bool = true;
-	public static var _dogIsInPipe:Bool = false; // this var is used to hide the dog in the pipes.
-	
-	public static var _musicEnabled:Bool = true;
-	public static var _soundEnabled:Bool = true;
-	public static var _backgroundSounds:Bool = false;
-	public static var _cheatModeEnabled:Bool = false; // is the cheat mode on. unlimited health, bullets ect.
-	public static var _playerRunningEnabled = true;
-	public static var _dialogFastTextEnabled = true; // do not change this. player must always be running so that some jumps will be difficult to do.
-	
-	public static var _buttonsNavigationUpdate:Bool = false; // used to update X and C buttons at playstate.hx once only when inventory menu is closed.
 	
 	//##################################################################
 	//############## These vars value must NOT be changed. #############
@@ -390,133 +374,384 @@ class Reg
 	public static var _playerCanShootAndMove:Bool = true;
 	//------------------------
 	
-	//##################################################################
-	//########## vars that WILL be saved when game is saved ############
-	//##################################################################
-	// NOTE: these vars MUST also be in the resetRegVars function at this
-	// class so they can be reset to there default value when a new game
-	// is selected.	
+	/**
+	 * Do NOT change the value of this var. Determine if the player used the teleporter.
+	 */
+	public static var _teleportedToHouse:Bool = false; 
 	
-	public static var _nuggets:Int = 0;
+	/**
+	 * Do NOT change the value of this var. Used to move the player to the waiting room.
+	 */
+	public static var _talkedToDoctorNearDogLady:Bool = false;
 	
-	public static var _playerFallDamage:Bool = true; // If true then the player well take fall damage when falling to the ground beyond the tile fall limit.
+
+	/**
+	 * Do NOT change the value of this var. At the waiting room scene, the var is used to delay the siren sound and screen shake effect and to display a help message from the doctor.
+	 */
+	public static var ticksDoctor:Float = 0;
 	
-	public static var _differcuityLevel:Int = 2; // how easy will the mobs be to defeat. 1:easy, 2:normal, 3:hard
+	/**
+	 * Do NOT change the value of this var. Doctor randomly teleporting malas when this var is of a certain value.
+	 */
+	public static var ticksTeleport:Float = 0;
 	
-	public static var _boss1ADefeated:Bool = false;
-	public static var _boss1BDefeated:Bool = false;
-	public static var _boss2Defeated:Bool = false;
+	/**
+	 * Do NOT change the value of this var. Dogs need to exist at every map or else when a dog is carried by player from one map to the next, the dog will not be overtop of the player. The reason is because there is no dog sprite on the map. This var is used at the the end of "playState.hx finction create()" to check if the dog exists. If no dog exist then a dog will be created at 0-0 map coords and this var will be set to true.
+	 */ 
+	public static var _dogExistsAtMap:Array<Bool> = [
+	false, false, false, false
+	];
 	
-	// Remember to change these values also near the top of this constructor. used to change the map when player walks in a door. in map units.
-	public static var mapXcoords:Float = 20; // should be 20.
-	public static var mapYcoords:Float = 20; // should be 20. 20-20 is the start map of the game.
-	public static var dogXcoords:Float = 0; // used to remember where the dog was picked up.
+	/**
+	 * Do NOT change the value of this var. If player picked up a dog that ran (ID 2) then that dog needs to move with the player. The problem is that the second id of the dog make the dog run back and forth. this var stops that from happening.
+	 */
+	public static var _dogStopMoving:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. The flute will play a buzz sound when both dogs are invisible. That sound refers to no dogs existing at current map because they are both at location 0-0 map coords.
+	 */
+	public static var _dogIsVisible:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. this var is used to hide the dog in the pipes.
+	 */
+	public static var _dogIsInPipe:Bool = false; 
+	
+	public static var _musicEnabled:Bool = true;				// Do NOT change the value of this var. 
+	public static var _soundEnabled:Bool = true;				// Do NOT change the value of this var. 
+	public static var _backgroundSoundsEnabled:Bool = false;	// Do NOT change the value of this var.
+	
+	/**
+	 * Do NOT change the value of this var.
+	 * T KEY toggles cheat mode on / off.
+	 * H KEY increase health by 1.
+	 * L KEY increase air in lungs by 10.
+	 */
+	public static var _cheatModeEnabled:Bool = false;
+	/**
+	 * Do NOT change the value of this var. No delay displaying the text at the dialog. The dialog is the text that the mob, npc or player outputs.
+	 */
+	public static var _dialogFastTextEnabled = true;
+	
+	/**
+	 * Do NOT change the value of this var. Used to update Z, X and C buttons at playstate.hx when inventory menu is closed.
+	 */
+	public static var _buttonsNavigationUpdate:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. At the inventory, the total number of horizontal slots that make the inventory grid.
+	 */
+	public static var _inventoryGridXTotalSlots:Int = 13;
+	
+	/**
+	 * Do NOT change the value of this var. At the inventory, the total number of vertical slots that make the inventory grid.
+	 */
+	public static var _inventoryGridYTotalSlots:Int = 7;
+	
+	/**
+	 * Do NOT change the value of this var. If true then the player will take fall damage when falling to the ground if player falls pass the tile fall limit.
+	 */
+	public static var _playerFallDamage:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. Used to remember where the dog was picked up.
+	 */
+	public static var dogXcoords:Float = 0;
+	
+	/**
+	 * Do NOT change the value of this var. Used to remember where the dog was picked up.
+	 */
 	public static var dogYcoords:Float = 0;
 	
+	/**
+	 * Do NOT change the value of this var. The player.x position on the map in pixels.
+	 */
+	public static var playerXcoords:Float = 0;
+	
+	/**
+	 * Do NOT change the value of this var. The player.y position on the map in pixels.
+	 */
+	public static var playerYcoords:Float = 0;
+	
+	/**
+	 * Do NOT change the value of this var. Your current score.
+	 */
 	public static var _score:Int = 0;
-	public static var _talkToDoctorAt24_25Map:Bool = false; // used to display the talked to mala countdown.
-	public static var _totalMalasTeleported:Int = 0; 
-		
-	// When all the malas are talked to at 24-25map, the barricate will be removed.
+	
+	/**
+	 * Do NOT change the value of this var. Your current gold.
+	 */
+	public static var _nuggets:Int = 0;
+	
+	/**
+	 * Do NOT change the value of this var. Used to determine if diamonds should be displayed on the map or if all dismonds were picked up. If the current displayed map is found within this var then all diamonds were collected.
+	 */ 
+	public static var _diamondCoords:String = "";
+	
+	/**
+	 * Do NOT change the value of this var. Used to determine if a heart container should be displayed on the current map or was picked up. If map coords exist in this var then heart container was picked up. Therefore, do not display the heart container on the current map.
+	 */ 
+	public static var _healthContainerCoords:String = "";
+	
+	/**
+	 * Do NOT change the value of this var. The Doctor will talk to the player at the waiting room shortly before the "death countdown" text is displayed. See _deathWhenReachedZero. 
+	 */
+	public static var _talkToDoctorAt24_25Map:Bool = false;
+			
+	/**
+	 * Do NOT change the value of this var. The wall barricate will be removed after the player talks to every Mala at the waiting room. Example, when player talks to Mala number 3, then the third array will be set to true.
+	 */
 	public static var _talkedToMalaAtWaitingRoom:Array<Bool> = [
 	false, false, false, false, false, false, false, false
 	];
 	
-	// _gunPower determines if its a double or single bullet, ect. Bullet power increases the higher this value is. values are 1, 2 or 3.
+	/**
+	 * Do NOT change the value of this var. If Reg._totalMalasTeleported is less than _numberOfMalasToSave then can teleport another Mala.
+	 */
+	public static var _totalMalasTeleported:Int = 0; 
+	
+	/**
+	 * Do NOT change the value of this var. Thus var refers to what gun it currently in use. normal gun has a value of 0, flame gun has a value of 1 and freeze gun has a value of 2.
+	 */
+	public static var _typeOfGunCurrentlyUsed:Int = 0;
+	
+	/**
+	 * Do NOT change the value of this var. At the start of game, player can stand anywhere at the beginning of the game. This var is false then after entering another map, the player stands near the edge of the screen.
+	 */
+	public static var beginningOfGame:Bool = true;
+	
+	/**
+	 * Do NOT change the value of this var. Currently set for a total of 4 different keys that can be collected. When player picks up a key then an array has a value of true.
+	 */
+	public static var _itemGotKey:Array<Bool> = [
+	false, false, false, false
+	];
+	
+	/**
+	 * Do NOT change the value of this var. Different jump items. array 1 is a low jump while 4 is a higher jump ability. currenly only 4 jump upgrades are available. When a jump item is collected then an array has a value of true.
+	 */
+	public static var _itemGotJump:Array<Bool> = [
+	false, false, false, false
+	];
+	
+	/**
+	 * Do NOT change the value of this var. If a Map tile is made of any 1 of 8 super blocks then that tile can only be destroyed if the player has an item of that type. If player picks up a super block item then an array is true. If an array is true and its ID is the same as the super block ID then player is able to destroy that super block.
+	 */ 
+	public static var _itemGotSuperBlock:Array<Bool> = [
+	false, false, false, false, false, false, false, false
+	];
+	
+	/**
+	 * Do NOT change the value of this var. Picked up a normal gun.
+	 */
+	public static var _itemGotGun:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up a freeze gun.
+	 */
+	public static var _itemGotGunFreeze:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up a flame gun.
+	 */
+	public static var _itemGotGunFlame:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up rapid fire for the normal gun.
+	 */
+	public static var _itemGotGunRapidFire:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up flying hat. Player need to stand on a flying pad to begin flying.
+	 */
+	public static var _itemGotFlyingHat:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up a swimming skill item. Player can now swim.
+	 */
+	public static var _itemGotSwimmingSkill:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up an antigravity suit item. Player can now walk on the ceiling.
+	 */
+	public static var _itemGotAntigravitySuit:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Picked up a skill dash item. Player can now dash quickly.
+	 */
+	public static var _itemGotSkillDash:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Player can now use the flute to find a dog.
+	 */
+	public static var _itemGotDogFlute:Bool = false;
+
+	/**
+	 * Do NOT change the value of this var. This is the default fall distance that the player can fall without receiving fall damage. This distance has a height of 2 tiles.
+	 */
+	public static var _fallAllowedDistanceInPixels = 64;
+	
+	/**
+	 * Do NOT change the value of this var.  How high the player can jump.
+	 */
+	public static var _jumpForce:Int = 680;	
+	
+	/**
+	 * Do NOT change the value of this var. Value is true if the player is using the flying hat item.
+	 */
+	public static var _usingFlyingHat:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. This is the last player coords befor entering the house, hut, cave, ect. Position of the player in the x and y coords system.
+	 */
+	public static var playerXcoordsLast:Float = 0;
+	public static var playerYcoordsLast:Float = 0;
+	
+	/**
+	 * Plaer will be a yellow color when felling weak.
+	 */
+	public static var _playerFeelsWeak:Bool = false;
+	
+	//------------------------
+	/**
+	 * Do NOT change the value of this var. Values are "house" and "". The house map will be displayed when value is house, 
+	 */
+	public static var _inHouse:String = "";
+	
+	/**
+	 * Do NOT change the value of this var. Used to remember if player picked up the dog at a house or outside.
+	 */public static var _dogInHouse:String = "";
+	//------------------------
+	
+	/**
+	 * Do NOT change the value of this var. Used to store a list of dog ID's. If ID exists in this var then that dog was returned to dog lady. Therefore, at the current map, a dog with that ID must not exist.
+	 */
+	public static var _dogCarriedItsID:String = ""; 
+	
+	/**
+	 * Do NOT change the value of this var. Used to determine the dog's ID. Example, if ID is 2 then the dog carried was running on the ground before player carried that dog.
+	 */
+	public static var _dogCurrentlyCarried:Int = 0;
+	
+	/**
+	 * Do NOT change the value of this var. True if dog is visable on the current map.
+	 */
+	public static var _dogOnMap:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. Holds the map data of all dogs returned to the dog lady. If map data in this var matches the map data of the current map then _dogOnMap will equal false. 
+	 */
+	public static var _dogFoundAtMap:String = "";
+	
+	/**
+	 * Do NOT change the value of this var. Used to hold all location of dogs picked up. If this var matches the coords where a dog should exist then the Reg.state.player._dogFound var will be false.
+	 */
+	public static var _dogNoLongerAtMap:String = "";	
+	
+	/**
+	 * Do NOT change the value of this var. Determines if the dog is carried. 
+	 */
+	public static var _dogCarried:Bool = false;
+	
+	/**
+	 * Do NOT change the value of this var. This var is used at the dog lady to only display the dog flute dialog once.
+	 */
+	public static var _displayFluteDialog:Bool = true;
+	
+	/**
+	 * For the Z key/button this is the current value of the inventory item selected.
+	 */
+	public static var _itemZSelectedFromInventory:Int = 0;
+	
+	/**
+	 * For the X key/button this is the current value of the inventory item selected.
+	 */
+	public static var _itemXSelectedFromInventory:Int = 0;
+	
+	/**
+	 * For the C key/button this is the current value of the inventory item selected.
+	 */
+	public static var _itemCSelectedFromInventory:Int = 0;
+	
+	//##################################################################
+	//########## vars that WILL be saved when game is saved ############
+	//##################################################################
+	// NOTE: these vars MUST also be in the resetRegVars function at this
+	// class so they can be reset to there default value when, after the 
+	// player dies, a new game is selected.	
+	
+	//------------------------
+	// You must only change this value when debugging. If this value is true then that boss has been defeated. Example, if you are setting the second boss to true then all the previous bosses must also be set to true. That value should only be changed if you want to test the dialog of NPCs or some event after a boss has been defeated. 
+	public static var _boss1ADefeated:Bool = false;
+	public static var _boss1BDefeated:Bool = false;
+	public static var _boss2Defeated:Bool = false;
+	//------------------------
+	
+	/**
+	 * Sometimes a mob will drop a heart. A heart collected will increase players health but cannot go beyond the total health of this var. Only a health container will increase the value of this var.
+	 */
+	public static var _healthMaximum:Float = 5;
+	
+	/**
+	 * This is the current health of player. The "Player.health" will equal this var when player is placed on the map. This var must not be greater than the _healthMaximum var.
+	 */
+	public static var _healthCurrent:Float = 5; 
+	
+	//------------------------
+	// These vars are used to load a map. You can change these vars to debug a different map but remember to set the map back to Map-20-20.csv because that map is the starting map of the game. Example, mapXcoords = 20 and mapYcoords = 20 will set the map back to the start of the game.
+	// These var values will be used the first time a new game loads. The second time, the values will come from the function resetRegVars at this clase. So, if you need to test a map other than 20-20 then you need to also change those values at that function.
+	
+	/**
+	 * The X coords of the current map displayed. Example, Map-X-Y.csv.
+	 */
+	public static var mapXcoords:Float = 20; // should be 20.
+	
+	/**
+	 * The Y coords of the current map displayed. Example, Map-X-Y.csv.
+	 */
+	public static var mapYcoords:Float = 20; // should be 20.
+	//------------------------
+		
+	/**
+	 * how easy will the mobs be to defeat. 1:easy, 2:normal, 3:hard
+	 */
+	public static var _difficultyLevel:Int = 2;
+	
+	/**
+	 * _gunPower determines if its a double or single bullet, ect. Bullet power and bullet size increase the higher this value is. values are 1, 2 or 3.
+	 */ 
 	public static var _gunPower:Float = 1;
 	
 	/**
 	 * The amount of triangles that the player has collected. Triangles sometimes drop from a monster when monster is defeated. When player picks up enough triangles when gun will increase in power and bullet will then be more powerful. Bullets will hurt monsters health at damage times gun power.
 	 */ 
 	public static var _gunHudBoxCollectedTriangles:Float = 0;	
+		
+	//######################## INVENTORY MENU ######################	
+	/**
+	 * For the Z key/button this is the current name of the inventory item selected.
+	 */
+	public static var _itemZSelectedFromInventoryName:String = "";
 	
-	// normal gun has a value of 0. flame gun has a value of 1, ect.
-	public static var _typeOfGunCurrentlyUsed:Int = 0;
-	
-	// at the start of game, player can stand anywhere at the beginning  of the game. after entering another level, the player stands near a door.
-	public static var beginningOfGame:Bool = true;
-	
-	// currently set for a total of 4 different keys. this var refers to a key that was picked up.
-	public static var _itemGotKey:Array<Bool> = [
-	false, false, false, false
-	];
-	
-	// different jump items. array 1 is a low jump while 4 is a higher jump ability. currenly only 4 jump upgrades are available.
-	public static var _itemGotJump:Array<Bool> = [
-	false, false, false, false
-	];
-	
-	// different guns, like normal gun, flame, ice, ect. the first var is normal, then flame. if ture that the item will not be displayed for the player to pickup when player goes back to that map.
-	public static var _itemGotGun:Bool = false;	
-	public static var _itemGotGunFreeze:Bool = false;
-	public static var _itemGotGunFlame:Bool = false;
-	
-	public static var _itemGotGunRapidFire:Bool = false;
-	
-	// hearts collected increases health but cannot go beyond the total health of this var.
-	public static var _healthMaximum:Float = 5;
-	public static var _healthCurrent:Float = 5; // health is not reset going to a different level.
-	
-	// used to determine if a heart container should be displayed on the map or was picked up.
-	public static var _healthContainerCoords:String = "";
-	
-	// used to determine if diamonds should be displayed on the map or if they were picked up.
-	public static var _diamondCoords:String = "";
-	
-	// position of the player in the x and y coords system.
-	public static var playerXcoords:Float = 0;
-	public static var playerYcoords:Float = 0;
-	
-	public static var _fallAllowedDistanceInPixels = 64; // go to function touchItemJump at playState for more values.
-	public static var _jumpForce:Int = 680;
-	
-	public static var _itemGotFlyingHat:Bool = false;
-	
-	public static var _usingFlyingHat:Bool = false; // refers to an item currently in use. 1 = flying hat.
-	
-	public static var _inHouse:String = ""; // values are "house" and "". when value is house, the house map will be displayed.
-	public static var _dogInHouse:String = ""; // // used to remember where the dog was picked up.
-	
-	// this is the last player coords befor entering the house, hut, cave, ect.
-	// position of the player in the x and y coords system.
-	public static var playerXcoordsLast:Float = 0;
-	public static var playerYcoordsLast:Float = 0;
-	
-	// got a super block item. if true then player is able to pass a super block.
-	public static var _itemGotSuperBlock:Array<Bool> = [
-	false, false, false, false, false, false, false, false
-	];
-	
-	public static var _itemGotSwimmingSkill:Bool = false;
-	public static var _itemGotAntigravitySuit:Bool = false;
-	public static var _itemGotSkillDash:Bool = false;
-	public static var _playerFeelsWeak:Bool = false;
-	public static var _itemGotDogFlute:Bool = false;
-	
-	// is there a dog at the current area?
-	public static var _dogOnMap:Bool = false;
-	// is the dog carried?
-	
-	public static var _dogCarriedItsID:String = "";
-	public static var _dogCurrentlyCarried:Int = 0;
-	public static var _dogFoundAtMap:String = "";
-	public static var _dogNoLongerAtMap:String = "";
-	
-	public static var _dogCarried:Bool = false;
-	
-	public static var _displayFluteDialog:Bool = true;
-	
-	//########## INVENTORY MENU
-	public static var _inventoryGridXTotalSlots:Int = 13; // total number of horizontal slots in the inventory grid.
-	public static var _inventoryGridYTotalSlots:Int = 7; // total number of vertical slots in the inventory grid.
-	public static var _itemZSelectedFromInventory:Int = 1; // current item selected.
-	public static var _itemXSelectedFromInventory:Int = 0;
-	public static var _itemCSelectedFromInventory:Int = 0;
-	public static var _itemZSelectedFromInventoryName:String = ""; // current item selected.
+	/**
+	 * For the X key/button this is the current name of the inventory item selected.
+	 */
 	public static var _itemXSelectedFromInventoryName:String = "Normal Jump.";
+	
+	/**
+	 * For the C key/button this is the current name of the inventory item selected.
+	 */
 	public static var _itemCSelectedFromInventoryName:String = "";
 	
-	// 104 items
+	/**
+	 * Currently a new game only has one item in the inventory, so this value must equal 1. If you add another item to the inventory list then change this value to 2 and add the data at the second field of _inventoryIconName, _inventoryIconDescription and _inventoryIconFilemame. 
+	 */
+	public static var _inventoryIconNumberMaximum:Int = 1;
+	
+	/**
+	 * At default, when you start a new game, the "normal jump" at inventory is the only item that can be selected. If you want that item to be at the Z action key then change here the first false to value true.
+	 * If there were two items at the inventory and you wanted the second item to be used as default at this action key then change the first value to false and the second value to true. Then at _inventoryIconName, _inventoryIconDescription and _inventoryIconFilemame add the second item data to the second value of those vars and then plus one the value of _inventoryIconNumberMaximum.
+	 */
 	public static var _inventoryIconZNumber:Array<Bool> = [
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
@@ -528,6 +763,9 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
 	];
 	
+	/**
+	 * If at the inventory screen there are two items displayed at slot one and two and you want the second item to be displayed at the navigation bar where the big X is displayed then change here the first value to false and then change the second value to true.
+	 */
 	public static var _inventoryIconXNumber:Array<Bool> = [
 	true, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
@@ -539,6 +777,9 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
 	];
 	
+	/**
+	 * If you would like to have this action key to use the third inventory item when a new game starts then change here the third "false" value and make it "true".
+	 */
 	public static var _inventoryIconCNumber:Array<Bool> = [
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
@@ -550,6 +791,9 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
 	];
 	
+	/**
+	 * Name of the inventory item.
+	 */
 	public static var _inventoryIconName:Array<String> = [
 	"Normal Jump.", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -561,6 +805,9 @@ class Reg
 	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
 	];
 	
+	/**
+	 * Description of the inventory item. Needs to be a short one-liner or else the text will run off of the screen.
+	 */
 	public static var _inventoryIconDescription:Array<String> = [
 	"Can jump a maximum distance of two tiles.", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -572,6 +819,9 @@ class Reg
 	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
 	];
 	
+	/**
+	 * The file image should be 32 x 32 in pixels and exist at the assets/images directory. Next, add the filename beside "itemJumpNormal.png". The image will be displayed at the inventory screen but only after you set the other inventory vars.
+	 */
 	public static var _inventoryIconFilemame:Array<String> = [
 	"itemJumpNormal.png", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -582,8 +832,8 @@ class Reg
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
 	];	
-	
-	public static var _inventoryIconNumberMaximum:Int = 1;
+	//################## END OF INVENTORY MENU #####################
+
 	
 	//						----MUST READ---
 	//##############################################################
@@ -724,17 +974,14 @@ class Reg
 	{
 		// public static so you can var rn = Util.randomNumber(1, 10);
 		var minimum:Int;
-			if (min < 0) {
-			minimum = min - 1;
-			} else {
-			minimum = min;
-		}
 		var maximum:Int;
- 			if (max < 0) {
-			maximum = max- 1;
-			} else {
-			maximum= max;
-		}
+		
+		// The minus 1 at this code will make var minimum a negative value.
+		if (min < 0) minimum = min - 1;
+		else minimum = min; // No plus 1 value because 0 is a positive value.
+ 		
+		if (max < 0) maximum = max - 1;
+		else maximum = max;
 		
 		return Std.int(Math.random() * (maximum - minimum + 1) + minimum);
 	} 
@@ -747,18 +994,24 @@ class Reg
 	* */
 	public static function incrementTicks(ticks:Float, inc:Float):Float
 	{
+		// Round ticks to the second decimal place.
 		ticks = FlxMath.roundDecimal(inc, 2) + FlxMath.roundDecimal(ticks, 2);
 		ticks = Math.round(ticks * 100) / 100;
 
+		// When framerate equals 180 then this "code block" will get called everytime. When the value is 0.33 then the code will make the ticks plus one its value but the inc var at next loop will still be a value of 0.33,
 		if (FlxMath.roundDecimal(inc,2) == 0.33)
 		{			
 			var temp:String = Std.string(ticks);
+			
+			// temp2[0] refers to a value at the left side of the decimal while tamp2[1] refers to the value at the right side of the decimal.
 			var temp2:Array<String> = temp.split(".");				
 
 			if (temp2[1] != null)
 			{
+				// If framerate equals 180 then 60 divided by framerate will equal 0.33. The problem is that ticks need to be in increments of 1. When a tick has a value of .99 then the tick will be rounded up to the next whole value. Then at a class we can do if (ticks == 1).
 				if (StringTools.startsWith(temp2[1], "99"))
 				{
+					// convert a string to a float/
 					var temp3:Float = Std.parseFloat(temp2[0]);
 					temp3++;  ticks = FlxMath.roundDecimal(temp3, 2);	
 				}
@@ -768,6 +1021,9 @@ class Reg
 		return ticks;
 	}
 	
+	/**
+	* Function used to exit the game.
+	*/
 	public static function exitProgram():Void
 	{
 		//#if WEB_EMBED	// enable in project.xml <haxedef name="WEB_EMBED" />

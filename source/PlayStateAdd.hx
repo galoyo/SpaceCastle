@@ -477,7 +477,7 @@ class PlayStateAdd
 		var paragraph = Reg._diamondCoords.split(",");
 		var diamondsFoundOnMap:Bool = false;
 		
-		// loop through the paragraph array. if there is a match then a heart was picked up at the current map the player is at.
+		// loop through the paragraph array.
 		for (i in 0...paragraph.length)
 		{	
 			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
