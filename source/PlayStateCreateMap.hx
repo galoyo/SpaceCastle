@@ -476,18 +476,18 @@ class PlayStateCreateMap
 			}
 		}		
 		
-		Reg.state.add(Reg.state._bullets);
-		Reg.state.add(Reg.state._bulletsMob);
-		Reg.state.add(Reg.state._bulletsObject);
+		if (Reg.state._bullets != null) Reg.state.add(Reg.state._bullets);
+		if (Reg.state._bulletsMob != null)Reg.state.add(Reg.state._bulletsMob);
+		if (Reg.state._bulletsObject != null)Reg.state.add(Reg.state._bulletsObject);
 		
 		// player is displayed in front of enemies.
-		Reg.state.add(Reg.state.enemies);
-		Reg.state.add(Reg.state.enemiesNoCollideWithTileMap);
-		Reg.state.add(Reg.state.npcs);	
-		Reg.state.add(Reg.state._objectCage);
-		Reg.state.add(Reg.state._objectTube);
-		Reg.state.add(Reg.state._objectCar);
-		Reg.state.add(Reg.state.player);
+		if (Reg.state.enemies != null)Reg.state.add(Reg.state.enemies);
+		if (Reg.state.enemiesNoCollideWithTileMap != null)Reg.state.add(Reg.state.enemiesNoCollideWithTileMap);
+		if (Reg.state.npcs != null)Reg.state.add(Reg.state.npcs);	
+		if (Reg.state._objectCage != null)Reg.state.add(Reg.state._objectCage);
+		if (Reg.state._objectTube != null)Reg.state.add(Reg.state._objectTube);
+		if (Reg.state._objectCar != null)Reg.state.add(Reg.state._objectCar);
+		if (Reg.state.player != null)Reg.state.add(Reg.state.player);
 		
 		
 	}	

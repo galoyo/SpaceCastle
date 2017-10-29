@@ -45,7 +45,7 @@ class PlayStateTouchObjects
 	{
 		FlxSpriteUtil.flicker(p, 100, 0.04);
 		Reg._powerUpStopFlicker = true;
-		FlxG.sound.playMusic("powerUp2", 0.40, false);
+		FlxG.sound.playMusic("powerUp2", 0.40, false); // The player cannot take damage when this music is playing.
 		
 		e.kill();
 	}
@@ -136,17 +136,13 @@ class PlayStateTouchObjects
 			// animate the player with a tween to look like he goes throught the door.
 			// move player to center of door and fade him out
 			var px = door.x;
-			var py = door.y;
+			var py = door.y;			
 			
-			if (!p.hasWon) {				
-				/*p.velocity.x = 0;
-				p.velocity.y = 0;
-				p.acceleration.x = 0;
-				p.acceleration.y = 0;
-				*/
-				p.hasWon = true;
-				
-			}	
+			/*p.velocity.x = 0;
+			p.velocity.y = 0;
+			p.acceleration.x = 0;
+			p.acceleration.y = 0;
+			*/
 			
 			door.kill();
 			
@@ -223,8 +219,8 @@ class PlayStateTouchObjects
 	{
 		if (InputControls.up.pressed) 
 		{
-			p.xForce--; p.xForce = FlxMath.bound(p.xForce, -1, 1);
-			p.yForce = 0;
+			p._xForce--; p._xForce = FlxMath.bound(p._xForce, -1, 1);
+			p._yForce = 0;
 			p.velocity.y = -100;
 			p.acceleration.y = -320;		
 			p.y = p.y - 2;
@@ -237,8 +233,8 @@ class PlayStateTouchObjects
 		}
 		else if (InputControls.down.pressed) 
 		{
-			p.xForce--; p.xForce = FlxMath.bound(p.xForce, -1, 1);
-			p.yForce = 0;
+			p._xForce--; p._xForce = FlxMath.bound(p._xForce, -1, 1);
+			p._yForce = 0;
 			p.velocity.y = 100;
 			p.acceleration.y = 320;
 			p.y = p.y + 2;
@@ -339,7 +335,7 @@ class PlayStateTouchObjects
 		Reg._playerAirLeftInLungs = Reg._playerAirLeftInLungsMaximum;
 			
 		// play the sound only when the player is in the air.,
-		if (p.inAir == true && Reg.state._playWaterSound == true)
+		if (p._inAir == true && Reg.state._playWaterSound == true)
 		{
 			if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 			Reg.state._playWaterSound = false;
@@ -369,7 +365,7 @@ class PlayStateTouchObjects
 		}
 			
 			
-		p._mobIsSwimming = true;									
+		p._mobInWater = true;									
 		Reg._playerAirLeftInLungs = -Reg.state._playerAirRemainingTimer.elapsedLoops + Reg._playerAirLeftInLungsCurrent;
 		p.drag.x = p._drag;
 		
@@ -386,7 +382,7 @@ class PlayStateTouchObjects
 	 */
 	public static function wavePlayer(w:FlxSprite, p:Player):Void
 	{
-		p._mobIsSwimming = false;
+		p._mobInWater = false;
 		p.acceleration.x = p.acceleration.y = p._gravity;
 	}	
 	

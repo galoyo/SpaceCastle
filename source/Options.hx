@@ -126,7 +126,7 @@ class Options extends FlxSubState
 		
 		options8 = new FlxText(190, 407, 0, "");
 		if (Reg._difficultyLevel == 1) options8.text = "Difficulty Level [EASY].";
-		if (Reg._difficultyLevel == 2 || Reg._difficultyLevel == null) options8.text = "Difficulty Level [NORMAL].";
+		if (Reg._difficultyLevel == 2 || Reg._difficultyLevel == 0) options8.text = "Difficulty Level [NORMAL].";
 		if (Reg._difficultyLevel == 3) options8.text = "Difficulty Level [HARD].";
 		options8.color = FlxColor.WHITE;
 		options8.size = 14;
@@ -305,7 +305,7 @@ class Options extends FlxSubState
 
 	public function saveOptions():Void
 	{		
-		if ( Reg._difficultyLevel == null) Reg._difficultyLevel = 2;
+		if ( Reg._difficultyLevel == 0) Reg._difficultyLevel = 2;
 		
 		_gameOptions = new FlxSave(); // initialize
 		_gameOptions.bind("TSC-SAVED-OPTIONS"); // bind to the named save slot.			

@@ -36,33 +36,142 @@ import flixel.util.FlxTimer;
 
 class PlayState extends FlxUIState
 {
+	/*******************************************************************************************************
+	 * Used in the recording of a game demo.
+	 */
 	public var recording:Bool = false;
-	public var replaying:Bool = false;	
+		
+	/*******************************************************************************************************
+	 *  This emitter of colorful square particles will continue through its straight path hitting anything in its way.
+	 */
+	public var _emitterBulletFlame:FlxEmitter;	
 	
+	/*******************************************************************************************************
+	 * This emitter will emit when a mob takes damage.
+	 */
 	public var _emitterMobsDamage:FlxEmitter;
-	public var _emitterDeath:FlxEmitter;
-	public var _emitterItemTriangle:FlxEmitter;
-	public var _emitterItemDiamond:FlxEmitter;
-	public var _emitterItemPowerUp:FlxEmitter;
-	public var _emitterItemNugget:FlxEmitter;
-	public var _emitterItemHeart:FlxEmitter;
-	public var _particleSmokeRight:FlxEmitter;
-	public var _particleSmokeLeft:FlxEmitter;	
-	public var _emitterBulletFlame:FlxEmitter;
-	public var _particleWaterSplash:FlxEmitter;
-	public var _emitterSkillDash:FlxEmitter;
 	
-	public var _particleCeilingHit:FlxEmitter;
-	public var _particleQuestionMark:FlxEmitter;
+	/*******************************************************************************************************
+	 * This emitter will display an animated explosion in front of a mob just before that mob is destroyed.
+	 */
+	public var _emitterDeath:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * One or more triangles might be dropped from a defeated mob. A collected triangle will inclease the "Gun Power" hud value. Collect enought of them and the gun power will increase. Hence, a gun bullet will then be more powerful.
+	 */
+	public var _emitterItemTriangle:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Sometimes a mob drops a diamond when defeated. That small diamond will increase the Score seen at the Score hud.
+	 */
+	public var _emitterItemDiamond:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Sometimes a mob drops a star. This emitter controls the animation and velocity of that star. The player will be invincible When that star is collected. A "powerUp" music will be played when the star is collected. The player can receive damage only after the powerUp music has ended.
+	 */
+	public var _emitterItemPowerUp:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * A mob might drop some nuggets when that mob is defeated. Nuggets are used to buy stuff from the store.
+	 */
+	public var _emitterItemNugget:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Increases the players health by one health point. If the player is not damaged, a full blue health bar, then picking up this item will not increase player's health.
+	 */
+	public var _emitterItemHeart:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. When the emitter emits, the player will quickly dash to the left or to the right while the player is rising in the air. At that time, a trail of gray players will be behind the player creating an effect that the player is moving so quickly that many of players can be seen.
+	 */
+	public var _emitterSkillDash:FlxEmitter;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
 	public var _particleBulletHit:FlxEmitter;
-	public var _particleBulletMiss:FlxEmitter;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
+	public var _particleBulletMiss:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * This is jetpack smoke for moving left mobs.
+	 */
+	public var _particleSmokeLeft:FlxEmitter;	
+	
+	/*******************************************************************************************************
+	 * This is jetpack smoke for moving right mobs.
+	 */
+	public var _particleSmokeRight:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * This partical emits a water splash effect when player or mob enters or exits the water.
+	 */
+	public var _particleWaterSplash:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * The player is stunned for a moment when the player's head hits the ceiling. This particle emits the image for that effect. 
+	 */
+	public var _particleCeilingHit:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * When playing the game, pressing the "Down arrow" key is used to interact with objects such as opening a door or talking to a mob. When there is nothing to interact with at thst location then a "?" will emit.
+	 */
+	public var _particleQuestionMark:FlxEmitter;		
+	
+	/*******************************************************************************************************
+	 * The player is able to breath underwater at an "air bubble" location. At the air bubble this emitter emits the animation.
+	 */
 	public var _particleAirBubble:FlxEmitter;
 	
+	// BULLET CLASSES ######################################################################################
+	
+	/*******************************************************************************************************
+	 * Normal gun bullets.
+	 */
+	public var _bullets:FlxTypedGroup<Bullet>;	
+	
+	/*******************************************************************************************************
+	 * Bullets from mobs.
+	 */
+	public var _bulletsMob:FlxTypedGroup<BulletMob>;
+	
+	/*******************************************************************************************************
+	 * Bullets from objects. For example, the object cannon shoots bullets.
+	 */
+	public var _bulletsObject:FlxTypedGroup<BulletObject>;
+	
+	//######################################################################################################
+	
+	// GUN OVERLAY #########################################################################################
+	
+	/*******************************************************************************************************
+	 * Normal gun class. For example, for access to this gun class do Reg.state._gun. 
+	 */
 	public var _gun:PlayerOverlayGun;
+	
+	/*******************************************************************************************************
+	 * Flame gun class.
+	 */
 	public var _gunFlame:PlayerOverlayGunFlame;
+	
+	/*******************************************************************************************************
+	 * Freeze gun class.
+	 */
 	public var _gunFreeze:PlayerOverlayGunFreeze;
-		
+	
+	//######################################################################################################
+	
+	/**
+	 * This group holds most items that were picked up by the player. A collide check for this group points to the PlayStateTouchItems.itemPickedUp function. See that function for an example about how to access a dialog when an item in this group is picked up.
+	 */
 	public var _itemsThatWerePickedUp:FlxGroup;
+	
+	/**
+	 * The player is free to fly for any lenght of time so long as player does not touch a tile. Touching a tile will stop the player from flying. The player will then need to stand on a flying pad to fly again.
+	 */
 	public var _itemFlyingHatPlatform:FlxGroup;	
 	public var _itemGunFlame:FlxGroup;
 	public var _itemGun:FlxGroup;
@@ -109,11 +218,27 @@ class PlayState extends FlxUIState
 	
 	public var _objectLayer3OverlapOnly:FlxGroup;
 	
+	// player class.
+	public var player:Player;
+		
+	// all mobs that collide will tilemaps are in this group.
+	public var enemies:FlxGroup;
+	// all mobs that do not collide will tilemaps but can collide with other mobs are in this group.	
+	public var enemiesNoCollideWithTileMap:FlxGroup;
+	public var npcs:FlxGroup; //  non-player characters (malas)
+	
+	// the inventory system across the top part of the screen.
+	public var hud:Hud;
+	
+	public var _buttonsNavigation:ButtonsNavigation; // left, right, jump, etc, buttons at the bottom of the screen.
+	
+	// the text when an item is picked up or a char is talking.
+	public var dialog:Dialog;
+	
 	// These mobs are in the enemies group.
 	public var mobApple:MobApple;
 	public var mobSlime:MobSlime;	
-	public var mobCutter:MobCutter;
-	public var boss2:Boss2;
+	public var mobCutter:MobCutter;	
 	public var mobBullet:MobBullet;
 	public var mobTube:MobTube;
 	public var mobBat:MobBat;
@@ -126,30 +251,18 @@ class PlayState extends FlxUIState
 	
 	public var boss1A:Boss1;
 	public var boss1B:Boss1;
+	public var boss2:Boss2;
 	public var mobBubble:MobBubble;
-	public var npcDoctor:NpcDoctor;
 	
+	public var npcDoctor:NpcDoctor;
 	public var npcMalaUnhealthy:NpcMalaUnhealthy;
 	public var npcMalaHealthy:NpcMalaHealthy;
 	public var npcDogLady:NpcDogLady;
-	public var npcDog:NpcDog;
-	
-	public var _bullets:FlxTypedGroup<Bullet>;	
-	public var _bulletsMob:FlxTypedGroup<BulletMob>;
-	public var _bulletsObject:FlxTypedGroup<BulletObject>;
-	
-	// player class.
-	public var player:Player;
+	public var npcDog:NpcDog;	
 	
 	public var _healthBars:FlxGroup;
 	public var _healthBarPlayer:HealthBar;
 	public var _bubbleHealthBar:FlxBar;
-	
-	// all mobs that collide will tilemaps are in this group.
-	public var enemies:FlxGroup;
-	// all mobs that do not collide will tilemaps but can collide with other mobs are in this group.	
-	public var enemiesNoCollideWithTileMap:FlxGroup;
-	public var npcs:FlxGroup; //  non-player characters (malas)
 	
 	public var _defenseMobFireball1:FlxSprite;
 	public var _defenseMobFireball2:FlxSprite;
@@ -162,27 +275,12 @@ class PlayState extends FlxUIState
 	public var _trail:FlxTrailEffect;
 	public var _tween:FlxTween;
 	
-	public var background:FlxSprite;
-	public var _playerOnLadder:Bool = false;
-	public var _playerJustExitedLadder:Bool = false;
-	public var _touchingSuperBlock:Bool = false;
-	
-	public var _playWaterSound:Bool = true;
-	public var _playWaterSoundEnemy:Bool = true;
-	
 	public var tilemap:FlxTilemapExt;
 	public var underlays:FlxTilemap;
 	public var overlays:FlxTilemap;
 	public var foregroundImage:FlxBackdrop;	
+	public var background:FlxSprite;
 	
-	// the inventory system across the top part of the screen.
-	public var hud:Hud;
-	
-	public var _buttonsNavigation:ButtonsNavigation; // left, right, jump, etc, buttons at the bottom of the screen.
-	
-	// the text when an item is picked up or a char is talking.
-	public var dialog:Dialog;
-
 	public var _rain:FlxTypedGroup<ObjectRain>; // a group of flakes
 	//private var _vPad:FlxVirtualPad;
 	
@@ -190,17 +288,19 @@ class PlayState extends FlxUIState
 	public var _questionMark:FlxTimer;
 	public var _waterPlayer:FlxTimer;
 	public var _waterEnemy:FlxTimer;
-	public var _playerAirRemainingTimer:FlxTimer;
-	
+	public var _playerAirRemainingTimer:FlxTimer;	
+		
+	public var _playerOnLadder:Bool = false;
+	public var _playerJustExitedLadder:Bool = false;
+	public var _touchingSuperBlock:Bool = false;	
+	public var _playWaterSound:Bool = true;
+	public var _playWaterSoundEnemy:Bool = true;
 	public var _ceilingHitFromMob:Bool;
-	
-	// save point.
 	public var savePoint:FlxGroup;
 	public var _fireballPositionInDegrees:Int;
 	public var airLeftInLungsText:FlxText;
 	public var _talkToHowManyMoreMalas:FlxText;
-	public var _timeRemainingBeforeDeath:FlxText;
-	
+	public var _timeRemainingBeforeDeath:FlxText;	
 	public var warningFallLine:FlxSprite;
 	public var deathFallLine:FlxSprite;
 	public var maximumJumpLine:FlxSprite;
@@ -526,7 +626,7 @@ class PlayState extends FlxUIState
 		Reg._dogStopMoving = false;
 		
 		//##################### RECORDING CODE BLOCK ####################
-		// if you want to play the recorded demo then uncomment this block only after you have recording a demo located at the top of update() function at this file. if you uncomment this block then you need to comment the recording code block at the top of the update() function at this file.
+		// if you want to play the recorded demo then uncomment this block only after you have recorded a demo located at the top of update() function at this file. if you uncomment this block then you need to comment the recording code block at the top of the update() function at this file.
 		if (Reg._playRecordedDemo == true)
 		{			
 			Reg._playRecordedDemo = false;
@@ -589,9 +689,9 @@ class PlayState extends FlxUIState
 		//to record a demo you need to uncomment this block and you need to comment the recording code block near the bottom of the create() function at this file. search for the keyword "record".
 		
 		// remember to change the framerate at options before recording. at playstate.hx press 8 to record and press 9 to save the recording and save the file "replay-60.fgr", "replay-120.fgr", etc to the assests/data directory.
-		/*if (FlxG.keys.anyJustPressed(["EIGHT"]) && !recording && !replaying) {recording = true; replaying = false; FlxG.vcr.startRecording(true);} 
+		/*if (FlxG.keys.anyJustPressed(["EIGHT"]) && !recording) {recording = true; FlxG.vcr.startRecording(true);} 
 		if (FlxG.keys.anyJustPressed(["NINE"])) FlxG.vcr.stopRecording();
-		if (FlxG.keys.anyJustPressed(["ZERO"])) {replaying = false; FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); }*/
+		if (FlxG.keys.anyJustPressed(["ZERO"])) FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); */
 		//################ END RECORDING DEMO BLOCK #################
 		
 		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
@@ -827,7 +927,7 @@ class PlayState extends FlxUIState
 		FlxG.collide(_objectsThatDoNotMove, _objectsThatMove);
 		
 		// check if player is in the water. These values are from layer 5. they refer to water overlays. when a player overlaps one of these tiles the air countdown text will be displayed.
-		if (FlxG.overlap(_overlayPipe, player) && player._mobIsSwimming == true 
+		if (FlxG.overlap(_overlayPipe, player) && player._mobInWater == true 
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 15 // water.
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 294
 		|| Reg.state.overlays.getTile(Std.int(player.x / 32), Std.int(player.y / 32)) == 302
@@ -847,7 +947,7 @@ class PlayState extends FlxUIState
 		// if no arrow key was pressed for a lenght of time then show the guidelines.
 		if (Reg._guildlineInUseTicks > 30)
 		{
-			if (player._mobIsSwimming == true) Reg._guildlineInUseTicks = 0;
+			if (player._mobInWater == true) Reg._guildlineInUseTicks = 0;
 			else
 			{
 				if (warningFallLine != null)
@@ -1026,34 +1126,19 @@ class PlayState extends FlxUIState
 		
 	}	
 	
-	function winGame(e:FlxSprite, p:Player):Void
-	{
-		// stop the player from moving when touching the exit, the floor and has not yet
-		// won the game.
-		if (p.isTouching(FlxObject.FLOOR) && !p.hasWon) {
-			p.velocity.x = 0;
-			p.acceleration.x = 0;
-
-			p.hasWon = true;
-
-			// goto the funtion that calls the playState.hx file.
-			PlayStateMiscellaneous.leaveMap(p);
-		}
-	}
-	
 	function flyingHat(p:Player):Void
 	{
 		if (InputControls.up.pressed) 
 		{
-			p.yForce--;p.yForce = FlxMath.bound(p.yForce, -1, 1);		
-			p.acceleration.y = p.yForce * p._yMaxAcceleration;			
+			p._yForce--;p._yForce = FlxMath.bound(p._yForce, -1, 1);		
+			p.acceleration.y = p._yForce * p._maxYacceleration; // How fast the object accelerates horizontally when the Y value of the object is changed.		
 				
 			p.animation.play("flyingHat");
 		}
 		else if (InputControls.down.pressed) 
 		{
-			p.yForce++;p.yForce = FlxMath.bound(p.yForce, -1, 1);		
-			p.acceleration.y = p.yForce * p._yMaxAcceleration;
+			p._yForce++;p._yForce = FlxMath.bound(p._yForce, -1, 1);		
+			p.acceleration.y = p._yForce * p._maxYacceleration; // How fast the object accelerates horizontally when the Y value of the object is changed.
 			
 			p.animation.play("flyingHat");
 		} else p.velocity.y = 300;

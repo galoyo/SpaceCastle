@@ -17,53 +17,184 @@ import haxe.Timer;
 
 class Player extends FlxSprite
 {
-	public var xForce:Float = 0;
-	public var yForce:Float = 0;
-	private var _dogFound:Bool = false;
-	private var _ticksNextJump:Float; // as this var increases, so does the amount of fading gray players when the player does the jump.
-	private var _playerIsDashing:Bool = false; // is the player doing a skill dash which is a fast horizontal attack.
-	private var _jumping:Bool = false; // is the player jumping. used with the skill dash to only allow one dash per jump.
-	
-	public var _newY:Float = 0;	// used to keep the player standing still above the mobs head.
-
-	public var _bullets:FlxTypedGroup<Bullet>;
-	private var _bullet:Bullet;
+	/*******************************************************************************************************
+	 * The normal gun's bullet speed.
+	 */
 	private var _bulletSpeed:Int = 1000;
-	private var _particleBulletHit:FlxEmitter;
-	private var _particleBulletMiss:FlxEmitter;
-	private var _emitterBulletFlame:FlxEmitter;
-	private var _emitterSkillDash:FlxEmitter;
 	
-	// public var _maxWalkSpeed:Int = 430;
-	public var _maxRunSpeed:Int = 630;
+	/*******************************************************************************************************
+	 * This is the player's default walking speed.
+	 */
+	public var _defaultWalkingSpeed:Int = 630;
+	
+	/*******************************************************************************************************
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 3500;
 		
-	private var _maxAcceleration:Int = 50000;
-	public var _yMaxAcceleration:Int = 1000;
+	/*******************************************************************************************************
+	 * How fast the object accelerates horizontally when the X value of the object is changed.
+	 */
+	private var _maxXacceleration:Int = 50000;
+	
+	/*******************************************************************************************************
+	 * How fast the object accelerates horizontally when the Y value of the object is changed.
+	 */
+	public var _maxYacceleration:Int = 1000;
+	
+	/*******************************************************************************************************
+	 * Used to change the _maxXacceleration var from a positive to negative or negative to positive value.
+	 */
+	public var _xForce:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to change the _maxYacceleration var from a positive to negative or negative to positive value.
+	 */
+	public var _yForce:Float = 0; 
+	
+	/*******************************************************************************************************
+	 * Slow the object before stopping it. More like deceleration. The higher the value, the faster the object stops.
+	 */
 	public var _drag:Int = 50000;
-	public var _mobIsSwimming:Bool = false;
-	private var _skillDashX = 0; // when not doing a dash attack the value will be zero. when doing a dash attack the velocityX will be its value. 
-	private var _velocityX = 1200; // speed of the horizontal dash.
-	private var _skillDashY = 0; // when not doing a dash attack the value will be zero. when doing a dash attack the velocityY will be its value. 
-	private var _velocityY = 23140; // must be a bit bugger than _maxFallSpeed. this var is 140 in value greater than _maxFallSpeed which will lift the player off the ground about 20 pixels when doing a dash attach.
+	
+	/*******************************************************************************************************
+	 * Speed of the horizontal dash.
+	 */
+	private var _velocityX = 1200;	
+	
+	/*******************************************************************************************************
+	 * This value is the maximum trail of gray players seen behind the player when player does a skill dash.
+	 */
+	private var _skillDashMaximumGrayPlayers:Int = 8;
+	
+	/*******************************************************************************************************
+	 * Must be a bit bugger than _maxFallSpeed. This var is 140 in value greater than _maxFallSpeed which will lift the player off the ground about 20 pixels when doing a dash attach.
+	 */
+	private var _velocityY = 23140;
+	
+	/*******************************************************************************************************
+	 * Maximum acceleration speed for this player.
+	 */
 	public var _maxFallSpeed:Int = 23000;
 	
-	// is player in the air?
-	public var inAir:Bool = false;
-	public var hasWon:Bool = false;	
-	public var hitEnemy:Bool = false;
+	//##################################################################
+	//################ These values must NOT be changed. ###############
+	//##################################################################
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
+	private var _particleBulletHit:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
+	private var _particleBulletMiss:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 *  DO NOT change the value of this var. This emitter of colorful square particles will continue through its straight path hitting anything in its way.
+	 */
+	private var _emitterBulletFlame:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. When the emitter emits, the player will quickly dash to the left or to the right while the player is rising in the air. At that time, a trail of gray players will be behind the player creating an effect that the player is moving so quickly that many of players can be seen.
+	 */
+	private var _emitterSkillDash:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This value is true when the player uses the dog flute and there is a dog at that map.
+	 */
+	private var _dogFound:Bool = false;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. Used with the skill dash to only allow one dash per jump.
+	 */
+	private var _jumping:Bool = false;
+	
+	/*******************************************************************************************************
+	 *DO NOT change the value of this var. Used to keep the player standing still above the frozen mobs head.
+	 */
+	public var _standStill:Float = 0;
 
-	private var _gunDelay:Float;
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This is needed so that a bullet can be recycled. No need to new the class everytime a bullet is fired.
+	 */
+	public var _bullets:FlxTypedGroup<Bullet>;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. A single bullet sprite.
+	 */
+	private var _bullet:Bullet;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. The gun delay between bullets fired.
+	 */
+	private var _gunDelay:Float = 0;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. The shot clock. When this value is equal or greater than _gunDelay then the bullet can be fired.
+	 */
 	private var _cooldown:Float;
-
-	public var finalJumpForce:Float;
-	public var holdingUpKey:Bool = false;
 	
-	private var _swimming:FlxTimer;
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This mob may either be swimming or walking in the water. In elther case, if this value is true then this player is in the water.
+	 */
+	public var _mobInWater:Bool = false;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. When not doing a dash attack the value will be zero. When doing a dash attack the velocityX will be its value. 
+	 */
+	private var _skillDashX = 0;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. The last calulation before player jumps. Determines if _jumpForce will be a negative or positive value. Velocity.y will equal this value.
+	 */
+	public var _finalJumpForce:Float;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. Used to display a gun pointing in upward direction or fire a bullet in an upward direction. If anti-gravity is true then the gun will be pointing down and its bullet will travel southward.
+	 */
+	public var _holdingUpKey:Bool = false;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. A timer used to stop rapid swimming.
+	 */
+	private var _swimmingTimer:FlxTimer;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. If this value if true then make the player swim in the water for a short lenght of time.
+	 */
 	private var _swimmingTimerIsComplete:Bool = true;
-	public var _setPlayerOffset:Bool = false; // used to stop the player from showing its head when stopping at a junction.
 	
-	public var _playerStandingOnFireBlockTimer = new FlxTimer();
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This var will stop the player's head from displaying above a T junction pipe when the player had moved through the pipe in an upward direction and then stopped at the T junction pipe. 
+	 */
+	public var _setPlayerOffset:Bool = false; // 
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This timer is triggered when player is standing on a lava tile. When the timer is finished and player is still standing on a lava tile then player's health will decrease. 
+	 */
+	public var _playerStandingOnFireBlockTimer = new FlxTimer();	
+
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. When not doing a dash attack the value will be zero. When doing a dash attack the velocityY will be its value. 
+	 */
+	private var _skillDashY = 0;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. As this var increases so does the amount of fading skill dash gray players seen. A trail of gray players will be behind the player creating an effect that the player is moving so quickly that many of players can be seen.
+	 */
+	private var _ticksSkilLDash:Float  = 0;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. Is the player doing a skill dash which is a fast horizontal attack.
+	 */
+	private var _playerIsDashing:Bool = false;
 	
 	public function new(x:Float, y:Float, bullets:FlxTypedGroup<Bullet>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter, emitterBulletFlame:FlxEmitter, emitterSkillDash:FlxEmitter) 
 	{
@@ -77,7 +208,7 @@ class Player extends FlxSprite
 		collisonXDrag = true;
 		pixelPerfectPosition = true;
 		
-		inAir = false;
+		_inAir = false;
 		offset.set(0, 0);
 		
 		_bullets = bullets;
@@ -133,18 +264,17 @@ class Player extends FlxSprite
 		// how fast the speed of the object is changed in pixels per second.
 		acceleration.y = _gravity;
 		
-		// slow the object before stopping it.		
-		drag.x = _drag;		
+		drag.x = _drag;	 // Deceleration.
 		
 		health = Reg._healthCurrent;
 		FlxSpriteUtil.flicker(this, Reg._mobHitFlicker, 0.04, true); // no damage given when starting at a level.
 		
-		_swimming = new FlxTimer();
+		_swimmingTimer = new FlxTimer();
 		
 		visible = true; 
 	}
 	
-	public function shoot(holdingUpKey:Bool):Void 
+	public function shoot(_holdingUpKey:Bool):Void 
 	{	
 		// disable tracker when bullet is fired.
 		Reg.state._ticksTrackerUp = 0;
@@ -171,7 +301,7 @@ class Player extends FlxSprite
 					Reg.state._emitterBulletFlame.y = Std.int(y) + 8;
 				}
 				
-				if (holdingUpKey == true)
+				if (_holdingUpKey == true)
 				{
 					
 					if(Reg._antigravity == false) Reg.state._emitterBulletFlame.y -= 30;
@@ -199,7 +329,7 @@ class Player extends FlxSprite
 					}
 				}		
 				
-				if (holdingUpKey == true)
+				if (_holdingUpKey == true)
 					{
 						if (Reg._antigravity == false) _emitterBulletFlame.velocity.set( -2, -1000, 2, -1200);
 							else _emitterBulletFlame.velocity.set( -2, 1000, 2, 1200);
@@ -250,7 +380,7 @@ class Player extends FlxSprite
 					}
 					var bXVeloc:Int = 0;
 					
-					if (holdingUpKey == true)
+					if (_holdingUpKey == true)
 					{
 						
 						if(Reg._antigravity == false) bulletY -= 30;
@@ -288,7 +418,7 @@ class Player extends FlxSprite
 					}
 
 
-					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _particleBulletHit, _particleBulletMiss);		
+					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _holdingUpKey, _particleBulletHit, _particleBulletMiss);		
 					_cooldown = 0;	// reset the shot clock
 					// emit it
 					_particleBulletHit.focusOn(_bullet);
@@ -318,7 +448,7 @@ class Player extends FlxSprite
 
 					var bXVeloc:Int = 0;
 					
-					if (holdingUpKey == true)
+					if (_holdingUpKey == true)
 					{
 						
 						if(Reg._antigravity == false) bulletY -= 30;
@@ -351,7 +481,7 @@ class Player extends FlxSprite
 					}
 
 
-					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, holdingUpKey, _particleBulletHit, _particleBulletMiss);		
+					_bullet.shoot(bulletX, bulletY, bXVeloc, bYVeloc, _holdingUpKey, _particleBulletHit, _particleBulletMiss);		
 					_cooldown = 0;	// reset the shot clock
 					// emit it
 					_particleBulletHit.focusOn(_bullet);
@@ -415,8 +545,8 @@ class Player extends FlxSprite
 			// bullet
 			_cooldown += elapsed;
 			
-			if (alive && !hasWon && Reg._playerCanShootAndMove == true ) controls();
-			if (!hasWon) animate();
+			if (alive && Reg._playerCanShootAndMove == true ) controls();
+			animate();
 			levelConstraints();	
 			
 			//######################### CHEAT MODE #########################
@@ -530,7 +660,7 @@ class Player extends FlxSprite
 		}
 		//----------------------------
 		
-		xForce = 0; yForce = 0;		
+		_xForce = 0; _yForce = 0;		
 
 		// #################### TOGGLE ANTIGRAVITY ####################
 		// toggle antigravity.
@@ -538,13 +668,13 @@ class Player extends FlxSprite
 		 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Antigravity Suit."
 		 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Antigravity Suit.")
 		{
-			if (inAir == false && Reg._antigravity == false && !overlapsAt(x, y + 16, Reg.state._itemFlyingHatPlatform)) 
+			if (_inAir == false && Reg._antigravity == false && !overlapsAt(x, y + 16, Reg.state._itemFlyingHatPlatform)) 
 			{
 				Reg._antigravity = true;
 				Reg._playersYLastOnTile = y;
 			}
 			
-			else if(inAir == false && Reg._antigravity == true)
+			else if(_inAir == false && Reg._antigravity == true)
 			{
 				Reg._antigravity = false;
 				Reg._playersYLastOnTile = y;
@@ -556,7 +686,7 @@ class Player extends FlxSprite
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
 			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96; 
-			if (inAir == false ) _jumping = true;
+			if (_inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
@@ -567,7 +697,7 @@ class Player extends FlxSprite
 		{
 			// Reg._itemGotJump[0] refers to the first jump item obtained. which is set to true when the game starts. the _jumpForce is how high the player can jump. in this case, the player can jump up two tiles. the next jump item jumps for 3 items, ect. Since the jump force is set for 2 tiles, the _fallAllowedDistanceInPixels is also 2 tiles totaling 64 pixels.
 			Reg._jumpForce = 680; Reg._fallAllowedDistanceInPixels = 64;
-			if (inAir == false ) _jumping = true;
+			if (_inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
 		}
@@ -575,12 +705,12 @@ class Player extends FlxSprite
 		if (Reg._antigravity == false) 
 		{
 			// vars for a normal jump.
-			finalJumpForce = -(Reg._jumpForce + Math.abs(velocity.y * 0.25));
+			_finalJumpForce = -(Reg._jumpForce + Math.abs(velocity.y * 0.25));
 		}
 		else 
 		{
 			// vars for an anitigravity jump.
-			finalJumpForce = (Reg._jumpForce + Math.abs(velocity.y * 0.25));	
+			_finalJumpForce = (Reg._jumpForce + Math.abs(velocity.y * 0.25));	
 		}
 		//################### END TOGGLE ANTIGRAVITY ####################
 
@@ -612,6 +742,19 @@ class Player extends FlxSprite
 			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
 		}	
 		
+		if(_mobInWater == false)
+		{
+			// fire the bullet in the direction of up or down depending if antigravity is used or not.
+			if (Reg._antigravity == true && InputControls.down.pressed || Reg._antigravity == false && InputControls.up.pressed)
+			{
+				_holdingUpKey = true; 
+			}	
+			else 
+			{
+				_holdingUpKey = false;  
+			}
+		} 
+				
 		if(!FlxG.overlap(Reg.state._overlayPipe, this))
 		{
 			if ( InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Gun."
@@ -625,18 +768,16 @@ class Player extends FlxSprite
 		      || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Freeze Gun.")
 		
 			{	
-				if(_mobIsSwimming == false)
+				if(_mobInWater == false)
 				{
 					// fire the bullet in the direction of up or down depending if antigravity is used or not.
 					if (Reg._antigravity == true && InputControls.down.pressed || Reg._antigravity == false && InputControls.up.pressed)
 					{
-						holdingUpKey = true; 
-						shoot(holdingUpKey); 						
+						shoot(_holdingUpKey); 						
 					}	
 					else 
 					{
-						holdingUpKey = false;  
-						shoot(holdingUpKey);
+						shoot(_holdingUpKey);
 					}
 		
 				} 
@@ -668,7 +809,7 @@ class Player extends FlxSprite
 			{				
 				if (InputControls.left.pressed) 
 				{ 
-					_skillDashX = _velocityX; xForce--;
+					_skillDashX = _velocityX; _xForce--;
 					if (Reg._antigravity == false) _skillDashY = -_velocityY;
 					else  _skillDashY = _velocityY;
 					
@@ -676,7 +817,7 @@ class Player extends FlxSprite
 				
 				else if (InputControls.right.pressed)
 				{ 
-					_skillDashX = _velocityX; xForce++;
+					_skillDashX = _velocityX; _xForce++;
 					if (Reg._antigravity == false) _skillDashY = -_velocityY;
 					else  _skillDashY = _velocityY;
 				}				
@@ -684,21 +825,21 @@ class Player extends FlxSprite
 				// the player moves so fast that there is a trail of gray players that fade behind the player.
 				// when player is dashing, the player will lift from the ground or ceiling. if players velocity.y is in motion then do the following.
 				if (_skillDashY != 0)
-				{	_ticksNextJump = Reg.incrementTicks(_ticksNextJump, 60 / Reg._framerate);
+				{	
+					_ticksSkilLDash = Reg.incrementTicks(_ticksSkilLDash, 60 / Reg._framerate);
 				
 					_emitterSkillDash.focusOn(this);
 					_emitterSkillDash.start(true, 0.05, 1);
 				}
 			}				
 	
-			// when this condition is met. the last trail is complete.
-			if (_ticksNextJump >= 8) 
+			if (_ticksSkilLDash >= _skillDashMaximumGrayPlayers) 
 			{
-				_ticksNextJump = 0;
+				_ticksSkilLDash = 0;
 			}
 
-			// stop when the last gray player is displayed, when then max value of the ticks is true and the player is dashing. also stop the dash when the key/button is not pressed, when that condition is true then xForce equals zero. so stop when the max value of the ticks is reached and when key/button is not pressed anymore.
-			if (_ticksNextJump >= 7 && _playerIsDashing == true || xForce == 0 && _playerIsDashing == true)
+			// Stop the skill dash when the last gray player is displayed. For example, stop when the maximum value of the ticks is true and then the player is dashing. Also stop the dash when the key/button is not pressed. xForce will then equals zero. When one of these conditions are met then the last trail is complete.
+			if (_ticksSkilLDash >= _skillDashMaximumGrayPlayers - 1 && _playerIsDashing == true || _xForce == 0 && _playerIsDashing == true)
 			{	
 				if ( !isTouching(FlxObject.FLOOR) || !isTouching(FlxObject.CEILING))
 				{
@@ -713,12 +854,12 @@ class Player extends FlxSprite
 
 			if (_playerIsDashing == false)
 			{			
-				_ticksNextJump = 0;	_skillDashX = 0; _skillDashY = 0;
+				_ticksSkilLDash = 0;	_skillDashX = 0; _skillDashY = 0;
 				
 				if (InputControls.left.pressed) 
-				{ xForce--; Reg._guildlineInUseTicks = 0; }
+				{ _xForce--; Reg._guildlineInUseTicks = 0; }
 				if (InputControls.right.pressed)
-				{ xForce++; Reg._guildlineInUseTicks = 0; }	
+				{ _xForce++; Reg._guildlineInUseTicks = 0; }	
 			}
 			
 			
@@ -726,8 +867,8 @@ class Player extends FlxSprite
 		}		
 		
 		// do not run faster then the max speed else set to walk speed.
-		if (_mobIsSwimming == false) {maxVelocity.x = _maxRunSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
-		else {maxVelocity.x = _maxRunSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
+		if (_mobInWater == false) {maxVelocity.x = _defaultWalkingSpeed + _skillDashX; maxVelocity.y = _maxFallSpeed + _skillDashY;}	
+		else {maxVelocity.x = _defaultWalkingSpeed + _skillDashX / Reg._swimmingDelay; maxVelocity.y = _maxFallSpeed + _skillDashY	/ Reg._swimmingDelay; }
 		
 		//---------------------------
 		//########### PLAYER IS JUMPING.
@@ -748,13 +889,17 @@ class Player extends FlxSprite
 				_playerIsDashing = false;
 			}
 			// normal jump.
-			else if ( Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
-			|| Reg._usingFlyingHat == false && inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
+			else if ( Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
+			|| Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
 			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
-				
-				velocity.y = finalJumpForce;	
-				_playerIsDashing = false;
+				if (_inAir == false)
+				{
+					if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
+						
+					_inAir = true;
+					velocity.y = _finalJumpForce;	
+					_playerIsDashing = false;
+				}
 			}
 		}
 
@@ -774,18 +919,18 @@ class Player extends FlxSprite
 					{
 						if (Reg._soundEnabled == true) FlxG.sound.play("jump", 0.50, false);			
 					}
-					velocity.y = finalJumpForce / 1.5;
+					velocity.y = _finalJumpForce / 1.5;
 				}
 				
 				// stop rapid swimming.
 				_swimmingTimerIsComplete = false;
-				if (_swimming.active == false) _swimming.start(0.12, swimmingOnTimer, 1);
+				if (_swimmingTimer.active == false) _swimmingTimer.start(0.12, swimmingOnTimer, 1);
 			}		
 		}
 
 		if (!FlxG.overlap(Reg.state._overlayPipe, this))
 		{
-			xForce = FlxMath.bound(xForce, -1, 1);		
+			_xForce = FlxMath.bound(_xForce, -1, 1);		
 			if (InputControls.left.pressed || InputControls.right.pressed)
 			{
 				if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
@@ -795,7 +940,7 @@ class Player extends FlxSprite
 				 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
 				 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 					acceleration.x = 0;
-				else acceleration.x = xForce * _maxAcceleration; // need this to stop running away player without arrow key press.
+				else acceleration.x = _xForce * _maxXacceleration; // How fast the object accelerates horizontally when the X value of the object is changed.
 				
 			} else if (_skillDashX == 0 ) acceleration.x = 0;		
 			
@@ -806,7 +951,7 @@ class Player extends FlxSprite
 		if (Reg._antigravity == true && justTouched(FlxObject.CEILING) && !overlapsAt(x, y + 16, Reg.state._objectLadders) || Reg._antigravity == false && justTouched(FlxObject.FLOOR) && !overlapsAt(x, y + 16, Reg.state._objectLadders) )
 		{
 			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-			inAir = false;
+			_inAir = false;
 			
 			if (Reg._antigravity == false) animation.play("idle"); 
 				else animation.play("idle2");
@@ -814,15 +959,13 @@ class Player extends FlxSprite
 			Reg._trackerInUse = false;
 			Reg.state._ticksTrackerUp = 0; // if jumping then reset tick.
 		} 
-		else if(Reg._antigravity == true && !isTouching(FlxObject.CEILING) || Reg._antigravity == false && !isTouching(FlxObject.FLOOR)) inAir = true;
+		else if(Reg._antigravity == true && !isTouching(FlxObject.CEILING) || Reg._antigravity == false && !isTouching(FlxObject.FLOOR)) _inAir = true;
 		
-		if (Reg._antigravity == true && inAir && justTouched(FlxObject.FLOOR) || Reg._antigravity == false && inAir && justTouched(FlxObject.CEILING)) 
+		if (Reg._antigravity == true && _inAir && justTouched(FlxObject.FLOOR) || Reg._antigravity == false && _inAir && justTouched(FlxObject.CEILING)) 
 		{
 			if (Reg._soundEnabled == true) FlxG.sound.play("ceilingHit", 1, false);
 		}	
 		
-		if (hitEnemy) hitEnemy = false;
-
 		//###################################### SET GRAVITY ##########################
 		//--------------------------------------------------
 		
@@ -945,7 +1088,6 @@ class Player extends FlxSprite
 				
 
 				//else if (velocity.x > 0 && acceleration.x < 0 || velocity.x < 0 && acceleration.x > 0) animation.play("skid");
-				//else if (Math.abs(velocity.x) > _maxWalkSpeed) animation.play("run");
 				else 
 				{ 
 					if (Reg._antigravity == false && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("walk");	
@@ -959,10 +1101,10 @@ class Player extends FlxSprite
 	{
 		// if player is at the boundries of the left side of screen then bounce off of
 		// screen and then stop.
-		if (x < 0) velocity.x = _maxRunSpeed;
+		if (x < 0) velocity.x = _defaultWalkingSpeed;
 		// if player is at the boundries of the right side of screen then bounce off of
 		// screen and then stop.
-		else if (x > Reg.state.tilemap.width - width) velocity.x = -_maxRunSpeed;
+		else if (x > Reg.state.tilemap.width - width) velocity.x = -_defaultWalkingSpeed;
 		
 		// if player moves in a down direction and leaves the boundries to the screen
 		// then the player has died.
@@ -1008,7 +1150,7 @@ class Player extends FlxSprite
 
 	}
 	
-	private function swimmingOnTimer(_swimming:FlxTimer):Void
+	private function swimmingOnTimer(_swimmingTimer:FlxTimer):Void
 	{				
 		_swimmingTimerIsComplete = true;
 	}

@@ -1066,7 +1066,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the air bubble to the map. player is able to breath underwater at an air bubble location.
+	 * add the air bubble to the map. The player is able to breath underwater at an air bubble location.
 	 */
 	public static function addAirBubble(X:Float, Y:Float):Void
 	{
