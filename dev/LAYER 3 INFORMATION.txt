@@ -53,8 +53,8 @@
 271: laser parameter. place a few tiled above the laser. used to stop the laser at that point.
 272, 273, 274: blocks that appear and disappear at a certain tick.
 275, 276, 277, 278: traps.
-279: flying hat. only works when activated from number 25.
-280: activation pad for the flying hat.
+279: flying hat. only works when activated from a flying pad.
+280: flying pad for the flying hat.
 281: heart container. increase maximum health.
 282: gun.
 283: if you would like the second npc Mala to use a shovel, then place this shovel shovel at the left or right side of the npc and beside that shovel, place the weed that has the flowers on it. 
