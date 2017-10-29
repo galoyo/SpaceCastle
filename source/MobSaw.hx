@@ -17,20 +17,49 @@ import flixel.util.FlxTimer;
 
 class MobSaw extends EnemyChildClass
 {	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth:Int = 99999;
-	// How fast the object is moving.
-	var maxXSpeed:Int = 320;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 320;
+	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 4200;
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;	
+	
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;	
 	
 	// speed is used as maxXSpeed or maxXSpeed * 2 when the player is within the horizontal view of this mob.
 	var speed:Float;
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 80; // total air in mob without air items.		
-	public var _airLeftInLungsMaximum:Int = 80; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 0;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 0; 
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -63,7 +92,7 @@ class MobSaw extends EnemyChildClass
 		
 		alive = true;		
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;				
 		
 		if (ID == 2) acceleration.y = _gravity;	
@@ -107,12 +136,12 @@ class MobSaw extends EnemyChildClass
 			if (justTouched(FlxObject.FLOOR)) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-				inAir = false;
+				_inAir = false;
 			} 
-			else if(!isTouching(FlxObject.FLOOR)) inAir = true;
+			else if(!isTouching(FlxObject.FLOOR)) _inAir = true;
 			
 			//------------------ WALK BUT CANNOT FALL IN HOLE
-			if (ID == 2) walkButCannotFallInHole(maxXSpeed, _mobIsSwimming, 32);
+			if (ID == 2) walkButCannotFallInHole(maxXSpeed, _mobInWater, 32);
 			
 			ticks = 1;
 		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);

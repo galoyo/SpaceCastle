@@ -16,11 +16,15 @@ import flixel.util.FlxTimer;
 
 class MobBullet extends EnemyChildClass
 {
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth1:Int = 50000; // not possible to kill this mob. 
-	var maxXSpeed:Int = 800;
-
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 800;
 
 	private var _timerparticleSmokeRight:FlxTimer;
 	private var _timerparticleSmokeLeft:FlxTimer;
@@ -44,7 +48,6 @@ class MobBullet extends EnemyChildClass
 		
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
 		visible = true;		
 		
 		if (x <= Reg.state.player.x) 

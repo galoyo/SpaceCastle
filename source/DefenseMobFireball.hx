@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 
 /**
- * @author galoyo
+ * @author galoyo. Currently, this fireball is used to circle the mobBubble.
  */
 
 class DefenseMobFireball extends FlxSprite 

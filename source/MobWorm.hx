@@ -15,30 +15,25 @@ import flixel.util.FlxTimer;
 
 class MobWorm extends EnemyChildClass
 {
-	/**
-	 * how fast the horizontal movement of this mob is.
+/**
+	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 400;
 
 	/**
-	 * init the gravity.
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
 	private var _gravity:Int = 0;
 
 	/**
-	 * the default health.
+	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth:Int = 4;
 	
 	/**
-	 * the object does not start in the air.
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */
-	public var inAir:Bool = false;
-	
-	/**
-	 * this object does not start swimming.
-	 */
-	public var _mobIsSwimming:Bool = false;
+	public var _mobInWater:Bool = false;
 	
 	/**
 	 * used to store the last known direction that the mob was moving.
@@ -46,17 +41,17 @@ class MobWorm extends EnemyChildClass
 	private var velocityOld:Float;	
 	
 	/**
-	 *  used to delay the decreasing of the _airLeftInLungs var.
+	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
-	public var airTimerTicks:Int = 0; 
+	public var airTimerTicks:Float = 0; 
 	
 	/**
-	 * total air left in the lungs of this mob.
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 90;
 	
 	/**
-	 * this var is used to reset _airLeftInLungs when jumping out of the water.
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 90; 
 	
@@ -86,7 +81,7 @@ class MobWorm extends EnemyChildClass
 	{				
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;	
 		
 		setFacingFlip(FlxObject.LEFT, true, false);

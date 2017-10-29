@@ -15,16 +15,39 @@ import flixel.util.FlxTimer;
 
 class MobFish extends EnemyChildClass
 {
-	public var defaultHealth:Int = 2;
-	var maxXSpeed:Int = 350; // horizontal movement of fish.
-	var maxYSpeed:Int = 70; // as the fish moves horizontal, it moves a bit up and down.
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */	public var defaultHealth:Int = 2;
+	 
+	 /**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 350;
 	
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * The Y velocity of this mob. 
+	 */
+	private var maxYSpeed:Int = 70;
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 0; // unlimited = 0;
-	public var _airLeftInLungsMaximum:Int = 0; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */	
+	public var _mobInWater:Bool = false;
+	
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 0;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 0; 
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -49,7 +72,7 @@ class MobFish extends EnemyChildClass
 	{				
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;	
 		
 		setFacingFlip(FlxObject.LEFT, true, false);

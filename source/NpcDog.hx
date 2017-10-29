@@ -13,7 +13,14 @@ class NpcDog extends FlxSprite
 	private var _startY:Float;
 	public var _player:Player;
 	
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
 	private var maxXSpeed:Int = 800;
 	
 	private var ticks:Int = 0;
@@ -142,14 +149,14 @@ class NpcDog extends FlxSprite
 			if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 28, Reg.state.tilemap))
 			{
 				facing = FlxObject.RIGHT;
-				if(_mobIsSwimming == false) {velocity.x = maxXSpeed; }
+				if(_mobInWater == false) {velocity.x = maxXSpeed; }
 				else {velocity.x = maxXSpeed / Reg._swimmingDelay;} 
 			}
 						
 			if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT || isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 28, Reg.state.tilemap))
 			{
 				facing = FlxObject.LEFT;
-				if(_mobIsSwimming == false) {velocity.x = -maxXSpeed;}
+				if(_mobInWater == false) {velocity.x = -maxXSpeed;}
 				else {velocity.x = -maxXSpeed / Reg._swimmingDelay;} 
 			}
 		}

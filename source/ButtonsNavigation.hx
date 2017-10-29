@@ -11,19 +11,64 @@ import flixel.util.FlxColor;
 
 class ButtonsNavigation extends FlxGroup 
 {
-	public var buttonLeft:MouseClickThisButton; // left.
-	public var buttonRight:MouseClickThisButton; // right.
-	public var buttonUp:MouseClickThisButton; // up.
-	public var buttonDown:MouseClickThisButton; // down.
-	public var buttonZ:MouseClickThisButton; // action key first slot.
-	public var buttonX:MouseClickThisButton; // action key second slot.
-	public var buttonC:MouseClickThisButton; // action key third slot.
-	public var buttonI:MouseClickThisButton; // menu, imnventory.
+	/**
+	 * This is the selected item of the Z button. At at inventory menu, if an item is highlighted, pressing the Z button will display the selected item beside the z button. After you have closed the inventory menu, pressing the Z button will do the action of that item selected.
+	 */
+	private var zButtonSelectedIcon:FlxSprite;
+ 	
+	/**
+	 * This is the selected item of the X button.
+	 */
+	private var xButtonSelectedIcon:FlxSprite;
 	
-	private var zButtonSelectedIcon:FlxSprite; // display the selected item beside the z button.
- 	private var xButtonSelectedIcon:FlxSprite; 
+	/**
+	 * This is the selected item of the C button.
+	 */
 	private var cButtonSelectedIcon:FlxSprite;
 	
+	/**
+	 * The player will move in the direction of left when this button is pressed.
+	 */
+	public var buttonLeft:MouseClickThisButton;
+	
+	/**
+	 * The player will move in the direction of right when this button is pressed.
+	 */
+	public var buttonRight:MouseClickThisButton;
+	
+	/**
+	 * If possible, the player will move up when this button is pressed.
+	 */
+	public var buttonUp:MouseClickThisButton;
+	
+	/**
+	 * If possible, the player will move down when this button is pressed.
+	 */
+	public var buttonDown:MouseClickThisButton;
+	
+	/**
+	 * Same as pressing the Z key on the keyboard. Pressing the Z button will do the action of the item it contains. For example, if the item is a jump item then the player will jump.
+	 */
+	public var buttonZ:MouseClickThisButton;
+	
+	/**
+	 * Same as pressing the X key on the keyboard. Pressing the X button will do the action of the item it contains.
+	 */
+	public var buttonX:MouseClickThisButton;
+	
+	/**
+	 * Same as pressing the C key on the keyboard. Pressing the C button will do the action of the item it contains.
+	 */
+	public var buttonC:MouseClickThisButton;
+	
+	/**
+	 * Button to access the inventory menu.
+	 */
+	public var buttonI:MouseClickThisButton;
+	
+	/**
+	 * Background of the navigation bar.
+	 */
 	private var _background:FlxSprite;
 	
 	public function new() 

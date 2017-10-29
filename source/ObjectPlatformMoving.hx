@@ -12,7 +12,10 @@ class ObjectPlatformMoving extends FlxSprite
 	private var _startx:Float;
 	private var _starty:Float;
 	
-	public var maxSpeed:Int = 300;
+	/**
+	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 */	
+	public var maxSpeed:Int = 320;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{		

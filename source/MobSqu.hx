@@ -15,19 +15,45 @@ import flixel.util.FlxTimer;
 
 class MobSqu extends EnemyChildClass
 {
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth:Int = 3;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
 	private var maxXSpeed:Int = 300;
 	
-	// how fast the object can fall.
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 4400;	
 
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
 
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
 	public var _airLeftInLungs:Int = 50;
-	public var _airLeftInLungsMaximum:Int = 50; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 50; 
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -55,7 +81,7 @@ class MobSqu extends EnemyChildClass
 		
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;	
 		
 		setFacingFlip(FlxObject.LEFT, false, false);
@@ -100,15 +126,15 @@ class MobSqu extends EnemyChildClass
 				{
 					if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
 				}
-				inAir = false;
+				_inAir = false;
 			} 
-			else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 				
 			//------------------ JUMP HAPPY IGNORE PLAYER.
-			jumpHappyIgnorePlayer(_mobIsSwimming);
+			jumpHappyIgnorePlayer(_mobInWater);
 			
 			//------------------ WALK BUT CAN FALL IN HOLE
-			walkButCanFallInHole(maxXSpeed, _mobIsSwimming);
+			walkButCanFallInHole(maxXSpeed, _mobInWater);
 
 			ticks = 1;
 		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);

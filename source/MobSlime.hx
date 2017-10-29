@@ -18,28 +18,64 @@ import flixel.util.FlxTimer;
 
 class MobSlime extends EnemyChildClass
 {
-	// health of the mob when mob is created;
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth:Int = 2;
 	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Float = 3000;
-	private var _gravityResetToThisValue:Int = 3000; // when reset(), this is the _gravity value.
 	
-	// this var must be in integers of 32.
-	var maxSpeed:Int = 480;	
+	/**
+	  * When reset(), this will be the _gravity value.
+	  */
+	private var _gravityResetToThisValue:Int = 3000;
 
-	private var _maxXspeed:Float = 130; // this var should be maxXspeed.
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var _maxXspeed:Float = 130;
+	
+	/**
+	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 */
+	private var maxSpeed:Int = 480;
+	
 	private var _mobVelocityY:Float = 740;
 	
 	public var _mobAccelY:Float = 6000; // this var should be gravity.
-	private var _YjumpingDelay:Float = 100;
 	
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * Used to slow the mobs jumping when in water.
+	 */ 
+	private var _slowJumpingInWater:Float = 100;
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 40; // total air in mob without air items.
-	public var _airLeftInLungsMaximum:Int = 40; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
+	
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 40;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 40; 
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter)
 	{
@@ -95,7 +131,7 @@ class MobSlime extends EnemyChildClass
 		alive = true;
 		velocity.x = -maxSpeed;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;
 		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		_airLeftInLungs = _airLeftInLungsMaximum;
@@ -123,13 +159,13 @@ class MobSlime extends EnemyChildClass
 			if (justTouched(FlxObject.FLOOR)) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-				inAir = false;
+				_inAir = false;
 			} 
-			else if (!isTouching(FlxObject.FLOOR)) inAir = true;
+			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;
 		
 				
 			//------------------ CONTINUE TO JUMP TOWARDS PLAYER
-			continueToJumpTowardsPlayer(_YjumpingDelay, _mobIsSwimming);
+			continueToJumpTowardsPlayer(_slowJumpingInWater, _mobInWater);
 		
 			
 			ticks = 1;

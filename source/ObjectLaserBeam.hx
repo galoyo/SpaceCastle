@@ -9,8 +9,11 @@ import flixel.util.FlxTimer;
 
 class ObjectLaserBeam extends FlxSprite
 {
-	// movement speed.
-	private var maxSpeed:Int = 600;	
+	/**
+	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 */
+	private var maxSpeed:Int = 608;	
+	
 	private var _startx:Float;
 	private var _starty:Float;
 	

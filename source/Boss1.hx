@@ -15,48 +15,48 @@ import flixel.util.FlxTimer;
 
 class Boss1 extends EnemyChildClass
 {
-	/**
-	 * Time it takes for this boss to fire another bullet.
+	/*******************************************************************************************************
+	 * Time it takes for this mob to fire another bullet.
 	 */
-	private var _bulletTimeForNextFiring:Float;
+	private var _bulletTimeForNextFiring:Float = 1;
 	
-	/**
+	/*******************************************************************************************************
 	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	 */
 	private var _bulletFormationNumber:Int = 0;
 	
-	/**
-	 * Used to change boss from Mala to monster.
+	/*******************************************************************************************************
+	 * Used to change Mala to monster.
 	 */
 	private var ticksDelay:Float = 0;
 	
-	/**
-	 * Used to delay the boss dialog.
+	/*******************************************************************************************************
+	 * Used to delay the mob dialog.
 	 */
 	private var ticksDialog:Float = 0;
 	
-	/**
-	 * The health of this boss.
+	/*******************************************************************************************************
+	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth:Int = 8;
 	
-	/**
-	 * The X velocity of this boss. Used to move boss to the left then to the right and then back again. 
+	/*******************************************************************************************************
+	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 415;
 	
-	/**
-	 * If true then boss is not touching a tile. This var is in code but not used for anything.
+	/*******************************************************************************************************
+	 * If true then this mob is not touching a tile. This var is in code but not used for anything.
 	 */
-	public var inAir:Bool = false;
+	public var _inAir:Bool = false;
 		
-	/**
+	/*******************************************************************************************************
 	 * Play the boss music when the battle between the player and this boss begins.
 	 */
 	private var _playedMusic:Bool = false;
 		
-	/**
-	 * How fast the object can fall. 4000 is a medimum speed while 10000 is a fast fall.
+	/*******************************************************************************************************
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
 	public var _gravity:Int = 4400;	
 	
@@ -66,7 +66,7 @@ class Boss1 extends EnemyChildClass
 		
 		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
-		
+
 		if(id == 1) loadGraphic("assets/images/boss1A.png", true, 28, 28);
 			else loadGraphic("assets/images/boss1B.png", true, 56, 56);
 		
@@ -138,7 +138,7 @@ class Boss1 extends EnemyChildClass
 				{
 					if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
 				} 
-				else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+				else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 						
 				if (ID == 1)
 				{

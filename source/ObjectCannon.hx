@@ -11,8 +11,15 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 
 class ObjectCannon extends ObjectChildClass
 {
-	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 0; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float = 1;
+	
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */	
+	private var _bulletFormationNumber:Int = 0;
 	
 	public function new(x:Float, y:Float, id:Int, bulletsObject:FlxTypedGroup<BulletObject>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{

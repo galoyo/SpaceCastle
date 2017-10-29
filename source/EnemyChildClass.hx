@@ -20,10 +20,22 @@ class EnemyChildClass extends FlxSprite
 	public var _bulletsMob:FlxTypedGroup<BulletMob>;
 	private var _bulletMob:BulletMob;
 	private var _bulletSpeed:Int = 350;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
 	private var _particleBulletHit:FlxEmitter;
-	private var _particleBulletMiss:FlxEmitter;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
+	private var _particleBulletMiss:FlxEmitter;
 		
-	private var _gunDelay:Float;
+	/**
+	 * The gun delay between bullets fired.
+	 */
+	private var _gunDelay:Float = 0;
+	
 	private var _cooldown:Float;
 	private var _bulletFireFormation:Int; 
 	
@@ -34,7 +46,11 @@ class EnemyChildClass extends FlxSprite
 	private var velocityYOld:Float; // used to address a bug in the code;
 
 	public var _newX:Float = 0;
-	public var _newY:Float = 0;
+	
+	/**
+	 * Keep the Y value still so that the mob does not move when player is standing on it.
+	 */
+	public var _standStill:Float = 0;
 	
 	private var _tileX:Int; // the tile, the x coords number not in pixels.
 	private var _tileY:Int;
@@ -55,13 +71,42 @@ class EnemyChildClass extends FlxSprite
 		
 	public var _player:Player;
 	private var _spawnTimeElapsed:Float = 0;	
+	
+	/*******************************************************************************************************
+	 * This emitter will emit when a mob takes damage.
+	 */
 	private var _emitterMobsDamage:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * This emitter will display an animated explosion in front of a mob just before that mob is destroyed.
+	 */
 	private var _emitterDeath:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * One or more triangles might be dropped from a defeated mob. A collected triangle will inclease the "Gun Power" hud value. Collect enought of them and the gun power will increase. Hence, a gun bullet will then be more powerful.
+	 */
 	private var _emitterItemTriangle:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Sometimes a mob drops a diamond when defeated. That small diamond will increase the Score seen at the Score hud.
+	 */
 	private var _emitterItemDiamond:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Sometimes a mob drops a star. This emitter controls the animation and velocity of that star. The player will be invincible When that star is collected. A "powerUp" music will be played when the star is collected. The player can receive damage only after the powerUp music has ended.
+	 */
 	private var _emitterItemPowerUp:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * A mob might drop some nuggets when that mob is defeated. Nuggets are used to buy stuff from the store.
+	 */
 	private var _emitterItemNugget:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * Increases the players health by one health point. If the player is not damaged, a full blue health bar, then picking up this item will not increase player's health.
+	 */
 	private var _emitterItemHeart:FlxEmitter;
+	
 	private var _particleSmokeRight:FlxEmitter;
 	private var _particleSmokeLeft:FlxEmitter;
 	
@@ -531,7 +576,7 @@ private function shoot():Void
 		} else return false;
 	}
 	
-	function jumpOverEmptyTile(_YjumpingDelay:Float, _mobIsSwimming:Bool):Void
+	function jumpOverEmptyTile(_slowJumpingInWater:Float, _mobInWater:Bool):Void
 	{
 		//################ JUMP OVER EMPTY TILE ##################
 		var jj = FlxG.random.int( 0, 5);
@@ -543,15 +588,15 @@ private function shoot():Void
 			{
 				if (isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 28, y + 28, Reg.state.tilemap) || isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 15, y + 15, Reg.state.tilemap))
 				{
-					if(_mobIsSwimming == false) {velocity.x = -600 - moveSpeed; velocity.y = -700;}
-					else {velocity.x = -600 - moveSpeed / Reg._swimmingDelay; velocity.y = - 700 - -_YjumpingDelay;} 
+					if(_mobInWater == false) {velocity.x = -600 - moveSpeed; velocity.y = -700;}
+					else {velocity.x = -600 - moveSpeed / Reg._swimmingDelay; velocity.y = - 700 - -_slowJumpingInWater;} 
 				}			
 			}
 		} 
 		//############### END JUMP OVER EMPTY TILE ################
 	}
 	
-	function walkButCannotFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool, offset:Int = 0):Void
+	function walkButCannotFallInHole(maxXSpeed:Int, _mobInWater:Bool, offset:Int = 0):Void
 	{
 		// ##################################################
 		// ##################################################
@@ -560,14 +605,14 @@ private function shoot():Void
 		if (justTouched(FlxObject.LEFT) && facing == FlxObject.LEFT || isTouching(FlxObject.FLOOR) && facing == FlxObject.LEFT && !overlapsAt(x - 27 - offset, y + 28, Reg.state.tilemap) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 15, Reg.state._objectQuickSand))
 		{
 			facing = FlxObject.RIGHT;
-			if(_mobIsSwimming == false) {velocity.x = maxXSpeed; }
+			if(_mobInWater == false) {velocity.x = maxXSpeed; }
 			else {velocity.x = maxXSpeed / Reg._swimmingDelay;} 
 		}
 					
 		if (justTouched(FlxObject.RIGHT) && facing == FlxObject.RIGHT ||isTouching(FlxObject.FLOOR) && facing == FlxObject.RIGHT && !overlapsAt(x + 27 + offset, y + 28, Reg.state.tilemap) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 15, Reg.state._objectQuickSand))
 		{
 			facing = FlxObject.LEFT;
-			if(_mobIsSwimming == false) {velocity.x = -maxXSpeed;}
+			if(_mobInWater == false) {velocity.x = -maxXSpeed;}
 			else {velocity.x = -maxXSpeed / Reg._swimmingDelay;} 
 		}			
 		//######### END WALKING THEN REVERSE DIRECTION ##########
@@ -591,7 +636,7 @@ private function shoot():Void
 	}
 
 	
-	function walkButCanFallInHole(maxXSpeed:Int, _mobIsSwimming:Bool):Void
+	function walkButCanFallInHole(maxXSpeed:Int, _mobInWater:Bool):Void
 	{
 		//################# WALK BUT CAN FALL IN HOLE ##################
 					
@@ -610,7 +655,7 @@ private function shoot():Void
 					
 					if (facing == FlxObject.LEFT && !overlapsAt(x, y + 28, Reg.state._objectQuickSand) && facing == FlxObject.LEFT && !overlapsAt(x - 27, y + 15, Reg.state._objectQuickSand))
 					{
-						if(_mobIsSwimming == false)	{velocity.x = -maxXSpeed; }
+						if(_mobInWater == false)	{velocity.x = -maxXSpeed; }
 							else {velocity.x = -maxXSpeed / Reg._swimmingDelay; } 
 					
 						velocityXOld = velocity.x;
@@ -618,7 +663,7 @@ private function shoot():Void
 				
 					else if (facing == FlxObject.RIGHT && !overlapsAt(x, y + 28, Reg.state._objectQuickSand) && facing == FlxObject.RIGHT && !overlapsAt(x + 27, y + 15, Reg.state._objectQuickSand))
 					{
-						if (_mobIsSwimming == false) {velocity.x = maxXSpeed;}
+						if (_mobInWater == false) {velocity.x = maxXSpeed;}
 							else {velocity.x = maxXSpeed / Reg._swimmingDelay; }				
 					
 						velocityXOld = velocity.x;
@@ -650,14 +695,14 @@ private function shoot():Void
 			} else {velocity.y = 0; acceleration.y = 0; drag.y = 50000; }
 			
 			ticksFrozen = Reg.incrementTicks(ticksFrozen, 60 / Reg._framerate);	
-			x = _newX; y = _newY; 
+			x = _newX; y = _standStill; 
 			
 			if (FlxG.collide(this, _player))
 			{
-				if (_player._newY != 0 && isTouching(FlxObject.CEILING)) 
+				if (_player._standStill != 0 && isTouching(FlxObject.CEILING)) 
 				{ 						
-					 y = _newY;
-					 _player.y = _newY - 25;							 					
+					 y = _standStill;
+					 _player.y = _standStill - 25;							 					
 				}
 			} 
 		}
@@ -866,7 +911,7 @@ private function shoot():Void
 		}
 	}
 	
-	function continueToJumpTowardsPlayer(_YjumpingDelay:Float, _mobIsSwimming:Bool):Void
+	function continueToJumpTowardsPlayer(_slowJumpingInWater:Float, _mobInWater:Bool):Void
 	{
 		//############ CONTINUE TO JUMP TOWARDS PLAYER. #############
 		// animate the player based on conditions.
@@ -892,10 +937,10 @@ private function shoot():Void
 						if (!overlapsAt(x, y + 14, Reg.state._objectQuickSand))
 						{
 							// if mob with id 2 then increase the move speed.
-							if(_mobIsSwimming == false)	{velocity.x = -_extraSpeed - moveSpeed; velocity.y = -_extraSpeed; }
+							if(_mobInWater == false)	{velocity.x = -_extraSpeed - moveSpeed; velocity.y = -_extraSpeed; }
 							else 
 							{
-								velocity.x = -_extraSpeed - moveSpeed / Reg._swimmingDelay; velocity.y = - _extraSpeed - -_YjumpingDelay;							
+								velocity.x = -_extraSpeed - moveSpeed / Reg._swimmingDelay; velocity.y = - _extraSpeed - -_slowJumpingInWater;							
 							}
 						
 							animation.play("jumping");
@@ -911,11 +956,11 @@ private function shoot():Void
 						if (!overlapsAt(x, y + 14, Reg.state._objectQuickSand))
 						{
 							// if mob with id 2 then increase the move speed.
-							if (_mobIsSwimming == false)	
+							if (_mobInWater == false)	
 							{
 								velocity.x = -_extraSpeed + moveSpeed; velocity.y = -_extraSpeed;
 							}
-							else {velocity.x = -_extraSpeed + moveSpeed / Reg._swimmingDelay; velocity.y = -_extraSpeed - -_YjumpingDelay;} 
+							else {velocity.x = -_extraSpeed + moveSpeed / Reg._swimmingDelay; velocity.y = -_extraSpeed - -_slowJumpingInWater;} 
 							
 							animation.play("jumping");	
 							if (Reg._soundEnabled == true) FlxG.sound.play("jumpMob", 0.50, false);
@@ -935,20 +980,20 @@ private function shoot():Void
 		//############ END CONTINUE TO JUMP TOWARDS PLAYER #############
 	}
 	
-	function jumpHappyIgnorePlayer(_mobIsSwimming:Bool):Void
+	function jumpHappyIgnorePlayer(_mobInWater:Bool):Void
 	{
 		//################ JUMP HAPPY IGNORE PLAYER. ################
 		var moveSpeed = FlxG.random.int(850, 1100);	
 		
 		if (isTouching(FlxObject.FLOOR))
 		{
-			if(_mobIsSwimming == false) {velocity.x = - moveSpeed; velocity.y = -moveSpeed / 1.5;}
+			if(_mobInWater == false) {velocity.x = - moveSpeed; velocity.y = -moveSpeed / 1.5;}
 			else {velocity.x = - moveSpeed / Reg._swimmingDelay; } // does not jump in water.
 		}
 		//############## END JUMP HAPPY IGNORE PLAYER. ##############
 	}
 	
-	function seekPlayerAfterTouchingTile(maxSpeed:Int, _mobIsSwimming:Bool):Void
+	function seekPlayerAfterTouchingTile(maxSpeed:Int, _mobInWater:Bool):Void
 	{
 		//############# SEEK PLAYER AFTER TOUCHING TILE. ##############
 		
@@ -1039,23 +1084,23 @@ private function shoot():Void
 				// move mob only when not in the coord of the player. if player is underneath of this mob, then the mob will only stop its horizontal movement towards player when both x coords are within 10 pixels of each other.
 				if (x -Reg.state.player.x> 10)
 				{
-					if (_mobIsSwimming == false) {velocity.x = -maxSpeed; }	
+					if (_mobInWater == false) {velocity.x = -maxSpeed; }	
 					else {velocity.x = -maxSpeed / Reg._swimmingDelay; }
 				}
 				else if (Reg.state.player.x - x > 10)
 				{					
-					if (_mobIsSwimming == false) {velocity.x = maxSpeed; }	
+					if (_mobInWater == false) {velocity.x = maxSpeed; }	
 					else {velocity.x = maxSpeed / Reg._swimmingDelay; }
 				} else velocity.x = 0;
 					
 				if (y - Reg.state.player.y > 10)
 				{
-					if (_mobIsSwimming == false) {velocity.y = -maxSpeed; }	
+					if (_mobInWater == false) {velocity.y = -maxSpeed; }	
 					else {velocity.y = -maxSpeed / Reg._swimmingDelay; }
 				}
 				else if (Reg.state.player.y - y > 10)
 				{
-					if (_mobIsSwimming == false) {velocity.y = maxSpeed; }	
+					if (_mobInWater == false) {velocity.y = maxSpeed; }	
 					else {velocity.y = maxSpeed / Reg._swimmingDelay; }
 				} else velocity.y = 0;
 			}			

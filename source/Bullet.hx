@@ -11,16 +11,29 @@ import flixel.effects.particles.FlxEmitter;
 
 class Bullet extends FlxSprite 
 {	
-	// used to store the distance away fron the gun that the particleBulletHit will emit from.
+	/*******************************************************************************************************
+	 * Used to store the distance away fron the gun that the particleBulletHit will emit from.
+	 */
 	private var	_bulletStar:Float = 0;
 	
-	// distance the bulletStar animation is from the gun.
+	/*******************************************************************************************************
+	 * Distance the bulletStar animation is from the gun.
+	 */ 
 	private var	_bulletStarDistance:Int = 30;
 	
-	// emit the _bulletStar animation.
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
 	private var _particleBulletHit:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
 	private var _particleBulletMiss:FlxEmitter;
 	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. Used to display a gun pointing in upward direction or fire a bullet in an upward direction. If anti-gravity is true then the gun will be pointing down and its bullet will travel southward.
+	 */
 	private var _holdingUpKey:Bool = false;
 	
 	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
@@ -58,7 +71,7 @@ class Bullet extends FlxSprite
 		if (this != null)
 		{
 			loadNewBulletImage();
-			
+			trace("a", _holdingUpKey);
 			// when the bullet is at the distance of the _bullterStar, emit the _particleBulletHit so that the _bulletStar animation can be seen. Then destroy the animation.
 			if (Reg._typeOfGunCurrentlyUsed == 0)
 			{
@@ -105,23 +118,29 @@ class Bullet extends FlxSprite
 	
 	public function shoot(x:Int, y:Int, velocityX:Int, velocityY:Int, holdingUpKey:Bool, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter):Void
 	{
+		_holdingUpKey = holdingUpKey; // This code is needed.
+		
 		if (Reg._playerCanShootAndMove == false) return;
 		
 		_particleBulletHit = particleBulletHit;
 		_particleBulletMiss = particleBulletMiss;
-		_holdingUpKey = holdingUpKey;
 	
 		// set the distance the bullet can travel when shooting in the up direction.
 		if (_holdingUpKey == true)
 		{
 			if(Reg._antigravity == false)
-			_bulletStar = y - (_bulletStarDistance) - ((Reg._gunPower + 1) * 50); 
-			else _bulletStar = y + (_bulletStarDistance) + ((Reg._gunPower + 1) * 50);
+			{
+				if (Reg.state.player.y > y) _bulletStar = y - (_bulletStarDistance) - ((Reg._gunPower + 1) * 50); 
+			}
+			else 
+			{
+				if (Reg.state.player.y <- y) _bulletStar = y + (_bulletStarDistance) + ((Reg._gunPower + 1) * 50);
+			}
 		}
 		else
 		{
-		if (Reg.state.player.x <= x) {_bulletStar = x + _bulletStarDistance + ((Reg._gunPower + 1) * 50); }
-	if (Reg.state.player.x > x) {_bulletStar = x - _bulletStarDistance - ((Reg._gunPower + 1) * 50); }
+			if (Reg.state.player.x <= x) {_bulletStar = x + _bulletStarDistance + ((Reg._gunPower + 1) * 50); }
+			if (Reg.state.player.x > x) {_bulletStar = x - _bulletStarDistance - ((Reg._gunPower + 1) * 50); }
 		}
 		
 		// used to reset the bullet to its default position.

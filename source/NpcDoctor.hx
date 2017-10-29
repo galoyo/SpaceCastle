@@ -15,29 +15,57 @@ import flixel.util.FlxTimer;
 
 class NpcDoctor extends FlxSprite
 {
-	private var _bulletTimeForNextFiring:Float = 1; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float = 1;
 	
-	// used with jumping ability.
-	private var _YjumpingDelay:Float = 100;
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */
+	private var _bulletFormationNumber:Int = -1;
 	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth1:Int = 1;
-	private var maxXSpeed:Int = 300;
-	private var maxSpeed:Int = 250;	
-	
-	// how fast the object can fall.
-	var _gravity:Int = 4400;	
 
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 300;
+	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
+	private var _gravity:Int = 4400;	
+
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
 
 	private var ticks:Int = 0;
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
 	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 100; // total air in mob without air items.
-	// this value must be higher that the _areLeftInLungs var. this value can be any value. the higher the value the longer the mob can stay in the water. 100 = player. most mobs are around 40 - 70 but can have a value of about 200. 
-	public var _airLeftInLungsMaximum:Int = 100;
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 100;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 100; 
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -69,9 +97,9 @@ class NpcDoctor extends FlxSprite
 			if (justTouched(FlxObject.FLOOR)) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-				inAir = false;
+				_inAir = false;
 			} 
-			else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 				
 			if( InputControls.down.justPressed && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player))
 			{

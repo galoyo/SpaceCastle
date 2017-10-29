@@ -12,7 +12,7 @@ import flixel.util.FlxTimer;
 
 class EnemyCastSpriteCollide {
     
-	/**********************************
+	/*******************************************************************************************************
 	 * In the water, this function is called if mob is at an air bubble. 
 	 */	
 	public static function airBubbleEnemyOverlap(a:FlxSprite, e:FlxSprite):Void
@@ -171,7 +171,7 @@ class EnemyCastSpriteCollide {
 		if (e.animation.paused == false)
 		{
 			// if player is above mob and they both collide...
-			if (Reg._antigravity == false && p.y < e.y && p.inAir == true || Reg._antigravity == true && p.y > e.y && p.inAir == true)
+			if (Reg._antigravity == false && p.y < e.y && p._inAir == true || Reg._antigravity == true && p.y > e.y && p._inAir == true)
 			{
 				if(FlxSpriteUtil.isFlickering(e) == false)
 				{
@@ -183,7 +183,6 @@ class EnemyCastSpriteCollide {
 					else if (Reg._boss1AIsMala == false || Reg._boss1BIsMala == false || Reg._boss2IsMala == false) e.hurt(1);
 						else e.hurt(1);
 									
-					p.hitEnemy = true;
 					p.bounce();
 					
 					if (Reg._soundEnabled == true) FlxG.sound.play("hitBounce", 1, false);
@@ -273,7 +272,7 @@ class EnemyCastSpriteCollide {
 				if (Std.is(p, Player))
 				{
 					var mob:Player = cast(p, Player);
-					mob._newY = mob.y; // prepare to stand still above the head of the mob.		
+					mob._standStill = mob.y; // prepare to stand still above the head of the mob.		
 				}
 			}
 		
@@ -300,7 +299,26 @@ class EnemyCastSpriteCollide {
 			mob.airTimerTicks = 0;
 			
 			// play a sound when the mob is in the air and a delay to play the sound is complete.
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
+			{
+				if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
+								
+				// set the delay to play the water sound. next time this function is called, the timer function will be called, to set this var as true so that if the mob is in the air and touching the water parameter then the sound will be played.				
+				Reg.state._playWaterSoundEnemy = false;
+				
+				Reg.state._particleWaterSplash.focusOn(mob);
+				Reg.state._particleWaterSplash.start(true, 0.2, 15);
+			} 	
+		}
+		
+		if (Std.is(e, MobExplode))
+		{
+			var mob:MobExplode = cast(e, MobExplode);
+			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
+			mob.airTimerTicks = 0;
+			
+			// play a sound when the mob is in the air and a delay to play the sound is complete.
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 								
@@ -318,7 +336,7 @@ class EnemyCastSpriteCollide {
 			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
 			mob.airTimerTicks = 0;
 			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 				Reg.state._playWaterSoundEnemy = false;
@@ -335,7 +353,7 @@ class EnemyCastSpriteCollide {
 			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
 			mob.airTimerTicks = 0;
 			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 1, false);
 
@@ -346,19 +364,7 @@ class EnemyCastSpriteCollide {
 			} 	
 		}
 		
-		if (Std.is(e, MobBullet))
-		{
-			var mob:MobBullet = cast(e, MobBullet);
-			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
-				Reg.state._playWaterSoundEnemy = false;
-				
-				Reg.state._particleWaterSplash.focusOn(mob);
-				Reg.state._particleWaterSplash.start(true, 0.2, 15);
-			} 	
-		}
+		// MobBullet does not enter water so do not use it here.
 		
 		if (Std.is(e, MobBat))
 		{
@@ -366,7 +372,7 @@ class EnemyCastSpriteCollide {
 			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
 			mob.airTimerTicks = 0;
 			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
@@ -382,7 +388,7 @@ class EnemyCastSpriteCollide {
 			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
 			mob.airTimerTicks = 0;
 			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
+			if (mob._inAir == true && Reg.state._playWaterSoundEnemy == true)
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
 				Reg.state._playWaterSoundEnemy = false;
@@ -392,39 +398,11 @@ class EnemyCastSpriteCollide {
 			} 	
 		}
 		
-		// fish do not need air so do not define it here.
+		// fish do not need air so do not use it here.
 		
-		if (Std.is(e, MobGlob))
-		{
-			var mob:MobGlob = cast(e, MobGlob);
-			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
-			mob.airTimerTicks = 0;
-			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
-				Reg.state._playWaterSoundEnemy = false;
-				
-				Reg.state._particleWaterSplash.focusOn(mob);
-				Reg.state._particleWaterSplash.start(true, 0.2, 15);
-			} 	
-		}
+		// MobGlob and MobWorm do not enter water so do not use them here.
 		
-		if (Std.is(e, MobWorm))
-		{
-			var mob:MobWorm = cast(e, MobWorm);
-			mob._airLeftInLungs = mob._airLeftInLungsMaximum;
-			mob.airTimerTicks = 0;
-			
-			if (mob.inAir == true && Reg.state._playWaterSoundEnemy == true)
-			{
-				if (Reg._soundEnabled == true) FlxG.sound.play("water", 0.50, false);
-				Reg.state._playWaterSoundEnemy = false;
-				
-				Reg.state._particleWaterSplash.focusOn(mob);
-				Reg.state._particleWaterSplash.start(true, 0.2, 15);
-			} 	
-		}
+
 	}
 	
 	public static function waterEnemy(e:FlxSprite):Void
@@ -432,9 +410,9 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobApple))
 		{
 			var mob:MobApple = cast(e, MobApple);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;	// increase timer. without this var the mob would die with no air in lungs as soon as the mob hit the water. this var makes a small delay in the air in lungs count down.
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);	// increase timer. without this var the mob would die with no air in lungs as soon as the mob hit the water. this var makes a small delay in the air in lungs count down.
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -449,9 +427,9 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobCutter))
 		{
 			var mob:MobCutter = cast(e, MobCutter);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -467,9 +445,9 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobSlime))
 		{
 			var mob:MobSlime = cast(e, MobSlime);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -481,18 +459,14 @@ class EnemyCastSpriteCollide {
 				mob.kill();	
 		}
 		
-		if (Std.is(e, MobBullet))
-		{
-			var mob:MobBullet = cast(e, MobBullet);
-			mob._mobIsSwimming = true;
-		}
+		// MobBullet should never be in water.
 		
 		if (Std.is(e, MobBat))
 		{
 			var mob:MobBat = cast(e, MobBat);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -507,9 +481,9 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobSqu))
 		{
 			var mob:MobSqu = cast(e, MobSqu);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -526,10 +500,10 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobGlob))
 		{
 			var mob:MobGlob = cast(e, MobGlob);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
-					
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
+						
 			if (mob.airTimerTicks > 5)
 			{
 				mob._airLeftInLungs--;
@@ -543,9 +517,9 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobWorm))
 		{
 			var mob:MobWorm = cast(e, MobWorm);
-			mob._mobIsSwimming = true;
+			mob._mobInWater = true;
 			
-			mob.airTimerTicks++;
+			mob.airTimerTicks = Reg.incrementTicks(mob.airTimerTicks, 60 / Reg._framerate);
 					
 			if (mob.airTimerTicks > 5)
 			{
@@ -566,7 +540,7 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobApple))
 		{
 			var mob:MobApple = cast(e, MobApple);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 			// TODO water currents do not work with mobs yet but if it does then this line is needed so that if the water current throws the mob out of the water then the gravity will pull the mob back down.
 			mob.acceleration.x = mob.acceleration.y = mob._gravity;
 		}
@@ -574,7 +548,7 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobCutter))
 		{
 			var mob:MobCutter = cast(e, MobCutter);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 			mob.acceleration.x = mob.acceleration.y = mob._gravity;
 		}
 		
@@ -582,27 +556,23 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobSlime))
 		{
 			var mob:MobSlime = cast(e, MobSlime);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 			
 			mob.acceleration.y = mob._mobAccelY;
 		}
 		
-		if (Std.is(e, MobBullet))
-		{
-			var mob:MobBullet = cast(e, MobBullet);
-			mob._mobIsSwimming = false;
-		}
+		// MobBullet should never be in water.
 
 		if (Std.is(e, MobBat))
 		{
 			var mob:MobBat = cast(e, MobBat);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 		}
 		
 		if (Std.is(e, MobSqu))
 		{
 			var mob:MobSqu = cast(e, MobSqu);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 			mob.acceleration.x = mob.acceleration.y = mob._gravity;
 		}
 		
@@ -611,13 +581,13 @@ class EnemyCastSpriteCollide {
 		if (Std.is(e, MobGlob))
 		{
 			var mob:MobGlob = cast(e, MobGlob);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 		}
 
 		if (Std.is(e, MobWorm))
 		{
 			var mob:MobWorm = cast(e, MobWorm);
-			mob._mobIsSwimming = false;
+			mob._mobInWater = false;
 		}
 	}
 	
@@ -640,7 +610,7 @@ class EnemyCastSpriteCollide {
 				mob.acceleration.y = 0;
 				mob.velocity.y = 0;
 				mob._newX = mob.x;
-				mob._newY = mob.y;
+				mob._standStill = mob.y;
 			
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletFreezeHit", 1, false);
 				mob.animation.paused = true;	
@@ -657,7 +627,7 @@ class EnemyCastSpriteCollide {
 				mob.acceleration.y = 0;
 				mob.velocity.y = 0;
 				mob._newX = mob.x;
-				mob._newY = mob.y;
+				mob._standStill = mob.y;
 			
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletFreezeHit", 1, false);
 				mob.animation.paused = true;	
@@ -737,7 +707,7 @@ class EnemyCastSpriteCollide {
 	{
 		if (Reg._playerFallDamage == false) return;
 		
-		if (p.inAir == true)
+		if (p._inAir == true)
 		{
 			if (Reg.state.warningFallLine != null)
 			{
@@ -752,7 +722,7 @@ class EnemyCastSpriteCollide {
 		Reg._playerYNewFallTotal = p.y - Reg._playersYLastOnTile;
 		
 		// if the player lands on the ground from a steep distance above the ground then the player is hurt. determine the distance hurt or if the player dies.
-		if (Reg._antigravity == false && p.isTouching(FlxObject.FLOOR) && p._mobIsSwimming == false)
+		if (Reg._antigravity == false && p.isTouching(FlxObject.FLOOR) && p._mobInWater == false)
 		{
 			if (Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels >= 128 || Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels > 0 && p.health <= 1.5) 
 			{
@@ -786,7 +756,7 @@ class EnemyCastSpriteCollide {
 			Reg._playersYLastOnTile = p.y;
 		}
 		
-		else if (Reg._antigravity == true && p.isTouching(FlxObject.CEILING) && p._mobIsSwimming == false)
+		else if (Reg._antigravity == true && p.isTouching(FlxObject.CEILING) && p._mobInWater == false)
 		{
 			if (Reg._playerYNewFallTotal + Reg._fallAllowedDistanceInPixels <= -128 || Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels > 0 && p.health <= 1.5) {p.hurt(p.health); if (Reg._soundEnabled == true) FlxG.sound.play("fallDamage", 0.85, false);}
 			else if (Reg._playerYNewFallTotal + Reg._fallAllowedDistanceInPixels <= -96) {p.hurt((p.health * 0.75)); if (Reg._soundEnabled == true) FlxG.sound.play("fallDamage", 0.85, false);} // 75 percent.

@@ -35,7 +35,7 @@ class ObjectQuickSand extends FlxSprite
 					// without these vars the player would fall through this sand block.
 					Reg.state.player.maxVelocity.y = 12;
 					Reg.state.player.velocity.y = 12;
-					Reg.state.player.inAir = false;
+					Reg.state.player._inAir = false;
 				}
 				
 				FlxG.overlap(this, Reg.state.enemies, enemyInQuickSand);

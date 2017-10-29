@@ -3,7 +3,6 @@ package;
 import flixel.FlxObject;
 import flixel.effects.particles.FlxEmitter;
 import flixel.effects.particles.FlxParticle;
-import flixel.math.FlxPoint;
 
 /**
  * @author galoyo

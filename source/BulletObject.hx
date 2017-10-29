@@ -12,7 +12,14 @@ import flixel.util.FlxColor;
 
 class BulletObject extends FlxSprite 
 {	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
 	private var _particleBulletHit:FlxEmitter;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
 	private var _particleBulletMiss:FlxEmitter;
 	
 	public function new(particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 

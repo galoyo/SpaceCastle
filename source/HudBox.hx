@@ -18,266 +18,322 @@ class HudBox extends FlxSpriteGroup
 	 */ 
 	@:isVar
 	public var animationStyle(get, set):AnimationStyle = AnimationStyle.PLAY_ON_CHANGE;
+	
 	/*******************************************************************************************************
 	 * Whether to automatically max the HudBox value when power > 0 and decrease power by 1.
 	 */
 	@:isVar
 	public var autoPowerUp(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * The bar border color. Ignored if barShowBorder is false.
 	 */
 	@:isVar
 	public var barBorderColor(get, set):FlxColor = 0xFFFFFFFF;
+	
 	/*******************************************************************************************************
 	 * The HudBox border color. Ignored if borderWidth is 0.
 	 */
 	@:isVar
 	public var borderColor(get, set):FlxColor = 0xFFFFFFFF;
+	
 	/*******************************************************************************************************
 	 * The width of the border for this HudBox. 
 	 */
 	@:isVar
 	public var borderWidth(get, set):Int = 0;
+	
 	/*******************************************************************************************************
 	 * The bar empty color(s) array. Use only one color for a solid empty bar [0xFF006600], or multiple colors for gradient [0xFF006600, 0xFF666600, 0xFF660000].
 	 */
 	@:isVar
 	public var barEmptyColors(get, set):Array<FlxColor> = [0xFF006600, 0xFF666600];
+	
 	/*******************************************************************************************************
 	 * The bar fill color(s) array. Use only one color for a solid fill bar [0xFF00CC00], or multiple colors for gradient [0xFF00FF00, 0xFFFFFF00, 0xFFFF0000].
 	 */
 	@:isVar
 	public var barFillColors(get, set):Array<FlxColor> = [0xFF00CC00, 0xFFCCCC00];
+	
 	/*******************************************************************************************************
 	* Height of the bar.
 	*/
 	@:isVar
 	public var barHeight(get, set):Float = 10;
+	
 	/*******************************************************************************************************
 	* Padding space araound the bar.
 	*/
 	@:isVar
 	public var barPadding(get, set):Int = 2;
+	
 	/*******************************************************************************************************
 	* Background color of the HudBox.
 	*/
 	@:isVar
 	public var bgColor(get, set):FlxColor = 0xFF000000;
+	
 	/*******************************************************************************************************
 	* Corner radius of the background. 0 is square corners.
 	*/
 	@:isVar
 	public var bgCornerRadius(get, set):Int = 0;
+	
 	/*******************************************************************************************************
 	 * Is the HudBox enabled?
 	 */
 	@:isVar
 	public var enabled(get, set):Bool = true;
+	
 	/*******************************************************************************************************
 	 * This function will be called once when value reaches its minimum. Use setCallbacks() function to set.
 	 */
 	public var emptyCallback:Void->Void;
+	
 	/*******************************************************************************************************
 	 * This function will be called once when value reaches its maximum. Use setCallbacks() function to set.
 	 */
 	public var filledCallback:Void->Void;
+	
 	/*******************************************************************************************************
 	 * This function will be called when the value changes. Use setCallbacks() function to set.
 	 */
 	public var changeCallback:Void->Void;
+	
 	/*******************************************************************************************************
 	 * This function will be called once when the warningValue is reached. Use setCallbacks() function to set.
 	 */
 	public var warningCallback:Void->Void;
+	
 	/*******************************************************************************************************
 	 * Whether or not to hide the power text when it is 0.
 	 */
 	@:isVar
 	public var hidePowerWhenZero(get, set):Bool = true;
+	
 	/*******************************************************************************************************
 	 * Whether or not to hide the value text when it is 0.
 	 */
 	@:isVar
 	public var hideValueWhenZero(get, set):Bool = true;
+	
 	/*******************************************************************************************************
 	 * Animation frames for the icon.
 	 */
 	@:isVar
 	public var iconFrames(get, set):Array<Int> = [0];
+	
 	/*******************************************************************************************************
 	 * Animation framerate for the icon.
 	 */
 	@:isVar
 	public var iconFrameRate(get, set):Int = 16;
+	
 	/*******************************************************************************************************
 	 * Animation frame to show when icon is idle.
 	 */
 	@:isVar
 	public var iconIdleFrame(get, set):Int = 0;
+	
 	/*******************************************************************************************************
 	 * Full path and file name of the icon image.
 	 */
 	@:isVar
 	public var iconPath(get, set):String;
+	
 	/*******************************************************************************************************
 	 * If true, the value text is shown as a percentage. You may want to set valuePrefix to "%".
 	 */
 	@:isVar
 	public var isPercent(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, it sets enabled to false when the value reaches min.
 	 */
 	@:isVar
 	public var disableOnEmpty(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, it sets enabled to true when the value is > min. Ignored if disableOnEmpty = false.
 	 */
 	@:isVar
 	public var enableOnNotEmpty(get, set):Bool = true;
+	
 	/*******************************************************************************************************
 	 * If true, it sets visible to false when the value reaches min.
 	 */
 	@:isVar
 	public var hideOnEmpty(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, it sets visible to true when the value is > min. Ignored if hideOnEmpty = false.
 	 */
 	@:isVar
 	public var showOnNotEmpty(get, set):Bool = true;
+	
 	/*******************************************************************************************************
 	 * Label displayed at the top of the HudBox.
 	 */
 	@:isVar
 	public var label(get, set):String = "";
+	
 	/*******************************************************************************************************
 	 * The label text color.
 	 */
 	@:isVar
 	public var labelColor(get, set):FlxColor = 0xFFFFFFFF;
+	
 	/*******************************************************************************************************
 	 * The minimum value of the HudBox. Read-only. Use setRange() to change min and max values.
 	 */
 	public var min(default, null):Float = 0;
+	
 	/*******************************************************************************************************
 	 * The maximum value of the HudBox. Read-only. Use setRange() to change min and max values.
 	 */
 	public var max(default, null):Float = 100;
+	
 	/*******************************************************************************************************
 	 * The maximum power value. Set maxPower = 0 for no limit.
 	 */
 	@:isVar
 	public var maxPower(get, set):Int = 0;
+	
 	/*******************************************************************************************************
 	 * Object to track value from. Use setParent() to set.
 	 */
 	public var parent:Dynamic;
+	
 	/*******************************************************************************************************
 	 * Property of parent object to track. Use setParent() to set.
 	 */
 	public var parentVariable:String = "";
+	
 	/*******************************************************************************************************
 	 * The power value. A value of 1 is equivalent to max, 2 is max * 2, etc.
 	 */
 	@:isVar
 	public var power(get, set):Int = 0;
+	
 	/*******************************************************************************************************
 	 * The power text color.
 	 */
 	@:isVar
 	public var powerColor(get, set):FlxColor = 0xFFFFFFFF;
+	
 	/*******************************************************************************************************
 	 * Whether the bar should have a 1px border.
 	 */
 	@:isVar
 	public var showBarBorder(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * Whether or not to show the icon if there is one. Ignored if no icon is added.
 	 */
 	@:isVar
 	public var showIcon(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, the power text is shown.
 	 */
 	@:isVar
 	public var showPower(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, the value text is shown.
 	 */
 	@:isVar
 	public var showValue(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * If true, the value text is shown during the warning. NOTE - Ignored if showValue == true.
 	 */
 	@:isVar
 	public var showValueOnWarning(get, set):Bool = false;
+	
 	/*******************************************************************************************************
 	 * Size of the label and value text. Power text is textSize * 1.3.
 	 */
 	@:isVar
 	public var textSize(get, set):Int = 8;
+	
 	/*******************************************************************************************************
 	 * The value of the HudBox.
 	 */
 	@:isVar
 	public var value(get, set):Float;
+	
 	/*******************************************************************************************************
 	 * The value text color.
 	 */
 	@:isVar
 	public var valueColor(get, set):FlxColor = 0xFFFFFFFF;
+	
 	/*******************************************************************************************************
 	 * Prefix string to add to the beginning of the value text. Usefull for adding the $ if used for cash.
 	 */
 	@:isVar
 	public var valuePrefix(get, set):String = "";
+	
 	/*******************************************************************************************************
 	 * Suffix string to add to the end of the value text. Usefull for adding the % if used for percent value.
 	 */
 	@:isVar
 	public var valueSuffix(get, set):String = "";
+	
 	/*******************************************************************************************************
 	 * Warning flag: true when value < warningValue && > min, and false when value <= min || > warningValue. 
 	 */
 	public var warning:Bool = false;
+	
 	/*******************************************************************************************************
 	 * The rate that the HudBox flashes when warningValue is reached. Ignored if warningFlash = false.
 	 */
 	@:isVar
 	public var warningRate(get, set):Float = 0.2;
+	
 	/*******************************************************************************************************
 	 * The WarningStyle to use when waningValue is reached. NONE, FLASH_ALL, FLASH_BAR(default). Ignored if warningFlash = false.
 	 */
 	@:isVar
 	public var warningStyle(get, set):WarningStyle = WarningStyle.FLASH_BAR;
+	
 	/*******************************************************************************************************
 	 * The value when the onWarning callback will trigger and the HudBox will flash if warningFlash = true.
 	 */
 	@:isVar
 	public var warningValue(get, set):Float = 0;
+	
 	/*******************************************************************************************************
 	 * The FlxBar object for the HudBox. You can use the properties directly. ie hudBox.barValue.property
 	 */
 	public var barValue:FlxBar;
+	
 	/*******************************************************************************************************
 	 * The Label FlxText object for the HudBox. You can use the properties directly. ie hudBox.txtLabel.property
 	 */
 	public var txtLabel:FlxText;
+	
 	/*******************************************************************************************************
 	 * The Value FlxText object for the HudBox. You can use the properties directly. ie hudBox.txtValue.property
 	 */
 	public var txtValue:FlxText;
+	
 	/*******************************************************************************************************
 	 * The Power FlxText object for the HudBox. You can use the properties directly. ie hudBox.txtPower.property
 	 */
 	public var txtPower:FlxText;
+	
 	/*******************************************************************************************************
 	 * The Icon FlxSprite object for the HudBox. You can use the properties directly. ie hudBox.sprIcon.property
 	 */
 	public var sprIcon:FlxSprite;
+	
 	/*******************************************************************************************************
 	 * The background FlxSprite object for the HudBox. You can use the properties directly. ie hudBox.sprBg.property
 	 */
 	public var sprBg:FlxSprite;
+	
 	/*******************************************************************************************************/
 	
 	/*******************************************************************************************************

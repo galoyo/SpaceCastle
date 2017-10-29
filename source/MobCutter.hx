@@ -15,22 +15,55 @@ import flixel.util.FlxTimer;
 
 class MobCutter extends EnemyChildClass
 {
-	// used with jumping ability.
-	private var _YjumpingDelay:Float = 100;
+	/**
+	 * Used to slow the mobs jumping when in water.
+	 */ 
+	private var _slowJumpingInWater:Float = 100;
 	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth:Int = 3;
-	var maxXSpeed:Int = 400;
 	
-	// how fast the object can fall.
-	public var _gravity:Int = 4400;	
-	private var _gravityResetToThisValue:Int = 4400; // when reset(), this is the _gravity value.
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 400;
+	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
+	public var _gravity:Int = 4400;
+	 
+	/**
+	 * When reset(), this will be the _gravity value.
+	 */
+	private var _gravityResetToThisValue:Int = 4400;
+	
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
 
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
 	public var _airLeftInLungs:Int = 70;
-	public var _airLeftInLungsMaximum:Int = 70; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 70; 
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -63,7 +96,7 @@ class MobCutter extends EnemyChildClass
 		velocity.y = 0;
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;	
 		
 		if (x <= Reg.state.player.x) 
@@ -107,9 +140,9 @@ class MobCutter extends EnemyChildClass
 				if (justTouched(FlxObject.FLOOR)) 
 				{
 					if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-					inAir = false;
+					_inAir = false;
 				} 
-				else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+				else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 					
 				//--------------------------------slopes
 				if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
@@ -125,10 +158,10 @@ class MobCutter extends EnemyChildClass
 											
 
 				// ----------------- JUMP OVER EMPTY TILE. HOLE MUST BE 2 TILES DEEP.	
-				jumpOverEmptyTile(_YjumpingDelay, _mobIsSwimming);
+				jumpOverEmptyTile(_slowJumpingInWater, _mobInWater);
 							
 				//------------------ WALK BUT CAN FALL IN HOLE
-				walkButCanFallInHole(maxXSpeed, _mobIsSwimming);
+				walkButCanFallInHole(maxXSpeed, _mobInWater);
 				
 				if (velocity.x == 0) velocity.x = velocityXOld;
 				

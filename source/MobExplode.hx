@@ -14,28 +14,67 @@ import flixel.util.FlxSpriteUtil;
 
 class MobExplode extends EnemyChildClass 
 {
-	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 5; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float = 1;
+	
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */	
+	private var _bulletFormationNumber:Int = 5;
 	
 	private var ra:Int; // distance from player.
 	private var ra2:Int; // how many pixels in an update elapsed this mob can move towards the player.
 	private var raSpeed:Int; // how much additional speed is added to velocity.y
 	private var ticksMove:Float = 0;
 	private var ticksExplode:Float = 0;
-	public var defaultHealth:Int = 2;
-	// How fast the object is moving.
-	var maxXSpeed:Int = 280;
-	public var _gravity:Int = -4200;
-	private var _gravityResetToThisValue:Int = -4200; // when reset(), this is the _gravity value.
 	
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */	
+	public var defaultHealth:Int = 2;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 280;
+	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */public var _gravity:Int = -4200;
+	 
+	/**
+	  * When reset(), this will be the _gravity value.
+	  */
+	private var _gravityResetToThisValue:Int = -4200;
+	
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;	
+	
 	private var _fixedDirection:Int = 0; //  0 = this mob does not have a fixed direction. 1 = left. 2 = right.
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 80; // total air in mob without air items.		
-	public var _airLeftInLungsMaximum:Int = 80; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 80;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 80; 
 	
 	public function new(x:Float, y:Float, player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{

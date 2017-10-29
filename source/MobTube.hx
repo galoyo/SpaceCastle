@@ -16,14 +16,18 @@ import flixel.util.FlxTimer;
 
 class MobTube extends EnemyChildClass
 {
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth1:Int = 1;
-	var maxXSpeed:Int = 1200;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 1200;
 
 	private var ticksMoveUp:Float = 0;
 	
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
-
 	private var _timerparticleSmokeRight:FlxTimer;
 	private var _timerparticleSmokeLeft:FlxTimer;
 	
@@ -49,7 +53,6 @@ class MobTube extends EnemyChildClass
 		
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
 		visible = true;		
 		solid = false;
 		maxVelocity.x = maxXSpeed;

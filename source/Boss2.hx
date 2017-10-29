@@ -16,32 +16,80 @@ import flixel.util.FlxTimer;
 
 class Boss2 extends EnemyChildClass 
 {	
-	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 2; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.	
+	/*******************************************************************************************************
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float =  1;
+	
+	/*******************************************************************************************************
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */
+	private var _bulletFormationNumber:Int = 2; 
+	
+	/*******************************************************************************************************
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth1:Int = 18;
+	
+	/*******************************************************************************************************
+	 * Used to display the next dialog.
+	 */
 	private var _displayNextDialog:Bool = false;
-	private var _dialogDisplayIt:Bool = false; // used to display a dialog only once. 
-	// how fast the object can fall.
-	var gravity:Int = 1800;
-	private var _YjumpingDelay:Float = 100;
 	
-	// this value is needed to that a mob can walk up a high slope.
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;	
+	/*******************************************************************************************************
+	 * Used to display a dialog only once. 
+	 */
+	private var _dialogDisplayIt:Bool = false;
 	
-	private var ticksRun:Float = 0; // used to give time to run from the mala before mala turns into a mob.
-	private var ticksBoss:Float = 0; // used to delay changing to a different mob ability.
+	/*******************************************************************************************************
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/*******************************************************************************************************
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;	
+	
+	/*******************************************************************************************************
+	 * This var is used to give the player some time to run away from the mala before mala turns into a mob.
+	 */
+	private var ticksRun:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Mob will do a different fighting tactic when this tick is a certain value.
+	 */
+	private var ticksBoss:Float = 0;
 		
-	// used to delay the decreasing of the _airLeftInLungs var.
+	/*******************************************************************************************************
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
 	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 70; // total air in mob without air items.
-	public var _airLeftInLungsMaximum:Int = 70; // this var is used to reset _airLeftInLungs when jumping out of the water.
 	
-	private var maxSpeed:Int = 330;
-	private var ra:Int; // used to store a random value;
+	/*******************************************************************************************************
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 70;
 	
-	private var _xRandomMinimumHorizontalHoverPosition:Float; // the random minimum and maximum horizontal x positions when hovering.
-	private var _xRandomMaximumHorizontalHoverPosition:Float;
+	/*******************************************************************************************************
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 70; 
+	
+	/*******************************************************************************************************
+	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 */
+	private var maxSpeed:Int = 320;
+	
+	/*******************************************************************************************************
+	 * This mob will disappear from somewhere close to the player and then will reappear somewhere on an invisible horizontal line above the player and will shoot bullets at that time. This val refers to the minimum X position of the mob on that line. 
+	 */
+	private var _xRandomMinimumHorizontalHoverPosition:Float = 0;
+	
+	/*******************************************************************************************************
+	 * The maximum X position of the mob. 
+	 */
+	private var _xRandomMaximumHorizontalHoverPosition:Float = 0;
 
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -66,7 +114,7 @@ class Boss2 extends EnemyChildClass
 	{				
 		alive = true;
 		angle = 0;
-		_mobIsSwimming = false;
+		_mobInWater = false;
 		visible = true;		
 		
 		// bullet.
@@ -142,14 +190,14 @@ class Boss2 extends EnemyChildClass
 					if (justTouched(FlxObject.FLOOR)) 
 					{
 						if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-						inAir = false;
+						_inAir = false;
 					} 
-					else if(!isTouching(FlxObject.FLOOR)) inAir = true;
+					else if(!isTouching(FlxObject.FLOOR)) _inAir = true;
 					
 					// follow player.
 					if (ticksBoss > 0 && ticksBoss <= 80)
 					{						
-						seekPlayerAfterTouchingTile(Std.int(maxSpeed / 2), _mobIsSwimming);
+						seekPlayerAfterTouchingTile(Std.int(maxSpeed / 2), _mobInWater);
 					}
 					else if (ticksBoss >= 80 && ticksBoss <= 130)
 					{

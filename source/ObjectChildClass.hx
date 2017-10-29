@@ -19,10 +19,22 @@ class ObjectChildClass extends FlxSprite
 	public var _bulletsObject:FlxTypedGroup<BulletObject>;
 	private var _bulletObject:BulletObject;
 	private var _bulletSpeed:Int = 450;
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
 	private var _particleBulletHit:FlxEmitter;
-	private var _particleBulletMiss:FlxEmitter;	
+	
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
+	private var _particleBulletMiss:FlxEmitter;
 		
-	private var _gunDelay:Float;
+	/**
+	 * The gun delay between bullets fired.
+	 */
+	private var _gunDelay:Float = 0;
+	
 	private var _cooldown:Float;
 	private var _bulletFireFormation:Int; 
 	

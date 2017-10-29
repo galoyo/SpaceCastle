@@ -16,33 +16,68 @@ import flixel.math.FlxMath;
 
 class MobBubble extends EnemyChildClass
 {
-	private var _bulletTimeForNextFiring:Float; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = 4; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float =1;
+
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */	
+	private var _bulletFormationNumber:Int = 4; 
 	
-	// used with jumping ability.
-	private var _YjumpingDelay:Float = 100;
 	private var _displayDialogDoOnlyOnce:Int = 0;
+	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */	
 	public var defaultHealth1:Int = 5;
-	var maxXSpeed:Int = 350;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
+	private var maxXSpeed:Int = 350;
+	
 	public var _bubbleMoved:Bool = false;
-	private var ticksFireballMoved:Float = 0;
-	private var ticksMobFireBullets:Float = 0;
+	
 	private var _oldYValue:Float = 0; // used to keep this mob above the player head when mob fires bullets.
 	private var ra:Int = 2; // random number.
 	
-	// how fast the object can fall.
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 4400;	
+	
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
 
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
-
-	// used to delay the decreasing of the _airLeftInLungs var.
-	public var airTimerTicks:Int = 0; 
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
+	public var airTimerTicks:Float = 0; 
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
 	public var _airLeftInLungs:Int = 170;
-	public var _airLeftInLungsMaximum:Int = 170; // this var is used to reset _airLeftInLungs when jumping out of the water.
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 170; 
 	
 	public var ticksTween:Int = 0;
 	private var ticksBubble:Float = 0;
+	private var ticksFireballMoved:Float = 0;
+	private var ticksMobFireBullets:Float = 0;
+	
 	private var _tween1:FlxTween;
 	private var _tween2:FlxTween;
 	private var _tween3:FlxTween;
@@ -103,9 +138,9 @@ class MobBubble extends EnemyChildClass
 				if (justTouched(FlxObject.FLOOR)) 
 				{
 					if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-					inAir = false;
+					_inAir = false;
 				} 
-				else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+				else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 					
 				//########################## TWEEN ############################
 				// if player is standing still then curcle the fireball around this mob.

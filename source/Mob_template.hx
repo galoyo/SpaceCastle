@@ -15,26 +15,67 @@ import flixel.util.FlxTimer;
 
 class Mob_template extends EnemyChildClass
 {
-	private var _bulletTimeForNextFiring:Float = 1; // time it takes to display another bullet.
-	private var _bulletFormationNumber:Int = -1; // -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	/**
+	 * Time it takes for this mob to fire another bullet.
+	 */
+	private var _bulletTimeForNextFiring:Float = 1;
 	
+	/**
+	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
+	 */
+	private var _bulletFormationNumber:Int = -1;
+	
+	/**
+	 * This is the default health when mob is first displayed or reset on a map.
+	 */
 	public var defaultHealth1:Int = 1;
+	
+	/**
+	 * The X velocity of this mob. 
+	 */
 	private var maxXSpeed:Int = 300;
-	private var maxSpeed:Int = 250;
 	
-	// how fast the object can fall.
+	/**
+	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 */
+	private var maxSpeed:Int = 256;
+	
+	/**
+	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
+	 */
 	public var _gravity:Int = 4400;	
-	private var _gravityResetToThisValue:Int = 4200; // when reset(), this is the _gravity value.
 	
-	public var inAir:Bool = false;
-	public var _mobIsSwimming:Bool = false;
+	/**
+	  * When reset(), this will be the _gravity value.
+	  */
+	private var _gravityResetToThisValue:Int = 4400;
+	
+	/**
+	 * If true then this mob is not touching a tile.
+	 */
+	public var _inAir:Bool = false;
+	
+	/**
+	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
+	 */
+	public var _mobInWater:Bool = false;
+	
 	private var velocityXOld:Float; // used to store the direction that the mob was moving.	
 	
-	// used to delay the decreasing of the _airLeftInLungs var.
+	/**
+	 * Used to delay the decreasing of the _airLeftInLungs value.
+	 */
 	public var airTimerTicks:Int = 0; 
-	public var _airLeftInLungs:Int = 100; // total air in mob without air items.
-	// this value must be higher that the _areLeftInLungs var. this value can be any value. the higher the value the longer the mob can stay in the water. 100 = player. most mobs are around 40 - 70 but can have a value of about 200. 
-	public var _airLeftInLungsMaximum:Int = 100;
+	
+	/**
+	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
+	 */
+	public var _airLeftInLungs:Int = 100;
+	
+	/**
+	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
+	 */
+	public var _airLeftInLungsMaximum:Int = 100; 
 	
 	public function new(x:Float, y:Float, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -73,9 +114,9 @@ class Mob_template extends EnemyChildClass
 			if (justTouched(FlxObject.FLOOR)) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-				inAir = false;
+				_inAir = false;
 			} 
-			else if (!isTouching(FlxObject.FLOOR)) inAir = true;			
+			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 				
 						//--------------------------------slopes
 			if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
@@ -94,7 +135,7 @@ class Mob_template extends EnemyChildClass
 			}
 			
 			//------------------ WALK BUT CANNOT FALL IN HOLE
-			walkButCannotFallInHole(maxXSpeed, _mobIsSwimming);
+			walkButCannotFallInHole(maxXSpeed, _mobInWater);
 
 			//------------------ FLY UP/DOWN IN THE AIR WHILE SWAY.
 			flyUpThenDown(maxXSpeed, maxYSpeed);
@@ -104,10 +145,10 @@ class Mob_template extends EnemyChildClass
 			stopAtLaserBeam();	
 
 			//------------------ JUMP OVER EMPTY TILE.	HOLE MUST BE 2 TILES DEEP.
-			jumpOverEmptyTile(_YjumpingDelay, _mobIsSwimming);
+			jumpOverEmptyTile(_slowJumpingInWater, _mobInWater);
 
 			//------------------ WALK BUT CAN FALL IN HOLE
-			walkButCanFallInHole(maxXSpeed, _mobIsSwimming);
+			walkButCanFallInHole(maxXSpeed, _mobInWater);
 
 			//------------------ FISH SWIMMING BACK AND FORTH.
 			fishSwim(maxXSpeed, maxYSpeed);
@@ -116,15 +157,15 @@ class Mob_template extends EnemyChildClass
 			walkAnyDirection();
 
 			//------------------ CONTINUE TO JUMP TOWARDS PLAYER
-			continueToJumpTowardsPlayer(_YjumpingDelay, _mobIsSwimming);
+			continueToJumpTowardsPlayer(_slowJumpingInWater, _mobInWater);
 
 
 			//------------------ JUMP HAPPY IGNORE PLAYER.
-			jumpHappyIgnorePlayer(_mobIsSwimming);
+			jumpHappyIgnorePlayer(_mobInWater);
 
 
 			//------------------ SEEK PLAYER AFTER TOUCHING TILE.
-			seekPlayerAfterTouchingTile(maxSpeed, _mobIsSwimming);
+			seekPlayerAfterTouchingTile(maxSpeed, _mobInWater);
 
 			//------------------ FLY BACK AND FORTH.
 			flyBackAndForth(maxXSpeed);
