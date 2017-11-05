@@ -23,7 +23,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
-import flixel.tweens.FlxTween;
+import flixel.tweens.FlxTween; // A FlxTween allows you to create smooth animations easily such as moving in a circle or semi circle. Tweening means inbetweening. Specify a start and end value and the FlxTween class will generate all values between them.
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
@@ -129,17 +129,17 @@ class PlayState extends FlxUIState
 	// BULLET CLASSES ######################################################################################
 	
 	/*******************************************************************************************************
-	 * Normal gun bullets.
+	 * Var that points to a normal gun bullets class.
 	 */
 	public var _bullets:FlxTypedGroup<Bullet>;	
 	
 	/*******************************************************************************************************
-	 * Bullets from mobs.
+	 * Var that points to a bullets from mob class.
 	 */
 	public var _bulletsMob:FlxTypedGroup<BulletMob>;
 	
 	/*******************************************************************************************************
-	 * Bullets from objects. For example, the object cannon shoots bullets.
+	 * Var that points to a bullets from object class. For example, the object cannon shoots bullets.
 	 */
 	public var _bulletsObject:FlxTypedGroup<BulletObject>;
 	
@@ -164,154 +164,550 @@ class PlayState extends FlxUIState
 	
 	//######################################################################################################
 	
-	/**
+	/*******************************************************************************************************
 	 * This group holds most items that were picked up by the player. A collide check for this group points to the PlayStateTouchItems.itemPickedUp function. See that function for an example about how to access a dialog when an item in this group is picked up.
 	 */
 	public var _itemsThatWerePickedUp:FlxGroup;
 	
-	/**
+	/*******************************************************************************************************
 	 * The player is free to fly for any lenght of time so long as player does not touch a tile. Touching a tile will stop the player from flying. The player will then need to stand on a flying pad to fly again.
 	 */
 	public var _itemFlyingHatPlatform:FlxGroup;	
-	public var _itemGunFlame:FlxGroup;
+	
+	// GUN ITEMS ###########################################################################################
+	// Other items are at reg.hx. These items are placed on a map with the Tiled Map Editor software. The player must collect these items first before using them.
+	
+	/*******************************************************************************************************
+	 * Normal gun item. Normal pea shooter gun.
+	 */
 	public var _itemGun:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Gun freeze item. This gun shoots cold bullets that can freeze SOME mobs.
+	 */
 	public var _itemGunFreeze:FlxGroup;
 	
-	// other items are made at reg.hx.
+	/*******************************************************************************************************
+	 * Gun flame item. This gun shoots flame of fire.
+	 */
+	public var _itemGunFlame:FlxGroup;
+
+	//######################################################################################################
 	
-	public var _objectLadders:FlxGroup; // needs to be in a group by itself.	
-	public var _objectCage:FlxGroup; // this needs to be in a group by itself.
-	public var _objectTube:FlxGroup; // this too.
-	public var _objectDoor:FlxGroup;
+	// OBJECTS #############################################################################################
+	
+	/*******************************************************************************************************
+	 * A few layer 3 objects are in this group.
+	 * Treasure chest and computer object are here.
+	 */
+	public var _objectsLayer3:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Objects that do not move are in this group. See cannon, barricade, spikeTrap.
+	 */
 	public var _objectsThatDoNotMove:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * Objects that move are in this group. See SpikeFalling and rockFalling.
+	 */
 	public var _objectsThatMove:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * All blocks and rocks that do no damage to the player should be in this group.
+	 */
+	public var _objectBlockOrRock:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * Clime the ladder. Player can fall off the ladder by using the Left or Right arrow key / button.
+	 */
+	public var _objectLadders:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Some Malas are held in cages. See map-18-15.
+	 */
+	public var _objectCage:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * MobTube exits this tube and flys in the direction of the player. MobTube will not exit this tube if player is standing on this tube.
+	 */
+	public var _objectTube:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Player can only open a door with a key that is the same color as that door.
+	 */
+	public var _objectDoor:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Door to the house. No key is needed to enter a house.
+	 */
 	public var _objectDoorToHouse:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * Horizontal and vertical moing platforms.
+	 */
 	public var _objectPlatformMoving:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Malas water grass weeds. Some grass weeds have flowers.
+	 */
 	public var _objectGrassWeed:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * Treasure chest. TODO: Not currently working.
+	 */
 	public var _objectTreasureChest:ObjectTreasureChest;	
+	
+	/*******************************************************************************************************
+	 * Computers. TODO: Not currently working.
+	 */
 	public var _objectComputer:ObjectComputer;		
+	
+	/*******************************************************************************************************
+	 * This fireball will revolve around the fireballBlock. 
+	 */
 	public var _objectFireball:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Fireballs that revolve around mobBubble. Tween is an easy to use feature to make animations and predefined sprite movements easily.
+	 */
 	public var _objectFireballTween:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * This laser beam is an obstacle for the player to overcome. This laser beam moves in an upward direction. Once the laser beam touches the ceiling it will reset back to the floor and will begin to move again. The player must move to the other side of this object without touching it. 
+	 */
 	public var _objectBeamLaser:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * This super block is used to stop to player from progressing in the game by blocking the player's path. the player can only remove this block with an block item of the same type.
+	 */
 	public var _objectSuperBlock:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Player is forced to swim in the direction of the water current. A water current can point in the direction of north, east, south or west. A water current cannot change direction.
+	 */
 	public var _objectWaterCurrent:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * A moving platform is a tile that moves either horizontally or vertically and will change direction when touching a wall or this object.
+	 */
 	public var _objectPlatformParameter:FlxGroup;	
-	public var _objectVineMoving:FlxGroup;
-	public var _objectBlockOrRock:FlxGroup; // all blocks that do no damage should be in this group.	
+	
+	/*******************************************************************************************************
+	 * Vine is a long, slender stem from a plant. Player can swing from vine to vine to progress the journey. 
+	 */
+	public var _objectVineMoving:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * A fireball will revolve around the block. 
+	 */
 	public var _objectFireballBlock:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * This tile is invisable when playing the game. In the Tiled Map Editor, it is placed above the water wave so that the game knowns when the player or mob enters or exits the water.
+	 */
 	public var _objectWaterParameter:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * The laser beam will stop and then reset when it touches this object. ../readme dev/README FIRST.txt for more information.
+	 */
 	public var _objectLaserParameter:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * When player is in front of this sign and the user presses the "Down arrow" key or button, the dialog text of this object can be read.
+	 */
 	public var _objectSign:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * A key collected will activate a new level to teleport to. At that time, the player can use a teleporter to go to a different level. A teleporter is located at the inside of a house.
+	 */
 	public var _objectTeleporter:FlxGroup;
-	public var _jumpingPad:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * This object must be placed at the left side or right side of walls. The direction of the player is reversed when jumping on this jumping pad. The player can make it to the top of the screen by jumping from this jumping pad to the next jumping pad.
+	 */
+	public var _objectJumpingPad:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * If this block is touched by the player or mob when health damage will be given. If the player or a mob is still standing on this tile, then within a set time, more damage will be given.
+	 */
 	public var _objectLavaBlock:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * The player or a mob can slowly sink into this quicksand. Rapid jumping is needed to exit this quicksand. Health damage will be given to the player or mob when fully underneath this quicksand.
+	 */
 	public var _objectQuickSand:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * A car is needed to make it to the other side of the boulevard (trees on both sides of the street).
+	 */
 	public var _objectCar:ObjectCar;
 	
-	// all still objects are within this group	
+	//######################################################################################################
+	
+	/*******************************************************************************************************
+	 * All still overlays are within this group.
+	 */ 
 	public var _overlaysThatDoNotMove:FlxGroup;	
-	public var _overlayLaserBeam:FlxGroup;		
+	
+	/*******************************************************************************************************
+	 * This overlay hides the start location and end location of a laser beam. ../readme dev/README FIRST.txt for more information.
+	 */
+	public var _overlayLaserBeam:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * The surface of the water.
+	 */
 	public var _overlayWave:FlxGroup;	
+	
+	/*******************************************************************************************************
+	 * This is water that the player or mob swims or walks in.
+	 */
 	public var _overlayWater:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * The player or mob is able to breath underwater at an air bubble location.
+	 */
 	public var _overlayAirBubble:FlxGroup;	
-	public var _overlayPipe:FlxGroup;
 	
-	public var _objectLayer3OverlapOnly:FlxGroup;
+	/*******************************************************************************************************
+	 * All blue pipes are added here. A pipe is a hollow cylinder material. When the player enters the pipe, the player will be forced to move in a forward direction until the player reaches a junction or an end of the pipe is reached. A series of pipe can be placed togetter for the player to travel in any direction.
+	 * IMPORTANT, there must be two horizontal or two vertical pipes that connect to a three or four way pipe or it will not work. also, there cannot be two angle (90 degree) pipes placed together.
+	 */
+	public var _overlayPipe:FlxGroup;	
 	
-	// player class.
+	/*******************************************************************************************************
+	 * Player class.
+	 */ 
 	public var player:Player;
 		
-	// all mobs that collide will tilemaps are in this group.
+	/*******************************************************************************************************
+	 * All mobs that collide will tilemaps are in this group.
+	 */ 
 	public var enemies:FlxGroup;
-	// all mobs that do not collide will tilemaps but can collide with other mobs are in this group.	
+		
+	/*******************************************************************************************************
+	 * All mobs that do not collide will tilemaps but can collide with other mobs are in this group.
+	 */
 	public var enemiesNoCollideWithTileMap:FlxGroup;
-	public var npcs:FlxGroup; //  non-player characters (malas)
 	
-	// the inventory system across the top part of the screen.
+	/*******************************************************************************************************
+	 * Non-player characters (malas)
+	 */
+	public var npcs:FlxGroup;  
+	
+	/*******************************************************************************************************
+	 * The HUD, heads up display, is the display area where a user can see their player's data such as score or gun power.
+	 */
 	public var hud:Hud;
 	
-	public var _buttonsNavigation:ButtonsNavigation; // left, right, jump, etc, buttons at the bottom of the screen.
+	/*******************************************************************************************************
+	 * The left, right, jump, etc, buttons at the bottom of the screen.
+	 */
+	public var _buttonsNavigation:ButtonsNavigation;
 	
-	// the text when an item is picked up or a char is talking.
+	/*******************************************************************************************************
+	 * The text when an item is picked up or when a character is talking.
+	 */
 	public var dialog:Dialog;
 	
+	// MOBS ################################################################################################
 	// These mobs are in the enemies group.
+	
+	/*******************************************************************************************************
+	 * Walks left and right a platform. Reverses direction when at edge of platform. Shoots no bullet.
+	 */
 	public var mobApple:MobApple;
+	
+	/*******************************************************************************************************
+	 * This mob with an ID of 2 jumps faster than mob ID 1. Shoots no bullets.
+	 */
 	public var mobSlime:MobSlime;	
+	
+	/*******************************************************************************************************
+	 * Walks left and right. Reverses direction when touching a wall. Jumps over holes. Shoots no bullets.
+	 */
 	public var mobCutter:MobCutter;	
+	
+	/*******************************************************************************************************
+	 * Only moves horizontally from one side of the screen to the other.
+	 */
 	public var mobBullet:MobBullet;
+	
+	/*******************************************************************************************************
+	 * This mob exits a tube and horizontally flies towards to the player.
+	 */
 	public var mobTube:MobTube;
+	
+	/*******************************************************************************************************
+	 * Moves vertically in the air. Shoots no bullets.
+	 */
 	public var mobBat:MobBat;
+	
+	/*******************************************************************************************************
+	 * Jump happy mob. Shoots no bullets.
+	 */
 	public var mobSqu:MobSqu;
+	
+	/*******************************************************************************************************
+	 * swims left and right. Reverses direction when touching a wall. shoots no bullets. Mob with an ID of 2 swims faster than mob ID 1.
+	 */
 	public var mobFish:MobFish;
+	
+	/*******************************************************************************************************
+	 * Walks on ceiling, walls or floors. Some types of this mob shoots bullets.
+	 */
 	public var mobGlob:MobGlob;
+	
+	/*******************************************************************************************************
+	 * Flying horizonally back and forth. Reverses direction when touching a tile. Fires bullets up and down.
+	 */
 	public var mobWorm:MobWorm;
+	
+	/*******************************************************************************************************
+	 * This mob hangs from the ceiling shooting bullets in an angle. Flys toward the player when player and this mob is near vertical from each other. occupies two tiles.
+	 */
 	public var mobExplode:MobExplode;
+	
+	/*******************************************************************************************************
+	 * Moves left and right. Reverses direction when at edge of platform.
+	 */
 	public var mobSaw:MobSaw;
 	
+	//######################################################################################################
+	
+	// BOSSES ##############################################################################################
+	
+	/*******************************************************************************************************
+	 * First appearance of susan.
+	 */
 	public var boss1A:Boss1;
+	
+	/*******************************************************************************************************
+	 * Second appearance of susan. She can now jump. She is much stronger than when the player first battled her.
+	 */
 	public var boss1B:Boss1;
+	
+	/*******************************************************************************************************
+	 * The ghost monster. This mob is strong.
+	 */
 	public var boss2:Boss2;
+	
+	/*******************************************************************************************************
+	 * End boss.
+	 */
 	public var mobBubble:MobBubble;
 	
+	//######################################################################################################
+	
+	// NPC's ###############################################################################################
+	
+	/*******************************************************************************************************
+	 * The doctor is a mystery. Is the doctor trying to save the Malas from doom or does the doctor have a hidden agenda.
+	 */
 	public var npcDoctor:NpcDoctor;
+	
+	/*******************************************************************************************************
+	 * Good NPCx but unhealthy.
+	 */
 	public var npcMalaUnhealthy:NpcMalaUnhealthy;
+	
+	/*******************************************************************************************************
+	 * healthy Malas.
+	 */
 	public var npcMalaHealthy:NpcMalaHealthy;
+	
+	/*******************************************************************************************************
+	 * Help find her dogs. She has an important story to tell the player.
+	 */
 	public var npcDogLady:NpcDogLady;
+	
+	/*******************************************************************************************************
+	 * The dog lady's dogs.
+	 */
 	public var npcDog:NpcDog;	
 	
-	public var _healthBars:FlxGroup;
-	public var _healthBarPlayer:HealthBar;
-	public var _bubbleHealthBar:FlxBar;
+	//######################################################################################################
 	
+	// FLXBAR ##############################################################################################
+	
+	/*******************************************************************************************************
+	 * This health bar represents the health of a mob. This health bar is located under the legs of a mob. The color blue refers to health and the color red refers to health damage. Mob dies when there is no more blue color on the health bar.
+	 */
+	public var _healthBars:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * This health bar represents the health of the player. This health bar is located under the legs of the player.
+	 */
+	public var _healthBarPlayer:HealthBar;
+	
+	/*******************************************************************************************************
+	 * This health bar represents the health of mobBubble. This health bar is located under the legs of mobBubble. MobBubble is not in the FlxGroup "enemies" because mobBubble is the last boss in the game.
+	 */
+	public var _healthBarMobBubble:FlxBar;
+	
+	//######################################################################################################
+	
+	// FIREBALLS FOR MOBBUBBLE #############################################################################
+	
+	/*******************************************************************************************************
+	 * The first fireball that revolves around mobBubble.
+	 */
 	public var _defenseMobFireball1:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * The second fireball that revolves around mobBubble.
+	 */
 	public var _defenseMobFireball2:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * The third fireball that revolves around mobBubble.
+	 */
 	public var _defenseMobFireball3:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * The forth fireball that revolves around mobBubble.
+	 */
 	public var _defenseMobFireball4:FlxSprite;
 	
-	public var _npcShovel:FlxGroup;	
+	//######################################################################################################
+	
+	/*******************************************************************************************************
+	 * Malas use this shovel to dig the grass weeds for the doctor.
+	 */
+	public var _npcShovel:FlxGroup;
+	
+	/*******************************************************************************************************
+	 * Malas use this watering can to water the grass weeds.
+	 */
 	public var _npcWateringCan:FlxGroup;
 	
-	public var _trail:FlxTrailEffect;
-	public var _tween:FlxTween;
+	// BACKGROUND AND OVERLAYS #############################################################################
 	
+	/*******************************************************************************************************
+	 * Layer 0: Main tiles are here. FlxTilemapExt handles tiled slopes. FlxTilemap has no tiled slopes.
+	 */
 	public var tilemap:FlxTilemapExt;
+	
+	/*******************************************************************************************************
+	 * These tiles are displayed in front of the tilemap but are displayed behind all other tiles.
+	 */
 	public var underlays:FlxTilemap;
+	
+	/*******************************************************************************************************
+	 * Layer 5: if (Reg.state.tilemap.getTile(i, j) == 177) refers to an tile ID to check. These tiles are displayed in front of all other tiles.
+	 */
 	public var overlays:FlxTilemap;
-	public var foregroundImage:FlxBackdrop;	
+	
+	/*******************************************************************************************************
+	 * This var displays the background scene of a map. 
+	 */
 	public var background:FlxSprite;
 	
-	public var _rain:FlxTypedGroup<ObjectRain>; // a group of flakes
-	//private var _vPad:FlxVirtualPad;
+	//######################################################################################################
 	
+	/*******************************************************************************************************
+	 * If a map coordinate are within Reg._displayRainCoords var then the rain will be displayed on that map.
+	 */
+	public var _rain:FlxTypedGroup<ObjectRain>;
+	
+	// TIMER ###############################################################################################
+	// Used to go to a function every set time for how many loops.
+	
+	/*******************************************************************************************************
+	 * Triggered when player hits the ceiling.
+	 */
 	public var _ceilingHit:FlxTimer;
+	
+	/*******************************************************************************************************
+	 * Triggered when user presses the "Down arrow" key.
+	 */
 	public var _questionMark:FlxTimer;
+	
+	/*******************************************************************************************************
+	 * Triggered when player enters and exits the water. Plays the water sound.
+	 */
 	public var _waterPlayer:FlxTimer;
+	
+	/*******************************************************************************************************
+	 * Triggered when the mob enters or exits the water.
+	 */
 	public var _waterEnemy:FlxTimer;
+	
+	/*******************************************************************************************************
+	 * Used for the countdown text of the air remaining in the players lungs.
+	 */
 	public var _playerAirRemainingTimer:FlxTimer;	
 		
+	//######################################################################################################
+	
+	/*******************************************************************************************************
+	 * Used to determine if the player is on the ladder.
+	 */
 	public var _playerOnLadder:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Used to reset the player's Y acceleration of gravity. Gravity is needed when player is no longer on the ladder.
+	 */
 	public var _playerJustExitedLadder:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Normally a player is stunned for a moment when the player's head hits the ceiling. At that time, an animation effect will play. However, when this value is true then a collision between the player and this tile will not result in the player being stunned nor an anaimation played. Instead, the block will be destoyed when a collision is detected.
+	 */
 	public var _touchingSuperBlock:Bool = false;	
+	
+	/*******************************************************************************************************
+	 * This vars value will be true when the player enters or exits the water. This var is used to trigger a water splash sound.
+	 */
 	public var _playWaterSound:Bool = true;
+	
+	/*******************************************************************************************************
+	 * This vars value will be true when a mob enters or exits the water. This var is used to trigger a water splash sound.
+	 */
 	public var _playWaterSoundEnemy:Bool = true;
-	public var _ceilingHitFromMob:Bool;
+	
+	/*******************************************************************************************************
+	 * At user saves the game when the player is at this location.
+	 */
 	public var savePoint:FlxGroup;
-	public var _fireballPositionInDegrees:Int;
+	
+	/*******************************************************************************************************
+	 * Start the fireball at this position in degrees. Currently, this var is used in part of a tween code that creates a fireball for the object fireball block.
+	 */
+	public var _fireballPositionInDegrees:Int = 359;
+	
+	/*******************************************************************************************************
+	 * This is the remaining air in lungs countdown text when player is in the water.
+	 */
 	public var airLeftInLungsText:FlxText;
+	
+	/*******************************************************************************************************
+	 * At the waiting room, this var holds how many more Malas the player needs to talk to.
+	 */
 	public var _talkToHowManyMoreMalas:FlxText;
+	
+	/*******************************************************************************************************
+	 * Used for the waiting room countdown text. The player has to leave the waiting room within this time or else the player will die.
+	 */
 	public var _timeRemainingBeforeDeath:FlxText;	
+	
+	/*******************************************************************************************************
+	 * If the player jumped / falled to this line then the player would receive small health damage. The player's health decreases more in value the greater the player drops.
+	 */
 	public var warningFallLine:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * If the player jumped / falled to this line then the player would die.	
+	 */
 	public var deathFallLine:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * This line refers to a maximum height that the player is able to jump.
+	 */
 	public var maximumJumpLine:FlxSprite;
-	public var _tracker:FlxSprite; // not visible. player looks beyond the game regions.	
-
-	public var ticks = 0;
-	public var _ticksTrackerUp:Float = 0;
-	public var _ticksTrackerDown:Float = 0;
 	
-	public var _dogFound:Bool = false;
-	
+	/*******************************************************************************************************
+	 * The constructor.
+	 */
 	override public function create():Void
 	{
 		Reg._update = true;
@@ -342,12 +738,6 @@ class PlayState extends FlxUIState
 			Reg._dogExistsAtMap[i] = false;
 		}
 		Reg._dogIsVisible = true;
-		
-		// some music that is invalid need to be saved with the free program Audacity.
-		// music1.ogg must be in the music folder for this music to play.
-		//FlxG.sound.playMusic("music1", 1, true); // also make music1 in project.xml. see the music section of that file.
-		
-		// reset var values here.
 		
 		//FlxG.mouse.visible = false;
 		
@@ -575,10 +965,6 @@ class PlayState extends FlxUIState
 		
 		PlayStateMiscellaneous.guidelines(); // display the fall/jump guide lines.
 		
-		_tracker = new FlxSprite(0, 0);
-		_tracker.makeGraphic(28, 28, 0x00FFFFFF);
-		add(_tracker);
-		
 		if (Reg._stopDreamsMusic == true) {FlxG.sound.music.stop(); Reg._stopDreamsMusic = false;}
 		
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
@@ -612,6 +998,10 @@ class PlayState extends FlxUIState
 			}
 				
 		}  
+		
+		// If powerUpStopflicker equals true then the powerUp music is still playing, so make the player flicker.
+		if (Reg._musicEnabled == true && Reg._powerUpStopFlicker == true && FlxG.sound.music.playing == true)
+			FlxSpriteUtil.flicker(Reg.state.player, 100, 0.04);
 		
 		if (Reg._backgroundSoundsEnabled == true) FlxG.sound.play("backgroundSounds", 0.25, true);
 		
@@ -753,11 +1143,8 @@ class PlayState extends FlxUIState
 			{
 				PlayStateMiscellaneous.playMusic();
 				
-				if ( Reg._powerUpStopFlicker == true)
-				{
-					Reg._powerUpStopFlicker = false;
-					FlxSpriteUtil.stopFlickering(Reg.state.player);
-				}
+				Reg._powerUpStopFlicker = false;
+				FlxSpriteUtil.stopFlickering(Reg.state.player);
 			}
 		}
 	
@@ -770,7 +1157,7 @@ class PlayState extends FlxUIState
 			Reg._dialogAnsweredYes = false;
 		}
 		
-		PlayStateDownKey.downKeyAndTracker(); // Down key and tracker.
+		PlayStateDownKey.downKey();
 
 		//####################### EMITTERS ############################		
 		FlxG.overlap(_emitterItemTriangle, player, PlayStateTouchObjects.emitterTrianglePlayerOverlap);

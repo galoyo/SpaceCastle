@@ -58,16 +58,16 @@ class PlayStateCreateMap
 			
 			Reg.state.background = new FlxSprite();
 			
-			if (Reg.mapXcoords >= 24 && Reg.mapYcoords >= 24)
+			if (Reg.mapXcoords == 24 && Reg.mapYcoords == 20 || Reg.mapXcoords == 25 && Reg.mapYcoords == 20)
 			{
-				FlxG.camera.color = 0xFF999999;
 				Reg.state.background.loadGraphic("assets/images/background2.jpg", false);
+				Reg.state.background.setPosition(0, 0);
+				Reg.state.add(Reg.state.background);
 			}
 			else if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19){} // trap the parallax car scene. 
 			else
 			{
 				Reg.state.background.loadGraphic("assets/images/background"+bgSet+"-"+bg+".jpg", false);
-				Reg.state.background.scrollFactor.set(0.2,0.2);
 				Reg.state.background.setPosition(0, 0);
 				Reg.state.add(Reg.state.background);
 			}
@@ -192,8 +192,8 @@ class PlayStateCreateMap
 		Reg.state._objectDoorToHouse = new FlxGroup();
 		Reg.state.add(Reg.state._objectDoorToHouse);
 		
-		Reg.state._objectLayer3OverlapOnly = new FlxGroup();
-		Reg.state.add(Reg.state._objectLayer3OverlapOnly);
+		Reg.state._objectsLayer3 = new FlxGroup();
+		Reg.state.add(Reg.state._objectsLayer3);
 		
 		Reg.state._objectBlockOrRock = new FlxGroup();
 		Reg.state.add(Reg.state._objectBlockOrRock);	
@@ -213,8 +213,8 @@ class PlayStateCreateMap
 		Reg.state._objectTeleporter = new FlxGroup();
 		Reg.state.add(Reg.state._objectTeleporter);
 		
-		Reg.state._jumpingPad = new FlxGroup();
-		Reg.state.add(Reg.state._jumpingPad);
+		Reg.state._objectJumpingPad = new FlxGroup();
+		Reg.state.add(Reg.state._objectJumpingPad);
 		
 		Reg.state._objectLavaBlock = new FlxGroup();
 		Reg.state.add(Reg.state._objectLavaBlock);
@@ -588,7 +588,7 @@ class PlayStateCreateMap
 	}	
 	
 	public static function createLayer5OverlaysTiles():Void
-	{				
+	{
 		Reg.state.overlays = new FlxTilemap();		
 		if (Reg._testItems == false) Reg.state.overlays.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + "_Layer 5 overlays tiles.csv"), "assets/images/map5OverlaysTiles.png", Reg._tileSize, Reg._tileSize);
 		else Reg.state.overlays.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items1_Layer 5 overlays tiles.csv"), "assets/images/map5OverlaysTiles.png", Reg._tileSize, Reg._tileSize);

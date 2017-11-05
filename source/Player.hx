@@ -102,11 +102,6 @@ class Player extends FlxSprite
 	private var _emitterSkillDash:FlxEmitter;
 	
 	/*******************************************************************************************************
-	 * DO NOT change the value of this var. This value is true when the player uses the dog flute and there is a dog at that map.
-	 */
-	private var _dogFound:Bool = false;
-	
-	/*******************************************************************************************************
 	 * DO NOT change the value of this var. Used with the skill dash to only allow one dash per jump.
 	 */
 	private var _jumping:Bool = false;
@@ -134,7 +129,7 @@ class Player extends FlxSprite
 	/*******************************************************************************************************
 	 * DO NOT change the value of this var. The shot clock. When this value is equal or greater than _gunDelay then the bullet can be fired.
 	 */
-	private var _cooldown:Float;
+	private var _cooldown:Float = 0;
 	
 	/*******************************************************************************************************
 	 * DO NOT change the value of this var. This mob may either be swimming or walking in the water. In elther case, if this value is true then this player is in the water.
@@ -276,10 +271,6 @@ class Player extends FlxSprite
 	
 	public function shoot(_holdingUpKey:Bool):Void 
 	{	
-		// disable tracker when bullet is fired.
-		Reg.state._ticksTrackerUp = 0;
-		Reg.state._ticksTrackerDown = 0;
-		
 		if(Reg._itemGotGunRapidFire == true && Reg._typeOfGunCurrentlyUsed == 0)
 			_cooldown = _gunDelay;
 			
@@ -623,34 +614,13 @@ class Player extends FlxSprite
 			
 		// play the flute.
 		if (Reg._itemGotDogFlute == true)
-		{
-			// used to hold the location of where the dog was picked up. if this var matches the coords where a dog should exist then the dogFound var will be false.
-			var _dogNoLongerAtMap2 = Reg._dogNoLongerAtMap.split(",");			
-			
-			if (Reg.state.npcDogLady != null) _dogFound = false;
-			if (Reg.state.npcDog != null) _dogFound = true;
-			
-			for (i in 0...4)
-			{	
-				var temp:String = Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse;
-
-				// was the dog picked up at map
-				if (_dogNoLongerAtMap2[i] != null)
-				{
-					if (_dogNoLongerAtMap2[i] == temp)
-					{
-						_dogFound = false;
-						break;
-					}
-				}
-			}				
-			
+		{			
 			if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Dog Flute."
 			 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Dog Flute."
 			 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Dog Flute.")
 			{
 				// if dog exists on map but is not located at top left corner of screen.
-				if (Reg.state.npcDog != null && Reg.state.npcDog.x != 0) 
+				if (Reg.state.npcDog != null && Reg.state.npcDog.x != 0 || Reg._dogCarried == true) 
 				{
 					if (Reg._soundEnabled == true) FlxG.sound.play("dogFlute", 1, false);
 				}
@@ -889,8 +859,8 @@ class Player extends FlxSprite
 				_playerIsDashing = false;
 			}
 			// normal jump.
-			else if ( Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad)
-			|| Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._jumpingPad))		
+			else if ( Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._objectJumpingPad)
+			|| Reg._usingFlyingHat == false && _inAir == false || Reg._usingFlyingHat == false && FlxG.collide(this, Reg.state._objectJumpingPad))		
 			{
 				if (_inAir == false)
 				{
@@ -954,10 +924,7 @@ class Player extends FlxSprite
 			_inAir = false;
 			
 			if (Reg._antigravity == false) animation.play("idle"); 
-				else animation.play("idle2");
-			
-			Reg._trackerInUse = false;
-			Reg.state._ticksTrackerUp = 0; // if jumping then reset tick.
+				else animation.play("idle2");			
 		} 
 		else if(Reg._antigravity == true && !isTouching(FlxObject.CEILING) || Reg._antigravity == false && !isTouching(FlxObject.FLOOR)) _inAir = true;
 		
@@ -1049,9 +1016,7 @@ class Player extends FlxSprite
 			Reg._usingFlyingHat = false;
 			if(Reg._antigravity == false) animation.play("idle");
 				else animation.play("idle2");
-				
-			Reg._trackerInUse = false;
-			Reg.state._tracker.y = y;
+
 			Reg._guildlineInUseTicks = 0;
 
 			velocity.y = velocity.y * 0.5; // set the gravity in case player is in the air and using the flying hat.

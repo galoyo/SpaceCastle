@@ -370,10 +370,10 @@ class PlayStateAdd
 			Reg.state._objectFireballTween.add(Reg.state._defenseMobFireball3);
 			Reg.state._objectFireballTween.add(Reg.state._defenseMobFireball4);
 			
-			Reg.state._bubbleHealthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobBubble, "health", 0, Reg.state.mobBubble.health, false);	
-			Reg.state._bubbleHealthBar.offset.set( -3, 0);
-			Reg.state._bubbleHealthBar.visible = false;
-			Reg.state._healthBars.add(Reg.state._bubbleHealthBar);	
+			Reg.state._healthBarMobBubble = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobBubble, "health", 0, Reg.state.mobBubble.health, false);	
+			Reg.state._healthBarMobBubble.offset.set( -3, 0);
+			Reg.state._healthBarMobBubble.visible = false;
+			Reg.state._healthBars.add(Reg.state._healthBarMobBubble);	
 		}
 	}
 	
@@ -657,7 +657,7 @@ class PlayStateAdd
 	public static function addTreasureChest(X:Float, Y:Float):Void
 	{		
 		Reg.state._objectTreasureChest = new ObjectTreasureChest(X, Y);
-		Reg.state._objectLayer3OverlapOnly.add(Reg.state._objectTreasureChest);
+		Reg.state._objectsLayer3.add(Reg.state._objectTreasureChest);
 	}
 	
 	/**
@@ -666,7 +666,7 @@ class PlayStateAdd
 	public static function addComputer(X:Float, Y:Float):Void
 	{		
 		Reg.state._objectComputer = new ObjectComputer(X, Y);
-		Reg.state._objectLayer3OverlapOnly.add(Reg.state._objectComputer);
+		Reg.state._objectsLayer3.add(Reg.state._objectComputer);
 	}
 	
 	/**
@@ -805,7 +805,7 @@ class PlayStateAdd
 	}
 		
 	/**
-	 * add a fireball block to the map. the fireball will rotate around the block. 
+	 * add a fireball block to the map. A fireball will revolve around the block. 
 	 */
 	public static function addObjectFireballBlock(X:Float, Y:Float):Void
 	{
@@ -813,8 +813,7 @@ class PlayStateAdd
 		Reg.state.add(Reg.state._objectFireballBlock);	
 		
 		Reg.fireballSpeed = FlxG.random.float( 0.95, 1.15);
-		Reg.state._fireballPositionInDegrees = 359;			
-		
+				
 		// add the four different fireball sprites at the fireball block.
 		Reg.state._objectFireball.add(new ObjectFireball1(X, Y));
 			Reg.state.add(Reg.state._objectFireball);
@@ -830,7 +829,7 @@ class PlayStateAdd
 	}	
 	
 	/**
-	 * add the laser beam to the map. This laser will move vertically starting from the ground then will touch the ceiling and then start over again. 
+	 * add the laser beam to the map. This laser beam is an obstacle for the player to overcome. This laser beam moves in an upward direction. Once the laser beam touches the ceiling it will reset back to the floor and will begin to move again. The player must move to the other side of this object without touching it. 
 	 */
 	public static function addLaserBeam(X:Float, Y:Float):Void
 	{
@@ -848,7 +847,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the super block to the map. the player can only remove this block that stands in players way when player has an item of that type.
+	 * add the super block to the map. This super block is used to stop to player from progressing in the game by blocking the player's path. the player can only remove this block with an block item of the same type.
 	 */
 	public static function addObjectSuperBlock(X:Float, Y:Float, id:Int):Void
 	{		
@@ -857,7 +856,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the water current to the map. player is forced to swim in the direction of the current.
+	 * add the water current to the map. Player is forced to swim in the direction of the water current. A water current can point in the direction of north, east, south or west. A water current cannot change direction.
 	 */
 	public static function addWaterCurrent(X:Float, Y:Float, id:Int):Void
 	{		
@@ -866,7 +865,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the moving vine to the map.
+	 * add the moving vine to the map. Vine is a long, slender stem from a plant. Player can swing from vine to vine to progress the journey. 
 	 */	
 	public static function addVineMoving(X:Float, Y:Float, id:Int):Void
 	{			
@@ -949,7 +948,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a teleporter to the map. used to teleport to a different level. needs a different key to activate a new level to teleport to.
+	 * Add a teleporter to the map. A key collected will activate a new level to teleport to. At that time, the player can use a teleporter to go to a different level. A teleporter is located at the inside of a house.
 	 */	
 	public static function addTeleporter(X:Float, Y:Float):Void
 	{
@@ -975,10 +974,13 @@ class PlayStateAdd
 		Reg.state.add(Reg.state._objectsThatMove);
 	}
 	
+	/**
+	 * Add a jumping pad to the map. This object must be placed at the left side or right side of walls. The direction of the player is reversed when jumping on this jumping pad. The player can make it to the top of the screen by jumping from this jumping pad to the next jumping pad.
+	 */
 	public static function addJumpingPad(X:Float, Y:Float, id:Int):Void
 	{
-		Reg.state._jumpingPad.add( new ObjectJumpingPad(X, Y, id));
-		Reg.state.add(Reg.state._jumpingPad);
+		Reg.state._objectJumpingPad.add( new ObjectJumpingPad(X, Y, id));
+		Reg.state.add(Reg.state._objectJumpingPad);
 	}
 	/**
 	 * add a mala cage to the map. malas placed at the bottom of the cage will appear to be inside the cage with game is played.
@@ -990,7 +992,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a lava block to the map. every once in awhile damage will be given to the mob or player that touches this block.
+	 * Add a lava block to the map. If this block is touched by the player or mob when health damage will be given. If the player or a mob is still standing on this tile, then within a set time, more damage will be given.
 	 */
 	public static function addLavaBlock(X:Float, Y:Float):Void
 	{
@@ -999,7 +1001,7 @@ class PlayStateAdd
 	}
 
 	/**
-	 * add a quicksand block to the map. player slowly enters the sand player needs to jump.
+	 * add a quicksand block to the map. The player or a mob can slowly sink into this quicksand. Rapid jumping is needed to exit this quicksand. Health damage will be given to the player or mob when fully underneath this quicksand.
 	 */
 	public static function addQuickSand(X:Float, Y:Float):Void
 	{
@@ -1017,7 +1019,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a car. the car is used to travel from one city to the next.
+	 * Add a car to the map. A car is needed to make it to the other side of the boulevard (trees on both sides of the street).
 	 */	
 	public static function addCar(X:Float, Y:Float):Void
 	{
@@ -1039,7 +1041,7 @@ class PlayStateAdd
 	// ###############################################################
 	
 	/**
-	 * add a water wave to the map. a water wave if tghe surface of the water.
+	 * add a water wave to the map. The surface of the water
 	 */
 	public static function addWave(X:Float, Y:Float):Void
 	{
@@ -1048,7 +1050,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the body of the water to the map. this is water, deep water, ect.
+	 * add the body of the water to the map. This function is currently not used. This is water that the player or mob swims or walks in.
 	 */
 	public static function addWater(X:Float, Y:Float):Void
 	{
@@ -1057,7 +1059,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a water parameter to the map. must be place above the water wave so that game knowns when water is entered or exited.
+	 * add a water parameter to the map. This tile is invisable when playing the game. In the Tiled Map Editor, it is placed above the water wave so that the game knowns when the player or mob enters or exits the water.
 	 */
 	public static function addWaterParameter(X:Float, Y:Float):Void
 	{
@@ -1066,7 +1068,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add the air bubble to the map. The player is able to breath underwater at an air bubble location.
+	 * add the air bubble to the map. The player or mob is able to breath underwater at an air bubble location.
 	 */
 	public static function addAirBubble(X:Float, Y:Float):Void
 	{
@@ -1078,18 +1080,18 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a laser block to the map. ../readme dev/README FIRST.txt for more information.
+	 * add a laser block to the map. This overlay hides the start location and end location of a laser beam. ../readme dev/README FIRST.txt for more information.
 	 */
 	public static function addLaserBlock(X:Float, Y:Float, id:Int):Void
 	{
 		var laser:OverlayLaserBlocks = new OverlayLaserBlocks(X, Y, id);
-		// the yellow overlay block used for the laser is in a different group than the orange laser block. the reason is that this stops a mob from waiting for the laser to not be in its current path when standing near the brown block. 
+		// the yellow overlay block used for the laser is in a different group than the orange laser block. the reason is that the yellow block stops a mob from walking so that a mob waits for the laser to pass. If a mob was walking on top of the orangle block and both blocks were in the same group then the mob would also stop which we do not want to happen. Hence, a mob should not stop were the platform's floor is the top of a laser beam's block.
 		if (id == 1) Reg.state._overlayLaserBeam.add(laser);
 		else Reg.state._overlaysThatDoNotMove.add(laser);		
 	}
 	
 	/**
-	 * add a laser parameter to the map. ../readme dev/README FIRST.txt for more information.
+	 * add a laser parameter to the map. The laser beam will stop and then reset when it touches this object. ../readme dev/README FIRST.txt for more information.
 	 */
 	public static function addLaserParameter(X:Float, Y:Float):Void
 	{
@@ -1098,7 +1100,8 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a pipe1 segment to the map.
+	 * All green pipes are added here. A pipe is a hollow cylinder material. When the player enters the pipe, the player will be forced to move in a forward direction until the player reaches a junction or an end of the pipe is reached. A series of pipe can be placed togetter for the player to travel in any direction.
+	 * IMPORTANT, there must be two horizontal or two vertical pipes that connect to a three or four way pipe or it will not work. also, there cannot be two angle (90 degree) pipes placed together.
 	 */
 	public static function addPipe1(X:Float, Y:Float, id:Int):Void
 	{
@@ -1107,7 +1110,8 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a pipe2 segment to the map.
+	 * All blue pipes are added here. A pipe is a hollow cylinder material. When the player enters the pipe, the player will be forced to move in a forward direction until the player reaches a junction or an end of the pipe is reached. A series of pipe can be placed togetter for the player to travel in any direction.
+	 * IMPORTANT, there must be two horizontal or two vertical pipes that connect to a three or four way pipe or it will not work. also, there cannot be two angle (90 degree) pipes placed together.
 	 */
 	public static function addPipe2(X:Float, Y:Float, id:Int):Void
 	{
@@ -1116,7 +1120,7 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * add a platform parameter to the map. a moving platform will change direction when touching a wall or this object.
+	 * add a platform parameter to the map. A moving platform is a tile that moves either horizontally or vertically and will change direction when touching a wall or this object.
 	 */
 	public static function addPlatformParameter(X:Float, Y:Float):Void
 	{

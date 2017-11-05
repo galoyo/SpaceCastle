@@ -87,7 +87,6 @@ class SavePoint extends FlxSprite
 		_gameSave.data._dogCurrentlyCarried = Reg._dogCurrentlyCarried; 
 		_gameSave.data._dogCarried = Reg._dogCarried; 
 		_gameSave.data._dogFoundAtMap = Reg._dogFoundAtMap; 
-		_gameSave.data._dogNoLongerAtMap = Reg._dogNoLongerAtMap;
 		_gameSave.data.playerXcoords = Reg.playerXcoords;
 		_gameSave.data.playerYcoords = Reg.playerYcoords;
 		_gameSave.data.playerX = Reg.state.player.x;

@@ -22,7 +22,7 @@ class Reg
 	//########################################################################
 	
 	/*******************************************************************************************************
-	* If a map is within this var then the rain will be displayed on that map.
+	* If a map coordinate are within this var then the rain will be displayed on that map.
 	*/
 	public static var _displayRainCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
@@ -92,7 +92,7 @@ class Reg
 	/*******************************************************************************************************
 	 * Before a map is shown, a black screen is displayed in front of the map where the player is at. Moving from the bottom-right corner to the top-left corner is small diamond shapes that appear. Those diamond shape is part of the map where the player is at. This var nust be enabled to display the transition diamond effect for each map. 
 	 */	
-	public static var _transitionEffectEnable:Bool = true;
+	public static var _transitionEffectEnable:Bool = false;
 
 	/*******************************************************************************************************
 	 * How many ticks the mob frozen for. increase value to increase the length of time the mob stays frozen. 0 = 1.33 seconds. 40 = 2 seconds. 100 = 3 seconds. Do not use a negative value.
@@ -351,11 +351,6 @@ class Reg
 	 */
 	public static var _playerYNewFallTotal:Float = 0; 
 
-	/*******************************************************************************************************
-	 * Do NOT change the value of this var. The player will look beyond the currently view region when user presses and holds down the arrow key. 
-	 */
-	public static var _trackerInUse:Bool = false;  
-	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. Show the guildlines if this var is too high in value.
 	 */
@@ -681,11 +676,6 @@ class Reg
 	public static var _dogFoundAtMap:String = "";
 	
 	/*******************************************************************************************************
-	 * Do NOT change the value of this var. Used to hold all location of dogs picked up. If this var matches the coords where a dog should exist then the Reg.state.player._dogFound var will be false.
-	 */
-	public static var _dogNoLongerAtMap:String = "";	
-	
-	/*******************************************************************************************************
 	 * Do NOT change the value of this var. Determines if the dog is carried. 
 	 */
 	public static var _dogCarried:Bool = false;
@@ -966,7 +956,6 @@ class Reg
 		_dogFoundAtMap = "";
 		_displayFluteDialog = true;
 		_dogCarriedItsID = "";
-		_dogNoLongerAtMap = "";
 		
 		_dogExistsAtMap = [
 	false, false, false, false
@@ -1088,5 +1077,17 @@ class Reg
 				openfl.system.System.exit(0);
 			#end
 		//#end
+	}
+	
+	/**
+	 * play a sound when a menu button is clicked.
+	 */
+	public static function playTwinkle():Void
+	{
+		if (Reg._soundEnabled == true) 
+		{
+			FlxG.sound.playMusic("twinkle", 1, false);		
+			FlxG.sound.music.persist = true;
+		}
 	}
 }

@@ -10,7 +10,7 @@ import flixel.util.FlxColor;
  * @author galoyo
  */
 
-class OverlayPipe1 extends OverlayPipeChildClass 
+class OverlayPipe1 extends OverlayPipeParentClass 
 {		
 	public function new(x:Float, y:Float, id:Int) 
 	{

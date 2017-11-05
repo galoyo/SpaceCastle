@@ -127,19 +127,19 @@ class PlayStateMiscellaneous
 	 */	
 	public static function guidelines():Void
 	{
-		// the player will receive small health damage one tile below this line.
+		// If the player jumped / falled to this line then the player would receive small health damage. The player's health decreases more in value the greater the player drops.
 		Reg.state.warningFallLine = new FlxSprite(0, 0);
 		Reg.state.warningFallLine.loadGraphic("assets/images/guideline.png", false);
 		Reg.state.warningFallLine.visible = false;
 		Reg.state.add(Reg.state.warningFallLine);
 		
-		// lets the player know where the death fall line is. feet touching this line is instant death.		
+		// If the player jumped / falled to this line then the player would die.		
 		Reg.state.deathFallLine = new FlxSprite(0, 0);
 		Reg.state.deathFallLine.loadGraphic("assets/images/guideline.png", false);
 		Reg.state.deathFallLine.visible = false;
 		Reg.state.add(Reg.state.deathFallLine);
 		
-		// this line refers to a maximum height that the player is able to jump.
+		// This line refers to a maximum height that the player is able to jump.
 		Reg.state.maximumJumpLine = new FlxSprite(0, 0);
 		Reg.state.maximumJumpLine.loadGraphic("assets/images/guideline.png", false);
 		Reg.state.maximumJumpLine.visible = false;

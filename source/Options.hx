@@ -205,49 +205,55 @@ class Options extends FlxSubState
 		super.update(elapsed);
 	}
 	
+	private function playTwinkle():Void
+	{
+		if (Reg._soundEnabled == true) 
+		{
+			FlxG.sound.playMusic("twinkle", 1, false);		
+			FlxG.sound.music.persist = true;
+		}
+	}
+	
 	private function button1Clicked():Void
 	{
-		if (Reg._musicEnabled == true) 
-		{
-			if(Reg._backgroundSoundsEnabled == true) FlxG.sound.play("twinkle", 1, false);
+		if (Reg._musicEnabled == true)
+		{			
 			options1.text = "Music [OFF].";
 			Reg._musicEnabled = false;
 			FlxG.sound.music.stop();
 		}
 		else
 		{
-			if(Reg._backgroundSoundsEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options1.text = "Music [ON].";
 			Reg._musicEnabled = true;
-			
-			FlxG.sound.playMusic("titleScreen", 1, false);
 			
 			// can only play one music track so if this sound is enabled then diable the background sound.
 			options2.text = "Background Sounds [OFF].";
 			Reg._backgroundSoundsEnabled = false;
 		}
+		
+		Reg.playTwinkle();
 	}
 
 	private function button2Clicked():Void
 	{
 		if (Reg._backgroundSoundsEnabled == true) 
 		{
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options2.text = "Background Sounds [OFF].";
 			Reg._backgroundSoundsEnabled = false;
 			FlxG.sound.music.stop();
 		}
 		else
 		{
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 			options2.text = "Background Sounds [ON].";
 			Reg._backgroundSoundsEnabled = true;
-			FlxG.sound.playMusic("backgroundSounds", 0.25, false);
 			
 			// can only be one music track played so if the background sound is enabled then diable the music.
 			options1.text = "Music [OFF].";
 			Reg._musicEnabled = false;
 		}
+		
+		Reg.playTwinkle();
 	}
 	
 	private function button3Clicked():Void
@@ -263,9 +269,9 @@ class Options extends FlxSubState
 			
 			options3.text = "Sound Effects [ON].";
 			Reg._soundEnabled = true;
-			// no error here because sound files will be included in the release.
-			FlxG.sound.play("twinkle", 1, false);				
 		}
+		
+		Reg.playTwinkle();
 	}
 	
 	private function button4Clicked():Void
@@ -274,14 +280,14 @@ class Options extends FlxSubState
 		{				
 			options4.text = "Fast dialog text [FALSE].";
 			Reg._dialogFastTextEnabled = false;
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 		}
 		else
 		{				
 			options4.text = "Fast dialog text [TRUE].";
 			Reg._dialogFastTextEnabled = true;
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);				
 		}		
+		
+		Reg.playTwinkle();
 	}
 	
 	private function button5Clicked():Void
@@ -291,41 +297,15 @@ class Options extends FlxSubState
 			
 			options5.text = "Cheat Mode [OFF].";
 			Reg._cheatModeEnabled = false;
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 		}
 		else
 		{
 			
 			options5.text = "Cheat Mode [ON].";
 			Reg._cheatModeEnabled = true;
-			if(Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);				
 		}
-	}
-	
-
-	public function saveOptions():Void
-	{		
-		if ( Reg._difficultyLevel == 0) Reg._difficultyLevel = 2;
 		
-		_gameOptions = new FlxSave(); // initialize
-		_gameOptions.bind("TSC-SAVED-OPTIONS"); // bind to the named save slot.			
-		
-		_gameOptions.data._musicEnabled = Reg._musicEnabled;
-		_gameOptions.data._soundEnabled = Reg._soundEnabled;
-		_gameOptions.data._backgroundSoundsEnabled = Reg._backgroundSoundsEnabled;
-		_gameOptions.data._dialogFastTextEnabled = Reg._dialogFastTextEnabled;
-		_gameOptions.data._cheatModeEnabled = Reg._cheatModeEnabled;
-		_gameOptions.data.framerate = Reg._framerate;
-		_gameOptions.data._playerFallDamage = Reg._playerFallDamage;
-		_gameOptions.data._difficultyLevel = Reg._difficultyLevel;
-		
-		// save options
-		_gameOptions.flush();
-		_gameOptions.close;
-		
-		Reg._ignoreIfMusicPlaying = false;
-		FlxG.switchState(new MenuState());
-		
+		Reg.playTwinkle();
 	}
 	
 	private function button6Clicked():Void
@@ -360,6 +340,8 @@ class Options extends FlxSubState
 		}
 		
 		options6.text = "Game Speed: Framerate " + Std.string(Reg._framerate);
+		
+		Reg.playTwinkle();
 	}
 	
 	private function button7Clicked():Void
@@ -369,6 +351,8 @@ class Options extends FlxSubState
 		else if (Reg._playerFallDamage == false) Reg._playerFallDamage = true;			
 		
 		options7.text = "Player Fall Damage [" + Std.string(Reg._playerFallDamage).toUpperCase() + "].";
+		
+		Reg.playTwinkle();
 	}
 		
 	private function button8Clicked():Void
@@ -380,11 +364,39 @@ class Options extends FlxSubState
 		if (Reg._difficultyLevel == 2) options8.text = "Difficulty Level [NORMAL].";
 		if (Reg._difficultyLevel == 3) options8.text = "Difficulty Level [HARD].";
 
+		Reg.playTwinkle();
 	}
 	
 	private function button10Clicked():Void
 	{
 		saveOptions();
+		
+		Reg.playTwinkle();
 	}
 
+	
+	public function saveOptions():Void
+	{		
+		if ( Reg._difficultyLevel == 0) Reg._difficultyLevel = 2;
+		
+		_gameOptions = new FlxSave(); // initialize
+		_gameOptions.bind("TSC-SAVED-OPTIONS"); // bind to the named save slot.			
+		
+		_gameOptions.data._musicEnabled = Reg._musicEnabled;
+		_gameOptions.data._soundEnabled = Reg._soundEnabled;
+		_gameOptions.data._backgroundSoundsEnabled = Reg._backgroundSoundsEnabled;
+		_gameOptions.data._dialogFastTextEnabled = Reg._dialogFastTextEnabled;
+		_gameOptions.data._cheatModeEnabled = Reg._cheatModeEnabled;
+		_gameOptions.data.framerate = Reg._framerate;
+		_gameOptions.data._playerFallDamage = Reg._playerFallDamage;
+		_gameOptions.data._difficultyLevel = Reg._difficultyLevel;
+		
+		// save options
+		_gameOptions.flush();
+		_gameOptions.close;
+		
+		Reg._ignoreIfMusicPlaying = false;
+		FlxG.switchState(new MenuState());
+		
+	}
 }

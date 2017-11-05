@@ -328,7 +328,7 @@ class PlayStateTouchObjects
 		p.drag.x = p._drag;	
 				
 		Reg.state._waterPlayer.cancel;
-		Reg.state._waterPlayer.start(0.05, onTimerWaterPlayer, 1);
+		Reg.state._waterPlayer.start(0.05, onTimerWaterPlayer, 1); // Play the water splash.
 		
 		// reset the amount of air in the players lungs.
 		Reg.state.airLeftInLungsText.visible = false;
@@ -445,11 +445,7 @@ class PlayStateTouchObjects
 	 */
 	public static function onTimerCeilingHit(_ceilingHit:FlxTimer):Void
 	{	
-		// remove this line if you want this emitted when a mob hits the head of player.
-		//if(_ceilingHitFromMob == false) // seems to work best without this line.
 		Reg.state._particleCeilingHit.start(true, 0.2, 2);
-	
-		Reg.state._ceilingHitFromMob = false;
 	}
 		
 }
