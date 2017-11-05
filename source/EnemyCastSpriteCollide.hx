@@ -166,7 +166,6 @@ class EnemyCastSpriteCollide {
 	public static function enemyPlayerCollide(e:FlxSprite, p:Player):Void
 	{
 		var healthDamage:Float = 0; // Initialize player hurt value.
-		Reg.state._ceilingHitFromMob = true;
 
 		if (e.animation.paused == false)
 		{

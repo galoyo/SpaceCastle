@@ -14,7 +14,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class MobTube extends EnemyChildClass
+class MobTube extends EnemyParentClass
 {
 	/**
 	 * This is the default health when mob is first displayed or reset on a map.
@@ -68,7 +68,7 @@ class MobTube extends EnemyChildClass
 		{
 			_spawnTimeElapsed += elapsed;
 				
-			if (_spawnTimeElapsed >= 0.1)
+			if (_spawnTimeElapsed >= Reg._spawnTime)
 				reset(_startX, _startY);	
 				
 			return;
@@ -107,7 +107,7 @@ class MobTube extends EnemyChildClass
 				}
 			}
 		}
-		else if (!isOnScreen() && ticks > 0 && Reg._trackerInUse == false) kill();
+		else if (!isOnScreen() && ticks > 0) kill();
 			
 		if (ticks == 1)
 		{

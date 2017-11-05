@@ -12,7 +12,7 @@ import flixel.util.FlxSpriteUtil;
  * @author galoyo
  */
 
-class MobExplode extends EnemyChildClass 
+class MobExplode extends EnemyParentClass 
 {
 	/**
 	 * Time it takes for this mob to fire another bullet.

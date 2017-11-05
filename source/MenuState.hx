@@ -145,12 +145,7 @@ class MenuState extends FlxState
 			FlxG.sound.music.stop();
 		}
 		
-		if (Reg._soundEnabled == true) 
-		{
-			FlxG.sound.playMusic("twinkle", 1, false); 
-			FlxG.sound.music.persist = true;
-		}
-		
+		Reg.playTwinkle();		
 		loadPlayState();
 	}
 	
@@ -162,7 +157,7 @@ class MenuState extends FlxState
 		} 
 		else if (_gameSave.data._fallAllowedDistanceInPixels != null && Reg._soundEnabled == true) 
 		{
-			
+			Reg.playTwinkle();
 			_userPressedScaleButton = false;
 			loadGame();
 		} 
@@ -174,6 +169,7 @@ class MenuState extends FlxState
 	{
 		Reg._ignoreIfMusicPlaying = true;
 
+		Reg.playTwinkle();
 		instructions();	
 	}
 	
@@ -181,7 +177,7 @@ class MenuState extends FlxState
 	private function button4Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = true;
-
+		Reg.playTwinkle();
 		openSubState(new Options());
 	}
 	
@@ -269,8 +265,7 @@ class MenuState extends FlxState
 		}
 
 	}
-
-	
+		
 	private function instructions():Void
 	{
 		if (Reg._musicEnabled == true)
@@ -279,6 +274,7 @@ class MenuState extends FlxState
 			FlxG.sound.music.stop();
 		}
 		
+		Reg.playTwinkle();
 		openSubState(new Instructions());	
 	}
 	
@@ -329,7 +325,6 @@ class MenuState extends FlxState
 		Reg._dogCurrentlyCarried = _gameSave.data._dogCurrentlyCarried;
 		Reg._dogCarried = _gameSave.data._dogCarried;		
 		Reg._dogFoundAtMap = _gameSave.data._dogFoundAtMap;		
-		Reg._dogNoLongerAtMap = _gameSave.data._dogNoLongerAtMap;		
 		Reg.playerXcoords = _gameSave.data.playerXcoords;
 		Reg.playerYcoords = _gameSave.data.playerYcoords;		
 		Reg.playerXcoords = _gameSave.data.playerX;
@@ -376,12 +371,6 @@ class MenuState extends FlxState
 			FlxG.sound.music.stop();
 		}
 		
-		if (Reg._soundEnabled == true) 
-		{
-			FlxG.sound.playMusic("twinkle", 1, false); 
-			FlxG.sound.music.persist = true;
-		}
-
 		FlxG.switchState(new PlayState());
 	}
 
@@ -392,6 +381,8 @@ class MenuState extends FlxState
 	
 	private function toggleFullScreenClicked():Void
 	{
+		Reg.playTwinkle();
+		
 		if (toggleFullScreen.text == "t: Fullscreen.") 
 		{
 			toggleFullScreen.text = "t: Window.";
@@ -401,7 +392,7 @@ class MenuState extends FlxState
 		{
 			toggleFullScreen.text = "t: Fullscreen.";
 			FlxG.fullscreen = false;
-		}
+		}		
 		
 		saveMenu();
 	}	

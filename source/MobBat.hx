@@ -14,7 +14,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class MobBat extends EnemyChildClass
+class MobBat extends EnemyParentClass
 {	
 	/**
 	 * The X velocity of this mob. 
@@ -156,7 +156,7 @@ class MobBat extends EnemyChildClass
 			ticks = 1;
 
 			
-		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);
+		} else if (ticks > 0) reset(_startX, _startY);
 		
 		if (inRange(_range))
 		{

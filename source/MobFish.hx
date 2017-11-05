@@ -13,7 +13,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class MobFish extends EnemyChildClass
+class MobFish extends EnemyParentClass
 {
 	/**
 	 * This is the default health when mob is first displayed or reset on a map.
@@ -120,7 +120,7 @@ class MobFish extends EnemyChildClass
 			fishSwim(maxXSpeed, maxYSpeed);
 					
 			ticks = 1;
-		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);
+		} else if (ticks > 0) reset(_startX, _startY);
 		
 		if (inRange(_range))
 		{

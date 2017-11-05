@@ -71,7 +71,7 @@ class Bullet extends FlxSprite
 		if (this != null)
 		{
 			loadNewBulletImage();
-			trace("a", _holdingUpKey);
+			
 			// when the bullet is at the distance of the _bullterStar, emit the _particleBulletHit so that the _bulletStar animation can be seen. Then destroy the animation.
 			if (Reg._typeOfGunCurrentlyUsed == 0)
 			{

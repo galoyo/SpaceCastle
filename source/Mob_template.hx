@@ -13,7 +13,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class Mob_template extends EnemyChildClass
+class Mob_template extends EnemyParentClass
 {
 	/**
 	 * Time it takes for this mob to fire another bullet.
@@ -172,7 +172,7 @@ class Mob_template extends EnemyChildClass
 
 			if (velocity.x == 0) velocity.x = velocityXOld;			
 			ticks = 1;
-		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);
+		} else if (ticks > 0) reset(_startX, _startY);
 		
 		if (isOnScreen())
 		{

@@ -13,7 +13,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class Boss1 extends EnemyChildClass
+class Boss1 extends EnemyParentClass
 {
 	/*******************************************************************************************************
 	 * Time it takes for this mob to fire another bullet.
@@ -429,7 +429,7 @@ class Boss1 extends EnemyChildClass
 					{
 						Reg.state.mobBubble.visible = false;
 						Reg.state.mobBubble.alive = false;
-						Reg.state._bubbleHealthBar.kill();
+						Reg.state._healthBarMobBubble.kill();
 						Reg.state._defenseMobFireball1.visible = false;
 						Reg.state._defenseMobFireball2.visible = false;
 						Reg.state._defenseMobFireball3.visible = false;
@@ -459,8 +459,5 @@ class Boss1 extends EnemyChildClass
 		}
 		
 		super.update(elapsed);		
-
-		// delete the enemy when at the bottom of screen.
-		if (y > Reg.state.tilemap.height) super.kill();
 	}	
 }

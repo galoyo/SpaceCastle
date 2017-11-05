@@ -96,6 +96,7 @@ class Instructions extends FlxSubState
 	private function button1Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = false;
+		Reg.playTwinkle();
 		FlxG.switchState(new MenuState());
 	}
 	

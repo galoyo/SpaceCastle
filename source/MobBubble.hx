@@ -14,7 +14,7 @@ import flixel.math.FlxMath;
  * @author galoyo
  */
 
-class MobBubble extends EnemyChildClass
+class MobBubble extends EnemyParentClass
 {
 	/**
 	 * Time it takes for this mob to fire another bullet.
@@ -74,6 +74,7 @@ class MobBubble extends EnemyChildClass
 	public var _airLeftInLungsMaximum:Int = 170; 
 	
 	public var ticksTween:Int = 0;
+	public var ticksDelay:Float = 0; // This var stops the initial player attack.
 	private var ticksBubble:Float = 0;
 	private var ticksFireballMoved:Float = 0;
 	private var ticksMobFireBullets:Float = 0;
@@ -149,7 +150,7 @@ class MobBubble extends EnemyChildClass
 					if (Reg._boss1BDefeated == true) 
 					{
 						visible = true; 
-						Reg.state._bubbleHealthBar.visible = true;
+						Reg.state._healthBarMobBubble.visible = true;
 					}
 					
 					y = _oldYValue;
@@ -186,91 +187,123 @@ class MobBubble extends EnemyChildClass
 		
 		//################## FIREBALL MOVE TO THE GROUND #################
 		// if player is near underneath or directly underneath the mob.
-		if (Reg.mapXcoords == 25 && Reg.mapYcoords == 20 && Reg.state.player.x - 32 < x && Reg.state.player.x + 32 > x || Reg.mapXcoords == 25 && Reg.mapYcoords == 20 && _bubbleMoved == true)
+		if (Reg.mapXcoords == 25 && Reg.mapYcoords == 20 && _displayDialogDoOnlyOnce == 1 || Reg.mapXcoords == 25 && Reg.mapYcoords == 20 && _bubbleMoved == true)
 		{	
-			if (ticksTween == 1)
+			// This var stops the initial player attack.
+			ticksDelay = Reg.incrementTicks(ticksDelay, 60 / Reg._framerate);
+			
+			if (ticksDelay > 30)
 			{
-				// shoot the fireball in a downward direction.
-				if (ticksBubble == 5)
+				if (ticksTween == 1)
 				{
-					_tween1.destroy(); // destroy the tween so that the fireball can be free to move.
-					// position the fireball left side of the mob if the player is facing left.
-					if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball1.x = x - 32;
-					if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT) Reg.state._defenseMobFireball1.x = x + 32;
+					// Keep the fireballs X position the same a this mobBubble x position when shooting the fireballs at the player.
+					if (Reg.state._defenseMobFireball1.velocity.y == 0)
+					{
+						Reg.state._defenseMobFireball1.x = x + 4;
+						Reg.state._defenseMobFireball1.y = y + 14;
+					}
+					if (Reg.state._defenseMobFireball2.velocity.y == 0)
+					{
+						Reg.state._defenseMobFireball2.x = x + 4;
+						Reg.state._defenseMobFireball2.y = y + 14;
+					}
+					if (Reg.state._defenseMobFireball3.velocity.y == 0)
+					{
+						Reg.state._defenseMobFireball3.x = x + 4;
+						Reg.state._defenseMobFireball3.y = y + 14;
+					}
+					if (Reg.state._defenseMobFireball4.velocity.y == 0)
+					{
+						Reg.state._defenseMobFireball4.x = x + 4;
+						Reg.state._defenseMobFireball4.y = y + 14;
+					}
 					
-					// shoot fireball downward.
-					Reg.state._defenseMobFireball1.velocity.y = 1500;
-					if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
-				}
-				
-				if (ticksBubble == 8)
-				{
-					_tween2.destroy();
-					if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball2.x = x - 32;
-					if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT) Reg.state._defenseMobFireball2.x = x + 32;
-					Reg.state._defenseMobFireball2.velocity.y = 1500;
-					if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
-				}
-				
-				if (ticksBubble == 13)
-				{
-
-					_tween3.destroy();
-					if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball3.x = x - 32;
-					if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT)	Reg.state._defenseMobFireball3.x = x + 32;
-					Reg.state._defenseMobFireball3.velocity.y = 1500;
-					if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
-				}
-				
-				
-				if (ticksBubble == 18)
-				{
-					_tween4.destroy();
-					if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball4.x = x - 32;
-					if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT)	Reg.state._defenseMobFireball4.x = x + 32;
-					Reg.state._defenseMobFireball4.velocity.y = 1500;
-					if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
-				}
-				
-				
-				if (ticksBubble > 0) 
-				{
-					// follow the player if will not collide with a tile.
-					if( !overlapsAt(Reg.state.player.x, y, Reg.state.tilemap)) x = Reg.state.player.x;													
-				} 
-				
-				// all the fireballs have moved in a downward direction. 30 is used for a short delay
-				if ( ticksBubble > 30)
-				{
-					ticksFireballMoved = Reg.incrementTicks(ticksFireballMoved, 60 / Reg._framerate);
-					velocity.set(0, 0);
+					// shoot the fireball in a downward direction.
+					if (ticksBubble == 5)
+					{
+						_tween1.destroy(); // destroy the tween so that the fireball can be free to move.
+						_tween2.destroy();
+						_tween3.destroy();
+						_tween4.destroy();					
+						
+						// position the fireball left side of the mob if the player is facing left.
+						if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT) Reg.state._defenseMobFireball1.x = x - 32;
+						if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT) Reg.state._defenseMobFireball1.x = x + 32;
+						
+						// shoot fireball downward.
+						Reg.state._defenseMobFireball1.velocity.y = 1500;
+						if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
+					}
 					
-					if (ticksFireballMoved <= ra) ticksTween = 0;
-					else {ticksTween = 2; ticksFireballMoved = 0;}
+					if (ticksBubble == 8)
+					{
+						if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball2.x = x - 32;
+						if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT) Reg.state._defenseMobFireball2.x = x + 32;
+						Reg.state._defenseMobFireball2.velocity.y = 1500;
+						if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
+					}
 					
-					ticksBubble = 1;
-					_bubbleMoved = false;
+					if (ticksBubble == 13)
+					{
+						if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball3.x = x - 32;
+						if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT)	Reg.state._defenseMobFireball3.x = x + 32;
+						Reg.state._defenseMobFireball3.velocity.y = 1500;
+						if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
+					}
 					
-					_tween1.destroy();
-					_tween2.destroy();
-					_tween3.destroy();
-					_tween4.destroy();
 					
-					// stop the velocity so that the fireballs can be tweened.
-					Reg.state._defenseMobFireball1.velocity.y = 0;
-					Reg.state._defenseMobFireball2.velocity.y = 0;
-					Reg.state._defenseMobFireball3.velocity.y = 0;
-					Reg.state._defenseMobFireball4.velocity.y = 0;
-				} else _bubbleMoved = true;
-				
-				if (Reg.state.player.velocity.x == 0)
-				{
-					ticksTween = 3;
-					ticksBubble = 1;					
-				}
-				
-				ticksBubble = Reg.incrementTicks(ticksBubble, 60 / Reg._framerate);
-			}			
+					if (ticksBubble == 18)
+					{
+						if (x > Reg.state.player.x && Reg.state.player.facing == FlxObject.LEFT)	Reg.state._defenseMobFireball4.x = x - 32;
+						if (x <= Reg.state.player.x && Reg.state.player.facing == FlxObject.RIGHT)	Reg.state._defenseMobFireball4.x = x + 32;
+						Reg.state._defenseMobFireball4.velocity.y = 1500;
+						if (Reg._soundEnabled == true) FlxG.sound.play("mobBullet", 1, false);
+					}
+					
+					
+					if (ticksBubble > 0) 
+					{
+						// follow the player if will not collide with a tile.
+						if ( !overlapsAt(Reg.state.player.x, y, Reg.state.tilemap)) 
+							x = Reg.state.player.x;													
+					}
+					
+					// all the fireballs have moved in a downward direction. 30 is used for a short delay
+					if ( ticksBubble > 30)
+					{
+						ticksFireballMoved = Reg.incrementTicks(ticksFireballMoved, 60 / Reg._framerate);
+						velocity.set(0, 0);
+						
+						if (ticksFireballMoved <= ra) ticksTween = 0;
+						else {ticksTween = 2; ticksFireballMoved = 0;}
+						
+						ticksBubble = 1;
+						_bubbleMoved = false;
+						
+						_tween1.destroy();
+						_tween2.destroy();
+						_tween3.destroy();
+						_tween4.destroy();
+						
+						// stop the velocity so that the fireballs can be tweened.
+						Reg.state._defenseMobFireball1.velocity.y = 0;
+						Reg.state._defenseMobFireball2.velocity.y = 0;
+						Reg.state._defenseMobFireball3.velocity.y = 0;
+						Reg.state._defenseMobFireball4.velocity.y = 0;
+						
+						ticksDelay = 0;
+						
+					} else _bubbleMoved = true;
+					
+					if (Reg.state.player.velocity.x == 0)
+					{
+						ticksTween = 3;
+						ticksBubble = 1;					
+					}
+					
+					ticksBubble = Reg.incrementTicks(ticksBubble, 60 / Reg._framerate);
+				}	
+			}
 
 		} 
 		//############### END FIREBALL MOVES TO THE GROUND ##############

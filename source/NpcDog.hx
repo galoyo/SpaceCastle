@@ -128,8 +128,7 @@ class NpcDog extends FlxSprite
 					Reg._dogCarried = false; 
 					
 					// used to place dog at lady.
-					Reg._dogFoundAtMap = Reg._dogFoundAtMap + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + ",";
-					Reg._dogNoLongerAtMap = Reg._dogNoLongerAtMap + Reg.dogXcoords + "-" + Reg.dogYcoords + Reg._dogInHouse + ",";
+					Reg._dogFoundAtMap = Reg._dogFoundAtMap + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse + ",";					
 					
 					x = Reg.state.npcDogLady.x + (32 * Reg._dogCurrentlyCarried);
 					y = Reg.state.npcDogLady.y;

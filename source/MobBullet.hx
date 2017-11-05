@@ -14,7 +14,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class MobBullet extends EnemyChildClass
+class MobBullet extends EnemyParentClass
 {
 	/**
 	 * This is the default health when mob is first displayed or reset on a map.
@@ -98,7 +98,7 @@ class MobBullet extends EnemyChildClass
 				_particleSmokeLeft.start(false, 0.006, 9);
 			}
 		}
-		else if (!inRange(_range) && ticks > 0 && Reg._trackerInUse == false) kill();
+		else if (!inRange(_range) && ticks > 0) kill();
 			
 		if (ticks == 1)
 		{

@@ -14,7 +14,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class Boss2 extends EnemyChildClass 
+class Boss2 extends EnemyParentClass 
 {	
 	/*******************************************************************************************************
 	 * Time it takes for this mob to fire another bullet.

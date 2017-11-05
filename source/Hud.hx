@@ -177,8 +177,6 @@ package;
 	 
 	 override public function update(elapsed:Float):Void 
 	{			
-		super.update(elapsed);	
-		
 		// display the gun hub box if not inside the house.
 		if (Reg._inHouse == "" && Reg._update == true )
 		{
@@ -241,6 +239,8 @@ package;
 				}
 			}
 		}
+		
+		super.update(elapsed);	
 	}
 	
 	public function decreaseGunPowerCollected():Void

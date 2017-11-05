@@ -13,7 +13,7 @@ import flixel.util.FlxTimer;
  * @author galoyo
  */
 
-class MobCutter extends EnemyChildClass
+class MobCutter extends EnemyParentClass
 {
 	/**
 	 * Used to slow the mobs jumping when in water.
@@ -171,7 +171,7 @@ class MobCutter extends EnemyChildClass
 								
 				ticks = 1;
 			}
-		} else if (ticks > 0 && Reg._trackerInUse == false) reset(_startX, _startY);
+		} else if (ticks > 0) reset(_startX, _startY);
 		
 		if (inRange(_range))
 		{
