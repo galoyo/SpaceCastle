@@ -952,10 +952,6 @@ class Player extends FlxSprite
 				acceleration.y = _gravity;
 				_playerIsDashing = false;
 			} 		
-			else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
-			{
-				acceleration.y = _gravity;
-			} 
 			else if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Normal Jump."
 			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Normal Jump."
 			|| InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump."	
@@ -965,29 +961,31 @@ class Player extends FlxSprite
 			{
 				acceleration.y = -_gravity;
 				_playerIsDashing = false;
-			} 
-			else if ( !isTouching(FlxObject.CEILING) && Reg._antigravity == true) 
-			{
-				acceleration.y = -_gravity;
-			} 
-			else
-			{
-				// if player is standing on a slope then set high gravity so that the player will walk down the slope instead of jumping or hopping down.
-				if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
-					|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 30
-					|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 38 
-					|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 46)
-				{					
-					if( Reg._antigravity == false) acceleration.y = Reg._gravityOnSlopes;
-					else acceleration.y = -Reg._gravityOnSlopes;
-				}	
-				// if player in not in the air oris not standing on the slope then player is standing on a tile. set gravity to normal.
-				else
-				{
-					if (Reg._antigravity == false) acceleration.y = _gravity;
-					else acceleration.y = -_gravity;
-				}
-			}
+			} 			
+		}
+		
+		// if player is standing on a slope then set high gravity so that the player will walk down the slope instead of jumping or hopping down.
+		else if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 30
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 38 
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 46)
+		{					
+			if( Reg._antigravity == false) acceleration.y = Reg._gravityOnSlopes;
+			else acceleration.y = -Reg._gravityOnSlopes;
+		}	
+		// if player in not in the air oris not standing on the slope then player is standing on a tile. set gravity to normal.
+		else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
+		{
+			acceleration.y = _gravity;
+		} 
+		else if ( !isTouching(FlxObject.CEILING) && Reg._antigravity == true) 
+		{
+			acceleration.y = -_gravity;
+		} 
+		else
+		{
+			if (Reg._antigravity == false) acceleration.y = _gravity;
+			else acceleration.y = -_gravity;
 		}
 		//-------------------------------------------------------------
 		//###################################### END SET GRAVITY ###########################
