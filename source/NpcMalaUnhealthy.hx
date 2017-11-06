@@ -10,17 +10,32 @@ import flixel.util.FlxTimer;
 
 class NpcMalaUnhealthy extends FlxSprite
 {
-	private var _startx:Float;
-	private var _starty:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	private var _talkedToDoctor:Bool = false; // used to display the doctors message once.
 	private var _malasTeleported:String = "";
 	
 	private var ticks:Float = 0;
 	private var ticksWalk:Float = 0; // used for the npc that walks back and forth.		
-	private var ticksNothing:Float = 0; // used to stop the npc from walking.
 	
-	private	var doNothing:Bool = false; // same as above.
+	/**
+	 * Make the Mala idle for a short random time.
+	 */
+	private var ticksIdle:Float = 0;
+	
+	/**
+	 * The Mala will stop and be idle if this value is true.
+	 */
+	private	var _makeMalaIdle:Bool = false;
+	
 	private var _xLeftBoundry:Float = 0; // npc cannot walk path the x position of this var.
 	private var _xRightBoundry:Float = 0;
 	private var _isWalking:Bool = false;
@@ -42,8 +57,8 @@ class NpcMalaUnhealthy extends FlxSprite
 		//## MOST VARS NEED TO BE FROM REG BECAUSE EACH ID DOES SOMETHING DIFFERENT.
 		//##########################################################################
 
-		_startx = x;
-		_starty = y;
+		_startX = x;
+		_startY = y;
 
 		_xLeftBoundry = x - 64;
 		_xRightBoundry = x + 64;
@@ -141,27 +156,27 @@ class NpcMalaUnhealthy extends FlxSprite
 			//################## END OF WATERING CAN ###############
 			 
 			//###################### WALKING #######################
-			else if (_isWalking == true && _usingShovel == false && Reg.mapXcoords != 24 && Reg.mapYcoords != 25)
+			if (_isWalking == true && _usingShovel == false)
 			{
-				if (ticksWalk > 10 && ra == 1 || doNothing == true)
+				 if (Reg.mapXcoords == 24 && Reg.mapYcoords == 25) return;
+				 
+				 if (ticksWalk > 10 && ra == 1 || _makeMalaIdle == true)
 				{					
-					if (ticksNothing == 0) 
+					if (ticksIdle == 0) 
 					{
-						animation.add("idle", [1,1,1,1,1, 12], 10);
 						animation.play("idle");
 						if (_usingWateringCan == true) animation.pause();						
 					}
 					
 					// do nothing				
-					ticksNothing = Reg.incrementTicks(ticksNothing, 60 / Reg._framerate);
-					doNothing = true;
+					ticksIdle = Reg.incrementTicks(ticksIdle, 60 / Reg._framerate);
+					_makeMalaIdle = true;
 					
-					if (ticksNothing > ticksRandom) // pause walking for a short time.
+					if (ticksIdle > ticksRandom) // pause walking for a short time.
 					{
-						ticksNothing = 0;
-						doNothing = false;
+						ticksIdle = 0;
+						_makeMalaIdle = false;
 						
-						animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 16);
 						animation.play("walk");
 						if (_usingWateringCan == true) animation.play("watering");
 					}
@@ -180,11 +195,7 @@ class NpcMalaUnhealthy extends FlxSprite
 						_tileY = Std.int(y / 32);
 					}
 					
-					if (ticksWalk == 0 && _usingWateringCan == false) 
-					{
-						animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 16);
-						animation.play("walk");
-					}
+					if (ticksWalk == 0 && _usingWateringCan == false) animation.play("walk");
 					
 					if (ticksWalk >= 90) // 90... reset to 0.
 					{
@@ -214,7 +225,6 @@ class NpcMalaUnhealthy extends FlxSprite
 					
 					if (_walking == false) // stop npc animation if object is not moving;
 					{
-						animation.add("idle", [1,1,1,1,1, 12], 10);
 						animation.play("idle");
 						if (_usingWateringCan == true) animation.pause();
 					} else if (_usingWateringCan == true) animation.play("watering");

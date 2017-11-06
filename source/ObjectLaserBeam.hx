@@ -14,15 +14,22 @@ class ObjectLaserBeam extends FlxSprite
 	 */
 	private var maxSpeed:Int = 608;	
 	
-	private var _startx:Float;
-	private var _starty:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	public function new(x:Float, y:Float) 
 	{		
 		super(x, y);
 
-		_startx = x;
-		_starty = y ;
+		_startX = x;
+		_startY = y ;
 		
 		loadGraphic("assets/images/objectLaserBeam.png", false, 24, 24);	
 		
@@ -36,7 +43,7 @@ class ObjectLaserBeam extends FlxSprite
 			if (justTouched(FlxObject.ANY))
 			{
 				visible = false;
-				reset(_startx, _starty);
+				reset(_startX, _startY);
 				
 				// reset the laser beam after the laser beam hits the receiving laser block.
 				new FlxTimer().start(0.25, onTimer, 1);				

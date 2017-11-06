@@ -9,15 +9,22 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectSpikeTrap extends FlxSprite
 {
-	private var _startx:Float;
-	private var _starty:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{		
 		super(x, y);
 
-		_startx = x;
-		_starty = y;
+		_startX = x;
+		_startY = y;
 		
 		if (id == 1)
 			loadGraphic("assets/images/objectSpikeTrap1.png", false, Reg._tileSize, 15);
@@ -43,7 +50,7 @@ class ObjectSpikeTrap extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{		
-		reset(_startx, _starty);
+		reset(_startX, _startY);
 		
 		FlxG.collide(this, Reg.state.player, playerCollide);			
 		FlxG.collide(this, Reg.state.enemies, mobCollide);	
@@ -63,7 +70,7 @@ class ObjectSpikeTrap extends FlxSprite
 		if (FlxSpriteUtil.isFlickering(p) == false)
 			p.hurt(5);
 		
-		reset(_startx, _starty);
+		reset(_startX, _startY);
 	}
 	
 	private function mobCollide(t:FlxSprite, e:FlxSprite):Void 
@@ -71,6 +78,6 @@ class ObjectSpikeTrap extends FlxSprite
 		if (FlxSpriteUtil.isFlickering(e) == false)
 			e.hurt(5);
 			
-		reset(_startx, _starty);
+		reset(_startX, _startY);
 	}
 }

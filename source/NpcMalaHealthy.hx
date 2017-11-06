@@ -9,13 +9,29 @@ import flixel.FlxSprite;
 
 class NpcMalaHealthy extends FlxSprite
 {
-	private var _startx:Float;
-	private var _starty:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	private var ticks:Float = 0;
 	private var ticksWalk:Float = 0; // used for the npc that walks back and forth.
-	private var ticksNothing:Float = 0; // used to stop the npc from walking.
-	private	var doNothing:Bool = false; // same as above.
+	
+	/**
+	 * Make the Mala idle for a short random time.
+	 */
+	private var ticksIdle:Float = 0;
+	
+	/**
+	 * The Mala will stop and be idle if this value is true.
+	 */
+	private	var _makeMalaIdle:Bool = false;
+	
 	private var _xLeftBoundry:Float = 0; // npc cannot walk path the x position of this var.
 	private var _xRightBoundry:Float = 0;
 	private var _isWalking:Bool = false;
@@ -31,8 +47,8 @@ class NpcMalaHealthy extends FlxSprite
 	{		
 		super(x, y);
 
-		_startx = x;
-		_starty = y;
+		_startX = x;
+		_startY = y;
 		
 		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
@@ -70,22 +86,24 @@ class NpcMalaHealthy extends FlxSprite
 			//###################### WALKING #######################
 			if (_isWalking == true && _usingShovel == false)
 			{
-				if (ticksWalk > 10 && ra == 1 || doNothing == true)
+				if (Reg.mapXcoords == 24 && Reg.mapYcoords == 25) return;
+				
+				if (ticksWalk > 10 && ra == 1 || _makeMalaIdle == true)
 				{					
-					if (ticksNothing == 0) 
+					if (ticksIdle == 0) 
 					{
 						animation.play("idle");
 						if (_usingWateringCan == true) animation.pause();						
 					}
 					
 					// do nothing				
-					ticksNothing = Reg.incrementTicks(ticksNothing, 60 / Reg._framerate);
-					doNothing = true;
+					ticksIdle = Reg.incrementTicks(ticksIdle, 60 / Reg._framerate);
+					_makeMalaIdle = true;
 					
-					if (ticksNothing > ticksRandom) // pause walking for a short time.
+					if (ticksIdle > ticksRandom) // pause walking for a short time.
 					{
-						ticksNothing = 0;
-						doNothing = false;
+						ticksIdle = 0;
+						_makeMalaIdle = false;
 						
 						animation.play("walk");
 						if (_usingWateringCan == true) animation.play("watering");

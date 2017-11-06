@@ -9,7 +9,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
  * @author galoyo
  */
 
-class ObjectCannon extends ObjectChildClass
+class ObjectCannon extends ObjectParentClass
 {
 	/**
 	 * Time it takes for this mob to fire another bullet.

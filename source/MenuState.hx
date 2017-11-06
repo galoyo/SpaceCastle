@@ -31,7 +31,6 @@ class MenuState extends FlxState
 	private var background:FlxSprite;
 	private var titleOptionsBar:FlxSprite;
 	private var ticks:Int = 0;
-	private var ticksDelay:Bool = false;
 	private var ticksSlide:Int;
 	
 	private var _gameMenu:FlxSave;
@@ -139,31 +138,25 @@ class MenuState extends FlxState
 	{		
 		_userPressedScaleButton = false;
 		
-		if (Reg._musicEnabled == true)
-		{
-			if (FlxG.sound.music.playing == true)
-			FlxG.sound.music.stop();
-		}
-		
 		Reg.playTwinkle();		
 		loadPlayState();
 	}
 	
 	private function button2Clicked():Void
 	{				
+		Reg.playTwinkle();
+		
 		if (_gameSave.data._fallAllowedDistanceInPixels == null)
 		{
 			if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false); 
 		} 
-		else if (_gameSave.data._fallAllowedDistanceInPixels != null && Reg._soundEnabled == true) 
+		else 
 		{
-			Reg.playTwinkle();
 			_userPressedScaleButton = false;
 			loadGame();
-		} 
+		}
 		
-		else { _userPressedScaleButton = false; loadGame(); }
-	}
+	}	
 	
 	private function button3Clicked():Void
 	{
@@ -197,7 +190,6 @@ class MenuState extends FlxState
 			
 			else if (FlxG.keys.anyJustReleased(["TWO"])) 
 			{
-
 				button2Clicked();
 			}	
 			
@@ -363,13 +355,6 @@ class MenuState extends FlxState
 		Reg._itemGotSkillDash = _gameSave.data._itemGotSkillDash;
 		
 		_gameSave.close;
-		ticksDelay = true;
-		
-		if (Reg._musicEnabled == true)
-		{
-			if (FlxG.sound.music.playing == true)
-			FlxG.sound.music.stop();
-		}
 		
 		FlxG.switchState(new PlayState());
 	}

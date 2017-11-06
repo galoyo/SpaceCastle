@@ -9,8 +9,15 @@ import flixel.FlxSprite;
 
 class ObjectPlatformMoving extends FlxSprite
 {
-	private var _startx:Float;
-	private var _starty:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	/**
 	 * The X and/or Y velocity of this mob. Must be in integers of 32.
@@ -19,10 +26,10 @@ class ObjectPlatformMoving extends FlxSprite
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{		
-		super(x, y);
+		super(x, y);		
 		
-		_starty = y;
-		_startx = x;
+		_startX = x;
+		_startY = y;
 		
 		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
@@ -64,7 +71,7 @@ class ObjectPlatformMoving extends FlxSprite
 				
 			// set y motion to zero.
 			velocity.y = acceleration.y = 0;
-			y = _starty;
+			y = _startY;
 		} 
 		else if(ID == 2)
 		{			
@@ -82,7 +89,7 @@ class ObjectPlatformMoving extends FlxSprite
 				
 			// set y motion to zero.
 			velocity.y = acceleration.y = 0;
-			y = _starty;
+			y = _startY;
 		} 
 		
 		else if(ID == 3)
@@ -101,7 +108,7 @@ class ObjectPlatformMoving extends FlxSprite
 				
 			// set x motion to zero.
 			velocity.x = acceleration.x = 0;
-			x = _startx;
+			x = _startX;
 		}
 		
 		super.update(elapsed);

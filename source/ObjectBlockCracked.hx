@@ -10,8 +10,15 @@ import flixel.effects.particles.FlxEmitter;
 
 class ObjectBlockCracked extends FlxSprite
 {
-	private var _startX:Float;
-	private var _startY:Float;
+	/**
+	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
+	 */
+	private var _startX:Float = 0;
+	
+	/**
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	/*******************************************************************************************************
 	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
