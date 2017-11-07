@@ -107,11 +107,6 @@ class Player extends FlxSprite
 	private var _jumping:Bool = false;
 	
 	/*******************************************************************************************************
-	 *DO NOT change the value of this var. Used to keep the player standing still above the frozen mobs head.
-	 */
-	public var _standStill:Float = 0;
-
-	/*******************************************************************************************************
 	 * DO NOT change the value of this var. This is needed so that a bullet can be recycled. No need to new the class everytime a bullet is fired.
 	 */
 	public var _bullets:FlxTypedGroup<Bullet>;
@@ -973,7 +968,7 @@ class Player extends FlxSprite
 			if( Reg._antigravity == false) acceleration.y = Reg._gravityOnSlopes;
 			else acceleration.y = -Reg._gravityOnSlopes;
 		}	
-		// if player in not in the air oris not standing on the slope then player is standing on a tile. set gravity to normal.
+		// if player in not in the air or is not standing on the slope then player is standing on a tile. set gravity to normal.
 		else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
 		{
 			acceleration.y = _gravity;
@@ -982,11 +977,11 @@ class Player extends FlxSprite
 		{
 			acceleration.y = -_gravity;
 		} 
-		else
+		/*else
 		{
 			if (Reg._antigravity == false) acceleration.y = _gravity;
 			else acceleration.y = -_gravity;
-		}
+		}*/
 		//-------------------------------------------------------------
 		//###################################### END SET GRAVITY ###########################
 		

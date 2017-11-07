@@ -686,19 +686,24 @@ class Reg
 	public static var _displayFluteDialog:Bool = true;
 	
 	/*******************************************************************************************************
-	 * For the Z key/button this is the current value of the inventory item selected.
+	 * Do NOT change the value of this var. For the Z key/button this is the current value of the inventory item selected.
 	 */
 	public static var _itemZSelectedFromInventory:Int = 0;
 	
 	/*******************************************************************************************************
-	 * For the X key/button this is the current value of the inventory item selected.
+	 * Do NOT change the value of this var. For the X key/button this is the current value of the inventory item selected.
 	 */
 	public static var _itemXSelectedFromInventory:Int = 0;
 	
 	/*******************************************************************************************************
-	 * For the C key/button this is the current value of the inventory item selected.
+	 * Do NOT change the value of this var. For the C key/button this is the current value of the inventory item selected.
 	 */
 	public static var _itemCSelectedFromInventory:Int = 0;
+	
+	/**
+	 * Do NOT change the value of this var. Used to determine if there should be player fall damage after the player hits a mob.
+	 */
+	public static var _playerFallDamageHitMob:Bool = false;
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
