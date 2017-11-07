@@ -60,8 +60,6 @@ class Mob_template extends EnemyParentClass
 	 */
 	public var _mobInWater:Bool = false;
 	
-	private var velocityXOld:Float; // used to store the direction that the mob was moving.	
-	
 	/**
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */

@@ -2,50 +2,21 @@ package ;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.util.FlxTimer;
 
 /**
  * @author galoyo
  */
 
-class NpcMalaHealthy extends FlxSprite
+class NpcMalaHealthy extends NpcParent
 {
-	/**
-	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
-	 */
-	private var _startX:Float = 0;
-	
-	/**
-	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
-	 */
-	private var _startY:Float = 0;
-	
-	private var ticks:Float = 0;
-	private var ticksWalk:Float = 0; // used for the npc that walks back and forth.
-	
-	/**
-	 * Make the Mala idle for a short random time.
-	 */
-	private var ticksIdle:Float = 0;
-	
-	/**
-	 * The Mala will stop and be idle if this value is true.
-	 */
-	private	var _makeMalaIdle:Bool = false;
-	
-	private var _xLeftBoundry:Float = 0; // npc cannot walk path the x position of this var.
-	private var _xRightBoundry:Float = 0;
-	private var _isWalking:Bool = false;
-	private var _shovelDiggingSpeed:Int;
-	private var _usingShovel:Bool = false;
-	private var _usingWateringCan:Bool = false;
-	private var _walking:Bool = false;
-	
-	private var _tileX:Int; // the tile x coords not in pixels.
-	private var _tileY:Int;
+	private var _talkedToDoctor:Bool = false; // used to display the doctors message once.
+	private var _malasTeleported:String = "";
+	private var _playerTimeRemainingTimer:FlxTimer;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{		
-		super(x, y);
+		super(x, y, id);
 
 		_startX = x;
 		_startY = y;
@@ -80,92 +51,9 @@ class NpcMalaHealthy extends FlxSprite
 			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
 			InputControls.checkInput();
 			
-			var ra:Int = FlxG.random.int(0, 25);			
-			var ticksRandom:Int = FlxG.random.int(15, 40);	// used to delay walking.		
-			
-			//###################### WALKING #######################
-			if (_isWalking == true && _usingShovel == false)
-			{
-				if (Reg.mapXcoords == 24 && Reg.mapYcoords == 25) return;
-				
-				if (ticksWalk > 10 && ra == 1 || _makeMalaIdle == true)
-				{					
-					if (ticksIdle == 0) 
-					{
-						animation.play("idle");
-						if (_usingWateringCan == true) animation.pause();						
-					}
-					
-					// do nothing				
-					ticksIdle = Reg.incrementTicks(ticksIdle, 60 / Reg._framerate);
-					_makeMalaIdle = true;
-					
-					if (ticksIdle > ticksRandom) // pause walking for a short time.
-					{
-						ticksIdle = 0;
-						_makeMalaIdle = false;
-						
-						animation.play("walk");
-						if (_usingWateringCan == true) animation.play("watering");
-					}
-				} 
-				else
-				{				
-					// convert pixels to tiles. used to find the next tile.
-					if (facing == FlxObject.LEFT)
-					{
-						_tileX = Std.int((x + 3) / 32);		
-						_tileY = Std.int(y / 32);
-					}
-					else 
-					{
-						_tileX = Std.int((x - 3) / 32);		
-						_tileY = Std.int(y / 32);
-					}
-					
-					if (ticksWalk == 0 && _usingWateringCan == false) animation.play("walk");
-					
-					if (ticksWalk >= 90) // 90... reset to 0.
-					{
-						// THIS IS THE SAME CODE AS BELOW.
-						if ((x - 2) > _xLeftBoundry && overlapsAt(x - 28, y + 28, Reg.state.tilemap) && !overlapsAt(x - 3, y, Reg.state._objectBlockOrRock) && Reg.state.tilemap.getTile(_tileX, _tileY) != 96) 
-						{
-							ticksWalk = 0; 
-							x = x - 2; 
-							_walking = true; 
-							
-						} // at this line the overlapsAt checks for an empty space underneath the next tile that the mob is walking to.					
-					}
-					else if (ticksWalk >= 45) // 45 to 90... walk to the right
-					{
-						if ((x + 2) < _xRightBoundry && overlapsAt(x + 28, y + 28, Reg.state.tilemap) && !overlapsAt(x + 3, y, Reg.state.tilemap) && !overlapsAt(x + 3, y, Reg.state._objectBlockOrRock) && Reg.state.tilemap.getTile(_tileX, _tileY) != 98)
-						{
-							x = x + 2; 
-							_walking = true;							
-						}
-						
-					}
-					else if ((x - 2) > _xLeftBoundry && overlapsAt(x - 28, y + 28, Reg.state.tilemap) && !overlapsAt(x - 3, y, Reg.state.tilemap) && !overlapsAt(x - 3, y, Reg.state._objectBlockOrRock) && Reg.state.tilemap.getTile(_tileX, _tileY) != 96) 
-					{
-						x = x - 2; 
-						_walking = true; 						
-					} // 0 to 45, walk left.
-					
-					if (_walking == false) // stop npc animation if object is not moving;
-					{
-						animation.play("idle");
-						if (_usingWateringCan == true) animation.pause();
-					} else if (_usingWateringCan == true) animation.play("watering");
-					
-					ticksWalk = Reg.incrementTicks(ticksWalk, 60 / Reg._framerate);		
-					_walking = false;
-					
-				}	
-			}
-			//################### END OF WALKING ##################
-			
-			ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
-			
+			shovel(); //################### SHOVEL #####################	
+			wateringCan(); //################### WATERING CAN #####################						 
+			walking(); //###################### WALKING #######################				
 			
 			//############### PLAYER CHATS WITH NPC ###############
 			if (InputControls.down.justReleased && overlapsAt(x, y, Reg.state.player))

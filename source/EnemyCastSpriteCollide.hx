@@ -180,13 +180,16 @@ class EnemyCastSpriteCollide {
 						
 					// a hit was made so decrease the mobs health.
 					else if (Reg._boss1AIsMala == false || Reg._boss1BIsMala == false || Reg._boss2IsMala == false) e.hurt(1);
-						else e.hurt(1);
+					else e.hurt(1);
 									
 					p.bounce();
 					
 					if (Reg._soundEnabled == true) FlxG.sound.play("hitBounce", 1, false);
 					
-					return;
+					Reg._playerFallDamageHitMob = true;
+					 EnemyCastSpriteCollide.shoundThereBeFallDamage(p);
+					
+					 return;
 				} 
 			}
 			
@@ -248,6 +251,9 @@ class EnemyCastSpriteCollide {
 					mob.bounce();	
 				}					
 				
+				Reg._playerFallDamageHitMob = true;
+				EnemyCastSpriteCollide.shoundThereBeFallDamage(p);
+				
 				return;
 			}
 	
@@ -266,15 +272,7 @@ class EnemyCastSpriteCollide {
 				return;
 			}	
 		
-		} else
-			{
-				if (Std.is(p, Player))
-				{
-					var mob:Player = cast(p, Player);
-					mob._standStill = mob.y; // prepare to stand still above the head of the mob.		
-				}
-			}
-		
+		}		
 	}
 
 	
@@ -608,9 +606,8 @@ class EnemyCastSpriteCollide {
 							
 				mob.acceleration.y = 0;
 				mob.velocity.y = 0;
-				mob._newX = mob.x;
-				mob._standStill = mob.y;
-			
+				mob._standStillX = mob.x;
+				
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletFreezeHit", 1, false);
 				mob.animation.paused = true;	
 			} else if (Reg._soundEnabled == true) FlxG.sound.play("bulletFreezeMiss", 1, false);
@@ -625,8 +622,7 @@ class EnemyCastSpriteCollide {
 							
 				mob.acceleration.y = 0;
 				mob.velocity.y = 0;
-				mob._newX = mob.x;
-				mob._standStill = mob.y;
+				mob._standStillX = mob.x;
 			
 				if (Reg._soundEnabled == true) FlxG.sound.play("bulletFreezeHit", 1, false);
 				mob.animation.paused = true;	
@@ -721,8 +717,11 @@ class EnemyCastSpriteCollide {
 		Reg._playerYNewFallTotal = p.y - Reg._playersYLastOnTile;
 		
 		// if the player lands on the ground from a steep distance above the ground then the player is hurt. determine the distance hurt or if the player dies.
-		if (Reg._antigravity == false && p.isTouching(FlxObject.FLOOR) && p._mobInWater == false)
+		if (Reg._antigravity == false && p.isTouching(FlxObject.FLOOR) && p._mobInWater == false
+		||  Reg._antigravity == false && Reg._playerFallDamageHitMob == true && p._mobInWater == false)
 		{
+			Reg._playerFallDamageHitMob = false;
+			
 			if (Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels >= 128 || Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels > 0 && p.health <= 1.5) 
 			{
 				Reg._isFallDamage = true;
@@ -755,8 +754,11 @@ class EnemyCastSpriteCollide {
 			Reg._playersYLastOnTile = p.y;
 		}
 		
-		else if (Reg._antigravity == true && p.isTouching(FlxObject.CEILING) && p._mobInWater == false)
+		else if (Reg._antigravity == true && p.isTouching(FlxObject.CEILING) && p._mobInWater == false
+			||   Reg._antigravity == true && Reg._playerFallDamageHitMob == true && p._mobInWater == false)
 		{
+			Reg._playerFallDamageHitMob = false;
+			
 			if (Reg._playerYNewFallTotal + Reg._fallAllowedDistanceInPixels <= -128 || Reg._playerYNewFallTotal - Reg._fallAllowedDistanceInPixels > 0 && p.health <= 1.5) {p.hurt(p.health); if (Reg._soundEnabled == true) FlxG.sound.play("fallDamage", 0.85, false);}
 			else if (Reg._playerYNewFallTotal + Reg._fallAllowedDistanceInPixels <= -96) {p.hurt((p.health * 0.75)); if (Reg._soundEnabled == true) FlxG.sound.play("fallDamage", 0.85, false);} // 75 percent.
 			else if (Reg._playerYNewFallTotal + Reg._fallAllowedDistanceInPixels <= -64) {p.hurt((p.health * 0.50)); if (Reg._soundEnabled == true) FlxG.sound.play("fallDamage", 0.85, false);} // 50 percent.

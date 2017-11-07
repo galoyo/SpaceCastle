@@ -68,15 +68,21 @@ class EnemyParentClass extends FlxSprite
 	 */
 	private var _startY:Float = 0;
 	
-	private var velocityXOld:Float; // used to store the direction that the mob was moving.
-	private var velocityYOld:Float; // used to address a bug in the code;
-
-	public var _newX:Float = 0;
+	/**
+	 * Used to store the previous velocity.x of the mob.
+	 */
+	private var velocityXOld:Float;
 	
 	/**
-	 * Keep the Y value still so that the mob does not move when player is standing on it.
+	 * Used to store the previous velocity.y of the mob.
 	 */
-	public var _standStill:Float = 0;
+	private var velocityYOld:Float;
+
+	/*******************************************************************************************************
+	 *DO NOT change the value of this var. Used to keep the mob's X value standing still. velocity.x equals zero for this var. 
+	 * _standStillY is not needed because acceleration.y will equal zero. Hence, gravity wil not be used for the Y value when mob is frozen.
+	 */
+	public var _standStillX:Float = 0;
 	
 	private var _tileX:Int; // the tile, the x coords number not in pixels.
 	private var _tileY:Int;
@@ -722,16 +728,25 @@ private function shoot():Void
 			} else {velocity.y = 0; acceleration.y = 0; drag.y = 50000; }
 			
 			ticksFrozen = Reg.incrementTicks(ticksFrozen, 60 / Reg._framerate);	
-			x = _newX; y = _standStill; 
+			x = _standStillX;
 			
 			if (FlxG.collide(this, _player))
-			{
-				if (_player._standStill != 0 && isTouching(FlxObject.CEILING)) 
-				{ 						
-					 y = _standStill;
-					 _player.y = _standStill - 25;							 					
+			{				
+				if (isTouching(FlxObject.FLOOR)) 
+				{
+					 _player.acceleration.y = 0;	
+					 
+					Reg._playerFallDamageHitMob = true;
+					 EnemyCastSpriteCollide.shoundThereBeFallDamage(_player);
 				}
 			} 
+		} 
+		else
+		{
+			acceleration.y = _gravity;
+			
+			if (Reg._antigravity == false) _player.acceleration.y = _player._gravity
+			else _player.acceleration.y = -_player._gravity;
 		}
 		//##################### END FREEZE MOB #####################
 	}

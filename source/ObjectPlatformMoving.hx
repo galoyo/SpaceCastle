@@ -34,12 +34,9 @@ class ObjectPlatformMoving extends FlxSprite
 		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
 		
-		// id 1: horizontal platform that moves hoizontal.
-		if(ID == 1)
-			loadGraphic("assets/images/objectPlatformMovingHorizontal1.png", false, Reg._tileSize, Reg._tileSize);	
-		else if(ID == 2) // moving object with spikes.
-			loadGraphic("assets/images/objectPlatformMovingVertical1.png", false, 32, 96);
-		else loadGraphic("assets/images/objectPlatformMovingHorizontal2.png", false, Reg._tileSize, Reg._tileSize);		
+		if (ID == 1)	 loadGraphic("assets/images/objectPlatformMovingLeftAndRight1.png", false, Reg._tileSize, Reg._tileSize);	
+		else if(ID == 2) loadGraphic("assets/images/objectPlatformMovingLeftAndRight2.png", false, 32, 96); // moving object with spikes.
+		else if(ID == 3) loadGraphic("assets/images/objectPlatformMovingUpAndDown.png", false, Reg._tileSize, Reg._tileSize);		
 			
 		immovable = false;	
 		pixelPerfectPosition = true;
@@ -65,7 +62,7 @@ class ObjectPlatformMoving extends FlxSprite
 			if (overlapsAt(x - 5, y, Reg.state.tilemap) || overlapsAt(x - 12, y, Reg.state._objectPlatformParameter)) {velocity.x = maxSpeed * 1.7; }
 			else if (overlapsAt(x + 5, y, Reg.state.tilemap) || overlapsAt(x + 12, y, Reg.state._objectPlatformParameter)) {velocity.x = -maxSpeed * 1.7; }
 			
-			// moving the object if object stops moving.
+			// move the object if object stops moving.
 			if (velocity.x == 0)
 				velocity.x = -maxSpeed * 1.5;
 				
@@ -105,7 +102,10 @@ class ObjectPlatformMoving extends FlxSprite
 			// moving the object if object stops moving.
 			if (velocity.y == 0)
 				velocity.y = -maxSpeed * 1.5;
-				
+			
+			// keep the player with this up and down moving platform. _inair is used to stop a small jump on this platform.
+			if (FlxG.overlap(this, Reg.state.player) && Reg.state.player._inAir == false) Reg.state.player.velocity.y = velocity.y;
+			
 			// set x motion to zero.
 			velocity.x = acceleration.x = 0;
 			x = _startX;
