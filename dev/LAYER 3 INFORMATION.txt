@@ -7,29 +7,29 @@
 
 
 0: not used. if this "X" is found at the map then remove it.
-1: mobTube: Place this at the right side of Tube. Tube is at layer 3. At the Tile Map Editor, its ID is 24.
-2: mobExplode: This mob hangs from the ceiling shooting bullets in an angle. Fly towards player when they are near vertical. occupies two tiles.
-3: mobSaw1. saw. moves back and forth on a platform.
+1: mobTube: This mob exits a tube and horizontally flies towards to the player. Place this at the right side of Tube. Tube is at layer 3 and located at the Tile Map Editor: its ID is 24.
+2: mobExplode: This mob hangs from the ceiling shooting bullets in an angle. Flys toward the player when player and this mob is near vertical from each other. occupies two tiles.
+3: mobSaw1. saw. Moves left and right. Reverses direction when at edge of platform.
 4: mobSaw2. saw. velocity 0.
 5: boss2. flies. warps to player when wall is a path obstacle. no bullets.
-6: mobBullet. only moves horizontally from one side of the screen to the other.
+6: mobBullet. Only moves horizontally from one side of the screen to the other.
 7: red "X".
-8-15: npc malas. good characters but unhealthy.
+8-15: npc malas. good NPCs but unhealthy.
 22: boss1a. upset Mala.
 23: boss1b. upset Mala.
 24,25,26. npc Malas. healthy.
 27: mobBubble, a boss later in the game.
-28: npcDogLady. Needs help to find her missing dogs.
+28: npcDogLady. Help find her dogs. She has an important story to tell the player.
 29-32: npc dogs. one dog id per map. all dogs collected will be displayed in id order beside the npc lady.
-33: doctor.
-49-51: mobSlime 1 and 2: higher id = faster movement. able to jump. no bullets.
-52-54: mobCutter. moves back/forth by touching a wall. jumps over holes. no bullets.
-57-59: mobApple. walks back and forth on a platform. no bullet ability.
-60-62: mobBat 1: moves randomly in the air. no bullets ability.
-65-67: mobSqu. jump happy mob: no bullets.
-68-70: mobFish 1 and 2. moves back/forth by touching a wall. no bullets. different speeds.
-73-75: mobGlob. moves on ceiling, walls or floors. slow movement. maybe bullets. place the "object follow path" at layer 1 or 5 and then this object on the path, so that the object will move and follow this path.
-76-78: mobWorm. flying left and right. reversing direction when touching a tile. fires bullets up and down.
+33: doctor. The doctor is a mystery. Is the doctor trying to save the Malas from doom or does the doctor have a hidden agenda.
+49-51: mobSlime ID 1 and 2: This mob with an ID of 2 jumps faster than mob ID 1. Shoots no bullets.
+52-54: mobCutter. Walks left and right. Reverses direction when touching a wall. Jumps over holes. Shoots no bullets.
+57-59: mobApple. Walks left and right a platform. Reverses direction when at edge of platform. Shoots no bullet.
+60-62: mobBat 1: Moves vertically in the air. Shoots no bullets.
+65-67: mobSqu. Jump happy mob. Shoots no bullets.
+68-70: mobFish ID 1 and 2. swims left and right. Reverses direction when touching a wall. shoots no bullets. Mob with an ID of 2 swims faster than mob ID 1.
+73-75: mobGlob. Walks on ceiling, walls or floors. Some types of this mob shoots bullets. Place the "object follow path" at layer 1 or 5 and then this object on the path, so that the object will move and follow this path.
+76-78: mobWorm. Flying horizonally back and forth. Reverses direction when touching a tile. Fires bullets up and down.
 
 
 ################################################
@@ -68,7 +68,7 @@
 294: black door.
 295: black key.
 296-303: once this, a super block icon is collected, a wall with the same picture can be passed by the player.
-304-311: super blocks: can only be passed when the player has a matching super block icon.
+304-311: super blocks: can only be passed when the player has a matching super block item.
 312: computer. TODO: maybe make a menu with quit game, back to main menu, unequipped items, etc.
 313: swimming skill. you are able to swimming using the jump button. 
 314-317: water currents. north, east, south, west. moves the player in those directions. player is unable to change direction in those currents
@@ -84,10 +84,10 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 334: teleporter. can teleport to another house but must have a key to that level.
 335: dog flute, if a nice flute tune is played then there is a dog at that map.
 336-340: more spikes.
-341, 342: jumping pads. these are placed beside walls. when the player jump and touches these, the direction of the player is reversed.
+341, 342: jumping pad. This object must be placed at the left side or right side of walls. The direction of the player is reversed when jumping on this jumping pad. The player can make it to the top of the screen by jumping from this jumping pad to the next jumping pad.
 343: falling spikes. the spikes need to be two tiles aways from the, eg `slope nw path` text at map5OverlaysTiles.png.
 344: antigravity suit.
-345: lava.
+345: lava. If this block is touched by the player or mob when health damage will be given. 
 346: quick sand.
 347: dash attack. the player will quickly dash to the left or right while the player is rising in the air.
 348: car. need car to make it to the other side of the boulevard (trees on both sides of the street).
