@@ -32,17 +32,7 @@ class EnemyParentClass extends FlxSprite
 	 * The velocity of the normal bullet.
 	 */
 	private var _bulletSpeed:Int = 350;
-	
-	/*******************************************************************************************************
-	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
-	 */
-	private var _particleBulletHit:FlxEmitter;
-	
-	/*******************************************************************************************************
-	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
-	 */
-	private var _particleBulletMiss:FlxEmitter;
-		
+			
 	/*******************************************************************************************************
 	 * The gun delay between bullets fired.
 	 */
@@ -53,12 +43,12 @@ class EnemyParentClass extends FlxSprite
 	 */
 	private var _cooldown:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * Gets the value from _bulletFormationNumber at the child class. This var determines what bullet to shoot.
 	 */
 	private var _bulletFireFormation:Int; 
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
@@ -68,40 +58,116 @@ class EnemyParentClass extends FlxSprite
 	 */
 	private var _startY:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * Used to store the previous velocity.x of the mob.
 	 */
 	private var velocityXOld:Float;
 	
-	/**
+	/*******************************************************************************************************
 	 * Used to store the previous velocity.y of the mob.
 	 */
 	private var velocityYOld:Float;
 
 	/*******************************************************************************************************
 	 *DO NOT change the value of this var. Used to keep the mob's X value standing still. velocity.x equals zero for this var. 
-	 * _standStillY is not needed because acceleration.y will equal zero. Hence, gravity wil not be used for the Y value when mob is frozen.
+	 * _standStillY is not needed because acceleration.y will equal zero. Hence, gravity will not be used for the Y value when mob is frozen.
 	 */
 	public var _standStillX:Float = 0;
 	
-	private var _tileX:Int; // the tile, the x coords number not in pixels.
+	// TILES ###############################################################################################
+	
+	// When a tile is placed at the top-left corner of a map then that tile would have an ID value of 1. To the right side of that tile could be another tile that would have an ID of 2. Each tile placed on a map can be read like words on a page. The top-left corner is the beginning at ID 1 and the last tile at the bottom-right corner would have the greatest ID value. 
+	
+	/*******************************************************************************************************
+	 * This var is the X value in tiles. The X value of a mob refers to pixels. Since each tile on a map is 32 pixels in width and height, the X is divided by 32 pixels To gets the Tiled Map Editor ID value when used with Y. This var can then be used to check if the tile directly left of the mob had a ID of 6. 
+	 * _tileX = Std.int(x / 32); 
+	 * _tileY = Std.int(y / 32); 
+	 * Reg.state.overlays.getTile(_tileX - 1, _tileY) == 6;
+	 */
+	private var _tileX:Int;
+	
+	/*******************************************************************************************************
+	 * This var is the Y value in tiles. The Y value of a mob refers to pixels. Since each tile on a map is 32 pixels in width and height, the Y is divided by 32 pixels To gets the Tiled Map Editor ID value when used with X. This var can then be used to check if the tile directly left of the mob had a ID of 6. 
+	 * _tileX = Std.int(x / 32); 
+	 * _tileY = Std.int(y / 32); 
+	 * Reg.state.overlays.getTile(_tileX - 1, _tileY) == 6;
+	 */
 	private var _tileY:Int;
 	
-	private var _spriteIsMoving:Bool = false; // when the x or y value is changing in value.
-	private var _directionMobIsMoving:String;
+	// #####################################################################################################
 	
-	private var ticks:Float = 0; // used to handle game loops.
-	private var ticksWalkAnyDirection:Int = 0;
-	public var ticksFrozen:Float = 0; // used to unthaw a mob.
-	private var ticksGame:Float = 0; // used when ticks is being used in the loop.
+	/*******************************************************************************************************
+	 * Used to walk a mob on a tile, either up or down a wall, left or right on a floor or left or right on a ceiling. When this var is true then a mobs X or Y value can be changed. The mobs velocity and the mobs gravity well be set to zero when this var is in use. See: walkAnyDirection() function.
+	 */
+	private var _spriteIsMoving:Bool = false;
+
+	/*******************************************************************************************************
+	 * This var is used to determine which direction the mob is moving and also used to move the mob in that dorection.
+	 */
+	private var _directionMobIsMoving:String;
+		
+	/*******************************************************************************************************
+	 * Triggered when mob is standing on a fire block. Damage will be given to a mob at every timer loop.
+	 */
+	public var _mobStandingOnFireBlockTimer = new FlxTimer();
+	
+	// TICKS ###############################################################################################
+
+	/*******************************************************************************************************
+	 * Used to handle game loops.
+	 */
+	private var ticks:Float = 0; 
+
+	/*******************************************************************************************************
+	 * Used to handle game loops at the continueToJumpTowardsPlayer() function.
+	 */
+	private var ticksGame:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used at the seekPlayerAfterTouchingTile() function to delay the fading in / out of a sprite alpha.
+	 */
 	private var ticksStandingStill:Float = 0;	
+	
+	/*******************************************************************************************************
+	 * Gravity and velocity is not used at the walkAnyDirection() function. The reason is the mob is able to walk upside down. Therefore, this var is used to slow a mobs motion when that mob can walk in any direction on a tile. 
+	 */
 	private var ticksMobDelay:Float = 0;
 	
-	private var mobHit:Bool = false;
-	private var _extraSpeed:Int;
-	private var _range:Bool = true; // used to determine if the mob and player are within range. if not when reset the mob.
+	/*******************************************************************************************************
+	 * Used to unthaw a mob.
+	 */
+	public var ticksFrozen:Float = 0;
+
+	// #####################################################################################################
 		
+	/*******************************************************************************************************
+	 * At the walkAnyDirection() function then var stores the total amount of pixels that a mob has walked.
+	 */
+	private var _totalPixelsWalked:Int = 0;	
+		
+	/*******************************************************************************************************
+	 * Used to stop the mob from moving.
+	 */
+	private var mobHit:Bool = false;
+	
+	/*******************************************************************************************************
+	 * This var gets its value from _mobVelocityY at the child class. Its used to delay the swimming of a mob.
+	 */
+	private var _extraSpeed:Int = 0;
+	
+	/*******************************************************************************************************
+	 * Used to determine if the mob and player are within range of each other. if they are not within range when a mob can be reset back to its starting map location.
+	 */
+	private var _range:Bool = true; // 
+		
+	/*******************************************************************************************************
+	 * Var used to access all the player's var and functions.
+	 */
 	public var _player:Player;
+	
+	/*******************************************************************************************************
+	 * When this var equals the value of another var, an out of range or dead mob will be reset back alive at its starting map location. This var is used at the child class.
+	 */
 	private var _spawnTimeElapsed:Float = 0;	
 	
 	/*******************************************************************************************************
@@ -138,12 +204,27 @@ class EnemyParentClass extends FlxSprite
 	 * Increases the players health by one health point. If the player is not damaged, a full blue health bar, then picking up this item will not increase player's health.
 	 */
 	private var _emitterItemHeart:FlxEmitter;
+		
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when the bullet reaches its maximum distance or when the bullet hits a mob.
+	 */
+	private var _particleBulletHit:FlxEmitter;
 	
-	private var _particleSmokeRight:FlxEmitter;
-	private var _particleSmokeLeft:FlxEmitter;
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. This particle will emit when a bullet from the normal gun hits a tile. 
+	 */
+	private var _particleBulletMiss:FlxEmitter;
 	
-	public var _mobStandingOnFireBlockTimer = new FlxTimer();
+	/*******************************************************************************************************
+	 * This is jetpack smoke for moving left mobs.
+	 */
+	public var _particleSmokeLeft:FlxEmitter;	
 	
+	/*******************************************************************************************************
+	 * This is jetpack smoke for moving right mobs.
+	 */
+	public var _particleSmokeRight:FlxEmitter;
+		
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
 		super(x, y);
@@ -296,7 +377,7 @@ class EnemyParentClass extends FlxSprite
 		visible = false;		// male sure it's not visible
 		setPosition(0, 0);
 		
-		mobHit = false;			// needed to stop the mob from moving.
+		mobHit = false;			// Used to stop the mob from moving.
 	}
 	
 	public function bounce():Void
@@ -319,7 +400,7 @@ class EnemyParentClass extends FlxSprite
 				if (!FlxG.overlap(Reg.state._bullets, this))
 					FlxSpriteUtil.flicker(this, Reg._mobHitFlicker, 0.04);
 				
-				// set ticks to 5 so that at update() stuff can be updated.
+				// Set ticks to 5 so that code that checks "if (ticks > 0)" can be true.
 				ticks = 5;
 				
 				scale.set(1.2, 1.2);
@@ -801,7 +882,7 @@ private function shoot():Void
 				if (overlapsAt(x - 23, y, Reg.state.tilemap)) angle = 90;  // left				
 				
 				// this is used to move the sprite.
-				ticksWalkAnyDirection = ticksWalkAnyDirection + 4;				
+				_totalPixelsWalked = _totalPixelsWalked + 4;				
 				
 				if (_directionMobIsMoving == "left" ){
 					x = x - 4;
@@ -822,14 +903,14 @@ private function shoot():Void
 				}
 				
 				// sprite has moved a full tile. now set the var so that the sprite can no longer be moved.
-				if (ticksWalkAnyDirection >= 32) { ticksWalkAnyDirection = 0; _spriteIsMoving = false;}
+				if (_totalPixelsWalked >= 32) { _totalPixelsWalked = 0; _spriteIsMoving = false;}
 			}
 			//################## END MOVING THE SPRITE ###################
 			
 			//################## FIND TILE TO MOVE TO ####################
 			if (_spriteIsMoving == false)
 			{
-				// convert pixels to tiles. used to find the next tile.
+				// convert pixels to tiles.
 				_tileX = Std.int(x / 32);		
 				_tileY = Std.int(y / 32);
 				
@@ -978,7 +1059,6 @@ private function shoot():Void
 					{
 						if (!overlapsAt(x, y + 14, Reg.state._objectQuickSand))
 						{
-							// if mob with id 2 then increase the move speed.
 							if(_mobInWater == false)	{velocity.x = -_extraSpeed - moveSpeed; velocity.y = -_extraSpeed; }
 							else 
 							{

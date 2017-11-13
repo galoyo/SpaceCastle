@@ -102,7 +102,7 @@ class MobGlob extends EnemyParentClass
 		health = (defaultHealth * ID) * Reg._difficultyLevel; 
 		allowCollisions = FlxObject.ANY;
 		_airLeftInLungs = _airLeftInLungsMaximum;
-		ticksWalkAnyDirection = 0;
+		_totalPixelsWalked = 0;
 		
 		// bullet.
 		_bulletTimeForNextFiring = FlxG.random.float(0.60, 1.20);

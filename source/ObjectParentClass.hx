@@ -48,9 +48,6 @@ class ObjectParentClass extends FlxSprite
 	 */
 	private var _startY:Float = 0;
 	
-	var ticks:Int = 0; // used to handle game loops.
-	private var ticksWalkAnyDirection:Int = 0;
-		
 	private var player:Player;
 	
 	public function new(x:Float, y:Float, bulletsObject:FlxTypedGroup<BulletObject>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
