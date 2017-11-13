@@ -75,7 +75,6 @@ class PlayStateAdd
 			if (Reg._teleportedToHouse == true) 
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("teleport2", 1, false);
-				X += (10 * Reg._tileSize);
 			}
 			Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); 			
 			

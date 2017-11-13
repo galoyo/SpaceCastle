@@ -96,10 +96,10 @@ class PlayStateCreateMap
 		for (i in 100...103) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
 							 Reg.state.tilemap.setTileProperties(178, FlxObject.ANY);
 		// house background tiles.
-		for (i in 181...183) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 189...191) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);	
-		for (i in 197...199) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
-		for (i in 205...207) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
+		for (i in 181...184) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
+		for (i in 189...192) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);	
+		for (i in 197...200) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
+		for (i in 205...208) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
 		
 		// stage background tiles.
 		for (i in 193...196) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);
@@ -120,31 +120,28 @@ class PlayStateCreateMap
 		Reg.state.tilemap.setSteep([260, 261, 264, 265], [262, 263, 266, 267]);
 		Reg.state.add(Reg.state.tilemap);
 
-		//set the left cage border to a blank tile.
-		var newindex:Int = 96;
+		var newindex:Int = 98;
 		for (j in 0...Reg.state.tilemap.heightInTiles)
 		{
 			for (i in 0...Reg.state.tilemap.widthInTiles - 1)
 			{
 				if (Reg.state.tilemap.getTile(i, j) == 97)
 				{
-					Reg.state.tilemap.setTile(i, j, newindex, true);
+					Reg.state.tilemap.setTile(i, j, 96, true); // set the left cage border to a blank tile.
+				}
+				
+				if (Reg.state.tilemap.getTile(i, j) == 99)
+				{
+					Reg.state.tilemap.setTile(i, j, 98, true); // set the right cage border to a blank tile.
+				}	
+				
+				if (Reg.state.tilemap.getTile(i, j) == 217)
+				{
+					Reg.state.tilemap.setTile(i, j, 218, true); // set the any block soild to transparent tile.
 				}	
 			}		
 		}
 		
-		//set the right cage border to a blank tile.
-		var newindex:Int = 98;
-		for (j in 0...Reg.state.tilemap.heightInTiles)
-		{
-			for (i in 0...Reg.state.tilemap.widthInTiles - 1)
-			{
-				if (Reg.state.tilemap.getTile(i, j) == 99)
-				{
-					Reg.state.tilemap.setTile(i, j, newindex, true);
-				}	
-			}		
-		}
 	}	
 			
 	public static function createLayer1UnderlaysTiles():Void
@@ -152,8 +149,6 @@ class PlayStateCreateMap
 		Reg.state.underlays = new FlxTilemap();		
 		if (Reg._testItems == false) Reg.state.underlays.loadMapFromCSV(Assets.getText("assets/data/Map-" + Reg.mapXcoords + "-" + Reg.mapYcoords + Reg._inHouse +  "_Layer 1 underlays tiles.csv"), "assets/images/map1UnderlaysTiles.png", Reg._tileSize, Reg._tileSize);
 		else Reg.state.underlays.loadMapFromCSV(Assets.getText("assets/data/Map-Test-Items1_Layer 1 underlays tiles.csv"), "assets/images/map1UnderlaysTiles.png", Reg._tileSize, Reg._tileSize);
-		
-		//for (i in 0...1159) underlays.setTileProperties(i, FlxObject.NONE);	
 		
 		Reg.state.add(Reg.state.underlays);
 		

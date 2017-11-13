@@ -494,6 +494,12 @@ class Player extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{	
+		// display the light at center of the player.
+		if (Reg._darkness == true && Reg._inHouse == "" && Reg.state._light != null)
+		{
+			Reg.state._light.setPosition(( -FlxG.width + (width / 2)) + x, (( -FlxG.height + (height / 2)) + y + 57));
+		}
+		
 		if (Reg._playerInsideCar == true)
 		{
 			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 // parallax car scene. if true, // player not in use. therefore, don't do player things in this update(). 
@@ -1020,7 +1026,11 @@ class Player extends FlxSprite
 			if (Reg._antigravity == false && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("jump");
 			else if (overlapsAt(x, y, Reg.state._objectLadders))
 			{					
-				if (velocity.y == 0) animation.play("idleOnLadder");
+				if (velocity.y == 0) 
+				{
+					animation.play("idleOnLadder");
+					acceleration.y = 0;
+				}
 			}
 		}
 		else if (Reg._antigravity == true && !isTouching(FlxObject.CEILING) && Reg._usingFlyingHat != false )
@@ -1028,7 +1038,11 @@ class Player extends FlxSprite
 			if (Reg._antigravity == true && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("jump2");
 			else if (overlapsAt(x, y, Reg.state._objectLadders))
 			{					
-				if (velocity.y == 0) animation.play("idleOnLadder2");
+				if (velocity.y == 0)
+				{
+					animation.play("idleOnLadder2");
+					acceleration.y = 0;
+				}
 			}			
 		}
 		else {				

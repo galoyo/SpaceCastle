@@ -603,6 +603,11 @@ class PlayState extends FlxUIState
 	 */
 	public var background:FlxSprite;
 	
+	/*******************************************************************************************************
+	 * Light effect for the player. The player can see in dark places.
+	 */
+	public var _light:FlxSprite;
+	
 	//######################################################################################################
 	
 	/*******************************************************************************************************
@@ -664,7 +669,7 @@ class PlayState extends FlxUIState
 	 * This vars value will be true when a mob enters or exits the water. This var is used to trigger a water splash sound.
 	 */
 	public var _playWaterSoundEnemy:Bool = true;
-	
+
 	/*******************************************************************************************************
 	 * At user saves the game when the player is at this location.
 	 */
@@ -916,13 +921,28 @@ class PlayState extends FlxUIState
 		}
 		//-----------------------------------------------
 		
+		// Light effect for the player. The player can see in dark places.
+		Reg._darkness = displayLight();
+		
+		if (Reg._darkness == true && Reg._inHouse == "")
+		{
+			_light = new FlxSprite();
+			_light.loadGraphic("assets/images/light.png", false);		
+			_light.setPosition((-FlxG.width + (Reg.state.player.width / 2)) + Reg.state.player.x, ((-FlxG.height + (Reg.state.player.height / 2)) + Reg.state.player.y + 57));
+			_light.scrollFactor.set(0, 0);
+			add(_light);
+		}
+							
 		hud = new Hud();		
 		add(hud);		
 		
 		// bad hack to display the gun power when trangles are zero.
 		hud.decreaseGunPowerCollected();
-		hud.increaseGunPowerCollected();
-				
+		hud.increaseGunPowerCollected();		
+		
+		_buttonsNavigation = new ButtonsNavigation();	
+		add(_buttonsNavigation);
+	
 		// add the guns.
 		_gun = new PlayerOverlayGun(Reg.state.player.x+15, Reg.state.player.y+21);
 		add(_gun);
@@ -1004,6 +1024,7 @@ class PlayState extends FlxUIState
 			FlxSpriteUtil.flicker(Reg.state.player, 100, 0.04);
 		
 		if (Reg._backgroundSoundsEnabled == true) FlxG.sound.play("backgroundSounds", 0.25, true);
+	
 		
 		//################# KEEP THIS CODE NEAR THE BOTTOM OF THIS FUNCTION.
 		//################################################################
@@ -1033,9 +1054,7 @@ class PlayState extends FlxUIState
 			init();
 		}
 		
-		_buttonsNavigation = new ButtonsNavigation();	
-		add(_buttonsNavigation);
-		
+	
 		super.create();
 	}
 	
@@ -1044,6 +1063,20 @@ class PlayState extends FlxUIState
 		var paragraph = Reg._displayRainCoords.split(",");
 		
 		// loop through the paragraph array. if there is a match then do not display the rain on the map.
+		for (i in 0...paragraph.length)
+		{	
+			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
+				return true;
+		}
+		
+		return false;
+	}	
+	
+	function displayLight():Bool
+	{
+		var paragraph = Reg._displayLightCoords.split(",");
+		
+		// loop through the paragraph array. if there is a match then do not display the clouds on the map.
 		for (i in 0...paragraph.length)
 		{	
 			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)

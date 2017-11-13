@@ -761,6 +761,16 @@ class Reg
 	//######################################################################################################
 		
 	/*******************************************************************************************************
+	 * If a map is within this var then the light will be displayed on that map. The map will be dark except for a light source that surrounds the player.
+	 */
+	public static var _displayLightCoords:String = "19-21,19-22";
+		
+	/*******************************************************************************************************
+	 * Light effect for the player. If the value is true then the player can see in dark places.
+	 */
+	public static var _darkness:Bool = false;
+	
+	/*******************************************************************************************************
 	 * how easy will the mobs be to defeat. 1:easy, 2:normal, 3:hard
 	 */
 	public static var _difficultyLevel:Int = 2;
