@@ -81,7 +81,7 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 324: vertical platform parameter. used to reverse direction once the platform touches this tile.
 326-331: rocks.
 332-333: sign. text about the level is read by pressing the down arrow at a sign.
-334: teleporter. can teleport to another house but must have a key to that level.
+334: teleporter that is inside of a house. can teleport to another house but must have a key to that level.
 335: dog flute, if a nice flute tune is played then there is a dog at that map.
 336-340: more spikes.
 341, 342: jumping pad. This object must be placed at the left side or right side of walls. The direction of the player is reversed when jumping on this jumping pad. The player can make it to the top of the screen by jumping from this jumping pad to the next jumping pad.
@@ -92,3 +92,5 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 347: dash attack. the player will quickly dash to the left or right while the player is rising in the air.
 348: car. need car to make it to the other side of the boulevard (trees on both sides of the street).
 349: falling rock. currently at the parallax car scene. map 23-19.
+
+352-359: teleporters that are outside of house. can teleport to another teleporter that must be at the same map. Id 1 to 8 is used outside of a house. If you have created only 3 teleporters on that map when the ID must start with 1 and end with 3. No duplicate IDs are allowed on a map. Needs a teleporter key to use the teleporter. Press the action button that has the teleporter key. If player enters teleporter ID of 2 then the player will exit to the next higher ID value which in this case would be the teleporter with ID of 3. If at that map a teleporter of ID 3 does not exist then the player will exit the teleporter with an ID of 1.
