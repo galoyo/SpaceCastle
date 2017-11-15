@@ -12,29 +12,59 @@ package;
 
  /**
  * @author galoyo
- * This class displays the hud boxs at the top left corner of the screen. The boxs are diamond, health, gun power.
+ * This class displays the hud boxes at the top left corner of the screen. The hud boxes are score, nuggets, diamonds, health, gun power.
  */
  
  class Hud extends FlxGroup
  {
-	 /**
-	 * this is the background of the hud.
+	 /*******************************************************************************************************
+	 * This is the background of the hud.
 	 */
 	 private var _hudBackground:FlxSprite;
+	 
+	 /*******************************************************************************************************
+	  * Total score is displayed here.
+	  */
 	 private var _scoreHudBox:HudBox;
+	 
+	 /*******************************************************************************************************
+	  * Total diamonds on a map that needs collecting are displayed here. Collecting all diamonds on a map will increase the maximum health by one point.
+	  */
 	 private var _diamondsHudBox:HudBox;
+	 
+	 /*******************************************************************************************************
+	  * Current player's health is displayed here.
+	  */
 	 public var _healthHudBox:HudBox;
+	 
+	 /*******************************************************************************************************
+	  * Total nuggets are displayed here. Nuggets are used to buy stuff at the store.
+	  */
 	 public var _nuggetsHudBox:HudBox;
+	 
+	 /*******************************************************************************************************
+	  * Displays the gun power. The gun power determines how much damage a bullet does to a mob.
+	  */
 	 private var _gunHudBox:HudBox;
 	 
-	 private var mainMenu:MouseClickThisButton;
+	 /*******************************************************************************************************
+	  * Clicking this button will display a subState that has three buttons to choose from. They are Exit button, Title button and Resume button.
+	  */
+	 private var mainMenu:Button;
 	 
-	 /**
-	 * used so that update function is not called when player in inside of the house.
+	 /*******************************************************************************************************
+	 * This hud will not be displayed when inside a house. Stuff at the update() function will be bypassed.
 	 */
 	 private var _atHouse:Bool = false; 
 	 
+	 /*******************************************************************************************************
+	  * The map coordinate. The first 20 in Map-20-20.tmx is the X value and the second 20 is the Y value. If the player is standing at Map-20-20.tmx and then exits that map from the left side, the X value would decrease by 1. Exiting the map from the north side would decrease the Y value by 1. Exiting the map at the north or east side would increase the X or Y values respectively.
+	  */
 	 private var _displayMapCoordinate:FlxText;
+	 
+	 /*******************************************************************************************************
+	  * The map location of the player.
+	  */
 	 private var _displayManCoordinate:FlxText;
 
 	public function new()
@@ -150,7 +180,7 @@ package;
 			_gunHudBox.hidePowerWhenZero = false; 
 			add(_gunHudBox);
 			
-			mainMenu = new MouseClickThisButton(540, 0, "m: Main Menu", 90, 50, null, 16, 0xFFCCFF33, 0, Reg.state.mainMenuChoices);
+			mainMenu = new Button(540, 0, "m: Main Menu", 90, 50, null, 16, 0xFFCCFF33, 0, Reg.state.mainMenuChoices);
 		add(mainMenu);
 			
 			// display the map coordinate at the top right corner of the screen.	

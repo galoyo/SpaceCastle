@@ -450,7 +450,7 @@ class PlayStateCreateMap
 						case 331: PlayStateAdd.addRock(x * Reg._tileSize, y * Reg._tileSize + 17, 6);
 						case 332: PlayStateAdd.addSign(x * Reg._tileSize, y * Reg._tileSize, 1);
 						case 333: PlayStateAdd.addSign(x * Reg._tileSize, y * Reg._tileSize, 2);
-						case 334: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize);
+						case 334: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 0); // id 0 is for a house teleporter.
 						case 335: PlayStateAdd.addDogFlute(x * Reg._tileSize, y * Reg._tileSize);
 						case 336: PlayStateAdd.addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 5);
 						case 337: PlayStateAdd.addSpikeTrap(x * Reg._tileSize, y * Reg._tileSize, 6);
@@ -466,6 +466,18 @@ class PlayStateCreateMap
 						case 347: PlayStateAdd.addItemSkillDash(x * Reg._tileSize, y * Reg._tileSize);
 						case 348: PlayStateAdd.addCar(x * Reg._tileSize, y * Reg._tileSize - 33);
 						case 349: PlayStateAdd.addRockFalling(x * Reg._tileSize, y * Reg._tileSize - 100);
+						
+						// id 1 to 8 is a teleporter outside of a house.
+						case 352: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 1);
+						case 353: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 2);
+						case 354: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 3);
+						case 355: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 4);
+						case 356: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 5);
+						case 357: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 6);
+						case 358: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 7);
+						case 359: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 8);
+					
+						
 					}
 				}
 			}

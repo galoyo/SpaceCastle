@@ -31,10 +31,10 @@ class TeleportSubState extends FlxSubState
 	private var ticks:Float = 0;
 	private var ticksDelay:Bool = false;
 	
-	public var button1:MouseClickThisButton;
-	public var button2:MouseClickThisButton;
-	public var button3:MouseClickThisButton;
-	public var button4:MouseClickThisButton;
+	public var button1:Button;
+	public var button2:Button;
+	public var button3:Button;
+	public var button4:Button;
 	
 	public function new():Void
 	{
@@ -70,7 +70,7 @@ class TeleportSubState extends FlxSubState
 		brickMoor.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLUE, 4);
 		add(brickMoor);
 		
-		button1 = new MouseClickThisButton(303, 273, "1", 30, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		button1 = new Button(303, 273, "1", 30, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
 		add(button1);
 		
 		if (Reg._itemGotKey[2] == true)
@@ -84,7 +84,7 @@ class TeleportSubState extends FlxSubState
 			blueTown.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLUE, 4);
 			add(blueTown);
 			
-			button2 = new MouseClickThisButton(303, 303, "2", 30, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
+			button2 = new Button(303, 303, "2", 30, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
 		add(button2);
 		}
 		
@@ -99,7 +99,7 @@ class TeleportSubState extends FlxSubState
 			rockFactor.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLUE, 4);
 			add(rockFactor);	
 			
-			button3 = new MouseClickThisButton(303, 333, "3", 30, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);			
+			button3 = new Button(303, 333, "3", 30, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);			
 			add(button3);
 		}	
 		

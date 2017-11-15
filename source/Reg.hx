@@ -700,10 +700,35 @@ class Reg
 	 */
 	public static var _itemCSelectedFromInventory:Int = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * Do NOT change the value of this var. Used to determine if there should be player fall damage after the player hits a mob.
 	 */
 	public static var _playerFallDamageHitMob:Bool = false;
+	
+	// TELEPORTER ##########################################################################################
+	 
+	// These vars are used to store the teleporter location so the player can move from teleporter to the next teleporter.
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. The X location of outside teleporter.
+	 */
+	public static var _teleporterStartX:Array<Float> = [
+	0, 0, 0, 0, 0, 0, 0, 0, 0 
+	];
+
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. The Y location of outside teleporter.
+	 */
+	public static var _teleporterStartY:Array<Float> = [
+	0, 0, 0, 0, 0, 0, 0, 0, 0 
+	];
+	
+	//######################################################################################################
+		
+	/*******************************************************************************************************
+	 * Use this as a hack to stop double firing of a key press or button click.
+	 */
+	public static var _keyOrButtonDown:Bool = false;
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
@@ -1018,6 +1043,12 @@ class Reg
 		
 		_playerInsideCar = false;
 		_carMovingEast = true;
+		
+		_teleporterStartX = [0, 0, 0, 0, 0, 0, 0, 0, 0	];
+		_teleporterStartY = [0, 0, 0, 0, 0, 0, 0, 0, 0 	];
+		
+		_keyOrButtonDown = false;
+	
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################

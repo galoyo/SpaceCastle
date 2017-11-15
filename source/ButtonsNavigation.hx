@@ -29,42 +29,42 @@ class ButtonsNavigation extends FlxGroup
 	/**
 	 * The player will move in the direction of left when this button is pressed.
 	 */
-	public var buttonLeft:MouseClickThisButton;
+	public var buttonLeft:Button;
 	
 	/**
 	 * The player will move in the direction of right when this button is pressed.
 	 */
-	public var buttonRight:MouseClickThisButton;
+	public var buttonRight:Button;
 	
 	/**
 	 * If possible, the player will move up when this button is pressed.
 	 */
-	public var buttonUp:MouseClickThisButton;
+	public var buttonUp:Button;
 	
 	/**
 	 * If possible, the player will move down when this button is pressed.
 	 */
-	public var buttonDown:MouseClickThisButton;
+	public var buttonDown:Button;
 	
 	/**
 	 * Same as pressing the Z key on the keyboard. Pressing the Z button will do the action of the item it contains. For example, if the item is a jump item then the player will jump.
 	 */
-	public var buttonZ:MouseClickThisButton;
+	public var buttonZ:Button;
 	
 	/**
 	 * Same as pressing the X key on the keyboard. Pressing the X button will do the action of the item it contains.
 	 */
-	public var buttonX:MouseClickThisButton;
+	public var buttonX:Button;
 	
 	/**
 	 * Same as pressing the C key on the keyboard. Pressing the C button will do the action of the item it contains.
 	 */
-	public var buttonC:MouseClickThisButton;
+	public var buttonC:Button;
 	
 	/**
 	 * Button to access the inventory menu.
 	 */
-	public var buttonI:MouseClickThisButton;
+	public var buttonI:Button;
 	
 	/**
 	 * Background of the navigation bar.
@@ -80,35 +80,35 @@ class ButtonsNavigation extends FlxGroup
 		 _background.setPosition(0, 537);
 		 add(_background);
 		 
-		buttonLeft = new MouseClickThisButton(0, 538, "", 60, 62, "assets/images/buttonMenuArrowLeft.png", 28, 0xFFCCFF33, 0);
+		buttonLeft = new Button(0, 538, "", 60, 62, "assets/images/buttonMenuArrowLeft.png", 28, 0xFFCCFF33, 0);
 		buttonLeft.scrollFactor.set(0, 0);
 		add(buttonLeft);
 		
-		buttonRight = new MouseClickThisButton(65, 538, "", 60, 62,  "assets/images/buttonMenuArrowRight.png", 28, 0xFFCCFF33, 0 );
+		buttonRight = new Button(65, 538, "", 60, 62,  "assets/images/buttonMenuArrowRight.png", 28, 0xFFCCFF33, 0 );
 		buttonRight.scrollFactor.set(0, 0);
 		add(buttonRight);
 		
-		buttonUp = new MouseClickThisButton(130, 538, "", 60, 62, "assets/images/buttonMenuArrowUp.png", 32, 0xFFCCFF33, 0 );
+		buttonUp = new Button(130, 538, "", 60, 62, "assets/images/buttonMenuArrowUp.png", 32, 0xFFCCFF33, 0 );
 		buttonUp.scrollFactor.set(0, 0);
 		add(buttonUp);
 		
-		buttonDown = new MouseClickThisButton(195, 538, "", 60, 62, "assets/images/buttonMenuArrowDown.png", 28, 0xFFCCFF33, 0 );
+		buttonDown = new Button(195, 538, "", 60, 62, "assets/images/buttonMenuArrowDown.png", 28, 0xFFCCFF33, 0 );
 		buttonDown.scrollFactor.set(0, 0);
 		add(buttonDown);
 		
-		buttonZ = new MouseClickThisButton(260, 538, "", 84, 62, "assets/images/buttonMenuZ.png", 32, 0xFFCCFF33, 0 );
+		buttonZ = new Button(260, 538, "", 84, 62, "assets/images/buttonMenuZ.png", 32, 0xFFCCFF33, 0 );
 		buttonZ.scrollFactor.set(0, 0);
 		add(buttonZ);
 		
-		buttonX = new MouseClickThisButton(349, 538, "", 84, 62, "assets/images/buttonMenuX.png", 28, 0xFFCCFF33, 0 );
+		buttonX = new Button(349, 538, "", 84, 62, "assets/images/buttonMenuX.png", 28, 0xFFCCFF33, 0 );
 		buttonX.scrollFactor.set(0, 0);
 		add(buttonX);
 		
-		buttonC = new MouseClickThisButton(438, 538, "", 84, 62, "assets/images/buttonMenuC.png", 28, 0xFFCCFF33, 0 );
+		buttonC = new Button(438, 538, "", 84, 62, "assets/images/buttonMenuC.png", 28, 0xFFCCFF33, 0 );
 		buttonC.scrollFactor.set(0, 0);
 		add(buttonC);
 		
-		buttonI = new MouseClickThisButton(740, 538, "", 60, 62, "assets/images/buttonMenuI.png", 28, 0xFFCCFF33, 0 );
+		buttonI = new Button(740, 538, "", 60, 62, "assets/images/buttonMenuI.png", 28, 0xFFCCFF33, 0 );
 		buttonI.scrollFactor.set(0, 0);
 		add(buttonI);
 		

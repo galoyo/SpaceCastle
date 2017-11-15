@@ -37,13 +37,13 @@ class MenuState extends FlxState
 	
 	private var _userPressedScaleButton:Bool = false; // used to stop the demo from playing when the user presses the scale button.
 	
-	private var button1:MouseClickThisButton;
-	private var button2:MouseClickThisButton;
-	private var button3:MouseClickThisButton;
-	private var button4:MouseClickThisButton;
-	private var exitProgram:MouseClickThisButton;
-	private var toggleFullScreen:MouseClickThisButton;
-	private var scale:MouseClickThisButton;
+	private var button1:Button;
+	private var button2:Button;
+	private var button3:Button;
+	private var button4:Button;
+	private var exitProgram:Button;
+	private var toggleFullScreen:Button;
+	private var scale:Button;
 	// the text when an item is picked up or a char is talking.
 	public var dialog:Dialog;
 	
@@ -98,14 +98,14 @@ class MenuState extends FlxState
 		_gameSave = new FlxSave(); // initialize
 		_gameSave.bind("TSC-SAVED-GAME"); // bind to the named save slot.
 		
-		button1 = 			new MouseClickThisButton(110, 346, "1: New Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
-		button2 = 			new MouseClickThisButton(110, 394, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
-		button3 = 			new MouseClickThisButton(320, 346, "3: Instructions.", 160, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);
-		button4 = 			new MouseClickThisButton(320, 394, "4: Options.", 160, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
-		toggleFullScreen = 	new MouseClickThisButton(530, 346, "t: Fullscreen.", 160, 35, null, 16, 0xFFCCFF33, 0, toggleFullScreenClicked);
+		button1 = 			new Button(110, 346, "1: New Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		button2 = 			new Button(110, 394, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
+		button3 = 			new Button(320, 346, "3: Instructions.", 160, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);
+		button4 = 			new Button(320, 394, "4: Options.", 160, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
+		toggleFullScreen = 	new Button(530, 346, "t: Fullscreen.", 160, 35, null, 16, 0xFFCCFF33, 0, toggleFullScreenClicked);
 		if (FlxG.fullscreen == true) toggleFullScreen.text = "t: Window."; 
-		exitProgram = 		new MouseClickThisButton(530, 394, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
-		scale = 			new MouseClickThisButton(10, 280, "s: scale", 90, 35, null, 16, 0xFFCCFF33, 0, scaleClicked);
+		exitProgram = 		new Button(530, 394, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
+		scale = 			new Button(10, 280, "s: scale", 90, 35, null, 16, 0xFFCCFF33, 0, scaleClicked);
 		
 		add(button1);
 		add(button2);
@@ -161,17 +161,17 @@ class MenuState extends FlxState
 	private function button3Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = true;
-
-		Reg.playTwinkle();
-		instructions();	
+		
+		instructions();
 	}
 	
 	
 	private function button4Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = true;
-		Reg.playTwinkle();
+		
 		openSubState(new Options());
+		Reg.playTwinkle();
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -366,7 +366,7 @@ class MenuState extends FlxState
 	
 	private function toggleFullScreenClicked():Void
 	{
-		Reg.playTwinkle();
+		FlxG.sound.play("twinkle", 1, false);
 		
 		if (toggleFullScreen.text == "t: Fullscreen.") 
 		{

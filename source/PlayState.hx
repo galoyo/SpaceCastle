@@ -720,8 +720,8 @@ class PlayState extends FlxUIState
 		// near the bottom of this constructor, if you plan to use more than 2 dogs then uncomment those two lines with id 3 and 4.
 		
 		// Multiple overlap between two objects. https://github.com/HaxeFlixel/flixel/issues/1247 uncomment the following to fix the issue. might lose small cpu preformance. you don't use many callbacks so this is currently not a concern.
-		//FlxG.worldDivisions = 1;
-		FlxG.worldBounds.set(); 
+		FlxG.worldDivisions = 1;
+		FlxG.worldBounds.set(0); 
 		
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
 		{

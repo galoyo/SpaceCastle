@@ -11,7 +11,10 @@ import flixel.util.FlxSpriteUtil;
 
 class GameOver extends FlxState
 {
-	private var button1:MouseClickThisButton;
+	/*******************************************************************************************************
+	 * Clicking this button will return you to the main menu.
+	 */
+	private var OKbutton:Button;
 
 	override public function create():Void
 	{
@@ -35,10 +38,10 @@ class GameOver extends FlxState
 		Reg.playerXcoordsLast = 0;
 		Reg.playerYcoordsLast = 0;
 		
-		button1 = new MouseClickThisButton(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
-		button1.setPosition(0, 500); 
-		button1.screenCenter(X);
-		add(button1);
+		OKbutton = new Button(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, OKbuttonClicked);
+		OKbutton.setPosition(0, 500); 
+		OKbutton.screenCenter(X);
+		add(OKbutton);
 		
 		if (Reg._musicEnabled == true) FlxG.sound.playMusic("gameOverNotCompleted", 1, false);
 	}
@@ -56,7 +59,7 @@ class GameOver extends FlxState
 		super.update(elapsed);
 	}	
 	
-	private function button1Clicked():Void
+	private function OKbuttonClicked():Void
 	{
 		Reg.resetRegVars(); FlxG.resetGame();
 	}

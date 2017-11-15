@@ -146,7 +146,7 @@ class Boss1 extends EnemyParentClass
 					{
 						animation.play("walk");	
 						
-						if (ticksDelay <= 50) ticksDelay = Reg.incrementTicks(ticksDelay, 60 / Reg._framerate);
+						ticksDelay = Reg.incrementTicks(ticksDelay, 60 / Reg._framerate);
 						if (ticksDelay == 50) 
 						{
 							// bullet.
@@ -316,8 +316,10 @@ class Boss1 extends EnemyParentClass
 			
 			}
 
-			if (health == (2 * Reg._gunPower))
+			if (ticksDelay >= 500)
 			{
+				ticksDelay = 51;
+				
 				velocity.x = velocity.y = 0;
 				acceleration.x = 0;
 				acceleration.y = 5000;
@@ -340,6 +342,16 @@ class Boss1 extends EnemyParentClass
 					}			
 					
 				}
+			}
+			
+			if (health == (2 * Reg._gunPower))
+			{
+				velocity.x = velocity.y = 0;
+				acceleration.x = 0;
+				acceleration.y = 5000;
+				allowCollisions = FlxObject.FLOOR;
+				Reg._playerCanShootAndMove = false;		
+				_bulletFormationNumber = -1; // do not fire bullet when mob is defeated.
 				
 				if(Reg.mapXcoords == 12 && Reg.mapYcoords == 19)	
 				{

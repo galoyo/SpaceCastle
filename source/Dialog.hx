@@ -11,6 +11,7 @@ import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.addons.text.FlxTypeText;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 import openfl.system.System;
 import openfl.text.Font;
 
@@ -94,34 +95,34 @@ class Dialog extends FlxSubState
 	/*******************************************************************************************************
 	 * USed to display the next dialog.
 	 */
-	private var buttonOK:MouseClickThisButton;
+	private var buttonOK:Button;
 	
 	/*******************************************************************************************************
 	 * Used to answer "YES" to a dialog question.
 	 */
-	private var buttonYes:MouseClickThisButton;
+	private var buttonYes:Button;
 	
 	/*******************************************************************************************************
 	 * Used to answer "NO" to a dialog question.
 	 */
-	private var buttonNo:MouseClickThisButton;
+	private var buttonNo:Button;
 	
 	//######################################################################################################
 	
 	/*******************************************************************************************************
 	 * This is the Exit button at the "Exit game menu". When playing the game, the "Exit game menu" can be accessed by pressing the M key.
 	 */
-	private var buttonExit:MouseClickThisButton;
+	private var buttonExit:Button;
 	
 	/*******************************************************************************************************
 	 * This is the Title button at the Exit game menu".
 	 */
-	private var buttonTitle:MouseClickThisButton;
+	private var buttonTitle:Button;
 	
 	/*******************************************************************************************************
 	 * This is the Resume button at the Exit game menu".
 	 */
-	private var buttonResume:MouseClickThisButton;
+	private var buttonResume:Button;
 	
 	/*******************************************************************************************************
 	 * Buttons displayed at the bottom of the screen. The images of those buttons are the left, up, down, right arrows, and the big letters of Z, X, C, I.
@@ -139,7 +140,7 @@ class Dialog extends FlxSubState
 		
 		background = new FlxSprite(0, 0);
 		if (Reg.exitGameMenu == false) background.makeGraphic(FlxG.width, FlxG.height, 0x77000000);	
-		else background.makeGraphic(FlxG.width, FlxG.height, 0xCC000000);	
+		else {Reg.playTwinkle(); background.makeGraphic(FlxG.width, FlxG.height, 0xCC000000); }	
 		background.scrollFactor.set(0, 0);	
 		add(background);
 		
@@ -256,9 +257,9 @@ class Dialog extends FlxSubState
 			
 			//---------------------- buttons for mobile. 
 			// When using desktop, Z, X or C will display the next dialog and the arrow key will be used to select the YES or NO answer to the question to the dialog text. When using mobile phones, the OK button will be used to display the next dialog and the YES and NO buttons will be used to answer the question to the dialog text.
-			buttonOK = new MouseClickThisButton(80, 300, "OK", 80, 35, null, 16, 0xFFCCFF33, 0, advanceText, 0xFF000044);
-			buttonYes = new MouseClickThisButton(490, 282, "YES", 80, 35, null, 16, 0xFFCCFF33, 0, yesButtonClicked, 0xFF000044);
-			buttonNo = new MouseClickThisButton(580, 282, "No", 80, 35, null, 16, 0xFFCCFF33, 0, noButtonClicked, 0xFF000044);
+			buttonOK = new Button(80, 300, "OK", 80, 35, null, 16, 0xFFCCFF33, 0, advanceText, 0xFF000044);
+			buttonYes = new Button(490, 282, "YES", 80, 35, null, 16, 0xFFCCFF33, 0, yesButtonClicked, 0xFF000044);
+			buttonNo = new Button(580, 282, "No", 80, 35, null, 16, 0xFFCCFF33, 0, noButtonClicked, 0xFF000044);
 			buttonOK.set_visible(false);
 			buttonYes.set_visible(false);
 			buttonNo.set_visible(false);
@@ -274,9 +275,9 @@ class Dialog extends FlxSubState
 		
 		else
 		{
-			buttonExit = new MouseClickThisButton(117, 350, "e: Exit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonExitClicked);	
-			buttonTitle = new MouseClickThisButton(317, 350, "t: Title", 160, 35, null, 16, 0xFFCCFF33, 0, buttonTitleClicked);	
-			buttonResume = new MouseClickThisButton(517, 350, "r: Resume", 160, 35, null, 16, 0xFFCCFF33, 0, buttonResumeClicked);	
+			buttonExit = new Button(117, 350, "e: Exit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonExitClicked);	
+			buttonTitle = new Button(317, 350, "t: Title", 160, 35, null, 16, 0xFFCCFF33, 0, buttonTitleClicked);	
+			buttonResume = new Button(517, 350, "r: Resume", 160, 35, null, 16, 0xFFCCFF33, 0, buttonResumeClicked);	
 			add(buttonExit);
 			add(buttonTitle);
 			add(buttonResume);
@@ -371,21 +372,34 @@ class Dialog extends FlxSubState
 				
 				if ( Reg._dialogFastTextEnabled == true) 
 				{
-					typeTheDialogText.skip();
+					if (typeTheDialogText != null) typeTheDialogText.skip();
 				}
 			}
 			else
 			{
 				#if !FLX_NO_KEYBOARD
-					if (FlxG.keys.anyJustPressed(["E"])) Reg.exitProgram();	
-					if (FlxG.keys.anyJustPressed(["T"])) {Reg.resetRegVars(); FlxG.resetGame();}
-					if (FlxG.keys.anyJustPressed(["R"])) {Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close(); }
+					if (FlxG.keys.anyJustPressed(["E"])) {Reg.exitProgram();}	
+					if (FlxG.keys.anyJustPressed(["T"])) {Reg.playTwinkle(); new FlxTimer().start(0.15, delayRestartGame,1);}
+					if (FlxG.keys.anyJustPressed(["R"])) {Reg.playTwinkle(); new FlxTimer().start(0.15, delayCloseSubstate,1);}
 				#end	
 			}
 		}
 		
 		super.update(elapsed);
 	}	
+	
+	private function delayRestartGame(Timer:FlxTimer):Void
+	{
+		Reg.resetRegVars(); 
+		FlxG.resetGame(); 
+	}
+	
+	private function delayCloseSubstate(Timer:FlxTimer):Void
+	{
+		Reg.exitGameMenu = false; 
+		Reg._ignoreIfMusicPlaying = false; 
+		close(); 
+	}
 	
 	private function buttonExitClicked():Void
 	{
@@ -394,12 +408,14 @@ class Dialog extends FlxSubState
 	
 	private function buttonTitleClicked():Void
 	{
-		Reg.resetRegVars(); FlxG.resetGame();		
+		Reg.playTwinkle(); 
+		new FlxTimer().start(0.15, delayRestartGame,1);
 	}
 	
 	private function buttonResumeClicked():Void
 	{
-		Reg.exitGameMenu = false; Reg._ignoreIfMusicPlaying = false; close();
+		Reg.playTwinkle(); 
+		new FlxTimer().start(0.15, delayCloseSubstate,1);
 	}
 	
 	public function dialogYesNo():Void

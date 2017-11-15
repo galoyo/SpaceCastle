@@ -949,9 +949,9 @@ class PlayStateAdd
 	/**
 	 * Add a teleporter to the map. A key collected will activate a new level to teleport to. At that time, the player can use a teleporter to go to a different level. A teleporter is located at the inside of a house.
 	 */	
-	public static function addTeleporter(X:Float, Y:Float):Void
+	public static function addTeleporter(X:Float, Y:Float, id:Int):Void
 	{
-		Reg.state._objectTeleporter.add( new ObjectTeleporter(X, Y));
+		Reg.state._objectTeleporter.add( new ObjectTeleporter(X, Y, id));
 		Reg.state.add(Reg.state._objectTeleporter);
 	}
 	

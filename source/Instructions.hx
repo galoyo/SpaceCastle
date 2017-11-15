@@ -6,6 +6,7 @@ import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 /**
  * @author galoyo
@@ -15,7 +16,7 @@ class Instructions extends FlxSubState
 {	
 	private var screenBox:FlxSprite;
 	private var title:FlxSprite;
-	private var button1:MouseClickThisButton;
+	private var button1:Button;
 	
 	public function new():Void
 	{
@@ -69,7 +70,7 @@ class Instructions extends FlxSubState
 		Instructions5.scrollFactor.set();
 		add(Instructions5);
 		
-		button1 = new MouseClickThisButton(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
+		button1 = new Button(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
 		button1.screenCenter(X);
 		add(button1);
 	}
@@ -96,8 +97,14 @@ class Instructions extends FlxSubState
 	private function button1Clicked():Void
 	{
 		Reg._ignoreIfMusicPlaying = false;
-		Reg.playTwinkle();
-		FlxG.switchState(new MenuState());
+		Reg.playTwinkle();		
+	
+		new FlxTimer().start(0.15, delayChangeState,1);
+
 	}
 	
+	private function delayChangeState(Timer:FlxTimer):Void
+	{
+		FlxG.switchState(new MenuState());
+	}
 }

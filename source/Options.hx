@@ -7,6 +7,7 @@ import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxSave;
+import flixel.util.FlxTimer;
 
 /**
  * @author galoyo
@@ -28,15 +29,15 @@ class Options extends FlxSubState
 	private var _gameOptions:FlxSave;
 	private	var BackToMainMenu :FlxText;
 	
-	private var button1:MouseClickThisButton;
-	private var button2:MouseClickThisButton;
-	private var button3:MouseClickThisButton;
-	private var button4:MouseClickThisButton;
-	private var button5:MouseClickThisButton;
-	private var button6:MouseClickThisButton;
-	private var button7:MouseClickThisButton;
-	private var button8:MouseClickThisButton;
-	private var button10:MouseClickThisButton;
+	private var button1:Button;
+	private var button2:Button;
+	private var button3:Button;
+	private var button4:Button;
+	private var button5:Button;
+	private var button6:Button;
+	private var button7:Button;
+	private var button8:Button;
+	private var button10:Button;
 	
 	public function new():Void
 	{
@@ -133,15 +134,15 @@ class Options extends FlxSubState
 		options8.scrollFactor.set();
 		add(options8);
 		
-		button1 = new MouseClickThisButton(150, 120, "1", 30, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
-		button2 = new MouseClickThisButton(150, 160, "2", 30, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
-		button3 = new MouseClickThisButton(150, 200, "3", 30, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
-		button4 = new MouseClickThisButton(150, 240, "4", 30, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);	
-		button5 = new MouseClickThisButton(150, 280, "5", 30, 35, null, 16, 0xFFCCFF33, 0, button5Clicked);	
-		button6 = new MouseClickThisButton(150, 320, "6", 30, 35, null, 16, 0xFFCCFF33, 0, button6Clicked);	
-		button7 = new MouseClickThisButton(150, 360, "7", 30, 35, null, 16, 0xFFCCFF33, 0, button7Clicked);	
-		button8 = new MouseClickThisButton(150, 400, "8", 30, 35, null, 16, 0xFFCCFF33, 0, button8Clicked);	
-		button10 = new MouseClickThisButton(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button10Clicked);		
+		button1 = new Button(150, 120, "1", 30, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
+		button2 = new Button(150, 160, "2", 30, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
+		button3 = new Button(150, 200, "3", 30, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
+		button4 = new Button(150, 240, "4", 30, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);	
+		button5 = new Button(150, 280, "5", 30, 35, null, 16, 0xFFCCFF33, 0, button5Clicked);	
+		button6 = new Button(150, 320, "6", 30, 35, null, 16, 0xFFCCFF33, 0, button6Clicked);	
+		button7 = new Button(150, 360, "7", 30, 35, null, 16, 0xFFCCFF33, 0, button7Clicked);	
+		button8 = new Button(150, 400, "8", 30, 35, null, 16, 0xFFCCFF33, 0, button8Clicked);	
+		button10 = new Button(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button10Clicked);		
 		button10.screenCenter(X);
 		
 		add(button1);
@@ -369,11 +370,16 @@ class Options extends FlxSubState
 	
 	private function button10Clicked():Void
 	{
-		saveOptions();
-		
 		Reg.playTwinkle();
-	}
 
+		new FlxTimer().start(0.15, delayChangeState,1);
+
+	}
+	
+	private function delayChangeState(Timer:FlxTimer):Void
+	{
+		saveOptions();
+	}
 	
 	public function saveOptions():Void
 	{		

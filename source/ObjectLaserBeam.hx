@@ -10,9 +10,9 @@ import flixel.util.FlxTimer;
 class ObjectLaserBeam extends FlxSprite
 {
 	/**
-	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 * Used at the velocity Y. 
 	 */
-	private var maxSpeed:Int = 608;	
+	private var maxSpeed:Int = 600;	
 	
 	/**
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
@@ -31,30 +31,17 @@ class ObjectLaserBeam extends FlxSprite
 		_startX = x;
 		_startY = y ;
 		
-		loadGraphic("assets/images/objectLaserBeam.png", false, 24, 24);	
-		
-		velocity.y = - maxSpeed;
+		loadGraphic("assets/images/objectLaserBeam.png", false, 24, 24);		
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (isOnScreen())
+		if (isOnScreen() && Reg._update == true)
 		{			
-			if (justTouched(FlxObject.ANY))
-			{
-				visible = false;
-				reset(_startX, _startY);
-				
-				// reset the laser beam after the laser beam hits the receiving laser block.
-				new FlxTimer().start(0.25, onTimer, 1);				
-			}
+			velocity.y = - maxSpeed;
+			
+			if (justTouched(FlxObject.ANY)) reset(_startX, _startY); // At playState.hx there is a collide check between this object and the player / laser parameter. When that collision happens then the laser will be reset back to the start Y location.
 			super.update(elapsed);
 		}		
-	}
-	
-	private function onTimer(Timer:FlxTimer):Void
-	{		
-		velocity.y = -maxSpeed;
-		visible = true;
-	}
+	}	
 }
