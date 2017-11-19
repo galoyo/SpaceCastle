@@ -12,7 +12,7 @@ import flixel.util.FlxSpriteUtil;
 class GameOver extends FlxState
 {
 	/*******************************************************************************************************
-	 * Clicking this button will return you to the main menu.
+	 * Clicking this button will send you to the main menu.
 	 */
 	private var OKbutton:Button;
 

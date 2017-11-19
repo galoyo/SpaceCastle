@@ -18,50 +18,83 @@ import flixel.util.FlxSave;
 
 class Inventory extends FlxSubState
 {	
-	private var _buttonDown:Bool;
 	
-	//private var screenBox:FlxSprite;
-	private var title:FlxSprite;
-	private var grid:FlxSprite;
-	private var inventoryItemHighlightedSquare:FlxSprite;
-	
-	private var itemTitle :FlxText; // displays the item title just under the inventory title.
-	private var itemDescription:FlxText;
-	
-	private var _icons:FlxSprite; // the reg._iconFilemame is passed to this class to get the icon sprite.
-	private var _iconsGroup:FlxGroup; // add the above sprite to this group so that more than one sprite can be seen on the screen.
-	
-	public var _buttonsNavigation:ButtonsNavigation; // left, right, up, X, etc buttons.
-	private var itemNumberSelected:Int = 0; // the location of the inventoryItemHighlightedSquare on the grid. the first square at the top-left corner of the grid refers to itemNumber 0 and to the right side of it is itemNumber 1;
-	
+	/*******************************************************************************************************
+	 * Fill the screen with this image.
+	 */
 	private var backdropImage:FlxBackdrop = new FlxBackdrop();
 	
+	/*******************************************************************************************************
+	 * Stops the inventory Item Highlighted Square from moving quickly through the grid when holding down a key or button.
+	 */
+	private var _buttonDown:Bool;
+	
+	/*******************************************************************************************************
+	 * This title text display near the top of the screen.
+	 */
+	private var title:FlxText;
+		
+	/*******************************************************************************************************
+	 * Displays the item title just under the inventory title.
+	 */
+	private var itemTitle :FlxText;
+	
+	/*******************************************************************************************************
+	 * Display a grid of boxes for the inventory items 
+	 */
+	private var imageGrid:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * 
+	 */
+	private var inventoryItemHighlightedSquare:FlxSprite;
+		
+	/*******************************************************************************************************
+	 * 
+	 */
+	private var itemDescription:FlxText;
+	
+	/*******************************************************************************************************
+	 * 
+	 */
+	private var _icons:FlxSprite; // the reg._iconFilemame is passed to this class to get the icon sprite.
+	
+	/*******************************************************************************************************
+	 * 
+	 */
+	private var _iconsGroup:FlxGroup; // add the above sprite to this group so that more than one sprite can be seen on the screen.
+	
+	/*******************************************************************************************************
+	 * The buttons navigation class. Some button are left, right, up and X.
+	 */
+	public var _buttonsNavigation:ButtonsNavigation;
+	
+	/*******************************************************************************************************
+	 * The location of the inventoryItemHighlightedSquare on the grid. the first square at the top-left corner of the grid refers to itemNumber 0 and to the right side of that location is itemNumber 1;
+	 */
+	private var itemNumberSelected:Int = 0;
+		
 	public function new():Void
 	{
 		super();
 		
+		// Fill the screen with this tiled image.
 		backdropImage = new FlxBackdrop("assets/images/backgroundTiles3.png", 0, 0, true, true, 0, 0);
 		add(backdropImage);
 		
-		/*screenBox = new FlxSprite(10, 10);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);		
-		screenBox.setPosition(0, 0); 
-		screenBox.scrollFactor.set(0, 0);
-		add(screenBox);*/
-		
-		title = new FlxSprite();
-		title.loadGraphic("assets/images/titleInventory.png", false);
+		title = new FlxText(0, 50, 0, "Inventory");
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
 		title.scrollFactor.set();
 		title.setPosition(0, 50);
 		title.screenCenter(X);
 		add(title);
 		
-		grid = new FlxSprite();
-		grid.loadGraphic("assets/images/inventoryGrid.png");		
-		grid.setPosition(0, 186); 
-		grid.screenCenter(X);
-		grid.scrollFactor.set(0, 0);
-		add(grid);
+		imageGrid = new FlxSprite();
+		imageGrid.loadGraphic("assets/images/inventoryGrid.png");		
+		imageGrid.setPosition(0, 186); 
+		imageGrid.screenCenter(X);
+		imageGrid.scrollFactor.set(0, 0);
+		add(imageGrid);
 		
 		inventoryItemHighlightedSquare = new FlxSprite();
 		inventoryItemHighlightedSquare.loadGraphic("assets/images/inventoryItemHighlightedSquare.png", true);		

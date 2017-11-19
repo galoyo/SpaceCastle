@@ -14,9 +14,20 @@ import flixel.util.FlxTimer;
 
 class Instructions extends FlxSubState
 {	
+	/*******************************************************************************************************
+	 * Used so that this subState does not start with a transparent background.
+	 */
 	private var screenBox:FlxSprite;
-	private var title:FlxSprite;
-	private var button1:Button;
+	
+	/*******************************************************************************************************
+	 * This title text display near the top of the screen.
+	 */
+	private var title:FlxText;
+	
+	/*******************************************************************************************************
+	 * Clicking this button will send you to the main menu.
+	 */
+	private var OKbutton:Button;
 	
 	public function new():Void
 	{
@@ -28,8 +39,8 @@ class Instructions extends FlxSubState
 		screenBox.scrollFactor.set(0, 0);
 		add(screenBox);
 		
-		title = new FlxSprite();
-		title.loadGraphic("assets/images/titleInstructionsImage.png", false);
+		title = new FlxText(0, 50, 0, "Instructions");
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
 		title.scrollFactor.set();
 		title.setPosition(0, 50);
 		title.screenCenter(X);
@@ -70,9 +81,9 @@ class Instructions extends FlxSubState
 		Instructions5.scrollFactor.set();
 		add(Instructions5);
 		
-		button1 = new Button(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
-		button1.screenCenter(X);
-		add(button1);
+		OKbutton = new Button(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, OKbuttonClicked);	
+		OKbutton.screenCenter(X);
+		add(OKbutton);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -80,13 +91,13 @@ class Instructions extends FlxSubState
 		#if !FLX_NO_KEYBOARD  
 			if (FlxG.keys.anyJustReleased(["F12"])) 
 			{
-				Reg._ignoreIfMusicPlaying = true;
+				Reg._stopDemoFromPlaying = true;
 				FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
 			}
 			
 			if (FlxG.keys.anyJustPressed(["Z"]))
 			{
-				Reg._ignoreIfMusicPlaying = false;
+				Reg._stopDemoFromPlaying = false;
 				FlxG.switchState(new MenuState());
 			}
 		#end
@@ -94,9 +105,9 @@ class Instructions extends FlxSubState
 		super.update(elapsed);
 	}	
 	
-	private function button1Clicked():Void
+	private function OKbuttonClicked():Void
 	{
-		Reg._ignoreIfMusicPlaying = false;
+		Reg._stopDemoFromPlaying = false;
 		Reg.playTwinkle();		
 	
 		new FlxTimer().start(0.15, delayChangeState,1);

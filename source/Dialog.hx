@@ -268,6 +268,7 @@ class Dialog extends FlxSubState
 			add(buttonNo);
 			
 			if (InputControls.i.pressed) {}; // trap key press.
+			if (InputControls.i.justReleased) {};
 			
 			ticks = 0;
 			nextText();	
@@ -320,7 +321,7 @@ class Dialog extends FlxSubState
 		else 
 		{
 			Reg.state._playerAirRemainingTimer.active = true;
-			Reg._ignoreIfMusicPlaying = false;
+			Reg._stopDemoFromPlaying = false;
 			close(); 
 		}
 	}		
@@ -365,7 +366,7 @@ class Dialog extends FlxSubState
 							Reg._dialogAnsweredYes = true;
 						else Reg._dialogAnsweredYes = false;
 						
-						Reg._ignoreIfMusicPlaying = false;
+						Reg._stopDemoFromPlaying = false;
 						close();
 					}
 				#end
@@ -397,7 +398,7 @@ class Dialog extends FlxSubState
 	private function delayCloseSubstate(Timer:FlxTimer):Void
 	{
 		Reg.exitGameMenu = false; 
-		Reg._ignoreIfMusicPlaying = false; 
+		Reg._stopDemoFromPlaying = false; 
 		close(); 
 	}
 	
@@ -461,7 +462,7 @@ class Dialog extends FlxSubState
 	{
 		Reg._dialogYesNoWasAnswered = true;
 		Reg._dialogAnsweredYes = true;
-		Reg._ignoreIfMusicPlaying = false;
+		Reg._stopDemoFromPlaying = false;
 		
 		buttonOK.set_visible(true);
 		buttonYes.set_visible(false);
@@ -474,7 +475,7 @@ class Dialog extends FlxSubState
 	{
 		Reg._dialogYesNoWasAnswered = true;
 		Reg._dialogAnsweredYes = false;
-		Reg._ignoreIfMusicPlaying = false;
+		Reg._stopDemoFromPlaying = false;
 		
 		buttonOK.set_visible(true);
 		buttonYes.set_visible(false);

@@ -11,23 +11,85 @@ import flixel.FlxG;
  */
 class InputControls
 {
-	public static var  left:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var right:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var    up:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var  down:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var     z:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var     x:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var 	  c:IState = { justPressed:false, pressed:false, justReleased:false };
-	public static var 	  i:IState = { justPressed:false, pressed:false, justReleased:false };
+	/*******************************************************************************************************
+	 * Select this if you want to use the Left key / button.
+	 */
+	public static var left:IState =		{ justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the Right key / button.
+	 */
+	public static var right:IState =	{ justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the Up key / button.
+	 */
+	public static var up:IState =		{ justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the Down key / button.
+	 */
+	public static var down:IState =		{ justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the Z key / button.
+	 */
+	public static var z:IState = { justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the X key / button.
+	 */
+	public static var x:IState = { justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the C key / button.
+	 */
+	public static var c:IState = { justPressed:false, pressed:false, justReleased:false };
+	
+	/*******************************************************************************************************
+	 * Select this if you want to use the I key / button.
+	 */
+	public static var i:IState = { justPressed:false, pressed:false, justReleased:false };
 
 #if !FLX_NO_KEYBOARD	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the Left key.
+	 */
 	public static var _leftKeys:Array<FlxKey>  = [A, LEFT];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the Right key.
+	 */
 	public static var _rightKeys:Array<FlxKey> = [D, RIGHT];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the Up key.
+	 */
 	public static var _upKeys:Array<FlxKey>    = [W, UP];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the Down key.
+	 */
 	public static var _downKeys:Array<FlxKey>  = [S, DOWN];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the Z key.
+	 */
 	public static var _zKeys:Array<FlxKey>     = [Z];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the X key.
+	 */
 	public static var _xKeys:Array<FlxKey>     = [X];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the C key.
+	 */
 	public static var _cKeys:Array<FlxKey>	   = [C];
+	
+	/*******************************************************************************************************
+	 * These are the allowed keys for the I key.
+	 */
 	public static var _iKeys:Array<FlxKey>	   = [I];
 #end
 

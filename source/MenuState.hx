@@ -60,7 +60,6 @@ class MenuState extends FlxState
 		//do not put fullscreen here. there is a bug. Flash will not embed in html page.
 		//FlxG.fullscreen = true;
 		
-		// smooth the image.
 		FlxG.camera.antialiasing = true;				
 	
 		background = new FlxSprite();
@@ -87,9 +86,15 @@ class MenuState extends FlxState
 		house.setPosition(0, 380);
 		add(house);
 		
-		if (Reg._musicEnabled == true) FlxG.sound.playMusic("titleScreen", 1, false);
+		if (Reg._musicEnabled == true) 
+		{
+			FlxG.sound.playMusic("titleScreen", 1, false);
+		}
 		
-				
+		#if !FLX_NO_KEYBOARD
+			FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
+		#end
+		
 		_gameMenu = new FlxSave(); // initialize		
 		_gameMenu.bind("TSC-MENU"); // bind to the named save slot.	
 		
@@ -128,39 +133,37 @@ class MenuState extends FlxState
 		scaleClicked();
 		_userPressedScaleButton = false;
 		
-		#if !FLX_NO_KEYBOARD
-			FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
-			FlxG.mouse.reset;
-		#end
 	}
 	
 	private function button1Clicked():Void
 	{		
 		_userPressedScaleButton = false;
 		
-		Reg.playTwinkle();		
-		loadPlayState();
+		if (Reg._playRecordedDemo == false)
+		{	
+			Reg.playTwinkle();		
+			loadPlayState();
+		}
 	}
 	
 	private function button2Clicked():Void
-	{				
-		Reg.playTwinkle();
+	{		
+		_userPressedScaleButton = false;
+		Reg._stopDemoFromPlaying = true;
 		
-		if (_gameSave.data._fallAllowedDistanceInPixels == null)
+		if (Reg._musicEnabled == true)
 		{
-			if (Reg._soundEnabled == true) FlxG.sound.play("buzz", 1, false); 
-		} 
-		else 
-		{
-			_userPressedScaleButton = false;
-			loadGame();
+			if (FlxG.sound.music.playing == true)
+			FlxG.sound.music.stop();
 		}
-		
+			
+		openSubState(new GameLoad());	
+		Reg.playTwinkle();		
 	}	
 	
 	private function button3Clicked():Void
 	{
-		Reg._ignoreIfMusicPlaying = true;
+		Reg._stopDemoFromPlaying = true;
 		
 		instructions();
 	}
@@ -168,7 +171,7 @@ class MenuState extends FlxState
 	
 	private function button4Clicked():Void
 	{
-		Reg._ignoreIfMusicPlaying = true;
+		Reg._stopDemoFromPlaying = true;
 		
 		openSubState(new Options());
 		Reg.playTwinkle();
@@ -177,56 +180,55 @@ class MenuState extends FlxState
 	override public function update(elapsed:Float):Void
 	{	
 		#if !FLX_NO_KEYBOARD  
-			if (FlxG.keys.anyJustReleased(["F12"])) 
+			if (Reg._stopDemoFromPlaying == true && FlxG.sound.music.playing == false || Reg._stopDemoFromPlaying == false && FlxG.sound.music.playing == true)
 			{
-				Reg._ignoreIfMusicPlaying = true;
-				FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+				if (FlxG.keys.anyJustReleased(["F12"])) 
+				{
+					Reg._stopDemoFromPlaying = true;
+					FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
+				}
+				
+				else if (FlxG.keys.anyJustReleased(["ONE"])) 
+				{
+					button1Clicked();
+				}
+				
+				else if (FlxG.keys.anyJustReleased(["TWO"])) 
+				{
+					button2Clicked();
+				}	
+				
+				else if (FlxG.keys.anyJustReleased(["THREE"])) 
+				{
+					button3Clicked();	
+				}
+				
+				else if (FlxG.keys.anyJustReleased(["FOUR"])) 
+				{
+					button4Clicked();
+				}
+				
+				else if (FlxG.keys.anyJustReleased(["E"])) 
+				{
+					Reg.exitProgram();
+				}
+				
+				else if (FlxG.keys.anyJustReleased(["T"])) 
+				{
+					toggleFullScreenClicked();
+				}
+				
+				else if (FlxG.keys.justPressed.S)
+				{
+					scaleClicked();
+				}
 			}
-			
-			else if (FlxG.keys.anyJustReleased(["ONE"])) 
-			{
-				button1Clicked();
-			}
-			
-			else if (FlxG.keys.anyJustReleased(["TWO"])) 
-			{
-				button2Clicked();
-			}	
-			
-			else if (FlxG.keys.anyJustReleased(["THREE"])) 
-			{
-				button3Clicked();	
-			}
-			
-			else if (FlxG.keys.anyJustReleased(["FOUR"])) 
-			{
-				button4Clicked();
-			}
-			
-			else if (FlxG.keys.anyJustReleased(["E"])) 
-			{
-				Reg.exitProgram();
-			}
-			
-			else if (FlxG.keys.anyJustReleased(["T"])) 
-			{
-				toggleFullScreenClicked();
-			}
-			
-			else if (FlxG.keys.justPressed.S)
-			{
-				scaleClicked();
-			}
-
-			
-			
-			
 			#end
 
 		// if music has finished and user has not yet pressed 1 or 2 to play the game then prepare to play the recorded demo.
 		if (Reg._musicEnabled == true)
 		{
-			if (FlxG.sound.music.playing == false && Reg._ignoreIfMusicPlaying == false && _userPressedScaleButton == false)
+			if (FlxG.sound.music.playing == false && _userPressedScaleButton == false)
 			{
 				Reg._playRecordedDemo = true; 
 				FlxG.switchState(new PlayState());
@@ -270,95 +272,6 @@ class MenuState extends FlxState
 		openSubState(new Instructions());	
 	}
 	
-	private function loadGame():Void
-	{
-		// player is at a save point.
-		Reg.restoreGameState = true;
-		Reg.beginningOfGame = false; 
-		
-		for (i in 0...4)
-		{
-			Reg._itemGotKey[i] = _gameSave.data._itemGotKey[i]; 
-			Reg._itemGotJump[i] = _gameSave.data._itemGotJump[i];
-		}
-		
-		for (i in 0...8)
-		{
-			Reg._itemGotSuperBlock[i] = _gameSave.data._itemGotSuperBlock[i]; 
-		}
-		
-		for (i in 0...126)
-		{
-			Reg._inventoryIconZNumber[i] = _gameSave.data._inventoryIconZNumber[i];	
-			Reg._inventoryIconXNumber[i] = _gameSave.data._inventoryIconXNumber[i];	
-			Reg._inventoryIconCNumber[i] = _gameSave.data._inventoryIconCNumber[i];	
-			Reg._inventoryIconName[i] = _gameSave.data._inventoryIconName[i];
-			Reg._inventoryIconDescription[i] = _gameSave.data._inventoryIconDescription[i];
-			Reg._inventoryIconFilemame[i] = _gameSave.data._inventoryIconFilemame[i];	
-		}
-		
-		Reg._fallAllowedDistanceInPixels = _gameSave.data._fallAllowedDistanceInPixels;	
-		Reg._jumpForce = _gameSave.data._jumpForce;
-		Reg._gunPower = _gameSave.data._gunPower;
-		Reg._gunHudBoxCollectedTriangles = _gameSave.data._gunHudBoxCollectedTriangles;
-		Reg._typeOfGunCurrentlyUsed = _gameSave.data._typeOfGunCurrentlyUsed;
-		
-		Reg._itemGotGun = _gameSave.data._itemGotGun;
-		Reg._itemGotGunFreeze = _gameSave.data._itemGotGunFreeze;
-		Reg._itemGotGunFlame = _gameSave.data._itemGotGunFlame;
-		Reg._itemGotGunRapidFire = _gameSave.data._itemGotGunRapidFire;
-		Reg._healthMaximum = _gameSave.data._healthMaximum;
-		Reg.mapXcoords = _gameSave.data.mapXcoords;
-		Reg.mapYcoords = _gameSave.data.mapYcoords; 
-		Reg.dogXcoords = _gameSave.data.dogXcoords;
-		Reg.dogYcoords = _gameSave.data.dogYcoords; 
-		Reg._healthContainerCoords = _gameSave.data._healthContainerCoords;
-		Reg._dogCarriedItsID = _gameSave.data._dogCarriedItsID;
-		Reg._dogCurrentlyCarried = _gameSave.data._dogCurrentlyCarried;
-		Reg._dogCarried = _gameSave.data._dogCarried;		
-		Reg._dogFoundAtMap = _gameSave.data._dogFoundAtMap;		
-		Reg.playerXcoords = _gameSave.data.playerXcoords;
-		Reg.playerYcoords = _gameSave.data.playerYcoords;		
-		Reg.playerXcoords = _gameSave.data.playerX;
-		Reg.playerYcoords = _gameSave.data.playerY;
-		Reg.facingDirectionRight = _gameSave.data.facing;
-		Reg._itemGotFlyingHat = _gameSave.data._itemGotFlyingHat; 
-		Reg._usingFlyingHat = _gameSave.data._usingFlyingHat;
-		Reg._inHouse = _gameSave.data._inHouse;
-		Reg._dogInHouse = _gameSave.data._dogInHouse;
-		Reg.playerXcoordsLast = _gameSave.data.playerXcoordsLast;
-		Reg.playerYcoordsLast = _gameSave.data.playerYcoordsLast;
-		
-		Reg._itemGotSwimmingSkill = _gameSave.data._itemGotSwimmingSkill;
-		Reg._healthCurrent = _gameSave.data._healthCurrent;
-		Reg._boss1ADefeated = _gameSave.data._boss1ADefeated;
-		Reg._boss1BDefeated = _gameSave.data._boss1BDefeated;
-		Reg._diamondCoords = _gameSave.data._diamondCoords;
-		Reg._playerFeelsWeak = _gameSave.data._playerFeelsWeak;
-		Reg._boss2Defeated = _gameSave.data._boss2Defeated;
-		Reg._itemGotDogFlute = _gameSave.data._itemGotDogFlute; 
-		Reg._talkToDoctorAt24_25Map = _gameSave.data._talkToDoctorAt24_25Map; 
-		Reg._totalMalasTeleported = _gameSave.data._totalMalasTeleported; 
-		Reg._score = _gameSave.data._score; 
-		Reg._nuggets = _gameSave.data._nuggets; 
-		Reg._inventoryGridXTotalSlots = _gameSave.data._inventoryGridXTotalSlots;
-		Reg._inventoryGridYTotalSlots = _gameSave.data._inventoryGridYTotalSlots;
-		Reg._itemZSelectedFromInventory = _gameSave.data._itemZSelectedFromInventory;
-		Reg._itemXSelectedFromInventory = _gameSave.data._itemXSelectedFromInventory;
-		Reg._itemCSelectedFromInventory = _gameSave.data._itemCSelectedFromInventory;
-
-		Reg._inventoryIconNumberMaximum = _gameSave.data._inventoryIconNumberMaximum;
-		Reg._itemZSelectedFromInventoryName = _gameSave.data._itemZSelectedFromInventoryName;
-		Reg._itemXSelectedFromInventoryName = _gameSave.data._itemXSelectedFromInventoryName;
-		Reg._itemCSelectedFromInventoryName = _gameSave.data._itemCSelectedFromInventoryName;
-		Reg._itemGotAntigravitySuit = _gameSave.data._itemGotAntigravitySuit;		
-		Reg._itemGotSkillDash = _gameSave.data._itemGotSkillDash;
-		
-		_gameSave.close;
-		
-		FlxG.switchState(new PlayState());
-	}
-
 	private function loadPlayState():Void
 	{
 		FlxG.switchState(new PlayState());
@@ -412,7 +325,7 @@ class MenuState extends FlxState
 		
 		_gameMenu.close;
 	}
-
+	
 }
 
 @:enum
