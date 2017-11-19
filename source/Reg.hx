@@ -222,9 +222,9 @@ class Reg
 	//##################################################################
 	
 	/*******************************************************************************************************
-	* DO NOT change the value of this var. It is used to determine if a substate should be displayed or if a demo should be played. Removing this var from all code will result in the demo playing when a substate at main menu is displayed.
+	* DO NOT change the value of this var. It is used to determine if a substate should be displayed or if a demo should be played. Setting this var to false will result in the demo playing when the music at menuState is finished playing.
 	*/
-	public static var _ignoreIfMusicPlaying:Bool = false;
+	public static var _stopDemoFromPlaying:Bool = false;
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. Used to stop a particular music from playing. This "dream" music is played only at the parallax car scene. This var makes that happen.
@@ -723,12 +723,39 @@ class Reg
 	0, 0, 0, 0, 0, 0, 0, 0, 0 
 	];
 	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. Player will not be able to use a teleporter that the player teleported to.
+	 */
+	public static var _teleporterInUse:Array<Bool> = [
+	true, true, true, true, true, true, true, true, true 
+	];
+	
 	//######################################################################################################
 		
 	/*******************************************************************************************************
-	 * Use this as a hack to stop double firing of a key press or button click.
+	 * Do NOT change the value of this var. Use this as a hack to stop double firing of a key press or button click.
 	 */
 	public static var _keyOrButtonDown:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. This var is passed to the parent so that buttons can be shared between the child classes. This valie is set at the child classes. 0 = not set yet. 1 = saving the game. 2 = loading the game.
+	 */
+	public static var _gameSaveOrLoad:Int = 0;
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. value is true if saving the game.
+	 */
+	public static var _savingGame:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. The date and time when the user saved the game.
+	 */
+	public static var _dateAndTimeSaved = Date;
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. When saving a game, the subState will be displayed again but this time the saved game text box will be in a different color.
+	 */
+	public static var _gameSlotNumberSaved:Int = 0;
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
@@ -1043,9 +1070,6 @@ class Reg
 		
 		_playerInsideCar = false;
 		_carMovingEast = true;
-		
-		_teleporterStartX = [0, 0, 0, 0, 0, 0, 0, 0, 0	];
-		_teleporterStartY = [0, 0, 0, 0, 0, 0, 0, 0, 0 	];
 		
 		_keyOrButtonDown = false;
 	

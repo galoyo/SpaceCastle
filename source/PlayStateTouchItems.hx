@@ -404,14 +404,8 @@ class PlayStateTouchItems
 	{
 		if (Std.is(item, SavePoint))
 		{
-			var save:SavePoint = cast(item, SavePoint);
-			save.saveGame();
-			
-			Reg.dialogIconText = openfl.Assets.getText("assets/text/gameSaved.txt").split("#");
-			
-			Reg.dialogCharacterTalk[0] = "";
-			Reg.displayDialogYesNo = false;
-			Reg.state.openSubState(new Dialog());
+			Reg._savingGame = true;
+			Reg.state.openSubState(new GameSave());
 		}
 	}	
 

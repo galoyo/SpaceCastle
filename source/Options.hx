@@ -15,8 +15,16 @@ import flixel.util.FlxTimer;
 
 class Options extends FlxSubState
 {	
+	/*******************************************************************************************************
+	 * Used so that this subState does not start with a transparent background.
+	 */
 	private var screenBox:FlxSprite;
-	private var title:FlxSprite;
+	
+	/*******************************************************************************************************
+	 * This title text display near the top of the screen.
+	 */
+	private var title:FlxText;
+	
 	private var options1 :FlxText;
 	private	var options2 :FlxText;
 	private	var options3 :FlxText;
@@ -49,14 +57,13 @@ class Options extends FlxSubState
 		screenBox.scrollFactor.set(0, 0);
 		add(screenBox);
 		
-		title = new FlxSprite();
-		title.loadGraphic("assets/images/titleOptionsImage.png", false);
+		title = new FlxText(0, 50, 0, "Options");
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
 		title.scrollFactor.set();
-		title.setPosition(0, 50);
 		title.screenCenter(X);
 		add(title);		
 		
-		options1 = new FlxText(190, 127, 0, "Music [ON].");
+		options1 = new FlxText(250, 127, 0, "Music [ON].");
 		options1.color = FlxColor.WHITE;
 		options1.size = 14;
 		options1.scrollFactor.set();
@@ -68,7 +75,7 @@ class Options extends FlxSubState
 		}
 		add(options1);
 	
-		options2 = new FlxText(190, 167, 0, "Background Sounds [OFF].");
+		options2 = new FlxText(250, 167, 0, "Background Sounds [OFF].");
 		options2.color = FlxColor.WHITE;
 		options2.size = 14;
 		options2.scrollFactor.set();
@@ -80,7 +87,7 @@ class Options extends FlxSubState
 		}
 		add(options2);
 		
-		options3 = new FlxText(190, 207, 0, "Sound Effects [ON].");
+		options3 = new FlxText(250, 207, 0, "Sound Effects [ON].");
 		options3.color = FlxColor.WHITE;
 		options3.size = 14;
 		options3.scrollFactor.set();
@@ -91,7 +98,7 @@ class Options extends FlxSubState
 		}		
 		add(options3);
 		
-		options4 = new FlxText(190, 247, 0, "Fast dialog text [TRUE].");
+		options4 = new FlxText(250, 247, 0, "Fast dialog text [TRUE].");
 		options4.color = FlxColor.WHITE;
 		options4.size = 14;
 		options4.scrollFactor.set();
@@ -102,7 +109,7 @@ class Options extends FlxSubState
 		}	
 		add(options4);
 		
-		options5 = new FlxText(190, 287, 0, "Cheat Mode [ON].");
+		options5 = new FlxText(250, 287, 0, "Cheat Mode [ON].");
 		options5.color = FlxColor.WHITE;
 		options5.size = 14;
 		options5.scrollFactor.set();
@@ -113,19 +120,19 @@ class Options extends FlxSubState
 		}	
 		add(options5);
 		
-		options6 = new FlxText(190, 327, 0, "Game Speed: Framerate " + Std.string(Reg._framerate));
+		options6 = new FlxText(250, 327, 0, "Game Speed: Framerate " + Std.string(Reg._framerate));
 		options6.color = FlxColor.WHITE;
 		options6.size = 14;
 		options6.scrollFactor.set();
 		add(options6);
 		
-		options7 = new FlxText(190, 367, 0, "Player Fall Damage [" + Std.string(Reg._playerFallDamage).toUpperCase() + "].");
+		options7 = new FlxText(250, 367, 0, "Player Fall Damage [" + Std.string(Reg._playerFallDamage).toUpperCase() + "].");
 		options7.color = FlxColor.WHITE;
 		options7.size = 14;
 		options7.scrollFactor.set();
 		add(options7);
 		
-		options8 = new FlxText(190, 407, 0, "");
+		options8 = new FlxText(250, 407, 0, "");
 		if (Reg._difficultyLevel == 1) options8.text = "Difficulty Level [EASY].";
 		if (Reg._difficultyLevel == 2 || Reg._difficultyLevel == 0) options8.text = "Difficulty Level [NORMAL].";
 		if (Reg._difficultyLevel == 3) options8.text = "Difficulty Level [HARD].";
@@ -134,14 +141,14 @@ class Options extends FlxSubState
 		options8.scrollFactor.set();
 		add(options8);
 		
-		button1 = new Button(150, 120, "1", 30, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
-		button2 = new Button(150, 160, "2", 30, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
-		button3 = new Button(150, 200, "3", 30, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
-		button4 = new Button(150, 240, "4", 30, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);	
-		button5 = new Button(150, 280, "5", 30, 35, null, 16, 0xFFCCFF33, 0, button5Clicked);	
-		button6 = new Button(150, 320, "6", 30, 35, null, 16, 0xFFCCFF33, 0, button6Clicked);	
-		button7 = new Button(150, 360, "7", 30, 35, null, 16, 0xFFCCFF33, 0, button7Clicked);	
-		button8 = new Button(150, 400, "8", 30, 35, null, 16, 0xFFCCFF33, 0, button8Clicked);	
+		button1 = new Button(170, 120, "1", 70, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
+		button2 = new Button(170, 160, "2", 70, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
+		button3 = new Button(170, 200, "3", 70, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
+		button4 = new Button(170, 240, "4", 70, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);	
+		button5 = new Button(170, 280, "5", 70, 35, null, 16, 0xFFCCFF33, 0, button5Clicked);	
+		button6 = new Button(170, 320, "6", 70, 35, null, 16, 0xFFCCFF33, 0, button6Clicked);	
+		button7 = new Button(170, 360, "7", 70, 35, null, 16, 0xFFCCFF33, 0, button7Clicked);	
+		button8 = new Button(170, 400, "8", 70, 35, null, 16, 0xFFCCFF33, 0, button8Clicked);	
 		button10 = new Button(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, button10Clicked);		
 		button10.screenCenter(X);
 		
@@ -158,7 +165,6 @@ class Options extends FlxSubState
 	
 	override public function update(elapsed:Float):Void 
 	{				
-		// toggle music on/off
 		#if !FLX_NO_KEYBOARD  
 			if (FlxG.keys.anyJustReleased(["ONE"])) 
 			{
@@ -371,7 +377,6 @@ class Options extends FlxSubState
 	private function button10Clicked():Void
 	{
 		Reg.playTwinkle();
-
 		new FlxTimer().start(0.15, delayChangeState,1);
 
 	}
@@ -401,7 +406,7 @@ class Options extends FlxSubState
 		_gameOptions.flush();
 		_gameOptions.close;
 		
-		Reg._ignoreIfMusicPlaying = false;
+		Reg._stopDemoFromPlaying = false;
 		FlxG.switchState(new MenuState());
 		
 	}

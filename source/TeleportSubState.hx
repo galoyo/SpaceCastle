@@ -27,7 +27,10 @@ import openfl.text.Font;
 class TeleportSubState extends FlxSubState
 {	
 	private var screenBox:FlxSprite;
-	private var title:FlxSprite;
+	/*******************************************************************************************************
+	 * This title text display near the top of the screen.
+	 */
+	private var title:FlxText;
 	private var ticks:Float = 0;
 	private var ticksDelay:Bool = false;
 	
@@ -42,11 +45,11 @@ class TeleportSubState extends FlxSubState
 		
 		// Set a background color
 		screenBox = new FlxSprite(0, 0);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xBB000000);
+		screenBox.makeGraphic(FlxG.width, FlxG.height, 0x44000000);
 		add(screenBox);
 		
-		title = new FlxSprite();
-		title.loadGraphic("assets/images/titleTeleporterImage.png", false);
+		title = new FlxText(0, 50, 0, "Teleporter");
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
 		title.scrollFactor.set();
 		title.setPosition(0, 170);
 		title.screenCenter(X);

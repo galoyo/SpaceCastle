@@ -15,6 +15,7 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.addons.effects.chainable.FlxTrailEffect;
 import flixel.addons.tile.FlxTilemapExt;
 import flixel.addons.ui.FlxUIState;
+import flixel.FlxState;
 import flixel.effects.particles.FlxEmitter;
 import flixel.effects.particles.FlxParticle;
 import flixel.graphics.FlxGraphic;
@@ -755,6 +756,10 @@ class PlayState extends FlxUIState
 		Reg.state = this;
 		Reg._playerAirIsDecreasing = false;
 		
+		Reg._teleporterStartX = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+		Reg._teleporterStartY = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+		Reg._teleporterInUse = [true, true, true, true, true, true, true, true, true];
+		
 		_ceilingHit = new FlxTimer();
 		_questionMark = new FlxTimer();
 		_waterPlayer = new FlxTimer();
@@ -1043,7 +1048,7 @@ class PlayState extends FlxUIState
 			Reg._playRecordedDemo = false;
 			Reg._noTransitionEffectDemoPlaying = true;
 			
-			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(),["ANY"],0,replayCallback);
+			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(),["Z","X","C"],0,replayCallback);
 
 		}
 		//##################### END OF RECORDING CODE BLOCK ####################
@@ -1116,8 +1121,20 @@ class PlayState extends FlxUIState
 		if (FlxG.keys.anyJustPressed(["NINE"])) FlxG.vcr.stopRecording();
 		if (FlxG.keys.anyJustPressed(["ZERO"])) FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); */
 		//################ END RECORDING DEMO BLOCK #################
-		
+				
+		if (Reg._gameSaveOrLoad == 1 && Reg._savingGame == true)
+		{
+			Reg.dialogIconText = openfl.Assets.getText("assets/text/gameSaved.txt").split("#");
+			Reg.dialogCharacterTalk[0] = "";
+			Reg.displayDialogYesNo = false;
+			Reg.state.openSubState(new Dialog());
+
+			Reg._savingGame = false;
+			Reg._gameSaveOrLoad = 0;
+		}
+			
 		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+		
 		InputControls.checkInput();
 		
 		if (InputControls.i.justReleased)
@@ -1570,6 +1587,7 @@ class PlayState extends FlxUIState
 	function replayCallback():Void
 	{
 		Reg.resetRegVars();
+		Reg._stopDemoFromPlaying = true;
 		FlxG.switchState(new MenuState());
 	}
 	
