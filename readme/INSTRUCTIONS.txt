@@ -1,11 +1,11 @@
 Instructions.
 
 LEFT / RIGHT arrow keys moves player.
-DOWN arrow key: interact with objects such as characters or doors and dialogs.
-Hold UP / DOWN arrow for a few seconds to look beyond the current view.
-A: Select item, confirm.
-F1: key is quit game menu.
-F12: key toggles full screen mode.
+DOWN arrow key: interact with objects such as characters, doors and dialogs.
+i: Access the inventory.
+z, x, c: Action key for an item. Confirm.
+m: Main menu.
+F12: Toggles full screen mode.
 Holding SHIFT key then press + / - to increase / decrease the volume.
 
 T KEY toggles cheat mode on / off.
