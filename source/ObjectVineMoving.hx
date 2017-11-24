@@ -12,18 +12,18 @@ import flixel.tweens.FlxTween;
 
 class ObjectVineMoving extends FlxSprite 
 {		
-	private var _tween:FlxTween;
-	
 	public function new(x:Float, y:Float, id:Int) 
 	{
 		super(x, y);
 		
 		loadGraphic("assets/images/objectVineMoving.png", true, 16, 16);	
 		
+		var _tween:FlxTween;
+		
 		if(id == 2)
 		{
 				// x is center of object. x -5 to 5 + 5 will make the rope move to and from those values. the value of y mades the dip in the half circle movement.
-			_tween = FlxTween.cubicMotion(this,
+			var _tween = FlxTween.cubicMotion(this,
 				x - 5, y,
 				x - 5, y + 2.5,
 				x + 5, y + 5,

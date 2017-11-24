@@ -16,8 +16,19 @@ import flixel.util.FlxTimer;
 
 class ObjectParentClass extends FlxSprite 
 {
+	/*******************************************************************************************************
+	 * Var that points to a bullets class.
+	 */
 	public var _bulletsObject:FlxTypedGroup<BulletObject>;
+	
+	/*******************************************************************************************************
+	 * Bullets from objects.
+	 */
 	private var _bulletObject:BulletObject;
+	
+	/*******************************************************************************************************
+	 * The velocity of the normal bullet.
+	 */
 	private var _bulletSpeed:Int = 450;
 	
 	/*******************************************************************************************************
@@ -30,25 +41,30 @@ class ObjectParentClass extends FlxSprite
 	 */
 	private var _particleBulletMiss:FlxEmitter;
 		
-	/**
-	 * The gun delay between bullets fired.
+	 /*******************************************************************************************************
+	 * DO NOT change the value of this var. The gun delay between bullets fired.
 	 */
 	private var _gunDelay:Float = 0;
 	
-	private var _cooldown:Float;
+	/*******************************************************************************************************
+	 * DO NOT change the value of this var. The shot clock. When this value is equal or greater than _gunDelay then the bullet can be fired.
+	 */
+	private var _cooldown:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Gets the value from _bulletFormationNumber at the child class. This var determines what bullet to shoot.
+	 */
 	private var _bulletFireFormation:Int; 
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
 	 */
 	private var _startY:Float = 0;
-	
-	private var player:Player;
 	
 	public function new(x:Float, y:Float, bulletsObject:FlxTypedGroup<BulletObject>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{

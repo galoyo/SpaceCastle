@@ -25,27 +25,95 @@ class Options extends FlxSubState
 	 */
 	private var title:FlxText;
 	
+	/*******************************************************************************************************
+	 * The text for configuration option 1.
+	 */
 	private var options1 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 2
+	 */
 	private	var options2 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 3
+	 */
 	private	var options3 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 4
+	 */
 	private	var options4 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 5
+	 */
 	private	var options5 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 6
+	 */
 	private	var options6 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 7
+	 */
 	private	var options7 :FlxText;
+	
+	/*******************************************************************************************************
+	 * The text for configuration option 8
+	 */
 	private	var options8 :FlxText;
-	
-	private var _gameOptions:FlxSave;
-	private	var BackToMainMenu :FlxText;
-	
+
+	/*******************************************************************************************************
+	 * Used to change preference for option 1
+	 */
 	private var button1:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 2
+	 */
 	private var button2:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 3
+	 */
 	private var button3:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 4
+	 */
 	private var button4:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 5
+	 */
 	private var button5:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 6
+	 */
 	private var button6:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 7
+	 */
 	private var button7:Button;
+	
+	/*******************************************************************************************************
+	 * Used to change preference for option 8
+	 */
 	private var button8:Button;
+	
+	/*******************************************************************************************************
+	 * Save the options buttom.
+	 */
 	private var button10:Button;
+		
+	/*******************************************************************************************************
+	 * This is what we're going to save the options to.
+	 */
+	private var _gameOptions:FlxSave;
 	
 	public function new():Void
 	{
@@ -206,7 +274,7 @@ class Options extends FlxSubState
 				button8Clicked();
 			}
 			
-			else if (FlxG.keys.anyJustReleased(["Z"])) saveOptions();
+			else if (FlxG.keys.anyJustReleased(["Z"])) button10Clicked();
 		#end
 		
 		super.update(elapsed);

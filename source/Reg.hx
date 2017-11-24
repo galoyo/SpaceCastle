@@ -757,6 +757,11 @@ class Reg
 	 */
 	public static var _gameSlotNumberSaved:Int = 0;
 	
+	/*******************************************************************************************************
+	 * This is the total playable maps. House and bonus maps are in this array.
+	 */
+	public static var _mapsTotalCount:Array<String> = [];
+	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
 	//##################################################################
@@ -1158,6 +1163,23 @@ class Reg
 		{
 			FlxG.sound.playMusic("twinkle", 1, false);		
 			FlxG.sound.music.persist = true;
+		}
+	}
+	
+	/**
+	 * Find the defined text within an array.
+	 * @param	arr 	The array to loop through.
+	 * @param	text	All characters in a string that will be used to search the array.
+	 */
+	public static function getTotalMaps(arr:Array<String>, text:String)
+	{
+ 		for ( i in 0...arr.length) 
+		{
+			// Search all words in an array. If a match is found then add an element to that map total array.
+			if (arr[i].indexOf(text) >= 0) 
+			{
+				Reg._mapsTotalCount.push(arr[i]);
+			}
 		}
 	}
 }

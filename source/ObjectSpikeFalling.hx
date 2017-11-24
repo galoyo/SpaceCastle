@@ -12,10 +12,20 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectSpikeFalling extends FlxSprite 
 {
+	/*******************************************************************************************************
+	 * Used to stop a block of code from running the second time.
+	 */
 	public var ticksSpike:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Spike will fall if spike is within the x range of the player. The range is plus/minus this value
+	 */
 	private var ra:Int;
 
-	private var _startY:Float;
+	/*******************************************************************************************************
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -37,7 +47,7 @@ class ObjectSpikeFalling extends FlxSprite
 		if (isOnScreen() == true)
 		{
 			
-			// make the spike fall if spike is within the x range of the player.
+			// Spike will fall if spike is within the x range of the player.
 			if (ticksSpike == 0 && Reg.state.player.x > x - ra && Reg.state.player.x < x + ra && y == _startY) velocity.y = 950 + (ra * 1.5);
 			
 			// spike not yet falling to the ground.

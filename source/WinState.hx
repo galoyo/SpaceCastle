@@ -12,8 +12,6 @@ import flixel.util.FlxSpriteUtil;
 
 class WinState extends FlxState
 {
-	private var button1:Button;
-	
 	override public function create():Void
 	{
 		super.create();
@@ -58,7 +56,7 @@ class WinState extends FlxState
 		winText.cursorCharacter = "";
 		add(winText);
 		
-		button1 = new Button(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
+		var button1:Button = new Button(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
 		button1.setPosition(0, 500); 
 		button1.screenCenter(X);
 		add(button1);

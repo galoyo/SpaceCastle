@@ -11,7 +11,14 @@ import flixel.util.FlxColor;
 
 class ObjectRain extends FlxSprite
 {
+	/*******************************************************************************************************
+	 * Size and speed of a rain particle.
+	 */
 	private var _level:Int = 0;
+	
+	/*******************************************************************************************************
+	 * If not initiated then position the rain outside of screen.
+	 */
 	private var _initialized:Bool = false;
 	
 	public function new(Level:Int = 0) 

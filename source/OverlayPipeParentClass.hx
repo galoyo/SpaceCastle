@@ -15,17 +15,20 @@ import flixel.util.FlxTimer;
 
 class OverlayPipeParentClass extends FlxSprite 
 {
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
 	 */
 	private var _startY:Float = 0;
 	
-	private var alignPlayerToPipeOnce:Bool = false;
+	/*******************************************************************************************************
+	 * If this value if true then the game can accept arrow key/button presses.
+	 */
+	private var _acceptKeyOrButtonPress:Bool = false;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{
@@ -84,7 +87,7 @@ class OverlayPipeParentClass extends FlxSprite
 				Reg._lastArrowKeyPressed = "down";			
 			}
 			
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 		}
 		
 		// align the player vertically and then move the player through the horizontal pipe.
@@ -103,45 +106,44 @@ class OverlayPipeParentClass extends FlxSprite
 				Reg._lastArrowKeyPressed = "left";
 			}
 			
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 		}
 		
 		//#################### END AUTO MOVEMENTS #####################	 	
 		
 		//##################### CHANGE DIRECTION ######################
-		// at a pipe intersection that player will not moved. the game will wait until a key is pressed. once pressed, the direction the arrow key was pressed is saved so what when moving through a non-pipe intersection the player will move in that direction.
-		if (InputControls.up.pressed && alignPlayerToPipeOnce == true)
+		if (InputControls.up.pressed && _acceptKeyOrButtonPress == true)
 		{
 			// these are the junctions that require an arrow key to be pressed.
 			if (ID == 1 || ID == 7 || ID == 12 || ID == 13) p.y = y - 32;
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "up";
 			
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);			
 		}
 		
-		else if (InputControls.left.pressed && alignPlayerToPipeOnce == true)
+		else if (InputControls.left.pressed && _acceptKeyOrButtonPress == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 7 || ID == 13) p.x = x - 32;		
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "left";
 			
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);	
 		}
 		
-		else if (InputControls.down.pressed && alignPlayerToPipeOnce == true)
+		else if (InputControls.down.pressed && _acceptKeyOrButtonPress == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 7 || ID == 12) p.y = y + 32;
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "down";
 			
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);	
 		}
 		
-		else if (InputControls.right.pressed && alignPlayerToPipeOnce == true)
+		else if (InputControls.right.pressed && _acceptKeyOrButtonPress == true)
 		{
 			if (ID == 1 || ID == 6 || ID == 12 || ID == 13) p.x = x + 32;
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "right";
 			
 			if (Reg._soundEnabled == true) FlxG.sound.play("pipeChangeDirection", 1, false);	
@@ -163,8 +165,8 @@ class OverlayPipeParentClass extends FlxSprite
 			//xif(isTouching(FlxObject.FLOOR)) // align the player but not under these conditions.
 				p.y = y + 2;
 			
-			// if this value if true then the game can accept arrow key presses.
-			alignPlayerToPipeOnce = true;			
+			// if this value if true then the game can accept arrow key/button presses.
+			_acceptKeyOrButtonPress = true;			
 
 		}		
 		
@@ -176,52 +178,52 @@ class OverlayPipeParentClass extends FlxSprite
 		if (ID == 9 && Reg._lastArrowKeyPressed == "left" || ID == 9 && Reg._lastArrowKeyPressed == "down") 
 		{
 			p.y = y + 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "down"; 			
 		}
 		else if (ID == 9 && Reg._lastArrowKeyPressed == "up" || ID == 9 && Reg._lastArrowKeyPressed == "right") 
 		{
 			p.x = x + 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "right"; 
 		}
 			
 		else if (ID == 15 && Reg._lastArrowKeyPressed == "down" || ID == 15 && Reg._lastArrowKeyPressed == "right") 
 		{
 			p.x = x + 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "right"; 			
 		}
 		else if (ID == 15 && Reg._lastArrowKeyPressed == "left" || ID == 15 && Reg._lastArrowKeyPressed == "up") 
 		{
 			p.y = y - 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "up";			
 		}
 		
 		else if (ID == 10 && Reg._lastArrowKeyPressed == "right" || ID == 10 && Reg._lastArrowKeyPressed == "down") 
 		{
 			p.y = y + 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "down";			
 		}
 		else if (ID == 10 && Reg._lastArrowKeyPressed == "up" || ID == 10 && Reg._lastArrowKeyPressed == "left") 
 		{
 			p.x = x - 32;
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "left";
 		}
 		
 		else if (ID == 16 && Reg._lastArrowKeyPressed == "down" || ID == 16 && Reg._lastArrowKeyPressed == "left") 
 		{
 			p.x = x - 32; 
-			alignPlayerToPipeOnce = false;
+			_acceptKeyOrButtonPress = false;
 			Reg._lastArrowKeyPressed = "left";			
 		}
 		else if (ID == 16 && Reg._lastArrowKeyPressed == "right" || ID == 16 && Reg._lastArrowKeyPressed == "up") 
 		{
 			p.y = y - 32; 
-			alignPlayerToPipeOnce = false; 
+			_acceptKeyOrButtonPress = false; 
 			Reg._lastArrowKeyPressed = "up"; 
 			
 		}

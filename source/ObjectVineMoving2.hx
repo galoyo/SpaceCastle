@@ -13,10 +13,20 @@ import flixel.util.FlxColor;
 
 class ObjectVineMoving2 extends FlxSprite 
 {		
-	private var _tween:FlxTween;
-	private var ticks:Float = 0; // used to delay holding of the vine if jumping.
-	private var _keyPressed:Bool = false; // used to delay the holding of the vine if jumping.
-	private var _isPlayerJumping:Bool = false; // used to jump off the vine only if the keyboard key used is a jump icon that was selected from the inventory.
+	/*******************************************************************************************************
+	 * Used to delay holding of the vine if jumping.
+	 */
+	private var ticks:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to delay the holding of the vine if jumping.
+	 */
+	private var _keyPressed:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Used to jump off the vine only if the key/buton used is a jump icon that was selected from the inventory.
+	 */
+	private var _isPlayerJumping:Bool = false;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{
@@ -27,7 +37,7 @@ class ObjectVineMoving2 extends FlxSprite
 		
 		if(id == 11)
 		{
-			_tween = FlxTween.cubicMotion(this,
+			var _tween = FlxTween.cubicMotion(this,
 				x - 94, y,
 				x - 94, y + 25,
 				x + 94, y + 27.5,

@@ -12,13 +12,39 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectRockFalling extends FlxSprite 
 {
-	public var ticksRock:Float = 0; // used to fade the rock and make the rock fall.
-	private var ra:Int; // used to rock the rock fall to the ground when player is random distance Y coords from this rock.
-	private var raFallAngle:Int = 0; // 0 = fall at 6 o'clock, 1 = fall at 8 o'clock and 2 = 4 o'clock
+	/*******************************************************************************************************
+	 * Used to fade the rock and make the rock fall.
+	 */
+	public var ticksRock:Float = 0;
 	
-	private var minusTicks:Float = 0;
-	private var ticksDelay:Float = 0; // used to delay the rock fading.
+	/*******************************************************************************************************
+	 * Used to make the rock fall to the ground when player is at a random distance Y away from this rock.
+	 */
+	private var ra:Int;
+	
+	/*******************************************************************************************************
+	 * 0 = fall at 6 o'clock, 1 = fall at 8 o'clock and 2 = 4 o'clock
+	 */
+	private var raFallAngle:Int = 0;
+	
+	/*******************************************************************************************************
+	 * Used to slowly fade the rock before its visiblity is false.
+	 */
+	private var ticksMinus:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to delay the rock fading.
+	 */
+	private var ticksDelay:Float = 0;
+	
+	/*******************************************************************************************************
+	 * The speed rocks fall to the ground.
+	 */
 	private var _rockfallVelocity:Float = 700;
+	
+	/*******************************************************************************************************
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
 	private var _startY:Float;
 	
 	public function new(x:Float, y:Float) 
@@ -94,9 +120,9 @@ class ObjectRockFalling extends FlxSprite
 				
 					// fade the rock and then remove it from map.
 					ticksRock = Reg.incrementTicks(ticksRock, 60 / Reg._framerate) + 1;
-					minusTicks = -10 + ticksRock;
-					minusTicks = Math.abs(minusTicks);
-					alpha = minusTicks / 10;				
+					ticksMinus = -10 + ticksRock;
+					ticksMinus = Math.abs(ticksMinus);
+					alpha = ticksMinus / 10;				
 				
 					if (ticksRock >= 10) kill();
 				}

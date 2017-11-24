@@ -10,6 +10,9 @@ import flixel.FlxSprite;
 
 class ObjectQuickSand extends FlxSprite
 {
+	/*******************************************************************************************************
+	 * Delay the sinking in to sand.
+	 */
 	private var ticksDelay:Float = 1;
 	
 	public function new(x:Float, y:Float) 
@@ -41,7 +44,7 @@ class ObjectQuickSand extends FlxSprite
 				FlxG.overlap(this, Reg.state.enemies, enemyInQuickSand);
 
 				
-				// delay the sinking in to to sand.
+				// delay the sinking in to sand.
 				ticksDelay = 1;
 			}
 			

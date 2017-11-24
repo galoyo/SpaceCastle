@@ -26,26 +26,53 @@ import openfl.text.Font;
 
 class TeleportSubState extends FlxSubState
 {	
+	/*******************************************************************************************************
+	 * Create a background for this subState.
+	 */
 	private var screenBox:FlxSprite;
+	
 	/*******************************************************************************************************
 	 * This title text display near the top of the screen.
 	 */
 	private var title:FlxText;
+	
+	/*******************************************************************************************************
+	 * Used to play a teleporter sound and to delay the loading of the playState so that the sound can finish playing. Without this var the sound would play for a very short time because the playState would load without a delay.
+	 */
 	private var ticks:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to delay the loading of the playState.
+	 */
 	private var ticksDelay:Bool = false;
 	
+	/*******************************************************************************************************
+	 * Brick Moor.
+	 */
 	public var button1:Button;
+	
+	/*******************************************************************************************************
+	 * Blue Town.
+	 */
 	public var button2:Button;
+	
+	/*******************************************************************************************************
+	 * Unused button/
+	 */
 	public var button3:Button;
+	
+	/*******************************************************************************************************
+	 * Unused button.
+	 */
 	public var button4:Button;
 	
 	public function new():Void
 	{
 		super();
 		
-		// Set a background color
+		// Create a background for this subState.
 		screenBox = new FlxSprite(0, 0);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0x44000000);
+		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xCC000000);
 		add(screenBox);
 		
 		title = new FlxText(0, 50, 0, "Teleporter");

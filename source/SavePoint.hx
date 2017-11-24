@@ -10,9 +10,6 @@ import flixel.util.FlxSave;
 
 class SavePoint extends FlxSprite 
 {
-	// This is what we're going to be saving to.
-	private var _gameSave:FlxSave;	
-	
 	public function new(x:Float, y:Float) 
 	{
 		super(x, y);

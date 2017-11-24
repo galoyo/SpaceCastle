@@ -11,17 +11,24 @@ import flixel.group.FlxGroup;
 
 class PlayerOverlayGunFlame extends FlxSprite 
 {	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
 	 */
 	private var _startY:Float = 0;
 	
-	private var yy:Float = 0;
+	/**
+	 * Used to display the gun correctly on the player.
+	 */
+	private var yOffset:Float = 0;
+	
+	/**
+	 * Used to delay the shooting.
+	 */
 	private var ticks:Float = 0;
 	
 	public function new(x:Float, y:Float) 
@@ -48,6 +55,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
 		InputControls.checkInput();
 		
+		// If gun is not in use and flame gun action key is pressed then set flame gun in use.
 		if (Reg._typeOfGunCurrentlyUsed != 1)
 		{
 			if (InputControls.z.pressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Flame Gun."
@@ -85,7 +93,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.RIGHT;	// face the object in this class in the direction right.
 					x = Reg.state.player.x + 19; // position this object to the body of the player.
 					y = _startY - 23;
-					yy = -23;
+					yOffset = -23;
 					animation.play("gun");
 				}
 			
@@ -96,7 +104,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.RIGHT;  
 					x = Reg.state.player.x + 22;	
 					y = _startY - 7;
-					yy = -7;
+					yOffset = -7;
 					animation.play("gun");
 				}
 				
@@ -107,7 +115,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					
 					x = Reg.state.player.x - 13;
 					y = _startY - 23;
-					yy = -23;
+					yOffset = -23;
 					animation.play("gun");
 				}
 			
@@ -117,11 +125,11 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.LEFT; 
 					x = Reg.state.player.x - 17;
 					y = _startY - 7;
-					yy = -7;
+					yOffset = -7;
 					animation.play("gun");
 				}			
 				
-				y = Reg.state.player.y + 21 + yy;
+				y = Reg.state.player.y + 21 + yOffset;
 			}
 			//################## END OF NORMAL GRAVITY ###################
 
@@ -134,7 +142,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.RIGHT;	// face the object in this class in the direction right.
 					x = Reg.state.player.x + 18; // position this object to the body of the player.
 					y = _startY - 1;
-					yy = 9;
+					yOffset = 9;
 					animation.play("gun2");
 				}
 			
@@ -145,7 +153,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.RIGHT;  
 					x = Reg.state.player.x + 22;	
 					y = _startY - 7;
-					yy = -6;
+					yOffset = -6;
 					animation.play("gun2");
 				}
 				
@@ -156,7 +164,7 @@ class PlayerOverlayGunFlame extends FlxSprite
 					
 					x = Reg.state.player.x - 13;
 					y = _startY - 1;
-					yy = 9;
+					yOffset = 9;
 					animation.play("gun2");
 				}
 			
@@ -166,11 +174,11 @@ class PlayerOverlayGunFlame extends FlxSprite
 					facing = FlxObject.LEFT; 
 					x = Reg.state.player.x - 17;
 					y = _startY - 7;
-					yy = -5;
+					yOffset = -5;
 					animation.play("gun2");
 				}	
 				
-				y = Reg.state.player.y + 5 + yy;
+				y = Reg.state.player.y + 5 + yOffset;
 			}		
 		
 			super.update(elapsed);

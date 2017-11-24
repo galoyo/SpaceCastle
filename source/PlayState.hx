@@ -1048,7 +1048,7 @@ class PlayState extends FlxUIState
 			Reg._playRecordedDemo = false;
 			Reg._noTransitionEffectDemoPlaying = true;
 			
-			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(),["Z","X","C"],0,replayCallback);
+			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(), ["Z","X","C"], 0, replayCallback);
 
 		}
 		//##################### END OF RECORDING CODE BLOCK ####################
@@ -1122,7 +1122,7 @@ class PlayState extends FlxUIState
 		if (FlxG.keys.anyJustPressed(["ZERO"])) FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); */
 		//################ END RECORDING DEMO BLOCK #################
 				
-		if (Reg._gameSaveOrLoad == 1 && Reg._savingGame == true)
+		if (Reg._gameSaveOrLoad == 1 && Reg._savingGame == true && Reg._gameSlotNumberSaved != 0)
 		{
 			Reg.dialogIconText = openfl.Assets.getText("assets/text/gameSaved.txt").split("#");
 			Reg.dialogCharacterTalk[0] = "";
@@ -1133,6 +1133,8 @@ class PlayState extends FlxUIState
 			Reg._gameSaveOrLoad = 0;
 		}
 			
+		Reg._gameSlotNumberSaved = 0;
+		
 		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
 		
 		InputControls.checkInput();
@@ -1586,6 +1588,7 @@ class PlayState extends FlxUIState
 	
 	function replayCallback():Void
 	{
+		FlxG.vcr.stopReplay();
 		Reg.resetRegVars();
 		Reg._stopDemoFromPlaying = true;
 		FlxG.switchState(new MenuState());
