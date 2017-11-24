@@ -27,6 +27,7 @@ class GameSave extends GameSaveLoadParent
 		title.screenCenter(X);
 		add(title);	
 
+		// This var is used at the parent. 1 = user is at the save screen while 2 = load screen.
 		Reg._gameSaveOrLoad = 1;
 	}
 	

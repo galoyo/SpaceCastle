@@ -131,7 +131,7 @@ class Dialog extends FlxSubState
 	
 	public function new():Void
 	{
-		super();
+		super();		
 		
 		Reg.state._playerAirRemainingTimer.active = false;
 		
@@ -250,7 +250,7 @@ class Dialog extends FlxSubState
 			yesNoArrow.exists = false;
 			
 			#if !FLX_NO_KEYBOARD
-				FlxG.keys.reset; // if key is pressed then do not yet count it as a key press. 
+				FlxG.keys.reset(); // if key is pressed then do not yet count it as a key press. 
 			#end
 			
 			add(yesNoArrow);
@@ -329,7 +329,7 @@ class Dialog extends FlxSubState
 	override public function update(elapsed:Float):Void 
 	{				
 		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
-		InputControls.checkInput();
+		InputControls.checkInput();		
 		
 		ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
 		if (ticks > 15)
@@ -382,7 +382,7 @@ class Dialog extends FlxSubState
 					if (FlxG.keys.anyJustPressed(["E"])) {Reg.exitProgram();}	
 					if (FlxG.keys.anyJustPressed(["T"])) {Reg.playTwinkle(); new FlxTimer().start(0.15, delayRestartGame,1);}
 					if (FlxG.keys.anyJustPressed(["R"])) {Reg.playTwinkle(); new FlxTimer().start(0.15, delayCloseSubstate,1);}
-				#end	
+				#end								
 			}
 		}
 		

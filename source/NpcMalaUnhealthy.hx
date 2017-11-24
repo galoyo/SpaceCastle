@@ -10,8 +10,14 @@ import flixel.util.FlxTimer;
 
 class NpcMalaUnhealthy extends NpcParent
 {
-	private var _talkedToDoctor:Bool = false; // used to display the doctors message once.
+	/*******************************************************************************************************
+	 * This var holds all Malas teleported.
+	 */
 	private var _malasTeleported:String = "";	
+	
+	/*******************************************************************************************************
+	 * Triggered when player talks to all the Malas at the waiting room.
+	 */
 	private var _playerTimeRemainingTimer:FlxTimer;
 	
 	public function new(x:Float, y:Float, id:Int) 
@@ -467,17 +473,21 @@ class NpcMalaUnhealthy extends NpcParent
 				{					
 				
 					var ra = FlxG.random.int(0, 7);
+					
+					// Hold an array of all Malas teleported.
 					var _malasTeleported2 = _malasTeleported.split(",");
 					var _thisMalaWasTeleported = false;
 					
 					for (i in 0...8)
 					{	
+						// If the value of _malasTeleported equals the I var then ignore because that Mala was already teleported.
 						if (_malasTeleported2[i] == Std.string(i))
 							_thisMalaWasTeleported = true;
 					}
 					
 					if (_thisMalaWasTeleported == false)
 					{
+						// This var holds all Malas teleported.
 						_malasTeleported = _malasTeleported + ra + ",";
 					
 						if (Reg._totalMalasTeleported < Reg._numberOfMalasToSave)

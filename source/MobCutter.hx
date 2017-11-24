@@ -15,52 +15,52 @@ import flixel.util.FlxTimer;
 
 class MobCutter extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
 	 * Used to slow the mobs jumping when in water.
 	 */ 
 	private var _slowJumpingInWater:Float = 100;
 	
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth:Int = 3;
 	
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 400;
 	
-	/**
+	/*******************************************************************************************************
 	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
 	public var _gravity:Int = 4400;
 	 
-	/**
+	/*******************************************************************************************************
 	 * When reset(), this will be the _gravity value.
 	 */
 	private var _gravityResetToThisValue:Int = 4400;
 	
-	/**
+	/*******************************************************************************************************
 	 * If true then this mob is not touching a tile.
 	 */
 	public var _inAir:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */
 	public var _mobInWater:Bool = false;
 
-	/**
+	/*******************************************************************************************************
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
 	public var airTimerTicks:Float = 0; 
 	
-	/**
+	/*******************************************************************************************************
 	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 70;
 	
-	/**
+	/*******************************************************************************************************
 	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 70; 

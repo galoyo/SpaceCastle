@@ -5,10 +5,7 @@ import flixel.FlxSprite;
 import flixel.effects.particles.FlxEmitter;
 import flixel.effects.particles.FlxParticle;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxTimer;
 
 /**
  * @author galoyo
@@ -16,18 +13,15 @@ import flixel.util.FlxTimer;
 
 class MobBullet extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth1:Int = 50000; // not possible to kill this mob. 
 	
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 800;
-
-	private var _timerparticleSmokeRight:FlxTimer;
-	private var _timerparticleSmokeLeft:FlxTimer;
 	
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{

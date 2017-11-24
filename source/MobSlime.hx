@@ -18,61 +18,67 @@ import flixel.util.FlxTimer;
 
 class MobSlime extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth:Int = 2;
 	
-	/**
+	/*******************************************************************************************************
 	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
 	public var _gravity:Float = 3000;
 	
-	/**
+	/*******************************************************************************************************
 	  * When reset(), this will be the _gravity value.
 	  */
 	private var _gravityResetToThisValue:Int = 3000;
 
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var _maxXspeed:Float = 130;
 	
-	/**
+	/*******************************************************************************************************
 	 * The X and/or Y velocity of this mob. Must be in integers of 32.
 	 */
 	private var maxSpeed:Int = 480;
 	
+	/*******************************************************************************************************
+	 * This is the maximum velocity.y for this mob.
+	 */
 	private var _mobVelocityY:Float = 740;
 	
-	public var _mobAccelY:Float = 6000; // this var should be gravity.
+	/*******************************************************************************************************
+	 * How fast this mob accelerates.
+	 */
+	public var _mobAccelY:Float = 6000; // 
 	
-	/**
+	/*******************************************************************************************************
 	 * Used to slow the mobs jumping when in water.
 	 */ 
 	private var _slowJumpingInWater:Float = 100;
 	
-	/**
+	/*******************************************************************************************************
 	 * If true then this mob is not touching a tile.
 	 */
 	public var _inAir:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */
 	public var _mobInWater:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
 	public var airTimerTicks:Float = 0; 
 	
-	/**
+	/*******************************************************************************************************
 	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 40;
 	
-	/**
+	/*******************************************************************************************************
 	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 40; 
@@ -136,7 +142,6 @@ class MobSlime extends EnemyParentClass
 		health = (defaultHealth * ID) * Reg._difficultyLevel;
 		_airLeftInLungs = _airLeftInLungsMaximum;
 		
-		// when this mob is placed somewhere on the map loaded at PlayState (addMobSlime(x, y, 1), its id, the last value, such as 1 is passed to this classe and used here to set the properties of the mob.  
 		acceleration.y = _mobAccelY;
 		maxVelocity.set(_maxXspeed, _mobVelocityY);			
 		_extraSpeed = Std.int(_mobVelocityY);	

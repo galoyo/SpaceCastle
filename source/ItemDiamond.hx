@@ -9,8 +9,6 @@ import openfl.display.BlendMode;
 
 class ItemDiamond extends FlxSprite
 {
-	var bobTween:FlxTween;
-	
 	public function new(x:Float, y:Float) 
 	{
 		super(x, y);

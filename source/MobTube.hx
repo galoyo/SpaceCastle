@@ -16,20 +16,20 @@ import flixel.util.FlxTimer;
 
 class MobTube extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */
 	public var defaultHealth1:Int = 1;
 	
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 1200;
 
-	private var ticksMoveUp:Float = 0;
-	
-	private var _timerparticleSmokeRight:FlxTimer;
-	private var _timerparticleSmokeLeft:FlxTimer;
+	/*******************************************************************************************************
+	 * Used to delay the movement of this mob.
+	 */
+	private var ticksMovement:Float = 0;
 	
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -79,11 +79,11 @@ class MobTube extends EnemyParentClass
 			// make the mob exit the tube only if the player is not standing on the tube.
 			if (!overlapsAt(x, y - 10, Reg.state.player) && !overlapsAt(x + 10, y - 10, Reg.state.player) || y != _startY)
 			{
-				ticksMoveUp = Reg.incrementTicks(ticksMoveUp, 60 / Reg._framerate);
+				ticksMovement = Reg.incrementTicks(ticksMovement, 60 / Reg._framerate);
 				solid = true;
 				
 				// Mob is now shown outside of the tube.
-				if ((ticksMoveUp + ticksMoveUp + ticksMoveUp + ticksMoveUp) > 64)
+				if ((ticksMovement + ticksMovement + ticksMovement + ticksMovement) > 64)
 				{
 					ticks = 1;
 					
@@ -102,7 +102,7 @@ class MobTube extends EnemyParentClass
 				else
 				{
 					// mob is moving in an upward direction until mob is fully displayed out of the tube.
-					y = _startY - (ticksMoveUp + ticksMoveUp + ticksMoveUp + ticksMoveUp);
+					y = _startY - (ticksMovement + ticksMovement + ticksMovement + ticksMovement);
 					
 				}
 			}
@@ -131,7 +131,7 @@ class MobTube extends EnemyParentClass
 		ticks = 0;
 		allowCollisions = FlxObject.ANY;
 		properties();
-		ticksMoveUp = 0;
+		ticksMovement = 0;
 		_spawnTimeElapsed = 0;	// reset the spawn timer
 	}	
 }

@@ -10,10 +10,6 @@ import flixel.util.FlxTimer;
 
 class NpcMalaHealthy extends NpcParent
 {
-	private var _talkedToDoctor:Bool = false; // used to display the doctors message once.
-	private var _malasTeleported:String = "";
-	private var _playerTimeRemainingTimer:FlxTimer;
-	
 	public function new(x:Float, y:Float, id:Int) 
 	{		
 		super(x, y, id);

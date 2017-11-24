@@ -16,75 +16,117 @@ import flixel.math.FlxMath;
 
 class MobBubble extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
+	 * First fireball that rotates around this mob. 
+	 */
+	private var _tween1:FlxTween;
+	
+	/*******************************************************************************************************
+	 * Second fireball that rotates around this mob. 
+	 */
+	private var _tween2:FlxTween;
+	
+	/*******************************************************************************************************
+	 * Third fireball that rotates around this mob. 
+	 */
+	private var _tween3:FlxTween;
+	
+	/*******************************************************************************************************
+	 * Forth fireball that rotates around this mob. 
+	 */
+	private var _tween4:FlxTween;
+	
+	/*******************************************************************************************************
 	 * Time it takes for this mob to fire another bullet.
 	 */
 	private var _bulletTimeForNextFiring:Float =1;
 
-	/**
+	/*******************************************************************************************************
 	 * -1 disabled, 0 = fire left/right, 1 = up/down. 2 = up/down/left/right. 3 = all four angles. 4 = every 10 minutes of a clock. 5 = 20 and 40 minutes of a clock.
 	 */	
 	private var _bulletFormationNumber:Int = 4; 
 	
+	/*******************************************************************************************************
+	 * This mob will start talking when player enters map 25-20 for the first time. This var stops the dialog from displaying the second time.
+	 */
 	private var _displayDialogDoOnlyOnce:Int = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */	
 	public var defaultHealth1:Int = 5;
 	
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 350;
 	
+	/*******************************************************************************************************
+	 * Delay all mobs fireball from moving to the ground.
+	 * 
+	 */
 	public var _bubbleMoved:Bool = false;
 	
-	private var _oldYValue:Float = 0; // used to keep this mob above the player head when mob fires bullets.
-	private var ra:Int = 2; // random number.
+	/*******************************************************************************************************
+	 * Used to keep this mob above the player head when mob fires bullets.
+	 */
+	private var _oldYValue:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
 	public var _gravity:Int = 4400;	
 	
-	/**
+	/*******************************************************************************************************
 	 * If true then this mob is not touching a tile.
 	 */
 	public var _inAir:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */
 	public var _mobInWater:Bool = false;
 
-	/**
+	/*******************************************************************************************************
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
 	public var airTimerTicks:Float = 0; 
 	
-	/**
+	/*******************************************************************************************************
 	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 170;
 	
-	/**
+	/*******************************************************************************************************
 	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 170; 
 	
+	/*******************************************************************************************************
+	 * 0 = fireballs rotate around this mob. 1 = mob shoots those rotated fireballs to the ground. 2 = Shoots a burst of bullets at every 10 minutes of a clock. 4 = strife.
+	 */
 	public var ticksTween:Int = 0;
-	public var ticksDelay:Float = 0; // This var stops the initial player attack.
+	
+	/*******************************************************************************************************
+	 * This var stops the initial player attack.
+	 */
+	public var ticksDelay:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to time the movement of the fireballs so that each fireball in turn will travel to the ground.
+	 */
 	private var ticksBubble:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used with another var to determine if this mob should do ticksTween formation 0 or 2. See var ticksTween for more information.
+	 */
 	private var ticksFireballMoved:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to fire bullets when this tick is at certain values.
+	 */
 	private var ticksMobFireBullets:Float = 0;
 	
-	private var _tween1:FlxTween;
-	private var _tween2:FlxTween;
-	private var _tween3:FlxTween;
-	private var _tween4:FlxTween;
-	
-
 	public function new(x:Float, y:Float, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
@@ -178,8 +220,7 @@ class MobBubble extends EnemyParentClass
 					36, 270,
 					false, Reg.fireballSpeed, true, { type: FlxTween.LOOPING, ease: FlxEase.backInOut });
 				
-					ticksTween = 1;
-					ra = FlxG.random.int(0, 2);
+					ticksTween = 1;					
 				}					
 			}
 		} 
@@ -268,11 +309,13 @@ class MobBubble extends EnemyParentClass
 							x = Reg.state.player.x;													
 					}
 					
-					// all the fireballs have moved in a downward direction. 30 is used for a short delay
+					// all the fireballs have moved in a downward direction.
 					if ( ticksBubble > 30)
 					{
 						ticksFireballMoved = Reg.incrementTicks(ticksFireballMoved, 60 / Reg._framerate);
 						velocity.set(0, 0);
+						
+						var ra = FlxG.random.int(0, 2);
 						
 						if (ticksFireballMoved <= ra) ticksTween = 0;
 						else {ticksTween = 2; ticksFireballMoved = 0;}

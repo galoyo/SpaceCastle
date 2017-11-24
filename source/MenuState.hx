@@ -23,64 +23,100 @@ import flixel.system.scaleModes.FillScaleMode;
 
 class MenuState extends FlxState
 {
-	// Here's the FlxSave variable this is what we're going to be saving to.
-	private var title:FlxSprite;
-	private var house:FlxSprite;
-	private var _gameSave:FlxSave;
-	private var once:Bool = false;
-	private var background:FlxSprite;
-	private var titleOptionsBar:FlxSprite;
-	private var ticks:Int = 0;
-	private var ticksSlide:Int;
+	/*******************************************************************************************************v
+	 * New game.
+	 */
+	private var button1:Button;
 	
+	/*******************************************************************************************************
+	 * Load game.
+	 */
+	private var button2:Button;
+	
+	/*******************************************************************************************************
+	 * Go to game instructions.
+	 */
+	private var button3:Button;
+	
+	/*******************************************************************************************************
+	 * Game configuration options.
+	 */
+	private var button4:Button;
+	
+	/*******************************************************************************************************
+	 * Quit program.
+	 */
+	private var exitProgram:Button;
+	
+	/*******************************************************************************************************
+	 * Toggles fullscreen mode off or on.
+	 */
+	private var toggleFullScreen:Button;
+	
+	/*******************************************************************************************************
+	 * Change the scale mode. The scale mode changes the width and height of the program's window settings.
+	 */
+	private var scale:Button;
+	
+	/*******************************************************************************************************
+	 * Saves the scale mode and the bool value of fullscreen.
+	 */
 	private var _gameMenu:FlxSave;
 	
-	private var _userPressedScaleButton:Bool = false; // used to stop the demo from playing when the user presses the scale button.
+	/*******************************************************************************************************
+	 * Used to stop the demo from playing when the user presses the scale button.
+	 */
+	private var _userPressedScaleButton:Bool = false;
 	
-	private var button1:Button;
-	private var button2:Button;
-	private var button3:Button;
-	private var button4:Button;
-	private var exitProgram:Button;
-	private var toggleFullScreen:Button;
-	private var scale:Button;
-	// the text when an item is picked up or a char is talking.
-	public var dialog:Dialog;
+	/*******************************************************************************************************
+	 * Current text of the scale mode selected.
+	 */
+	private var scaleModeCurrentText:FlxText;
 	
-	private var currentPolicy:FlxText;
+	/*******************************************************************************************************
+	 * The scale modes. Changes the game's aspect ratio and/or size. Can maintain the aspect ratio of width and height and can windowbox the game if necessary.
+	 */
 	private var scaleModes:Array<ScaleMode> = [RATIO_DEFAULT, FIXED, RELATIVE, FILL];
-	private var scaleModeIndex:Int = 0;
 	
+	/*******************************************************************************************************
+	 * This holds the value of the scale mode selected.
+	 */
+	private var scaleModeIndex:Int = 0;
+	public var arra:Array<String> = [];
 	override public function create():Void
 	{
 		super.create();
 		//FlxG.switchState(new PlayState());
 		//FlxG.mouse.visible = false;
 		
+		// Get all text file names and then search that array to find the total maps in game.
+		var textAssetsList = Assets.list(AssetType.TEXT);
+		Reg.getTotalMaps(textAssetsList, "_Layer 0 tiles"); // To output the total maps use Reg._mapsTotalCount.length
+		
 		//do not put fullscreen here. there is a bug. Flash will not embed in html page.
 		//FlxG.fullscreen = true;
 		
 		FlxG.camera.antialiasing = true;				
 	
-		background = new FlxSprite();
+		var background = new FlxSprite(); // Background image of universe stars.
 		background.loadGraphic("assets/images/background2-1.jpg", true, 800, 600);
 		background.scrollFactor.set();
 		background.setPosition(0, 0);
 		add(background);	
 		
-		title = new FlxSprite();
+		var title = new FlxSprite(); // Title image.
 		title.loadGraphic("assets/images/titleImage.png", false);
 		title.scrollFactor.set();
 		title.setPosition(0, 0);
 		add(title);
 		
-		titleOptionsBar = new FlxSprite();
+		var titleOptionsBar = new FlxSprite(); // This image is displayed underneath the main buttons.
 		titleOptionsBar.loadGraphic("assets/images/titleOptionsBar.png", false);
 		titleOptionsBar.scrollFactor.set();
 		titleOptionsBar.setPosition(0, 328);
 		add(titleOptionsBar);
 		
-		house = new FlxSprite();
+		var house = new FlxSprite(); // Image of the house.
 		house.loadGraphic("assets/images/titleHouse.png", false);
 		house.scrollFactor.set();
 		house.setPosition(0, 380);
@@ -99,9 +135,6 @@ class MenuState extends FlxState
 		_gameMenu.bind("TSC-MENU"); // bind to the named save slot.	
 		
 		if (_gameMenu.data.scaleModeIndex != null || _gameMenu.data.fullscreen != null)	loadMenu();
-		
-		_gameSave = new FlxSave(); // initialize
-		_gameSave.bind("TSC-SAVED-GAME"); // bind to the named save slot.
 		
 		button1 = 			new Button(110, 346, "1: New Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);
 		button2 = 			new Button(110, 394, "2: Load Game.", 160, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);
@@ -125,14 +158,13 @@ class MenuState extends FlxState
 		info.alpha = 0.75;
 		add(info);
 		
-		currentPolicy = new FlxText(460, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
-		currentPolicy.alignment = LEFT;
-		currentPolicy.size = 14;
-		add(currentPolicy);
+		scaleModeCurrentText = new FlxText(452, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
+		scaleModeCurrentText.alignment = LEFT;
+		scaleModeCurrentText.size = 14;
+		add(scaleModeCurrentText);		
 		
-		scaleClicked();
+		scaleModeLoad();		
 		_userPressedScaleButton = false;
-		
 	}
 	
 	private function button1Clicked():Void
@@ -180,49 +212,47 @@ class MenuState extends FlxState
 	override public function update(elapsed:Float):Void
 	{	
 		#if !FLX_NO_KEYBOARD  
-			if (Reg._stopDemoFromPlaying == true && FlxG.sound.music.playing == false || Reg._stopDemoFromPlaying == false && FlxG.sound.music.playing == true)
+			if (FlxG.keys.anyJustReleased(["F12"])) 
 			{
-				if (FlxG.keys.anyJustReleased(["F12"])) 
-				{
-					Reg._stopDemoFromPlaying = true;
-					FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
-				}
-				
-				else if (FlxG.keys.anyJustReleased(["ONE"])) 
-				{
-					button1Clicked();
-				}
-				
-				else if (FlxG.keys.anyJustReleased(["TWO"])) 
-				{
-					button2Clicked();
-				}	
-				
-				else if (FlxG.keys.anyJustReleased(["THREE"])) 
-				{
-					button3Clicked();	
-				}
-				
-				else if (FlxG.keys.anyJustReleased(["FOUR"])) 
-				{
-					button4Clicked();
-				}
-				
-				else if (FlxG.keys.anyJustReleased(["E"])) 
-				{
-					Reg.exitProgram();
-				}
-				
-				else if (FlxG.keys.anyJustReleased(["T"])) 
-				{
-					toggleFullScreenClicked();
-				}
-				
-				else if (FlxG.keys.justPressed.S)
-				{
-					scaleClicked();
-				}
+				Reg._stopDemoFromPlaying = true;
+				toggleFullScreenClicked(); // toggles fullscreen mode.
 			}
+		
+			if (FlxG.keys.anyJustReleased(["ONE"])) 
+			{
+				button1Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["TWO"])) 
+			{
+				button2Clicked();
+			}	
+			
+			else if (FlxG.keys.anyJustReleased(["THREE"])) 
+			{
+				button3Clicked();	
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["FOUR"])) 
+			{
+				button4Clicked();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["E"])) 
+			{
+				Reg.exitProgram();
+			}
+			
+			else if (FlxG.keys.anyJustReleased(["T"])) 
+			{
+				toggleFullScreenClicked();
+			}
+			
+			else if (FlxG.keys.justPressed.S)
+			{
+				scaleClicked();
+			}
+
 			#end
 
 		// if music has finished and user has not yet pressed 1 or 2 to play the game then prepare to play the recorded demo.
@@ -240,7 +270,7 @@ class MenuState extends FlxState
 	
 	private function setScaleMode(scaleMode:ScaleMode)
 	{
-		currentPolicy.text = scaleMode;
+		scaleModeCurrentText.text = scaleMode;
 		
 		FlxG.scaleMode = switch (scaleMode)
 		{
@@ -279,7 +309,7 @@ class MenuState extends FlxState
 	
 	private function toggleFullScreenClicked():Void
 	{
-		FlxG.sound.play("twinkle", 1, false);
+		if (Reg._soundEnabled == true) FlxG.sound.play("twinkle", 1, false);
 		
 		if (toggleFullScreen.text == "t: Fullscreen.") 
 		{
@@ -295,6 +325,19 @@ class MenuState extends FlxState
 		saveMenu();
 	}	
 	
+	public function scaleModeLoad():Void
+	{
+		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
+		setScaleMode(scaleModes[scaleModeIndex]);		
+		
+		_gameMenu.data.scaleModeIndex = scaleModeIndex - 1;
+		
+		// save data
+		_gameMenu.flush();
+		_gameMenu.close;		
+		
+	}
+	
 	public function scaleClicked():Void
 	{
 		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
@@ -304,9 +347,12 @@ class MenuState extends FlxState
 		
 		// save data
 		_gameMenu.flush();
-		_gameMenu.close;
+		_gameMenu.close;		
 		
 		_userPressedScaleButton = true;
+		
+		if (Reg._soundEnabled == true)
+		FlxG.sound.play("twinkle", 1, false);	
 	}
 	
 	public function saveMenu():Void

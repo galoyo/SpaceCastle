@@ -9,6 +9,9 @@ import flixel.group.FlxGroup;
 
 class ObjectBarricade extends FlxSprite 
 {	
+	/*******************************************************************************************************
+	 * Needed to display the barricade only once.
+	 */
 	private var _displayBarricadeDoOnlyOnce:Int = 0;
 	
 	public function new(x:Float, y:Float) 

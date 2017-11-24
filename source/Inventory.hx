@@ -45,24 +45,24 @@ class Inventory extends FlxSubState
 	private var imageGrid:FlxSprite;
 	
 	/*******************************************************************************************************
-	 * 
+	 * A white square box that moves with the arrow keys/buttons. Pressing the action key will select any inventory item that is underneath this square.
 	 */
 	private var inventoryItemHighlightedSquare:FlxSprite;
 		
 	/*******************************************************************************************************
-	 * 
+	 * Draws the text on the screen from the Reg._inventoryIconDescription var. Description of the inventory item. Needs to be a short one-liner or else the text will run off of the screen.
 	 */
 	private var itemDescription:FlxText;
 	
 	/*******************************************************************************************************
-	 * 
+	 * The reg._iconFilemame is passed to this class to get the icon sprite.
 	 */
-	private var _icons:FlxSprite; // the reg._iconFilemame is passed to this class to get the icon sprite.
+	private var _icons:FlxSprite;
 	
 	/*******************************************************************************************************
-	 * 
+	 * Will add the _icons sprite to this group so that more than one sprite can be seen on the screen.
 	 */
-	private var _iconsGroup:FlxGroup; // add the above sprite to this group so that more than one sprite can be seen on the screen.
+	private var _iconsGroup:FlxGroup;
 	
 	/*******************************************************************************************************
 	 * The buttons navigation class. Some button are left, right, up and X.

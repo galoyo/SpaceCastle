@@ -16,49 +16,45 @@ import flixel.util.FlxTimer;
 
 class MobBat extends EnemyParentClass
 {	
-	/**
+	/*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 50; 
 	
-	/**
+	/*******************************************************************************************************
 	 * The Y velocity of this mob. 
 	 */
 	private var maxYSpeed:Int = 200;
 	
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */	
 	public var defaultHealth:Int = 4;
 	
-	/**
+	/*******************************************************************************************************
 	 * If true then this mob is not touching a tile.
 	 */
 	public var _inAir:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */
 	public var _mobInWater:Bool = false;
 
-	/**
+	/*******************************************************************************************************
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
 	public var airTimerTicks:Float = 0; 
 	
-	/**
+	/*******************************************************************************************************
 	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 130;
 	
-	/**
+	/*******************************************************************************************************
 	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 130; 
-	
-	private var velocityDifference:Int = 200; // used for random movement.
-	
-	public var ra:Int;
 	
 	public function new(x:Float, y:Float, id:Int, player:Player, emitterMobsDamage:FlxEmitter, emitterDeath:FlxEmitter, emitterItemTriangle:FlxEmitter, emitterItemDiamond:FlxEmitter, emitterItemPowerUp:FlxEmitter, emitterItemNugget:FlxEmitter, emitterItemHeart:FlxEmitter, particleSmokeRight:FlxEmitter, particleSmokeLeft:FlxEmitter, bulletsMob:FlxTypedGroup<BulletMob>, particleBulletHit:FlxEmitter, particleBulletMiss:FlxEmitter) 
 	{
@@ -123,33 +119,7 @@ class MobBat extends EnemyParentClass
 		}
 		
 		if(inRange(_range))
-		{
-			
-			/*if (ID == 1 || ra == 1)
-			{
-				ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
-				
-				// do not fly through walls.
-				if (isTouching(FlxObject.CEILING)) velocity.y = velocityDifference;
-				if (isTouching(FlxObject.FLOOR)) velocity.y = -velocityDifference;
-				
-				
-				// bats move randomly
-				
-				if (ticks > 5)
-				{
-					var move = FlxG.random.int(0, 5);
-					
-					if (move >= 3)
-					{
-						var xx = FlxG.random.int( -velocityDifference, velocityDifference); var yy = FlxG.random.int( -velocityDifference, velocityDifference);		
-						velocity.set(xx, yy);
-					} else velocity.set(0, 0);
-					
-					ticks = 1;
-				}	
-			}*/
-			
+		{			
 			//------------------ FLY UP/DOWN IN THE AIR WHILE SWAY.
 			flyUpThenDown(maxXSpeed, maxYSpeed);
 				

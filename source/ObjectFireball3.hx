@@ -10,15 +10,13 @@ import flixel.tweens.FlxTween;
 
 class ObjectFireball3 extends FlxSprite 
 {	
-	private var _tween:FlxTween;
-	
 	public function new(x:Float, y:Float) 
 	{
 		super(x, y);		
 	
 		loadGraphic("assets/images/objectFireball.png", false, 16, 16);
 	
-		_tween = FlxTween.circularMotion(this,
+		var _tween = FlxTween.circularMotion(this,
 		x+8, 
 		y+8,
 		12, Reg.state._fireballPositionInDegrees,

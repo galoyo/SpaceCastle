@@ -9,39 +9,85 @@ import flixel.FlxSprite;
 
 class NpcParent extends FlxSprite
 {
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
 	 */
 	private var _startY:Float = 0;
 	
-	private var ticksWalk:Float = 0; // used for the npc that walks back and forth.
+	/*******************************************************************************************************
+	 * Used when the npc walks back and forth.
+	 */
+	private var ticksWalk:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * Make the Mala idle for a short random time.
 	 */
 	private var ticksIdle:Float = 0;
 	
+	/*******************************************************************************************************
+	 * Used to load either the shovel or watering can image.
+	 */
 	private var ticks:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * The Mala will stop and be idle if this value is true.
 	 */
 	private	var _makeMalaIdle:Bool = false;
 	
-	private var _xLeftBoundry:Float = 0; // npc cannot walk path the x position of this var.
+	/*******************************************************************************************************
+	 * NPC cannot walk past the x location of this var. Stop NPC from walking if NPC walks too far to the left side of the map. NPC stops at about 3 tiles away from start location.
+	 */
+	private var _xLeftBoundry:Float = 0;
+	
+	/*******************************************************************************************************
+	 * NPC cannot walk past the x location of this var. Stop NPC from walking if NPC walks too far to the right side of the map. NPC stops at about 3 tiles away from start location.
+	 */
 	private var _xRightBoundry:Float = 0;
+	
+	/*******************************************************************************************************
+	 * True if the Mala is walking.
+	 */
 	private var _isWalking:Bool = false;
+	
+	/*******************************************************************************************************
+	 * If value is true then the Mala is using the shovel.
+	 */
 	private var _usingShovel:Bool = false;
+	
+	/*******************************************************************************************************
+	 * This is how fast that the Mala digs in the dirt.
+	 */
 	private var _shovelDiggingSpeed:Int;
+	
+	/*******************************************************************************************************
+	 * If true then the NPC will water tjhe weeds.
+	 */
 	private var _usingWateringCan:Bool = false;
+	
+	/*******************************************************************************************************
+	 * If this is true then the Mala is walking.
+	 */
 	private var _walking:Bool = false;
 	
-	private var _tileX:Int; // the tile x coords not in pixels.
+	/*******************************************************************************************************
+	 * This var is the X value in tiles. The X value of a mob refers to pixels. Since each tile on a map is 32 pixels in width and height, the X is divided by 32 pixels To gets the Tiled Map Editor ID value when used with Y. This var can then be used to check if the tile directly left of the mob had a ID of 6. 
+	 * _tileX = Std.int(x / 32); 
+	 * _tileY = Std.int(y / 32); 
+	 * Reg.state.overlays.getTile(_tileX - 1, _tileY) == 6;
+	 */
+	private var _tileX:Int;
+	
+	/*******************************************************************************************************
+	 * This var is the Y value in tiles. The Y value of a mob refers to pixels. Since each tile on a map is 32 pixels in width and height, the Y is divided by 32 pixels To gets the Tiled Map Editor ID value when used with X. This var can then be used to check if the tile directly left of the mob had a ID of 6. 
+	 * _tileX = Std.int(x / 32); 
+	 * _tileY = Std.int(y / 32); 
+	 * Reg.state.overlays.getTile(_tileX - 1, _tileY) == 6;
+	 */
 	private var _tileY:Int;
 	
 	public function new(x:Float, y:Float, id:Int) 

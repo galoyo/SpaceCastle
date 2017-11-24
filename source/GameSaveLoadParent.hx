@@ -45,22 +45,44 @@ class GameSaveLoadParent extends FlxSubState
 	 */
 	private var slotBox:FlxSprite;
 	
+	/*******************************************************************************************************
+	 * Save to slot 1.
+	 */
 	private var button1:Button;
+	
+	/*******************************************************************************************************
+	 * Save to slot 2.
+	 */
 	private var button2:Button;
+	
+	/*******************************************************************************************************
+	 * Save to slot 3.
+	 */
 	private var button3:Button;
+	
+	/*******************************************************************************************************
+	 * Save to slot 4.
+	 */
 	private var button4:Button;
+	
+	/*******************************************************************************************************
+	 * Depending on a var used with this var, clicking this button's text of "Back" will cancel and close this subState. 
+	 * This button's text will be changed to "OK" when a save game is made. Clicking the OK text will then confirm that a save was made.
+	 */
 	private var button10:Button;
 	
 	public function new():Void
 	{
 		super();
 		
+		// the background image of this subState.
 		screenBox = new FlxSprite(0, 0);
 		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);		
 		screenBox.setPosition(0, 0); 
 		screenBox.scrollFactor.set(0, 0);
 		add(screenBox);
 
+		// Create the four slots of text boxes. Note that the fifth count ends before another loop, so only four loops will be performed. 
 		for (i in 1...5) 
 		{
 			slotBox = new FlxSprite(0, 0);
@@ -70,20 +92,22 @@ class GameSaveLoadParent extends FlxSubState
 			add(slotBox);
 		}		
 	
+		// Create the four slot buttons. 1 button displayed overtop of 1 text box. Positioned at the left side of the screen. If Reg._gameSaveOrLoad has a value of 1 then clicking these buttons will save the game, else a value of 2 will load a game.
 		button1 = new Button(60, 130 + (1 * 70), "1", 70, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
 		button2 = new Button(60, 130 + (2 * 70), "2", 70, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
 		button3 = new Button(60, 130 + (3 * 70), "3", 70, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
 		button4 = new Button(60, 130 + (4 * 70), "4", 70, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
-		button10 = new Button(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, cancelSave);		
-		button10.screenCenter(X);
-		
 		add(button1);
 		add(button2);
 		add(button3);
 		add(button4);
+		
+		// This button's text will be displayed for both save and load screens. However, only after a save slot has been clicked will this button's text be changed to "OK". After the user saves the game, all four slot buttons will be hidden and the text box where the save was made will be highlighted and then this button's text will be displayed as the text labled OK, giving the option for the user to verify the save made.
+		button10 = new Button(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, cancelSave);		
+		button10.screenCenter(X);
 		add(button10);
 		
-		// sub-header
+		//--------------------------------------------------- Header columns for the data rows.
 		var slot = new FlxText(60, 145, 0, "Slot");
 		slot.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
 		slot.scrollFactor.set();
@@ -108,14 +132,17 @@ class GameSaveLoadParent extends FlxSubState
 		date.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
 		date.scrollFactor.set();
 		add(date);		
+		//--------------------------------------------------- End of header columns
 		
+		// Go to the function four times. Each loop, load the data and display that data at that text box.
 		for (i in 1...5) {gameSlotLoad(i);}
-
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{				
 		#if !FLX_NO_KEYBOARD  
+			// Slots can also be accessed be pressing the 1 to 4 key on the keyboard.
+		
 			if (FlxG.keys.anyJustReleased(["ONE"])) 
 			{
 				button1Clicked();
@@ -136,12 +163,16 @@ class GameSaveLoadParent extends FlxSubState
 				button4Clicked();
 			}
 			
+			// The Z keyboard key is used to either load a game or cancel/confirm saving a game.
 			else if (FlxG.keys.anyJustReleased(["Z"])) cancelSave();
 		#end
 		
 		super.update(elapsed);
 	}
 	
+	/*******************************************************************************************************
+	 * Used to delay closing of this subState so that the clicking sound of a button can complete.
+	 */
 	private function delayChangeState(Timer:FlxTimer):Void
 	{
 		Reg._stopDemoFromPlaying = false;
@@ -152,55 +183,41 @@ class GameSaveLoadParent extends FlxSubState
 	}
 	
 	private function button1Clicked():Void
-	{
-		
-		if (Reg._gameSaveOrLoad == 1) 
-		{
-			gameSave(1);		
-		}
-		
+	{		
+		if (Reg._gameSaveOrLoad == 1) gameSave(1);				
 		if (Reg._gameSaveOrLoad == 2) gameLoad(1); 
 	}
 	
 	private function button2Clicked():Void
-	{
-		
-		
-		if (Reg._gameSaveOrLoad == 1) 
-		{
-			gameSave(2);
-		}
-		
+	{		
+		if (Reg._gameSaveOrLoad == 1) gameSave(2);
 		if (Reg._gameSaveOrLoad == 2) gameLoad(2); 
 	}
 	
 	private function button3Clicked():Void
 	{
-		if (Reg._gameSaveOrLoad == 1) 
-		{
-			gameSave(3);
-		}
-		
+		if (Reg._gameSaveOrLoad == 1) gameSave(3);
 		if (Reg._gameSaveOrLoad == 2) gameLoad(3); 			
 	}
 	
 	private function button4Clicked():Void
 	{
-		if (Reg._gameSaveOrLoad == 1) 
-		{
-			gameSave(4);			
-		}
-		if (Reg._gameSaveOrLoad == 2) gameLoad(4); 					
-	
+		if (Reg._gameSaveOrLoad == 1) gameSave(4);			
+		if (Reg._gameSaveOrLoad == 2) gameLoad(4); 		
 	}
 	
+	/*******************************************************************************************************
+	 * Used to delay a subState close() so that a sound can finish playing.
+	 */
 	private function cancelSave():Void
 	{
 		Reg.playTwinkle();
-
 		new FlxTimer().start(0.15, delayChangeState,1);
 	}
 	
+	/*******************************************************************************************************
+	 * There are four text boxes. Each text box displays the health, nuggets, etc of the player. Only save the data needed to display information at a text box. So if the second button was clicked then data for the second text box would be saved and that text box would have an ID of slot 2.
+	 */
 	public function gameSlotSave(slotID:Int):Void
 	{			
 		if (_gameSlotSave == null)
@@ -330,6 +347,7 @@ class GameSaveLoadParent extends FlxSubState
 		_gameSave.flush();
 		_gameSave.close;
 		
+		// The following in this function is used to highlight the text box that was saved and to set the cancel button as the OK button. When this subState is closed, if the button that has the text of "Back" now has the text of OK then the saved message will be displayed.
 		Reg._gameSlotNumberSaved = slotID;
 		
 		button1.visible = false;
@@ -338,14 +356,14 @@ class GameSaveLoadParent extends FlxSubState
 		button4.visible = false;
 		button10.text = "Z: OK";
 		
+		// If slot 2 was clicked then all slot buttons are hidden. Place this different colored text box overtop of the second text box. Next, display the updated text overtop of this new text box. 
 		var slotBox = new FlxSprite(0, 0);
 		slotBox.makeGraphic(FlxG.width - 40, 55, 0xFF004400);		
 		slotBox.setPosition(20, 120 + (slotID * 70)); 
 		slotBox.scrollFactor.set(0, 0);
 		add(slotBox);
 			
-		gameSlotLoad(slotID);
-		Reg._gameSlotNumberSaved = 0;
+		gameSlotLoad(slotID);		
 		Reg.playTwinkle();
 	}
 	

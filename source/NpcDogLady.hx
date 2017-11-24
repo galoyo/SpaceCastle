@@ -9,18 +9,29 @@ import flixel.FlxSprite;
 
 class NpcDogLady extends FlxSprite
 {
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the X value of this class. If this class needs to be reset back to its start map location then X needs to equal this var. 
 	 */
 	private var _startX:Float = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
 	 */
 	private var _startY:Float = 0;
 	
+	/*******************************************************************************************************
+	 * Value is true if all dogs are found.
+	 */
 	private var _allDogsFound:Bool = false;
+	
+	/*******************************************************************************************************
+	 * True if player has the dog lady's super block item.
+	 */
 	private var _receivedSuperBlock:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Used to pickup the super block item from this dog lady.
+	 */
 	private var ticks:Float = 0;
 		
 	public function new(x:Float, y:Float) 
@@ -193,8 +204,9 @@ class NpcDogLady extends FlxSprite
 						if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1 , false);
 					}
 				}
+				
 				ticks = Reg.incrementTicks(ticks, 60 / Reg._framerate);
-				if (ticks > 100000) ticks = 0;
+				if (ticks > 100) ticks = 100;
 			}	
 				
 			super.update(elapsed);			

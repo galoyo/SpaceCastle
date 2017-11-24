@@ -13,9 +13,20 @@ import flixel.util.FlxSpriteUtil;
 
 class ObjectCar extends FlxSprite 
 {
-	private var _startY:Float;
+	/*******************************************************************************************************
+	 * When this class is first created this var will hold the Y value of this class. If this class needs to be reset back to its start map location then Y needs to equal this var. 
+	 */
+	private var _startY:Float = 0;
+	
+	/*******************************************************************************************************
+	 * Used to increase the speed of the car by moving the car past map's center.
+	 */
 	private var ticksCamera:Float = 0;
-	private var minusTicks:Float = 11;
+	
+	/*******************************************************************************************************
+	 * Used to decrease the spped of the car by moving the car from it's map's center.
+	 */
+	private var ticksMinus:Float = 11;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -114,15 +125,15 @@ class ObjectCar extends FlxSprite
 			if (InputControls.left.pressed && ticksCamera == 1 && Reg._carMovingEast == true
 			 || InputControls.right.pressed && ticksCamera == 1 && Reg._carMovingEast == false)
 			{
-				if (minusTicks / 10 <= 1) Reg.state.camera.followLerp = minusTicks / 10; 
+				if (ticksMinus / 10 <= 1) Reg.state.camera.followLerp = ticksMinus / 10; 
 				
-				if (minusTicks >= 0) Reg.state.camera.followLead.set(minusTicks,0);
+				if (ticksMinus >= 0) Reg.state.camera.followLead.set(ticksMinus,0);
 			}	
 			//#######################################################	
 			
 			ticksCamera = Reg.incrementTicks(ticksCamera, 60 / Reg._framerate);
-			minusTicks = -40 + ticksCamera;
-			minusTicks = Math.abs(minusTicks);			
+			ticksMinus = -40 + ticksCamera;
+			ticksMinus = Math.abs(ticksMinus);			
 			
 			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 && FlxSpriteUtil.isFlickering(this) == false && velocity.x == 0 && Reg._playerInsideCar == true)
 			{

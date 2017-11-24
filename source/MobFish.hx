@@ -15,36 +15,37 @@ import flixel.util.FlxTimer;
 
 class MobFish extends EnemyParentClass
 {
-	/**
+	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
-	 */	public var defaultHealth:Int = 2;
+	 */	
+	public var defaultHealth:Int = 2;
 	 
-	 /**
+	 /*******************************************************************************************************
 	 * The X velocity of this mob. 
 	 */
 	private var maxXSpeed:Int = 350;
 	
-	/**
+	/*******************************************************************************************************
 	 * The Y velocity of this mob. 
 	 */
 	private var maxYSpeed:Int = 70;
 	
-	/**
+	/*******************************************************************************************************
 	 * This mob may either be swimming or walking in the water. In elther case, if this value is true then this mob is in the water.
 	 */	
 	public var _mobInWater:Bool = false;
 	
-	/**
+	/*******************************************************************************************************
 	 * Used to delay the decreasing of the _airLeftInLungs value.
 	 */
 	public var airTimerTicks:Float = 0; 
 	
-	/**
+	/*******************************************************************************************************
 	 * A value of zero will equal unlimited air. This value must be the same as the value of the _airLeftInLungsMaximum var. This var will decrease in value when mob is in water. This mob will stay alive only when this value is greater than zero.
 	 */
 	public var _airLeftInLungs:Int = 0;
 	
-	/**
+	/*******************************************************************************************************
 	 * This var is used to set the _airLeftInLungs back to default value when mob jumps out of the water.
 	 */
 	public var _airLeftInLungsMaximum:Int = 0; 

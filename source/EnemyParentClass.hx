@@ -19,7 +19,7 @@ class EnemyParentClass extends FlxSprite
 {
 	
 	/*******************************************************************************************************
-	 * Var that points to a bullets from mob class.
+	 * Var that points to a bullets class.
 	 */
 	public var _bulletsMob:FlxTypedGroup<BulletMob>;
 	
