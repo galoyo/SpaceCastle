@@ -14,3 +14,9 @@ Haxeflixel tutorials and more information about the game can be found at the [wi
 If you like the Space Castle then fork it because, who knows, this repository might be removed one day.
 
 Space Castle news is at the first paragraph of the wiki.
+
+![preview](https://raw.githubusercontent.com/galoyo/SpaceCastle/master/dev/images/preview4.gif)
+
+![preview](https://raw.githubusercontent.com/galoyo/SpaceCastle/master/dev/images/preview5.gif)
+
+![preview](https://raw.githubusercontent.com/galoyo/SpaceCastle/master/dev/images/preview6.gif)
