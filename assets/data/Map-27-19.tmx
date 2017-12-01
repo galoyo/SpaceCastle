@@ -3,19 +3,19 @@
  <tileset firstgid="1" name="0" tilewidth="32" tileheight="32" tilecount="800" columns="8">
   <image source="../images/map0Tiles.png" width="256" height="3200"/>
  </tileset>
- <tileset firstgid="801" name="1" tilewidth="32" tileheight="32" tilecount="1512" columns="8">
-  <image source="../images/map1UnderlaysTiles.png" width="256" height="6050"/>
+ <tileset firstgid="801" name="1" tilewidth="32" tileheight="32" tilecount="1744" columns="8">
+  <image source="../images/map1UnderlaysTiles.png" width="256" height="7000"/>
  </tileset>
- <tileset firstgid="2313" name="2" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+ <tileset firstgid="2545" name="2" tilewidth="32" tileheight="32" tilecount="64" columns="8">
   <image source="../images/map2UnderlaysSpritesAndPlayer.png" width="256" height="256"/>
  </tileset>
- <tileset firstgid="2377" name="3" tilewidth="32" tileheight="32" tilecount="368" columns="8">
+ <tileset firstgid="2609" name="3" tilewidth="32" tileheight="32" tilecount="368" columns="8">
   <image source="../images/map3UnderlaysSpritesAndMobs.png" width="256" height="1500"/>
  </tileset>
- <tileset firstgid="2745" name="4" tilewidth="32" tileheight="32" tilecount="120" columns="8">
+ <tileset firstgid="2977" name="4" tilewidth="32" tileheight="32" tilecount="120" columns="8">
   <image source="../images/map4OverlaysSprites.png" width="256" height="500"/>
  </tileset>
- <tileset firstgid="2865" name="5" tilewidth="32" tileheight="32" tilecount="1000" columns="8">
+ <tileset firstgid="3097" name="5" tilewidth="32" tileheight="32" tilecount="1000" columns="8">
   <image source="../images/map5OverlaysTiles.png" width="256" height="4000"/>
  </tileset>
  <layer name="Layer 0 tiles" width="25" height="15">
@@ -70,13 +70,14 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,2313,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,2545,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer name="Layer 3 underlays sprites and mobs" width="25" height="15">
   <data encoding="csv">
+673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,673,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -88,8 +89,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,2725,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,2957,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>

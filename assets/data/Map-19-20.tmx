@@ -75,7 +75,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Layer 3 underlays sprites and mobs" width="25" height="15" visible="0">
+ <layer name="Layer 3 underlays sprites and mobs" width="25" height="15">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2886,2886,2886,2886,2886,2886,2886,2886,2886,2886,0,0,0,0,0,0,0,0,0,0,0,0,0,2886,2886,
