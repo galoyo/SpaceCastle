@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.8.2" company="" />
+	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.6.9.11" company="" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -158,7 +158,7 @@
 	<haxelib name="flixel-ui"/>
 	
 	<!--In case you want to use nape with flixel-->
-	<!--<haxelib name="nape" />-->	
+	<!--<haxelib name="nape" />-->
 	<!-- ______________________________ Haxedefines _____________________________ -->
 	
 	<!--Enable the Flixel core recording system-->
