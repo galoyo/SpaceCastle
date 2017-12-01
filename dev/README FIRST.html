@@ -1,4 +1,28 @@
 <HTML><HEAD><TITLE>Space Castle</TITLE></HEAD><BODY>
+When creating a map, there are two things to remember.
+1: Remember to add the player to the map.
+2: Remember to add the door ID to the Reg._maps_X_Y_OutsideTotalManual var. See the doorway IDs below. If player can only leave the map 19-20 by going to the left or right side of screen then the ID is 5. Add ', ["19-20", "5"]' to the var and exclude the ' characters.
+<br /><br />
+The mini map will then display the new map and its doorways.
+<br /><br />
+w = west, n = north, e = east, s = south.
+1 = w<br />
+2 = n<br />
+3 = w,n<br />
+4 = e<br />
+5 = w, e<br />
+6 = n, e<br />
+7 = w, n, e<br />
+8 = s<br />
+9 = s, w<br />
+10 = s, n<br />
+11 = s, w, n<br />
+12 = e, s<br />
+13 = e, s, w<br />
+14 = n, e, s<br />
+15 = n, e, s, w<br />
+<br /><hr><br /><br /> 
+
 	FlxG.sound.playMusic("music1", 1, true); // also make music1 in project.xml. see the music section of that file.
 <br /><hr><br /><br /> 
 
