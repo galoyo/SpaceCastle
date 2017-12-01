@@ -518,7 +518,7 @@ class Player extends FlxSprite
 		
 		else
 		{
-			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
+			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used. This line is needed for the keys/buttons to work.		
 			InputControls.checkInput();
 
 			if (overlapsAt(x, y - 15, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe) || overlapsAt(x, y - 45, Reg.state._overlayPipe) && !overlapsAt(x, y, Reg.state._overlayPipe)) 

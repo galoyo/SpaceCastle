@@ -1,4 +1,5 @@
 package;
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 
@@ -738,6 +739,11 @@ class Reg
 	public static var _keyOrButtonDown:Bool = false;
 	
 	/*******************************************************************************************************
+	 * Do NOT change the value of this var. Use this as a hack to stop double firing of a key press or button click. Used at a subState.
+	 */
+	public static var _keyOrButtonDownAtSubState:Bool = false;
+	
+	/*******************************************************************************************************
 	 * Do NOT change the value of this var. This var is passed to the parent so that buttons can be shared between the child classes. This valie is set at the child classes. 0 = not set yet. 1 = saving the game. 2 = loading the game.
 	 */
 	public static var _gameSaveOrLoad:Int = 0;
@@ -758,9 +764,14 @@ class Reg
 	public static var _gameSlotNumberSaved:Int = 0;
 	
 	/*******************************************************************************************************
-	 * This is the total playable maps. House and bonus maps are in this array.
+	 * Do NOT change the value of this var. These are all the maps that the player has been to.
 	 */
-	public static var _mapsTotalCount:Array<String> = [];
+	public static var _mapsThatPlayerHasBeenTo:Array<String> = [];
+	
+	/*******************************************************************************************************
+	 *  Do NOT change the value of this var. This is the total playable outside maps that are automatically generated. House and bonus maps are not in this array. Note, the doorway values are not programmed in a way for this var to automatically obtain them.
+	 */
+	public static var _maps_X_Y_OutsideTotalAutomatic:Array<String> = [];
 	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
@@ -818,6 +829,17 @@ class Reg
 	//######################################################################################################
 		
 	/*******************************************************************************************************
+	 *  This is the total playable outside map that is manually edited. House and bonus maps are not in this array. The first value is the part of a map name from the assets/data directory and the second value is the doorway number. Search for doorways at dev/README FIRST.html
+	 * The _maps_X_Y_OutsideTotalAutomatic var must have the same lenght as this var or else an error message will be displayed when you run the game. The reason is to verify that you have every map in the game in this var. Note, the doorway values will not be verified.
+	 */
+	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["1-1", "5"], ["49-49", "5"], ["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
+	
+	/**
+	 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
+ 	 */
+	public static var _mapsThatHaveAnItem:Array<String> = ["15-15", "15-15", "14-18", "12-19", "17-22", "20-19", "20-18", "19-20", "19-20", "23-18", "21-21"];
+	
+	/*******************************************************************************************************
 	 * If a map is within this var then the light will be displayed on that map. The map will be dark except for a light source that surrounds the player.
 	 */
 	public static var _displayLightCoords:String = "19-21,19-22";
@@ -856,12 +878,12 @@ class Reg
 	/*******************************************************************************************************
 	 * For the C key/button this is the current name of the inventory item selected.
 	 */
-	public static var _itemCSelectedFromInventoryName:String = "";
+	public static var _itemCSelectedFromInventoryName:String = "Mini Maps.";
 	
 	/*******************************************************************************************************
 	 * Currently a new game only has one item in the inventory, so this value must equal 1. If you add another item to the inventory list then change this value to 2 and add the data at the second field of _inventoryIconName, _inventoryIconDescription and _inventoryIconFilemame. 
 	 */
-	public static var _inventoryIconNumberMaximum:Int = 1;
+	public static var _inventoryIconNumberMaximum:Int = 2;
 	
 	/*******************************************************************************************************
 	 * At default, when you start a new game, the "normal jump" at inventory is the only item that can be selected. If you want that item to be at the Z action key then change here the first false to value true.
@@ -876,7 +898,7 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
-	];
+	]; // 112
 	
 	/*******************************************************************************************************
 	 * If at the inventory screen there are two items displayed at slot one and two and you want the second item to be displayed at the navigation bar where the big X is displayed then change here the first value to false and then change the second value to true.
@@ -890,13 +912,13 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
-	];
+	]; // 112
 	
 	/*******************************************************************************************************
 	 * If you would like to have this action key to use the third inventory item when a new game starts then change here the third "false" value and make it "true".
 	 */
 	public static var _inventoryIconCNumber:Array<Bool> = [
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+	false, true, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
@@ -904,13 +926,13 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
-	];
+	]; // 112
 	
 	/*******************************************************************************************************
 	 * Name of the inventory item.
 	 */
 	public static var _inventoryIconName:Array<String> = [
-	"Normal Jump.", "", "", "", "", "", "", "", "", "", "", "", "", "", 
+	"Normal Jump.", "Mini Maps.", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -924,7 +946,7 @@ class Reg
 	 * Description of the inventory item. Needs to be a short one-liner or else the text will run off of the screen.
 	 */
 	public static var _inventoryIconDescription:Array<String> = [
-	"Can jump a maximum distance of two tiles.", "", "", "", "", "", "", "", "", "", "", "", "", "", 
+	"Can jump a maximum distance of two tiles.", "Every outside map displayed as small maps on one screen.", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -938,7 +960,7 @@ class Reg
 	 * The file image should be 32 x 32 in pixels and exist at the assets/images directory. Next, add the filename beside "itemJumpNormal.png". The image will be displayed at the inventory screen but only after you set the other inventory vars.
 	 */
 	public static var _inventoryIconFilemame:Array<String> = [
-	"itemJumpNormal.png", "", "", "", "", "", "", "", "", "", "", "", "", "", 
+	"itemJumpNormal.png", "itemMiniMaps.png", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -1068,7 +1090,13 @@ class Reg
 		_inventoryIconDescription[0] = "Can jump a maximum distance of two tiles.";
 		_inventoryIconFilemame[0] = "itemJumpNormal.png";
 		
-		_inventoryIconNumberMaximum = 1;
+		_inventoryIconCNumber[1] = true;
+		_itemCSelectedFromInventoryName = "Mini Maps.";
+		_inventoryIconName[1] = "Mini Maps.";
+		_inventoryIconDescription[1] = "Every outside map displayed as small maps on one screen.";
+		_inventoryIconFilemame[1] = "itemMiniMaps.png";
+		
+		_inventoryIconNumberMaximum = 2;
 		_deathWhenReachedZero = _deathWhenReachedZeroCurrent = 400;
 		
 		_changeToDayOrNightBgsAtPageLoadTicks = 0;
@@ -1178,8 +1206,36 @@ class Reg
 			// Search all words in an array. If a match is found then add an element to that map total array.
 			if (arr[i].indexOf(text) >= 0) 
 			{
-				Reg._mapsTotalCount.push(arr[i]);
+				if (arr[i].substr(22, 5) != "house") // house maps are not allowed.
+				_maps_X_Y_OutsideTotalAutomatic.push(arr[i]);
 			}
 		}
+							
+		for (i in 0...Reg._maps_X_Y_OutsideTotalAutomatic.length)
+		{
+			// Trim the array so that onlu the coordinates remain.
+			_maps_X_Y_OutsideTotalAutomatic[i] = _maps_X_Y_OutsideTotalAutomatic[i].substring(16, 21);
+		}
 	}
+	
+	// ################################################################
+	// camera
+	// ################################################################
+	public static function setCamera():Void
+	{
+		
+		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 )
+		{
+			if (Reg._playerInsideCar == true)
+				FlxG.camera.follow(Reg.state._objectCar, FlxCameraFollowStyle.TOPDOWN);	// make the camera follow the car.
+			else FlxG.camera.follow(Reg.state.player, FlxCameraFollowStyle.TOPDOWN);
+		}
+		else 
+			FlxG.camera.follow(Reg.state.player, FlxCameraFollowStyle.SCREEN_BY_SCREEN); // make player walk to sides of screen.
+			
+		// do not display anything outside of the current map displayed.
+		FlxG.camera.setScrollBoundsRect(0, -60, Reg.state.tilemap.width - Reg._tileSize + 32, Reg.state.tilemap.height - Reg._tileSize + 155, true);		
+
+	}
+	
 }

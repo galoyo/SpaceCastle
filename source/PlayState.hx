@@ -7,7 +7,6 @@ import flixel.addons.transition.TransitionData;
 import flixel.addons.transition.TransitionFade;
 import openfl.display.StageQuality;
 
-import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -717,6 +716,7 @@ class PlayState extends FlxUIState
 	override public function create():Void
 	{
 		Reg._update = true;
+		persistentDraw = false;
 		
 		// near the bottom of this constructor, if you plan to use more than 2 dogs then uncomment those two lines with id 3 and 4.
 		
@@ -910,7 +910,7 @@ class PlayState extends FlxUIState
 				
 		// ---------------------------------- rain.		
 		var outside:Bool = displayRain();
-		
+
 		// trap this because != does not work. this is for the parallax var scene.
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19) {}
 		else if (outside == true && Reg._inHouse == "")
@@ -937,7 +937,10 @@ class PlayState extends FlxUIState
 			_light.scrollFactor.set(0, 0);
 			add(_light);
 		}
-							
+		
+		// If this is the first time that the player has been to the current map then add the map to a var so that the map will be displayed correctly at the mini map screen.		
+		currentMap();
+									
 		hud = new Hud();		
 		add(hud);		
 		
@@ -959,7 +962,7 @@ class PlayState extends FlxUIState
 		add(_gunFreeze);
 				
 		FlxG.camera.bgColor = FlxColor.TRANSPARENT;	
-		setCamera();
+		Reg.setCamera();
 		
 		airLeftInLungsText = new FlxText();
 		airLeftInLungsText.color = FlxColor.WHITE;
@@ -1077,6 +1080,25 @@ class PlayState extends FlxUIState
 		return false;
 	}	
 	
+	function currentMap():Bool
+	{
+		// loop through the array. if there is a match then do not add this map to the array. Old mini maps will be displayed in a different color. No need to add two or more of the same map to the list.
+		for (i in 0...Reg._mapsThatPlayerHasBeenTo.length)
+		{	
+			if (Reg._mapsThatPlayerHasBeenTo[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
+				return true;
+		}
+		
+		Reg._mapsThatPlayerHasBeenTo.push(Std.string(Reg.mapXcoords) + "-" + Std.string(Reg.mapYcoords));
+		return false;
+	}	
+	
+	public function removeItemFromMiniMap():Void
+	{
+		// If there is a match then remove item so that the item will not be displayed at the mini map.
+		Reg._mapsThatHaveAnItem.remove(Reg.mapXcoords + "-" + Reg.mapYcoords);
+	}	
+	
 	function displayLight():Bool
 	{
 		var paragraph = Reg._displayLightCoords.split(",");
@@ -1091,26 +1113,6 @@ class PlayState extends FlxUIState
 		return false;
 	}	
 
-	// ################################################################
-	// update - camera
-	// ################################################################
-	function setCamera():Void
-	{
-		
-		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 )
-		{
-			if (Reg._playerInsideCar == true)
-				FlxG.camera.follow(_objectCar, FlxCameraFollowStyle.TOPDOWN);	// make the camera follow the car.
-			else FlxG.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
-		}
-		else 
-			FlxG.camera.follow(player, FlxCameraFollowStyle.SCREEN_BY_SCREEN); // make player walk to sides of screen.
-			
-		// do not display anything outside of the current map displayed.
-		FlxG.camera.setScrollBoundsRect(0, -60, tilemap.width - Reg._tileSize + 32, tilemap.height - Reg._tileSize + 155, true);		
-
-	}
-	
 	override public function update(elapsed:Float):Void
 	{			
 		//################ RECORDING DEMO BLOCK #####################
@@ -1135,12 +1137,24 @@ class PlayState extends FlxUIState
 			
 		Reg._gameSlotNumberSaved = 0;
 		
-		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
-		
+		// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used. This line is needed for the keys/buttons to work.		
 		InputControls.checkInput();
 		
-		if (InputControls.i.justReleased)
+		if (InputControls.z.justPressed && Reg._inventoryIconZNumber[Reg._itemZSelectedFromInventory] == true && Reg._itemZSelectedFromInventoryName == "Mini Maps."
+		 || InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Mini Maps."
+		 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Mini Maps.")
 		{
+			openSubState(new ObjectMap());	
+		}
+		
+		if (InputControls.i.justPressed && Reg._keyOrButtonDown == false)
+		{
+			Reg._keyOrButtonDown = true;
+		}
+		
+		if (InputControls.i.justReleased && Reg._keyOrButtonDown == true)
+		{
+			Reg._keyOrButtonDown = false;
 			openSubState(new Inventory());
 		}
 		

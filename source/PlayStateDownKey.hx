@@ -17,44 +17,53 @@ class PlayStateDownKey
 		//######################## DOWN KEY PRESS #######################
 		var	_tileX = Std.int(Reg.state.player.x / 32);		
 		var	_tileY = Std.int(Reg.state.player.y / 32);
-
-		// save game is requested when down key is pressed at the save point.		
-		if(InputControls.down.pressed && FlxG.overlap(Reg.state.savePoint, Reg.state.player))
-		{
-			Reg.dialogIconFilename = "savePoint.png";
-			Reg.dialogIconText = openfl.Assets.getText("assets/text/saveTheGame.txt").split("#");
-			Reg.dialogCharacterTalk[0] = "";
-			Reg.displayDialogYesNo = true;
-			Reg.state.openSubState(new Dialog());
-		}				
-				
-		else if(InputControls.down.pressed && FlxG.overlap(Reg.state._objectDoorToHouse, Reg.state.player))
-		{
-			if (Reg._inHouse == "")
-			{
-				Reg._inHouse = "-house";
-				// remember the players last position on the map befor entering the house.
-				Reg.playerXcoordsLast = Reg.state.player.x;
-				Reg.playerYcoordsLast = Reg.state.player.y;
-			}
-			else Reg._inHouse = "";			
-			
-			Reg._dogOnMap = false;
-			FlxG.switchState(new PlayState());
-		} 
-
-		else if (InputControls.down.pressed && Reg.state.tilemap.getTile(_tileX, _tileY) == 77
-		      || InputControls.down.pressed && Reg.state.tilemap.getTile(_tileX, _tileY) == 78) // teleporter
-		{
-			Reg.dialogIconFilename = "itemGun1.png";
-			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGun.txt").split("#");
-				
-			Reg.dialogCharacterTalk[0] = "";			
-			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-			Reg.displayDialogYesNo = false;
-			Reg.state.openSubState(new Dialog());	
-		}				
 		
+		if (InputControls.down.justPressed && Reg._keyOrButtonDown == false)
+		{			
+			// save game is requested when down key is pressed at the save point.		
+			if(FlxG.overlap(Reg.state.savePoint, Reg.state.player))
+			{
+				Reg.dialogIconFilename = "savePoint.png";
+				Reg.dialogIconText = openfl.Assets.getText("assets/text/saveTheGame.txt").split("#");
+				Reg.dialogCharacterTalk[0] = "";
+				Reg.displayDialogYesNo = true;
+				Reg.state.openSubState(new Dialog());
+			}				
+					
+			else if(FlxG.overlap(Reg.state._objectDoorToHouse, Reg.state.player))
+			{
+				if (Reg._inHouse == "")
+				{
+					Reg._inHouse = "-house";
+					// remember the players last position on the map befor entering the house.
+					Reg.playerXcoordsLast = Reg.state.player.x;
+					Reg.playerYcoordsLast = Reg.state.player.y;
+				}
+				else Reg._inHouse = "";			
+				
+				Reg._dogOnMap = false;
+				FlxG.switchState(new PlayState());
+			} 
+
+			else if (Reg.state.tilemap.getTile(_tileX, _tileY) == 77
+				  || Reg.state.tilemap.getTile(_tileX, _tileY) == 78) // teleporter
+			{
+				Reg.dialogIconFilename = "itemGun1.png";
+				Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGun.txt").split("#");
+					
+				Reg.dialogCharacterTalk[0] = "";			
+				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
+				Reg.displayDialogYesNo = false;
+				Reg.state.openSubState(new Dialog());	
+			}
+							
+		}
+		
+		else if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+		{
+			Reg._keyOrButtonDown = false;
+		}
+	
 		// emitter the "question mark if there is no action.
 		else if (InputControls.up.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player)
 		      || InputControls.down.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player)

@@ -295,7 +295,7 @@ class PlayStateCreateMap
 		// contains all the data of that tile maps row but without the line break.
 		var rows:Array<String> = objectData.split("\n");
 		
-			for (y in 0...rows.length) 
+		for (y in 0...rows.length) 
 		{
 			if (rows[y].length > 0)
 			{

@@ -72,7 +72,7 @@ class TeleportSubState extends FlxSubState
 		
 		// Create a background for this subState.
 		screenBox = new FlxSprite(0, 0);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xCC000000);
+		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xEE000000);
 		add(screenBox);
 		
 		title = new FlxText(0, 50, 0, "Teleporter");

@@ -61,7 +61,8 @@ class PlayStateTouchItems
 				Reg.dialogCharacterTalk[0] = "";
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
-				Reg.state.openSubState(new Dialog());		
+				Reg.state.openSubState(new Dialog());
+				Reg.state.removeItemFromMiniMap();
 				
 			}
 			
@@ -88,6 +89,7 @@ class PlayStateTouchItems
 					// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 					Reg.displayDialogYesNo = false;
 					Reg.state.openSubState(new Dialog());	
+					Reg.state.removeItemFromMiniMap();
 					
 					Reg._itemGotJump[i.ID] = true;					
 					newInventoryItem( openfl.Assets.getText("assets/text/touchItemJump1Description.txt"), Reg.dialogIconFilename);
@@ -114,6 +116,7 @@ class PlayStateTouchItems
 				Reg.dialogCharacterTalk[0] = "";
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());
+				Reg.state.removeItemFromMiniMap();
 				
 				Reg._itemGotSwimmingSkill = true;
 			}
@@ -136,7 +139,8 @@ class PlayStateTouchItems
 				
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
-				Reg.state.openSubState(new Dialog());	
+				Reg.state.openSubState(new Dialog());
+				Reg.state.removeItemFromMiniMap();
 			}
 			
 			Reg._itemGotGunRapidFire = true;
@@ -167,6 +171,7 @@ class PlayStateTouchItems
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
 			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
 		}
 		
 		//################## ITEM FLYING HAT
@@ -187,6 +192,7 @@ class PlayStateTouchItems
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
 			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
 		}	
 		
 		//################## ITEM DIAMONDS.
@@ -290,6 +296,7 @@ class PlayStateTouchItems
 				// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());		
+				Reg.state.removeItemFromMiniMap();
 				
 				Reg._itemGotSuperBlock[i.ID] = true;
 			}
@@ -312,6 +319,7 @@ class PlayStateTouchItems
 				Reg.dialogCharacterTalk[0] = "";
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());
+				Reg.state.removeItemFromMiniMap();
 				
 				Reg._itemGotAntigravitySuit = true;
 			}
@@ -334,6 +342,7 @@ class PlayStateTouchItems
 				Reg.dialogCharacterTalk[0] = "";
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());
+				Reg.state.removeItemFromMiniMap();
 				
 				Reg._itemGotSkillDash = true;
 			}
@@ -360,6 +369,7 @@ class PlayStateTouchItems
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
 			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
 			
 			Reg._itemGotGunFlame = true;
 		}			
@@ -389,6 +399,7 @@ class PlayStateTouchItems
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
 			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
 			
 			Reg._itemGotGun = true;
 		}
@@ -429,12 +440,13 @@ class PlayStateTouchItems
 			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 			Reg.displayDialogYesNo = false;
 			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
 			
 			Reg._itemGotGunFreeze = true;
 		}			
 	}
 
-	// when player picks up an item that uses the x or c key, add it to the inventory.
+	// when player picks up an item that uses the z, x or c key, add it to the inventory.
 	public static function newInventoryItem(iconName:String, iconFilemame:String):Void
 	{	var titleAndDescriptionText = iconName.split("#");
 		Reg._inventoryIconName[Reg._inventoryIconNumberMaximum] = titleAndDescriptionText[0];
