@@ -104,8 +104,14 @@ class NpcDoctor extends FlxSprite
 			} 
 			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;			
 				
-			if( InputControls.down.justPressed && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
 			{
+				Reg._keyOrButtonDown = false;
+			}
+			
+			if( InputControls.down.justPressed && Reg._keyOrButtonDown == false && Reg.mapXcoords == 13 && Reg.mapYcoords == 15 && overlapsAt(x, y, Reg.state.player))
+			{
+				Reg._keyOrButtonDown = true;
 				Reg.dialogIconFilename = "";
 				Reg.dialogIconText = openfl.Assets.getText("assets/text/Map13-15-doctor.txt").split("#");
 				

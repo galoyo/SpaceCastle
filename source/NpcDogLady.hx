@@ -61,8 +61,15 @@ class NpcDogLady extends FlxSprite
 				if( overlapsAt(x, y, Reg.state.player))
 				{
 					
-					if (InputControls.down.justPressed && Reg._itemGotDogFlute == false)
-					{				
+					if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+					{
+						Reg._keyOrButtonDown = false;
+					}
+					
+					if( InputControls.down.justPressed && Reg._keyOrButtonDown == false && Reg._itemGotDogFlute == false)
+					{	
+						Reg._keyOrButtonDown = true;
+						
 						if(Reg.mapXcoords == 15 && Reg.mapYcoords == 15)	
 						{
 							Reg.dialogIconFilename = "";
@@ -109,8 +116,10 @@ class NpcDogLady extends FlxSprite
 						}
 					}
 					
-					else if (InputControls.down.justPressed && Reg._itemGotDogFlute == true)
+					else if (InputControls.down.pressed && Reg._keyOrButtonDown == false && Reg._itemGotDogFlute == true)
 					{				
+						Reg._keyOrButtonDown = true;
+						
 						if(Reg.mapXcoords == 15 && Reg.mapYcoords == 15)		
 						{
 							Reg.dialogIconFilename = "";
@@ -126,7 +135,12 @@ class NpcDogLady extends FlxSprite
 			}			
 			//###################### END CHAT #####################
 			
-			if (InputControls.down.justPressed && Reg._itemGotDogFlute == true && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+			{
+				Reg._keyOrButtonDown = false;
+			}
+			
+			if( InputControls.down.justPressed && Reg._keyOrButtonDown == false && Reg._itemGotDogFlute == true && overlapsAt(x, y, Reg.state.player))
 			{			
 				if ( Reg._dogCarriedItsID.length == 2)
 				{				

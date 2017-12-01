@@ -100,8 +100,14 @@ class Boss1 extends EnemyParentClass
 		{
 			
 			//############### PLAYER CHATS WITH MOB ###############
-			if (InputControls.down.justReleased && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
 			{
+				Reg._keyOrButtonDown = false;
+			}
+			
+			if( InputControls.down.justPressed && Reg._keyOrButtonDown == false && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
+			{
+				Reg._keyOrButtonDown = true;
 				Reg.dialogIconFilename = "";
 				
 				if(Reg.mapXcoords == 17 && Reg.mapYcoords == 22)	

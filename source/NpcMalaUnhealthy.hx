@@ -72,7 +72,12 @@ class NpcMalaUnhealthy extends NpcParent
 			walking(); //###################### WALKING #######################
 				
 			//############### PLAYER CHATS WITH NPC ###############
-			if (InputControls.down.justReleased && overlapsAt(x, y, Reg.state.player))
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+			{
+				Reg._keyOrButtonDown = false;
+			}
+			
+			if( InputControls.down.justPressed && Reg._keyOrButtonDown == false && overlapsAt(x, y, Reg.state.player))
 			{
 				Reg.dialogIconFilename = "dialogNpcUnhealthy.png";
 				

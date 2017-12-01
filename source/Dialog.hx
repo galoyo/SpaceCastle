@@ -133,10 +133,22 @@ class Dialog extends FlxSubState
 	{
 		super();		
 		
+		Reg.state.persistentDraw = true;
+		
+		Reg._keyOrButtonDownAtSubState = false;
+		
 		Reg.state._playerAirRemainingTimer.active = false;
 		
 		_buttonsNavigation = new ButtonsNavigation();		
 		add(_buttonsNavigation);
+		
+		_buttonsNavigation.zButtonSelectedIcon.visible = false;
+		_buttonsNavigation.xButtonSelectedIcon.visible = false;
+		_buttonsNavigation.cButtonSelectedIcon.visible = false;
+		
+		_buttonsNavigation.buttonX.visible = false;
+		_buttonsNavigation.buttonC.visible = false;
+		_buttonsNavigation.buttonI.visible = false;
 		
 		background = new FlxSprite(0, 0);
 		if (Reg.exitGameMenu == false) background.makeGraphic(FlxG.width, FlxG.height, 0x77000000);	
@@ -283,6 +295,8 @@ class Dialog extends FlxSubState
 			add(buttonTitle);
 			add(buttonResume);
 		}
+		
+		
 	}
 	
 	private function startText():Void
@@ -322,6 +336,8 @@ class Dialog extends FlxSubState
 		{
 			Reg.state._playerAirRemainingTimer.active = true;
 			Reg._stopDemoFromPlaying = false;
+			Reg._keyOrButtonDownAtSubState = true;
+			Reg.state.persistentDraw = true;
 			close(); 
 		}
 	}		
@@ -340,8 +356,6 @@ class Dialog extends FlxSubState
 				// this action key is used to display the next paragraph.
 				#if !FLX_NO_KEYBOARD
 					if (InputControls.z.justReleased && Reg.displayDialogYesNo == false  
-					 || InputControls.x.justReleased && Reg.displayDialogYesNo == false  
-					 || InputControls.c.justReleased && Reg.displayDialogYesNo == false  
 					)
 
 					{
@@ -356,9 +370,7 @@ class Dialog extends FlxSubState
 						yesNoArrow.setPosition(457, 283); 
 					
 					// display the arrow key at either the yes or no answer.
-					if (InputControls.z.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true
-					 || InputControls.x.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true 
-					 || InputControls.c.justReleased && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true )
+					if (InputControls.z.pressed && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true )
 					{
 						Reg._dialogYesNoWasAnswered = true;
 						
@@ -367,6 +379,39 @@ class Dialog extends FlxSubState
 						else Reg._dialogAnsweredYes = false;
 						
 						Reg._stopDemoFromPlaying = false;
+						Reg.state.persistentDraw = true;
+						close();
+					}
+				#else
+					if (_buttonsNavigation.buttonZ.justPressed && Reg._keyOrButtonDownAtSubState == false && Reg.displayDialogYesNo == false )
+					{
+						Reg._keyOrButtonDownAtSubState = true;
+					}
+					
+					if (_buttonsNavigation.buttonZ.justReleased && Reg._keyOrButtonDownAtSubState == true )
+					{
+						Reg._keyOrButtonDownAtSubState = false;
+						nextText();		
+					}
+						
+					// these keys are used to navigate the arrow at the yes / no answers.
+					if (_buttonsNavigation.buttonRight.justPressed && Reg.displayDialogYesNo == true)
+						yesNoArrow.setPosition(572, 283); 
+						
+					if (_buttonsNavigation.buttonLeft.justPressed && Reg.displayDialogYesNo == true)
+						yesNoArrow.setPosition(457, 283); 
+					
+					// display the arrow key at either the yes or no answer.
+					if (_buttonsNavigation.buttonZ.justPressed && Reg.displayDialogYesNo == true && dialogBoxYesNo.exists == true )
+					{
+						Reg._dialogYesNoWasAnswered = true;
+						
+						if (yesNoArrow.x == 457)
+							Reg._dialogAnsweredYes = true;
+						else Reg._dialogAnsweredYes = false;
+						
+						Reg._stopDemoFromPlaying = false;
+						Reg.state.persistentDraw = true;
 						close();
 					}
 				#end
@@ -399,6 +444,8 @@ class Dialog extends FlxSubState
 	{
 		Reg.exitGameMenu = false; 
 		Reg._stopDemoFromPlaying = false; 
+		Reg._keyOrButtonDownAtSubState = true;
+		Reg.state.persistentDraw = true;
 		close(); 
 	}
 	
@@ -467,7 +514,8 @@ class Dialog extends FlxSubState
 		buttonOK.set_visible(true);
 		buttonYes.set_visible(false);
 		buttonNo.set_visible(false);
-		
+		Reg._keyOrButtonDownAtSubState = true;
+		Reg.state.persistentDraw = true;
 		close();
 	}
 	
@@ -480,7 +528,8 @@ class Dialog extends FlxSubState
 		buttonOK.set_visible(true);
 		buttonYes.set_visible(false);
 		buttonNo.set_visible(false);
-		
+		Reg._keyOrButtonDownAtSubState = true;
+		Reg.state.persistentDraw = true;
 		close();
 	}
 }

@@ -143,8 +143,9 @@ class Boss2 extends EnemyParentClass
 				Reg.state.openSubState(new Dialog());					
 			}
 			
-			else if (InputControls.down.justReleased && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
+			else if (InputControls.down.justPressed && Reg._keyOrButtonDown == false && Reg._playerHasTalkedToThisMob == false && overlapsAt(x, y, Reg.state.player))
 			{
+				Reg._keyOrButtonDown = true;
 				Reg.dialogIconFilename = "";
 				
 				if (Reg.mapXcoords == 15 && Reg.mapYcoords == 15 && Reg.displayDialogYesNo == false && _displayNextDialog == false)	
@@ -161,6 +162,11 @@ class Boss2 extends EnemyParentClass
 					_displayNextDialog = true;					
 				} 				
 			}		
+			
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+			{
+				Reg._keyOrButtonDown = false;
+			}
 			
 			if (Reg.displayDialogYesNo == true && Reg._dialogYesNoWasAnswered == true && Reg._dialogAnsweredYes == false && _dialogDisplayIt == false && overlapsAt(x, y, Reg.state.player))
 			{						

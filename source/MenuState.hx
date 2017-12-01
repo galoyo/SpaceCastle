@@ -82,7 +82,9 @@ class MenuState extends FlxState
 	 * This holds the value of the scale mode selected.
 	 */
 	private var scaleModeIndex:Int = 0;
-	public var arra:Array<String> = [];
+	
+	private var _test:Array<Array<Int>> = [[0, 2], [3, 4]];
+	
 	override public function create():Void
 	{
 		super.create();
@@ -90,12 +92,15 @@ class MenuState extends FlxState
 		//FlxG.mouse.visible = false;
 		
 		// Get all text file names and then search that array to find the total maps in game.
-		var textAssetsList = Assets.list(AssetType.TEXT);
-		Reg.getTotalMaps(textAssetsList, "_Layer 0 tiles"); // To output the total maps use Reg._mapsTotalCount.length
+		if (Reg._maps_X_Y_OutsideTotalAutomatic [0] == null) 
+		{
+			var textAssetsList = Assets.list(AssetType.TEXT);
+			Reg.getTotalMaps(textAssetsList, "_Layer 0 tiles"); // To output the total maps use Reg._maps_X_Y_OutsideTotalAutomatic.length
+		}
 		
 		//do not put fullscreen here. there is a bug. Flash will not embed in html page.
 		//FlxG.fullscreen = true;
-		
+
 		FlxG.camera.antialiasing = true;				
 	
 		var background = new FlxSprite(); // Background image of universe stars.
@@ -156,11 +161,13 @@ class MenuState extends FlxState
 		var info:FlxText = new FlxText(115, 290, FlxG.width, "Press S key to change the scale mode.");
 		info.setFormat(null, 14, FlxColor.WHITE, LEFT);
 		info.alpha = 0.75;
+		info.scrollFactor.set(0, 0);	
 		add(info);
 		
 		scaleModeCurrentText = new FlxText(452, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
 		scaleModeCurrentText.alignment = LEFT;
 		scaleModeCurrentText.size = 14;
+		scaleModeCurrentText.scrollFactor.set(0, 0);	
 		add(scaleModeCurrentText);		
 		
 		scaleModeLoad();		

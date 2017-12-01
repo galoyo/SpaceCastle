@@ -14,17 +14,17 @@ class ButtonsNavigation extends FlxGroup
 	/**
 	 * This is the selected item of the Z button. At at inventory menu, if an item is highlighted, pressing the Z button will display the selected item beside the z button. After you have closed the inventory menu, pressing the Z button will do the action of that item selected.
 	 */
-	private var zButtonSelectedIcon:FlxSprite;
+	public var zButtonSelectedIcon:FlxSprite;
  	
 	/**
 	 * This is the selected item of the X button.
 	 */
-	private var xButtonSelectedIcon:FlxSprite;
+	public var xButtonSelectedIcon:FlxSprite;
 	
 	/**
 	 * This is the selected item of the C button.
 	 */
-	private var cButtonSelectedIcon:FlxSprite;
+	public var cButtonSelectedIcon:FlxSprite;
 	
 	/**
 	 * The player will move in the direction of left when this button is pressed.
@@ -151,7 +151,7 @@ class ButtonsNavigation extends FlxGroup
 		super.update(elapsed);
 	}
 	
-	// z was pressed so we need to set all this array var to false and set only one to true so that only one item is currently selecyed.
+	// z was pressed so we need to set all this array var to false and set only one to true so that only one item is currently selected.
 	public function resetInventoryIconZNumber(item:Int):Void
 	{
 		var max = Reg._inventoryGridXTotalSlots * Reg._inventoryGridYTotalSlots;

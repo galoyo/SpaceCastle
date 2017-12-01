@@ -18,11 +18,15 @@ import flixel.util.FlxSave;
 
 class Inventory extends FlxSubState
 {	
+	/**
+	 * Stops a close this subState bug.
+	 */
+	private var _stopCloseSubState:Bool = true;
 	
 	/*******************************************************************************************************
 	 * Fill the screen with this image.
 	 */
-	private var backdropImage:FlxBackdrop = new FlxBackdrop();
+	private var backdropImage:FlxBackdrop;
 	
 	/*******************************************************************************************************
 	 * Stops the inventory Item Highlighted Square from moving quickly through the grid when holding down a key or button.
@@ -78,8 +82,8 @@ class Inventory extends FlxSubState
 	{
 		super();
 		
-		// Fill the screen with this tiled image.
 		backdropImage = new FlxBackdrop("assets/images/backgroundTiles3.png", 0, 0, true, true, 0, 0);
+		backdropImage.scrollFactor.set(0, 0);
 		add(backdropImage);
 		
 		title = new FlxText(0, 50, 0, "Inventory");
@@ -140,8 +144,6 @@ class Inventory extends FlxSubState
 			add(itemDescription);			
 			
 		}
-		
-		//	FlxG.camera.setScrollBoundsRect(0, -60, tilemap.width - Reg._tileSize + 32, tilemap.height - Reg._tileSize + 92, true);		
 
 	}
 	
@@ -152,19 +154,21 @@ class Inventory extends FlxSubState
 		
 		navigation();
 				
-		if (InputControls.i.justReleased) 
+		if (InputControls.i.justPressed && _stopCloseSubState == false || _buttonsNavigation.buttonI.justReleased && Reg._inventoryIconNumberMaximum > 0 && _stopCloseSubState == false )
 		{
 			Reg._buttonsNavigationUpdate = true;
 			if (Reg._soundEnabled == true) FlxG.sound.play("menu", 1, false);
 			close();
 		}
+
+		_stopCloseSubState = false;
 		super.update(elapsed);	
 	}
 	
 	private function navigation():Void
 	{
 		
-		if (InputControls.left.justPressed && inventoryItemHighlightedSquare.x > 147 || _buttonsNavigation.buttonLeft.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x > 147 )
+		if (InputControls.left.justReleased && inventoryItemHighlightedSquare.x > 147 || _buttonsNavigation.buttonLeft.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x > 147 )
 		{
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x - 36;
 			_buttonDown = true;
@@ -172,7 +176,7 @@ class Inventory extends FlxSubState
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
-		if (InputControls.right.justPressed && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180 || _buttonsNavigation.buttonRight.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180)
+		if (InputControls.right.justReleased && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180 || _buttonsNavigation.buttonRight.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.x < (32 * Reg._inventoryGridXTotalSlots) + 180)
 		{
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x + 36;
 			_buttonDown = true;
@@ -180,7 +184,7 @@ class Inventory extends FlxSubState
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
-		if (InputControls.up.justPressed && inventoryItemHighlightedSquare.y > 186 ||  _buttonsNavigation.buttonUp.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y > 186)
+		if (InputControls.up.justReleased && inventoryItemHighlightedSquare.y > 186 ||  _buttonsNavigation.buttonUp.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y > 186)
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y - 36;
 			_buttonDown = true;
@@ -189,7 +193,7 @@ class Inventory extends FlxSubState
 			
 		}
 		
-		if (InputControls.down.justPressed && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186 || _buttonsNavigation.buttonDown.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186)
+		if (InputControls.down.justReleased && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186 || _buttonsNavigation.buttonDown.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y < (32 * Reg._inventoryGridYTotalSlots) + 186)
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y + 36;
 			_buttonDown = true;
@@ -198,21 +202,21 @@ class Inventory extends FlxSubState
 		}
 		
 		// if item is available and key is pressed then set item to that navigation button.
-		if (InputControls.z.justPressed && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.z.justReleased && Reg._inventoryIconNumberMaximum > 0 || _buttonsNavigation.buttonZ.justReleased && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconZNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconZNumber(itemNumberSelected);
 			Reg._inventoryIconZNumber[itemNumberSelected] = true;
 		}
 		
-		if (InputControls.x.justPressed && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.x.justReleased && Reg._inventoryIconNumberMaximum > 0 || _buttonsNavigation.buttonX.justReleased && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconXNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconXNumber(itemNumberSelected);
 			Reg._inventoryIconXNumber[itemNumberSelected] = true;
 		}
 		
-		if (InputControls.c.justPressed && Reg._inventoryIconNumberMaximum > 0)
+		if (InputControls.c.justReleased && Reg._inventoryIconNumberMaximum > 0 || _buttonsNavigation.buttonC.justReleased && Reg._inventoryIconNumberMaximum > 0)
 		{
 			_buttonsNavigation.resetInventoryIconCNumber(itemNumberSelected);
 			Reg.state._buttonsNavigation.resetInventoryIconCNumber(itemNumberSelected);

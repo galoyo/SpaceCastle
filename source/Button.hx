@@ -92,5 +92,11 @@ class Button extends FlxButton
 		}
 	}
 	
-
+	override public function update(elapsed:Float):Void 
+	{		
+		if (!Reg._keyOrButtonDown && justPressed)  Reg._keyOrButtonDown = true;		// HACK WORKAROUND to prevent double fire of 
+		if ( Reg._keyOrButtonDown && justReleased) Reg._keyOrButtonDown = false;	// justPressed and justReleased events!!!
+		
+		super.update(elapsed);
+	}
 }
