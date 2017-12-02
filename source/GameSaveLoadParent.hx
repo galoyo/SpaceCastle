@@ -343,6 +343,14 @@ class GameSaveLoadParent extends FlxSubState
 
 		_gameSave.data._dateAndTimeSaved = Date.now();
 		
+		_gameSave.data._mapsThatPlayerHasBeenToLength = Reg._mapsThatPlayerHasBeenTo.length;
+					   
+		_gameSave.data._mapsThatPlayerHasBeenTo = new Array<String>();
+		for (i in 0...Reg._mapsThatPlayerHasBeenTo.length)
+		{
+			_gameSave.data._mapsThatPlayerHasBeenTo[i] = Reg._mapsThatPlayerHasBeenTo[i];
+		}
+		
 		// save data
 		_gameSave.flush();
 		_gameSave.close;
@@ -515,6 +523,13 @@ class GameSaveLoadParent extends FlxSubState
 			Reg._itemGotSkillDash = _gameLoad.data._itemGotSkillDash;
 			
 			Reg._dateAndTimeSaved = _gameLoad.data._dateAndTimeSaved;
+			
+			var _mapsThatPlayerHasBeenToLength:Int = _gameLoad.data._mapsThatPlayerHasBeenToLength;
+
+			for (i in 0..._mapsThatPlayerHasBeenToLength)
+			{
+				Reg._mapsThatPlayerHasBeenTo[i] = _gameLoad.data._mapsThatPlayerHasBeenTo[i];
+			}
 			
 			_gameLoad.close;		
 			

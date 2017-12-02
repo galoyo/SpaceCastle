@@ -1,8 +1,10 @@
 package;
 
 import flixel.FlxSprite;
+using flixel.util.FlxSpriteUtil;
 import flixel.group.FlxGroup;
 import flixel.FlxG;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
 /**
@@ -71,11 +73,51 @@ class ButtonsNavigation extends FlxGroup
 	 */
 	private var _background:FlxSprite;
 	
+	/**
+	 * Mini map symbol referring to an unexplored map. The player has not seen that map. 
+	 */
+	public var _miniMapUnexplored:FlxSprite;
+	
+	/**
+	 * Unexplored symbol text.
+	 */
+	public var _miniMapUnexploredText:FlxText;
+	 
+	/**
+	 * Mini map symbol referring to an explored map. The player has seen that map before. 
+	 */
+	public var _miniMapExplored:FlxSprite;
+	
+	/**
+	 * Explored symbol text.
+	 */
+	public var _miniMapExploredText:FlxText;
+	
+	/**
+	 * Mini map symbol referring to the map where the player is located. 
+	 */
+	public var _miniMapPlayer:FlxSprite;
+	
+	/**
+	 * Player symbol text.
+	 */
+	public var _miniMapPlayerText:FlxText;
+	
+	/**
+	 * Mini map symbol referring to an item on the map at can be picked up by the player. 
+	 */
+	public var _miniMapItem:FlxSprite;
+	
+	/**
+	 * Item symbol text.
+	 */
+	public var _miniMapItemText:FlxText;
+	
 	public function new() 
 	{
 		super();	
 		
-		 _background = new FlxSprite().makeGraphic(FlxG.width, 80, FlxColor.BLACK);
+		 _background = new FlxSprite().makeGraphic(FlxG.width, 80, 0xFF000022);
 		 _background.scrollFactor.set(0, 0);
 		 _background.setPosition(0, 537);
 		 add(_background);
@@ -144,6 +186,64 @@ class ButtonsNavigation extends FlxGroup
 			buttonC.active = false;
 			buttonI.active = false;
 		#end
+		
+		// These are the mini map symbols. Used at the objectMao to help understand what the drawn squares and circles represent.
+		_miniMapUnexplored = new FlxSprite(0, 0);
+		_miniMapUnexplored.setPosition(420,543);
+		_miniMapUnexplored.makeGraphic(30, 24, FlxColor.WHITE);
+		_miniMapUnexplored.scrollFactor.set(0, 0);		
+		_miniMapUnexplored.visible = false;
+		add(_miniMapUnexplored);
+
+		_miniMapUnexploredText = new FlxText(460, 543, 0, "Unexplored.");
+		_miniMapUnexploredText.color = FlxColor.WHITE;
+		_miniMapUnexploredText.size = 14;
+		_miniMapUnexploredText.scrollFactor.set();
+		_miniMapUnexploredText.visible = false;
+		add(_miniMapUnexploredText);
+		
+		_miniMapExplored = new FlxSprite(0, 0);
+		_miniMapExplored.setPosition(420,571);
+		_miniMapExplored.makeGraphic(30, 24, FlxColor.ORANGE);
+		_miniMapExplored.scrollFactor.set(0, 0);		
+		_miniMapExplored.visible = false;
+		add(_miniMapExplored);
+		
+		_miniMapExploredText = new FlxText(460, 571, 0, "Explored.");
+		_miniMapExploredText.color = FlxColor.WHITE;
+		_miniMapExploredText.size = 14;
+		_miniMapExploredText.scrollFactor.set();
+		_miniMapExploredText.visible = false;
+		add(_miniMapExploredText);
+		
+		_miniMapPlayer = new FlxSprite(0, 0);
+		_miniMapPlayer.setPosition(620,543);
+		_miniMapPlayer.makeGraphic(30, 24, FlxColor.PURPLE);
+		_miniMapPlayer.scrollFactor.set(0, 0);		
+		_miniMapPlayer.visible = false;
+		add(_miniMapPlayer);
+
+		_miniMapPlayerText = new FlxText(660, 543, 0, "Player.");
+		_miniMapPlayerText.color = FlxColor.WHITE;
+		_miniMapPlayerText.size = 14;
+		_miniMapPlayerText.scrollFactor.set();
+		_miniMapPlayerText.visible = false;
+		add(_miniMapPlayerText);
+		
+		_miniMapItem = new FlxSprite(0, 0);
+		_miniMapItem.makeGraphic(20, 12, FlxColor.TRANSPARENT);
+		_miniMapItem.drawCircle( -1, -1, -1, FlxColor.GREEN);
+		_miniMapItem.setPosition(624, 576);
+		_miniMapItem.scrollFactor.set();
+		_miniMapItem.visible = false;
+		add(_miniMapItem);
+		
+		_miniMapItemText = new FlxText(660, 571, 0, "Item.");
+		_miniMapItemText.color = FlxColor.WHITE;
+		_miniMapItemText.size = 14;
+		_miniMapItemText.scrollFactor.set();
+		_miniMapItemText.visible = false;
+		add(_miniMapItemText);
 	}
 	
 	override public function update(elapsed:Float):Void 

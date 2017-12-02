@@ -8,6 +8,7 @@ import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import openfl.Assets;
 using flixel.util.FlxSpriteUtil;
@@ -67,7 +68,24 @@ class ObjectMap extends FlxSubState
 		_buttonsNavigation.buttonX.visible = false;
 		_buttonsNavigation.buttonC.visible = false;
 		_buttonsNavigation.buttonI.visible = false;	
-
+		
+		// Display the mini map symbols to help understand what the drawn squares and circles represent.
+		_buttonsNavigation._miniMapUnexplored.visible = true;
+		_buttonsNavigation._miniMapUnexploredText.visible = true;
+		_buttonsNavigation._miniMapExplored.visible = true;
+		_buttonsNavigation._miniMapExploredText.visible = true;
+		_buttonsNavigation._miniMapPlayer.visible = true;
+		_buttonsNavigation._miniMapPlayerText.visible = true;
+		_buttonsNavigation._miniMapItem.visible = true;
+		_buttonsNavigation._miniMapItemText.visible = true;
+		
+		var title = new FlxText(0, 50, 0, "Mini Map");
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
+		title.scrollFactor.set(0, 0);
+		title.setPosition(0, 50);
+		title.screenCenter(X);
+		add(title);
+		
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -111,16 +129,38 @@ class ObjectMap extends FlxSubState
 				close();	
 			}
 		#else
-			if (_buttonsNavigation.buttonLeft.pressed && _tracker.x > _halfWidth - 20)
-				_tracker.x = _tracker.x - 20;
-			else if (_buttonsNavigation.buttonRight.pressed && _tracker.x < _mapSizeMaximumX - _halfWidth - 50)
-				_tracker.x = _tracker.x + 20;
+
+			if (_buttonsNavigation.buttonLeft.pressed && !_buttonsNavigation.buttonUp.pressed && _tracker.x > _halfWidth - 20
+			||  _buttonsNavigation.buttonLeft.pressed && !_buttonsNavigation.buttonDown.pressed && _tracker.x > _halfWidth - 20)
+			{
+				_tracker.velocity.x = -1000;
+				_tracker.velocity.y = 0;
+			}
 			
-			else if (_buttonsNavigation.buttonUp.pressed && _tracker.y > _halfHeight - 18)
-				_tracker.y = _tracker.y - 18;
-			else if (_buttonsNavigation.buttonDown.pressed && _tracker.y < _mapSizeMaximumY - _halfHeight - 20 - 18)
-				_tracker.y = _tracker.y + 18 ;
-			else if (_buttonsNavigation.buttonZ.justReleased)
+			else if (_buttonsNavigation.buttonRight.pressed && !_buttonsNavigation.buttonUp.pressed && _tracker.x < _mapSizeMaximumX - _halfWidth - 48
+			      || _buttonsNavigation.buttonRight.pressed && !_buttonsNavigation.buttonDown.pressed && _tracker.x < _mapSizeMaximumX - _halfWidth - 48)
+			{
+				_tracker.velocity.x = 1000;
+				_tracker.velocity.y = 0;
+			}
+			
+			else if (_buttonsNavigation.buttonUp.pressed && !_buttonsNavigation.buttonLeft.pressed && _tracker.y > _halfHeight - 18
+			    ||   _buttonsNavigation.buttonUp.pressed && !_buttonsNavigation.buttonRight.pressed && _tracker.y > _halfHeight - 18)
+			{
+				_tracker.velocity.x = 0;
+				_tracker.velocity.y = - 1000;
+			}
+			
+			else if (_buttonsNavigation.buttonDown.pressed && !_buttonsNavigation.buttonLeft.pressed && _tracker.y < _mapSizeMaximumY - _halfHeight - 28
+				||   _buttonsNavigation.buttonDown.pressed && !_buttonsNavigation.buttonRight.pressed && _tracker.y < _mapSizeMaximumY - _halfHeight - 28)
+			{
+				_tracker.velocity.x = 0;
+				_tracker.velocity.y = 1000;
+			}
+			
+			else _tracker.velocity.x = _tracker.velocity.y = 0;	
+			
+			if (_buttonsNavigation.buttonZ.justReleased)
 			{
 				Reg.setCamera();
 				close();
@@ -151,33 +191,36 @@ class ObjectMap extends FlxSubState
 					{
 						var offsetX:Int = 0;
 						
-						var Box = new FlxSprite(0, 0);
-						if (mapX == 23 && mapY == 19) offsetX = 120;
+						// Create and then display a small square white map. The offset var is used when an odd sized map needs to be displayed.
+						var _miniMap = new FlxSprite(0, 0);
+						if (mapX == 23 && mapY == 19) offsetX = 120;						
+						_miniMap.makeGraphic(32 + offsetX, 24, FlxColor.WHITE);
 						
-						Box.makeGraphic(32 + offsetX, 24, FlxColor.WHITE);
-						
+						// Make all small mini maps the color orange that the player has been to.
 						for (i in 0...Reg._mapsThatPlayerHasBeenTo.length)
 						{
 							if (Reg._mapsThatPlayerHasBeenTo[i] == mapX + "-" + mapY)
-								Box.makeGraphic(32 + offsetX, 24, FlxColor.GREEN);
+								_miniMap.makeGraphic(32 + offsetX, 24, FlxColor.ORANGE);
 						}
 									
+						// This mini map colored purple refers to the current location of the player.
 						if (Reg.mapXcoords == mapX && Reg.mapYcoords == mapY)
 						{
-							Box.makeGraphic(32 + offsetX, 24, FlxColor.BLUE);
+							_miniMap.makeGraphic(32 + offsetX, 24, FlxColor.PURPLE);
 							_tracker.setPosition(_halfWidth + 20 + mapX * 40, _halfHeight + 18 + mapY * 32);
 						}
 											
-						Box.setPosition(_halfWidth + mapX * 40, _halfHeight + mapY * 32);
-						add(Box);						
+						_miniMap.setPosition(_halfWidth + mapX * 40, _halfHeight + mapY * 32);
+						add(_miniMap);						
 						
+						// This code block will draw a circle overtop every mini map that has an item for the player to pick up. 
 						for (i in 0...Reg._mapsThatHaveAnItem.length)
 						{
 							if (Reg._mapsThatHaveAnItem[i] == mapX + "-" + mapY)
 							{
 								var _itemIsAtThisMap = new FlxSprite(0, 0);
 								_itemIsAtThisMap.makeGraphic(20 + offsetX, 12, FlxColor.TRANSPARENT);
-								_itemIsAtThisMap.drawCircle( -1, -1, -1, FlxColor.MAGENTA);
+								_itemIsAtThisMap.drawCircle( -1, -1, -1, FlxColor.GREEN);
 								_itemIsAtThisMap.setPosition(_halfWidth + 6 + mapX * 40, _halfHeight + 6 + mapY * 32);
 								add(_itemIsAtThisMap);
 							}
@@ -191,10 +234,12 @@ class ObjectMap extends FlxSubState
 		}
 	}
 
-	private function doorways(i:Int, mapX:Int, mapY:Int, offsetX:Int):Void
+	private function doorways(id:Int, mapX:Int, mapY:Int, offsetX:Int):Void
 	{
+		// These values are called doorway IDs. See /dev/README FIRST.html doorways. The ID values have been passed to this function from the _maps_X_Y_OutsideTotalManual var at Reg.hx. That var needs to be updated everytime a new map is created.
+		
 		// left doorway.				
-		if (i == 1 || i == 3 || i == 5 || i == 7 || i == 9 || i == 11 || i == 13 || i == 15)
+		if (id == 1 || id == 3 || id == 5 || id == 7 || id == 9 || id == 11 || id == 13 || id == 15)
 		{						
 			var doorway = new FlxSprite(0, 0);
 			doorway.makeGraphic(8, 8, FlxColor.YELLOW);
@@ -203,7 +248,7 @@ class ObjectMap extends FlxSubState
 		}
 		
 		// up doorway.
-		if (i == 2 || i == 3 || i ==6 || i == 7 || i == 10 || i == 11 || i  == 14 || i == 15)
+		if (id == 2 || id == 3 || id ==6 || id == 7 || id == 10 || id == 11 || id == 14 || id == 15)
 		{						
 			var doorway = new FlxSprite(0, 0);
 			doorway.makeGraphic(8, 8, FlxColor.YELLOW);
@@ -212,7 +257,7 @@ class ObjectMap extends FlxSubState
 		}  
 		
 		// right doorway.				
-		if (i == 4 || i == 5 || i == 6 || i == 7 || i == 12 || i == 13 || i == 14 || i == 15)
+		if (id == 4 || id == 5 || id == 6 || id == 7 || id == 12 || id == 13 || id == 14 || id == 15)
 		{						
 			var doorway = new FlxSprite(0, 0);
 			doorway.makeGraphic(8, 8, FlxColor.YELLOW);
@@ -221,7 +266,7 @@ class ObjectMap extends FlxSubState
 		}
 		
 		// down doorway.
-		if (i == 8 || i == 9 || i == 10 || i == 11 || i == 12 || i == 13 || i == 14 || i == 15)
+		if (id == 8 || id == 9 || id == 10 || id == 11 || id == 12 || id == 13 || id == 14 || id == 15)
 		{						
 			var doorway = new FlxSprite(0, 0);
 			doorway.makeGraphic(8, 8, FlxColor.YELLOW);
