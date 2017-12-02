@@ -134,7 +134,7 @@ class Dialog extends FlxSubState
 		super();		
 		
 		Reg.state.persistentDraw = true;
-		
+		Reg._keyOrButtonDown = true;
 		Reg._keyOrButtonDownAtSubState = false;
 		
 		Reg.state._playerAirRemainingTimer.active = false;
@@ -151,7 +151,7 @@ class Dialog extends FlxSubState
 		_buttonsNavigation.buttonI.visible = false;
 		
 		background = new FlxSprite(0, 0);
-		if (Reg.exitGameMenu == false) background.makeGraphic(FlxG.width, FlxG.height, 0x77000000);	
+		if (Reg.exitGameMenu == false) background.makeGraphic(FlxG.width, FlxG.height, 0xCC000000);	
 		else {Reg.playTwinkle(); background.makeGraphic(FlxG.width, FlxG.height, 0xCC000000); }	
 		background.scrollFactor.set(0, 0);	
 		add(background);

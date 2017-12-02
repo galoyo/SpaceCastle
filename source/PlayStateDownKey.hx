@@ -70,12 +70,10 @@ class PlayStateDownKey
 				}
 				
 				Reg._guildlineInUseTicks = 0;						
-			}	
-			
-				Reg._keyOrButtonDown = true;
+			}					
 		}
 		
-		else if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+		if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
 		{
 			Reg._keyOrButtonDown = false;
 		}
