@@ -724,6 +724,8 @@ class PlayState extends FlxUIState
 		FlxG.worldDivisions = 1;
 		FlxG.worldBounds.set(0); 
 		
+		Reg._keyOrButtonDown = false;
+		
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
 		{
 			var parallaxCar1 = new FlxBackdrop("assets/images/parallaxForest1.png", 0.4, 0, true, false, 0, 0);

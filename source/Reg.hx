@@ -832,7 +832,7 @@ class Reg
 	 *  This is the total playable outside map that is manually edited. House and bonus maps are not in this array. The first value is the part of a map name from the assets/data directory and the second value is the doorway number. Search for doorways at dev/README FIRST.html
 	 * The _maps_X_Y_OutsideTotalAutomatic var must have the same lenght as this var or else an error message will be displayed when you run the game. The reason is to verify that you have every map in the game in this var. Note, the doorway values will not be verified.
 	 */
-	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["1-1", "5"], ["49-49", "5"], ["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
+	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
 	
 	/**
 	 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
@@ -1105,7 +1105,8 @@ class Reg
 		_carMovingEast = true;
 		
 		_keyOrButtonDown = false;
-	
+		
+		Reg._mapsThatPlayerHasBeenTo.splice(0, Reg._mapsThatPlayerHasBeenTo.length);	
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################

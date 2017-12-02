@@ -1,6 +1,7 @@
 package;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.util.FlxTimer;
 
 /**
@@ -56,7 +57,22 @@ class PlayStateDownKey
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());	
 			}
-							
+	
+			// emitter the "question mark if there is no action.
+			else if (InputControls.up.justPressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player)
+				  || InputControls.down.justPressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player)
+				  || InputControls.down.justPressed && Reg._antigravity == false && !FlxG.overlap(Reg.state._objectCar, Reg.state.player)) // for npcs overlapping, see an npcs class.
+			{
+				if (!Reg.state.player.justTouched(FlxObject.FLOOR) && Reg.state.player.isTouching(FlxObject.FLOOR))
+				{
+					Reg.state._particleQuestionMark.focusOn(Reg.state.player);
+					Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
+				}
+				
+				Reg._guildlineInUseTicks = 0;						
+			}	
+			
+				Reg._keyOrButtonDown = true;
 		}
 		
 		else if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
@@ -64,17 +80,6 @@ class PlayStateDownKey
 			Reg._keyOrButtonDown = false;
 		}
 	
-		// emitter the "question mark if there is no action.
-		else if (InputControls.up.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player)
-		      || InputControls.down.pressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player)
-			  || InputControls.down.pressed && Reg._antigravity == false && !FlxG.overlap(Reg.state._objectCar, Reg.state.player)) // for npcs overlapping, see an npcs class.
-		{
-			Reg.state._particleQuestionMark.focusOn(Reg.state.player);
-			Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
-
-			Reg._guildlineInUseTicks = 0;						
-		}	
-
 		//###################### END OF DOWN KEY ######################
 	}
 	
