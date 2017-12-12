@@ -36,16 +36,12 @@ class NpcDogLady extends FlxSprite
 		
 	public function new(x:Float, y:Float) 
 	{		
-		super(x, y);
+		super(x-4, y-12);
 
 		_startX = x;
 		_startY = y;	
 	
-		loadGraphic("assets/images/npcHumanF01.png", true, Reg._tileSize, Reg._tileSize);
-
-		animation.add("idle", [0]);
-		animation.play("idle");
-
+		loadGraphic("assets/images/npcHumanF01.png", false);
 	}
 	
 	override public function update(elapsed:Float):Void 

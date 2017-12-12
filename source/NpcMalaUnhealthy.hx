@@ -46,10 +46,10 @@ class NpcMalaUnhealthy extends NpcParent
 			
 		_shovelDiggingSpeed = FlxG.random.int(20, 40);
 		
-		animation.add("idle", [1,1,1,1,1, 12], 10);
+		animation.add("idle", [0], 10);
 		animation.play("idle");
 		
-		animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 16);			
+		animation.add("walk", [11, 6, 7, 8, 9, 10], 16);			
 
 		// boss1b was defeated so remove all unhealthy malas from the screen because the doctor took them all away.
 		if (ID == 1 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 2 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 3 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 4 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true) kill();

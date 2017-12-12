@@ -71,7 +71,7 @@ class Boss1 extends EnemyParentClass
 			else loadGraphic("assets/images/boss1B.png", true, 56, 56);
 		
 		// The animation of this mob. The image is made of 32 x 32 blocks and haxeflixel reads those blocks the same way as a person reading a book. The first 32 x 32 block is the zero value of this walk animation. 
-		animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 12);
+		animation.add("walk", [11, 6, 7, 8, 9, 10], 12);
 		
 		pixelPerfectPosition = false;
 		

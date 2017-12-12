@@ -646,6 +646,7 @@ private function shoot():Void
 		// vertical movement.
 		if ( x <= (_startX - 16) && velocity.x <= 0 ) {velocity.x = maxYSpeed; velocityXOld = velocity.x; }
 		else if ( x >= (_startX + 16) && velocity.x >= 0 ) {velocity.x = -maxXSpeed; velocityXOld = velocity.x; }
+		
 		if (velocity.x == 0 && velocityXOld < 0) velocity.x = maxXSpeed;
 		else if (velocity.x == 0 && velocityXOld > 0) velocity.x = -maxXSpeed;
 		
@@ -841,6 +842,7 @@ private function shoot():Void
 		// vertical movement.
 		if ( y <= (_startY - 16) && velocity.y <= 0 ) {velocity.y = maxYSpeed * (ID / 1.25);velocityYOld = velocity.y; }
 		else if ( y >= (_startY + 16) && velocity.y >= 0 ) {velocity.y = -maxYSpeed * (ID / 1.25); velocityYOld = velocity.y; }
+		
 		if (velocity.y == 0 && velocityYOld < 0) velocity.y = maxYSpeed;
 		else if (velocity.y == 0 && velocityYOld > 0) velocity.y = -maxYSpeed;
 		

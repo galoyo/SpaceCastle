@@ -195,8 +195,9 @@ class ButtonsNavigation extends FlxGroup
 		_miniMapUnexplored.visible = false;
 		add(_miniMapUnexplored);
 
-		_miniMapUnexploredText = new FlxText(460, 543, 0, "Unexplored.");
-		_miniMapUnexploredText.color = FlxColor.WHITE;
+		_miniMapUnexploredText = new FlxText(460, 538, 0, "Unexplored.");
+		_miniMapUnexploredText.setFormat("assets/fonts/trim.ttf", 36, FlxColor.WHITE);
+		_miniMapUnexploredText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_miniMapUnexploredText.size = 14;
 		_miniMapUnexploredText.scrollFactor.set();
 		_miniMapUnexploredText.visible = false;
@@ -209,8 +210,9 @@ class ButtonsNavigation extends FlxGroup
 		_miniMapExplored.visible = false;
 		add(_miniMapExplored);
 		
-		_miniMapExploredText = new FlxText(460, 571, 0, "Explored.");
-		_miniMapExploredText.color = FlxColor.WHITE;
+		_miniMapExploredText = new FlxText(460, 566, 0, "Explored.");
+		_miniMapExploredText.setFormat("assets/fonts/trim.ttf", 36, FlxColor.WHITE);
+		_miniMapExploredText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_miniMapExploredText.size = 14;
 		_miniMapExploredText.scrollFactor.set();
 		_miniMapExploredText.visible = false;
@@ -223,8 +225,9 @@ class ButtonsNavigation extends FlxGroup
 		_miniMapPlayer.visible = false;
 		add(_miniMapPlayer);
 
-		_miniMapPlayerText = new FlxText(660, 543, 0, "Player.");
-		_miniMapPlayerText.color = FlxColor.WHITE;
+		_miniMapPlayerText = new FlxText(660, 538, 0, "Player.");
+		_miniMapPlayerText.setFormat("assets/fonts/trim.ttf", 36, FlxColor.WHITE);
+		_miniMapPlayerText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_miniMapPlayerText.size = 14;
 		_miniMapPlayerText.scrollFactor.set();
 		_miniMapPlayerText.visible = false;
@@ -238,8 +241,9 @@ class ButtonsNavigation extends FlxGroup
 		_miniMapItem.visible = false;
 		add(_miniMapItem);
 		
-		_miniMapItemText = new FlxText(660, 571, 0, "Item.");
-		_miniMapItemText.color = FlxColor.WHITE;
+		_miniMapItemText = new FlxText(660, 566, 0, "Item.");
+		_miniMapItemText.setFormat("assets/fonts/trim.ttf", 36, FlxColor.WHITE);
+		_miniMapItemText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_miniMapItemText.size = 14;
 		_miniMapItemText.scrollFactor.set();
 		_miniMapItemText.visible = false;

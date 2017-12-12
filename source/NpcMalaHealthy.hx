@@ -30,10 +30,10 @@ class NpcMalaHealthy extends NpcParent
 			
 		_shovelDiggingSpeed = FlxG.random.int(20, 40);
 		
-		animation.add("idle", [1, 1, 1, 1, 1, 12], 10);
+		animation.add("idle", [0], 10);
 		animation.play("idle");
 		
-		animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 16);
+		animation.add("walk", [11, 6, 7, 8, 9, 10], 16);
 		
 		// a green mala appears at house only if first boss was defeated.
 		if (ID == 3 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1ADefeated == false) kill();

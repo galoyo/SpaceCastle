@@ -40,8 +40,7 @@ class ObjectMap extends FlxSubState
 		super();	
 			
 		// make the background semi-transparent.
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(_mapSizeMaximumX, _mapSizeMaximumY, 0xFF000000);
+		var background = new FlxSprite(0, 0, "assets/images/backgroundSubState3.jpg");
 		background.scrollFactor.set(0, 0);	
 		add(background);
 
@@ -80,7 +79,8 @@ class ObjectMap extends FlxSubState
 		_buttonsNavigation._miniMapItemText.visible = true;
 		
 		var title = new FlxText(0, 50, 0, "Mini Map");
-		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.BLUE);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.LIME, 1);
 		title.scrollFactor.set(0, 0);
 		title.setPosition(0, 50);
 		title.screenCenter(X);

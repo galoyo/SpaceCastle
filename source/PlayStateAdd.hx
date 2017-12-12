@@ -76,7 +76,7 @@ class PlayStateAdd
 			{
 				if (Reg._soundEnabled == true) FlxG.sound.play("teleport2", 1, false);
 			}
-			Reg.state.player = new Player(X, Y, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); 			
+			Reg.state.player = new Player(X-32, Y, Reg.state._bullets, Reg.state._particleBulletHit, Reg.state._particleBulletMiss, Reg.state._emitterBulletFlame, Reg.state._emitterSkillDash); 			
 			
 			Reg._teleportedToHouse = false;
 		}
@@ -86,9 +86,8 @@ class PlayStateAdd
 		
 		if (facingLeft == true) Reg.state.player.facing = FlxObject.LEFT;
 		
-		Reg.state._healthBarPlayer = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.player, "health", 0, Reg.state.player.health, false);		
+		Reg.state._healthBarPlayer = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.player, "health", 0, Reg.state.player.health, false, Reg.state.player.height);		
 		Reg.state._healthBarPlayer.setRange(0, Reg._healthMaximum);
-		Reg.state.add(Reg.state._healthBarPlayer);
 	}
 	
 	
@@ -105,7 +104,7 @@ class PlayStateAdd
 			Reg.state.mobApple = new MobApple(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobApple);
 
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobApple, "health", 0, Reg.state.mobApple.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobApple, "health", 0, Reg.state.mobApple.health, false, Reg.state.mobApple.height);		
 			Reg.state._healthBars.add(_healthBar);
 		}
 	}
@@ -123,7 +122,7 @@ class PlayStateAdd
 			Reg.state.mobCutter = new MobCutter(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobCutter);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobCutter, "health", 0, Reg.state.mobCutter.health, false);	
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobCutter, "health", 0, Reg.state.mobCutter.health, false, Reg.state.mobCutter.height);	
 			Reg.state._healthBars.add(_healthBar);
 		}
 	}
@@ -141,7 +140,7 @@ class PlayStateAdd
 			Reg.state.mobSlime = new MobSlime(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobSlime);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobSlime, "health", 0, Reg.state.mobSlime.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobSlime, "health", 0, Reg.state.mobSlime.health, false, Reg.state.mobSlime.height);		
 			Reg.state._healthBars.add(_healthBar);
 		}
 	}
@@ -156,7 +155,7 @@ class PlayStateAdd
 			Reg.state.boss2 = new Boss2(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss2);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss2, "health", 0, Reg.state.boss2.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss2, "health", 0, Reg.state.boss2.health, false, Reg.state.boss2.height);		
 			Reg.state._healthBars.add(_healthBar);
 		} else Reg._boss2IsMala = false;
 	}
@@ -170,7 +169,7 @@ class PlayStateAdd
 		Reg.state.mobBullet = new MobBullet(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemiesNoCollideWithTileMap.add(Reg.state.mobBullet);
 		
-		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBullet, "health", 0, Reg.state.mobBullet.health, false);		
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBullet, "health", 0, Reg.state.mobBullet.health, false, Reg.state.mobBullet.height);		
 		Reg.state._healthBars.add(_healthBar);		
 	}
 	
@@ -195,7 +194,7 @@ class PlayStateAdd
 			Reg.state.mobBat = new MobBat(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobBat);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBat, "health", 0, Reg.state.mobBat.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobBat, "health", 0, Reg.state.mobBat.health, false, Reg.state.mobBat.height);		
 			Reg.state._healthBars.add(_healthBar);
 		}
 	}
@@ -214,7 +213,7 @@ class PlayStateAdd
 			Reg.state.enemies.add(Reg.state.mobSqu);
 			
 			// the health bar displayed underneath the players legs.
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobSqu, "health", 0, Reg.state.mobSqu.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobSqu, "health", 0, Reg.state.mobSqu.health, false, Reg.state.mobSqu.height);		
 			Reg.state._healthBars.add(_healthBar);	
 		}
 	}
@@ -240,7 +239,7 @@ class PlayStateAdd
 			Reg.state.mobFish = new MobFish(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobFish);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobFish, "health", 0, Reg.state.mobFish.health, false);		
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobFish, "health", 0, Reg.state.mobFish.health, false, Reg.state.mobFish.height);		
 			Reg.state._healthBars.add(_healthBar);		
 		}
 	}
@@ -257,7 +256,7 @@ class PlayStateAdd
 			Reg.state.mobGlob = new MobGlob(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobGlob);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobGlob, "health", 0, Reg.state.mobGlob.health, false);	
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobGlob, "health", 0, Reg.state.mobGlob.health, false, Reg.state.mobGlob.height);	
 			_healthBar.offset.set( -3, -6);
 			Reg.state._healthBars.add(_healthBar);	
 		}
@@ -275,7 +274,7 @@ class PlayStateAdd
 			Reg.state.mobWorm = new MobWorm(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.mobWorm);
 			
-			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobWorm, "health", 0, Reg.state.mobWorm.health, false);	
+			var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobWorm, "health", 0, Reg.state.mobWorm.health, false, Reg.state.mobWorm.height);	
 			_healthBar.offset.set( -3, -6);
 			Reg.state._healthBars.add(_healthBar);
 		}
@@ -289,7 +288,7 @@ class PlayStateAdd
 		Reg.state.mobExplode = new MobExplode(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		Reg.state.enemies.add(Reg.state.mobExplode);
 		
-		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobExplode, "health", 0, Reg.state.mobExplode.health, false);	
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.mobExplode, "health", 0, Reg.state.mobExplode.health, false, Reg.state.mobExplode.height);	
 		_healthBar.offset.set( 0, -12);
 		Reg.state._healthBars.add(_healthBar);
 	}
@@ -313,7 +312,7 @@ class PlayStateAdd
 			Reg.state.boss1A = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1A);
 			
-		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1A, "health", 0, Reg.state.boss1A.health, false);	
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1A, "health", 0, Reg.state.boss1A.health, false, Reg.state.boss1A.height);	
 		_healthBar.offset.set( -3, -6);
 		Reg.state._healthBars.add(_healthBar);
 		}
@@ -323,7 +322,7 @@ class PlayStateAdd
 			Reg.state.boss1B = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1B);
 			
-		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1B, "health", 0, Reg.state.boss1B.health, false);	
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.boss1B, "health", 0, Reg.state.boss1B.health, false, Reg.state.boss1B.height);	
 		_healthBar.offset.set( -3, -30); // minus values = move down;
 		Reg.state._healthBars.add(_healthBar);
 		}
@@ -369,7 +368,7 @@ class PlayStateAdd
 			Reg.state._objectFireballTween.add(Reg.state._defenseMobFireball3);
 			Reg.state._objectFireballTween.add(Reg.state._defenseMobFireball4);
 			
-			Reg.state._healthBarMobBubble = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobBubble, "health", 0, Reg.state.mobBubble.health, false);	
+			Reg.state._healthBarMobBubble = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, 	Reg.state.mobBubble, "health", 0, Reg.state.mobBubble.health, false, Reg.state.mobBubble.height);	
 			Reg.state._healthBarMobBubble.offset.set( -3, 0);
 			Reg.state._healthBarMobBubble.visible = false;
 			Reg.state._healthBars.add(Reg.state._healthBarMobBubble);	
@@ -384,7 +383,7 @@ class PlayStateAdd
 		Reg.state.npcDoctor = new NpcDoctor(X, Y);
 		Reg.state.npcs.add(Reg.state.npcDoctor);
 		
-		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.npcDoctor, "health", 0, Reg.state.npcDoctor.health, false);		
+		var _healthBar = new HealthBar(0, 0, FlxBarFillDirection.LEFT_TO_RIGHT, 28, 12, Reg.state.npcDoctor, "health", 0, Reg.state.npcDoctor.health, false, Reg.state.npcDoctor.height);		
 		Reg.state._healthBars.add(_healthBar);		
 	}
 	

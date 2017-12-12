@@ -22,7 +22,8 @@ class GameLoad extends GameSaveLoadParent
 		super();
 		
 		title = new FlxText(0, 50, 0, "Load Game");
-		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.BLUE);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
 		title.scrollFactor.set();
 		title.screenCenter(X);
 		add(title);	

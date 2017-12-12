@@ -180,7 +180,8 @@ package;
 			_gunHudBox.hidePowerWhenZero = false; 
 			add(_gunHudBox);
 			
-			mainMenu = new Button(540, 0, "m: Main Menu", 90, 50, null, 16, 0xFFCCFF33, 0, Reg.state.mainMenuChoices);
+			mainMenu = new Button(540, 0, "m: Menu", 90, 50, null, 16, 0xFFCCFF33, 0, Reg.state.mainMenuChoices);
+			mainMenu.label.font = Reg.defaultFont;
 		add(mainMenu);
 			
 			// display the map coordinate at the top right corner of the screen.	

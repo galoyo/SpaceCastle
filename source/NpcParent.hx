@@ -97,6 +97,9 @@ class NpcParent extends FlxSprite
 		_startX = x;
 		_startY = y;
 		
+		setFacingFlip(FlxObject.LEFT, true, false);
+		setFacingFlip(FlxObject.RIGHT, false, false);
+		
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -149,7 +152,7 @@ class NpcParent extends FlxSprite
 			if (overlapsAt(x + 64, y, Reg.state._objectGrassWeed)) _xRightBoundry = x + 64;
 			if (overlapsAt(x + 96, y, Reg.state._objectGrassWeed)) _xRightBoundry = x + 96;
 			
-			animation.add("watering", [0, 1, 2, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 2, 1], _shovelDiggingSpeed, true);
+			animation.add("watering", [0, 1, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4 ,3 ,2, 4, 3, 2, 1], _shovelDiggingSpeed, true);
 			animation.play("watering");
 			_usingWateringCan = true;
 			_isWalking = true;
@@ -164,7 +167,7 @@ class NpcParent extends FlxSprite
 			if (overlapsAt(x - 80, y, Reg.state._objectGrassWeed)) _xLeftBoundry = x - 80;
 			if (overlapsAt(x - 102, y, Reg.state._objectGrassWeed)) _xLeftBoundry = x - 102;
 			
-			animation.add("watering", [0, 1, 2, 3, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 5, 6, 5, 4, 3, 2, 1], _shovelDiggingSpeed, true);
+			animation.add("watering", [0, 1, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4 ,3 ,2, 4, 3, 2, 1], _shovelDiggingSpeed, true);
 			flipX = true;
 			animation.play("watering");
 			_usingWateringCan = true;
@@ -227,7 +230,8 @@ class NpcParent extends FlxSprite
 					{
 						ticksWalk = 0; 
 						x = x - 2; 
-						_walking = true; 
+						_walking = true;
+						if (_usingShovel == false &&  _usingWateringCan == false) facing = FlxObject.LEFT;
 						
 					} // at this line the overlapsAt checks for an empty space underneath the next tile that the mob is walking to.					
 				}
@@ -236,7 +240,8 @@ class NpcParent extends FlxSprite
 					if ((x + 2) < _xRightBoundry && overlapsAt(x + 28, y + 28, Reg.state.tilemap) && !overlapsAt(x + 3, y, Reg.state.tilemap) && !overlapsAt(x + 3, y, Reg.state._objectBlockOrRock) && Reg.state.tilemap.getTile(_tileX, _tileY) != 98)
 					{
 						x = x + 2; 
-						_walking = true;							
+						_walking = true;		
+						if (_usingShovel == false &&  _usingWateringCan == false) facing = FlxObject.RIGHT;
 					}
 					
 				}
@@ -251,6 +256,7 @@ class NpcParent extends FlxSprite
 					animation.play("idle");
 					if (_usingWateringCan == true) animation.pause();
 				} else if (_usingWateringCan == true) animation.play("watering");
+				else animation.play("walk");
 				
 				ticksWalk = Reg.incrementTicks(ticksWalk, 60 / Reg._framerate);		
 				_walking = false;

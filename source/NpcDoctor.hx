@@ -72,14 +72,11 @@ class NpcDoctor extends FlxSprite
 	
 	public function new(x:Float, y:Float) 
 	{
-		super(x, y);
+		super(x-4, y-6);
 		
 		// set to false if sprite has no animation frames.
-		loadGraphic("assets/images/doctor.png", true, Reg._tileSize, 60);
+		loadGraphic("assets/images/doctor.png", false);
 		
-		animation.add("idle", [0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 1, 2, 3, 4], 12);
-		animation.play("idle");	
-
 		pixelPerfectPosition = false;
 		
 		Reg.displayDialogYesNo = false;

@@ -64,13 +64,13 @@ class MobBat extends EnemyParentClass
 		ID = id;
 		
 		// set to false if sprite has no animation frames.
-		loadGraphic("assets/images/mobBat.png", true, 28, 28);
+		loadGraphic("assets/images/mobBat.png", true, 36, 33);
 				
 		// uncomment if sprite has animation frames. 
-		if (id == 1) animation.add("walk", [0, 1, 2, 3, 4, 3, 2, 1], 60);
-		if (id == 2) animation.add("walk", [5, 6, 7, 8, 9, 8, 7, 6], 60);
-		if (id == 3) animation.add("walk", [10, 11, 12, 13, 14, 13, 12, 11], 60);
-		animation.play("walk");	
+		if (id == 1) animation.add("fly", [0, 1, 2, 3, 4, 3, 2, 1], 55);
+		if (id == 2) animation.add("fly", [7, 8, 9, 10, 11, 10, 9, 8], 55);
+		if (id == 3) animation.add("fly", [14, 15, 16, 17, 18, 17, 16, 15], 55);
+		animation.play("fly");	
 
 		pixelPerfectPosition = false;
 		

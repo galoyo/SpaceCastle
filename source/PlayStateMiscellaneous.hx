@@ -22,43 +22,13 @@ class PlayStateMiscellaneous
 	}
 	
 	/**
-	 * play a short music before playing the longer music.
-	 */
-	public static function playMusicIntro():Void
-	{
-		if (Reg._inHouse == "")
-		{
-			var _randomMusicNumber:Int = FlxG.random.int(20, 24); // random var for random music.
-
-			if (Reg._musicEnabled == true)
-			{
-				if (FlxG.sound.music.playing == false)
-				{
-					if ( _randomMusicNumber == 20) 
-						FlxG.sound.playMusic("20", 0.40, false);
-					if ( _randomMusicNumber == 21) 
-						FlxG.sound.playMusic("21", 0.40, false);
-					if ( _randomMusicNumber == 22) 
-						FlxG.sound.playMusic("22", 0.40, false);
-					if ( _randomMusicNumber == 23) 
-						FlxG.sound.playMusic("23", 0.40, false);
-					if ( _randomMusicNumber == 24) 
-						FlxG.sound.playMusic("24", 0.40, false);
-				}
-				
-				FlxG.sound.music.persist = true;
-			}
-		}
-	}
-	
-	/**
-	 * Play a long 1 minute+ music.
+	 * Play adventure music.
 	 */
 	public static function playMusic():Void
 	{
 		// play random music.
 		
-		var _randomMusicNumber:Int = FlxG.random.int(1, 8); // random var for random music.
+		var _randomMusicNumber:Int = FlxG.random.int(1, 6); // random var for random music.
 
 		if (Reg._musicEnabled == true)
 		{
@@ -74,10 +44,6 @@ class PlayStateMiscellaneous
 			FlxG.sound.playMusic("5", 0.40, false);
 			if ( _randomMusicNumber == 6) 
 			FlxG.sound.playMusic("6", 0.40, false);
-			if ( _randomMusicNumber == 7) 
-			FlxG.sound.playMusic("7", 0.40, false);
-			if ( _randomMusicNumber == 8) 
-			FlxG.sound.playMusic("8", 0.40, false);
 			
 			FlxG.sound.music.persist = true;
 		} 

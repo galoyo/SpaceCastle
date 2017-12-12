@@ -38,7 +38,7 @@ class Player extends FlxSprite
 	private var _maxXacceleration:Int = 50000;
 	
 	/*******************************************************************************************************
-	 * How fast the object accelerates horizontally when the Y value of the object is changed.
+	 * How fast the object accelerates vertically when the Y value of the object is changed.
 	 */
 	public var _maxYacceleration:Int = 1000;
 	
@@ -70,12 +70,12 @@ class Player extends FlxSprite
 	/*******************************************************************************************************
 	 * Must be a bit bugger than _maxFallSpeed. This var is 140 in value greater than _maxFallSpeed which will lift the player off the ground about 20 pixels when doing a dash attach.
 	 */
-	private var _velocityY = 23140;
+	private var _velocityY = 53140;
 	
 	/*******************************************************************************************************
 	 * Maximum acceleration speed for this player.
 	 */
-	public var _maxFallSpeed:Int = 23000;
+	public var _maxFallSpeed:Int = 53000;
 	
 	//##################################################################
 	//################ These values must NOT be changed. ###############
@@ -223,30 +223,22 @@ class Player extends FlxSprite
 		// frame 8 so it looks like our character is blinking. 
 		
 		// normal gravity animation.
-		animation.add("walk", [0, 1, 2, 1, 0, 1, 2, 1], 16);
-		animation.add("walkOnLadder", [3, 4, 5, 4, 3, 4, 5, 4], 16);
-		animation.add("run" , [0, 1, 2, 1, 0, 1, 2, 1], 24);
-		animation.add("jump", [2], 25);
-		animation.add("skid", [2], 25);
-		animation.add("death", [2], 25);
-		animation.add("changedToItemFlyingHat", [6, 7, 8, 9], 40, false);
-		animation.add("changedToNoItem", [8, 7, 6, 0], 40, false);
-		animation.add("flyingHat", [10, 11], 20, true);
-		animation.add("idle", [2], 25);
-		animation.add("idleOnLadder", [3], 25);
+		animation.add("walk", [11, 6, 7, 8, 9, 10], 40);
+		animation.add("walkOnLadder", [12, 13, 14, 15, 16, 14], 40);
+		animation.add("jump", [5], 25);
+		animation.add("changedToItemFlyingHat", [18, 19, 20, 21], 40, false);
+		animation.add("flyingHat", [22, 23], 20, true);
+		animation.add("idle", [11], 25);
+		animation.add("idleOnLadder", [14], 25);
 		
 		// antigravity animation.
-		animation.add("walk2", [0, 1, 2, 1, 0, 1, 2, 1], 16, true, false, true);
-		animation.add("walkOnLadder2", [3, 4, 5, 4, 3, 4, 5, 4], 16, true, false, true);
-		animation.add("run2" , [0, 1, 2, 1, 0, 1, 2, 1], 24, true, false, true);
-		animation.add("jump2", [2], 25, true, false, true);
-		animation.add("skid2", [2], 25, true, false, true);
-		animation.add("death2", [2], 25, true, false, true);
-		animation.add("changedToItemFlyingHat2", [6, 7, 8, 9], 40, false, false, true);
-		animation.add("changedToNoItem2", [8, 7, 6, 0], 40, false, false, true);
-		animation.add("flyingHat2", [10, 11], 20, true, false, true);
-		animation.add("idle2", [2], 25, true, false, true);
-		animation.add("idleOnLadder2", [3], 25, true, false, true);
+		animation.add("walk2", [11, 6, 7, 8, 9, 10], 40, true, false, true);
+		animation.add("walkOnLadder2", [12, 13, 14, 15, 16, 14], 40, true, false, true);
+		animation.add("jump2", [5], 25, true, false, true);
+		animation.add("changedToItemFlyingHat2", [18, 19, 20, 21], 40, false, false, true);
+		animation.add("flyingHat2", [22, 23], 20, true, false, true);
+		animation.add("idle2", [11], 25, true, false, true);
+		animation.add("idleOnLadder2", [14], 25, true, false, true);
 		
 		// max movement speed.
 		maxVelocity.y = _maxFallSpeed;
@@ -921,7 +913,6 @@ class Player extends FlxSprite
 		// play a thump sound when mob lands on the floor.
 		if (Reg._antigravity == true && justTouched(FlxObject.CEILING) && !overlapsAt(x, y + 16, Reg.state._objectLadders) || Reg._antigravity == false && justTouched(FlxObject.FLOOR) && !overlapsAt(x, y + 16, Reg.state._objectLadders) )
 		{
-			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
 			_inAir = false;
 			
 			if (Reg._antigravity == false) animation.play("idle"); 
@@ -966,7 +957,12 @@ class Player extends FlxSprite
 		}
 		
 		// if player is standing on a slope then set high gravity so that the player will walk down the slope instead of jumping or hopping down.
-		else if ( Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
+		else if ( 
+			   Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y - 32 / 32)) == 22
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y - 32 / 32)) == 30
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y - 32 / 32)) == 38 
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y - 32 / 32)) == 46
+			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 22
 			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 30
 			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 38 
 			|| Reg.state.overlays.getTile(Std.int(x / 32), Std.int(y / 32)) == 46)
@@ -974,7 +970,7 @@ class Player extends FlxSprite
 			if( Reg._antigravity == false) acceleration.y = Reg._gravityOnSlopes;
 			else acceleration.y = -Reg._gravityOnSlopes;
 		}	
-		// if player in not in the air or is not standing on the slope then player is standing on a tile. set gravity to normal.
+		// set gravity to normal.
 		else if (!isTouching(FlxObject.FLOOR) && Reg._antigravity == false) 
 		{
 			acceleration.y = _gravity;
@@ -982,12 +978,7 @@ class Player extends FlxSprite
 		else if ( !isTouching(FlxObject.CEILING) && Reg._antigravity == true) 
 		{
 			acceleration.y = -_gravity;
-		} 
-		/*else
-		{
-			if (Reg._antigravity == false) acceleration.y = _gravity;
-			else acceleration.y = -_gravity;
-		}*/
+		}
 		//-------------------------------------------------------------
 		//###################################### END SET GRAVITY ###########################
 		
@@ -1024,7 +1015,8 @@ class Player extends FlxSprite
 		else if (Reg._antigravity == false && !isTouching(FlxObject.FLOOR) && Reg._usingFlyingHat == false)
 		{
 			if (Reg._antigravity == false && !overlapsAt(x, y, Reg.state._objectLadders)) animation.play("jump");
-			else if (overlapsAt(x, y, Reg.state._objectLadders))
+			else 
+			if (overlapsAt(x, y, Reg.state._objectLadders))
 			{					
 				if (velocity.y == 0) 
 				{

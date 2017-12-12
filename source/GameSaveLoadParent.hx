@@ -16,11 +16,6 @@ import flixel.util.FlxTimer;
 class GameSaveLoadParent extends FlxSubState
 {	
 	/*******************************************************************************************************
-	 * This title text display near the top of the screen.
-	 */
-	private var screenBox:FlxSprite;
-			
-	/*******************************************************************************************************
 	 * This is what we're going to save to.
 	 */ 
 	private var _gameSave:FlxSave;
@@ -75,12 +70,9 @@ class GameSaveLoadParent extends FlxSubState
 	{
 		super();
 		
-		// the background image of this subState.
-		screenBox = new FlxSprite(0, 0);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);		
-		screenBox.setPosition(0, 0); 
-		screenBox.scrollFactor.set(0, 0);
-		add(screenBox);
+		var background = new FlxSprite(0, 0, "assets/images/backgroundSubState4.jpg");
+		background.scrollFactor.set(0, 0);	
+		add(background);
 
 		// Create the four slots of text boxes. Note that the fifth count ends before another loop, so only four loops will be performed. 
 		for (i in 1...5) 
@@ -97,6 +89,12 @@ class GameSaveLoadParent extends FlxSubState
 		button2 = new Button(60, 130 + (2 * 70), "2", 70, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
 		button3 = new Button(60, 130 + (3 * 70), "3", 70, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
 		button4 = new Button(60, 130 + (4 * 70), "4", 70, 35, null, 16, 0xFFCCFF33, 0, button4Clicked);
+		
+		button1.label.font = Reg.defaultFont;
+		button2.label.font = Reg.defaultFont;
+		button3.label.font = Reg.defaultFont;
+		button4.label.font = Reg.defaultFont;
+		
 		add(button1);
 		add(button2);
 		add(button3);
@@ -105,37 +103,36 @@ class GameSaveLoadParent extends FlxSubState
 		// This button's text will be displayed for both save and load screens. However, only after a save slot has been clicked will this button's text be changed to "OK". After the user saves the game, all four slot buttons will be hidden and the text box where the save was made will be highlighted and then this button's text will be displayed as the text labled OK, giving the option for the user to verify the save made.
 		button10 = new Button(180, 510, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, cancelSave);		
 		button10.screenCenter(X);
+		
+		button10.label.font = Reg.defaultFont;
+		
 		add(button10);
 		
 		//--------------------------------------------------- Header columns for the data rows.
-		var slot = new FlxText(60, 145, 0, "Slot");
-		slot.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
-		slot.scrollFactor.set();
-		add(slot);	
-		
-		var health = new FlxText(157, 145, 0, "Health");
-		health.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
-		health.scrollFactor.set();
-		add(health);	
-		
-		var nuggets = new FlxText(279, 145, 0, "Nuggets");
-		nuggets.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
-		nuggets.scrollFactor.set();
-		add(nuggets);	
-		
-		var map = new FlxText(421, 145, 0, "Map");
-		map.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
-		map.scrollFactor.set();
-		add(map);
-		
-		var date = new FlxText(526, 145, 0, "Date");
-		date.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
-		date.scrollFactor.set();
-		add(date);		
+		text(60, 145, "Slot");
+		text(157, 145, "Health");
+		text(279, 145, "Nuggets");
+		text(421, 145, "Map");	
+		text(526, 145, "Date");	
 		//--------------------------------------------------- End of header columns
 		
 		// Go to the function four times. Each loop, load the data and display that data at that text box.
 		for (i in 1...5) {gameSlotLoad(i);}
+	}
+		
+	/**
+	 * @param	_width	Width location of text on screen.
+	 * @param	_height	Height location of text on screen.
+	 * @param	_text	The text to place on screen.
+	 */
+	private function text(_width:Int, _height:Int, _text:String):Void
+	{
+		var _t:FlxText;
+		_t = new FlxText(_width, _height, 0, _text);
+		_t.setFormat(Reg.defaultFont, 18, FlxColor.BLACK);
+		_t.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLUE, 1);
+		_t.scrollFactor.set();
+		add(_t);
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -343,6 +340,10 @@ class GameSaveLoadParent extends FlxSubState
 
 		_gameSave.data._dateAndTimeSaved = Date.now();
 		
+		var nearHouse:Bool = Reg.state.playerOutsideOfHouse();
+		if (nearHouse == false) Reg._playingHouseMusic = true;
+		_gameSave.data._playingHouseMusic = Reg._playingHouseMusic;
+		
 		_gameSave.data._mapsThatPlayerHasBeenToLength = Reg._mapsThatPlayerHasBeenTo.length;
 					   
 		_gameSave.data._mapsThatPlayerHasBeenTo = new Array<String>();
@@ -396,21 +397,25 @@ class GameSaveLoadParent extends FlxSubState
 			
 			var health = new FlxText(157, 130 + (slotID * 70), 0, Std.int(_healthCurrent) + "/" + Std.int(_healthMaximum));
 			health.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
+			health.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			health.scrollFactor.set();
 			add(health);
 			
 			var nuggets = new FlxText(279, 130 + (slotID * 70), 0, _nuggets);
 			nuggets.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
+			nuggets.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			nuggets.scrollFactor.set();
 			add(nuggets);
 
 			var map = new FlxText(421, 130 + (slotID * 70), 0, _mapXcoords + "/" + _mapYcoords);
 			map.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
+			map.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			map.scrollFactor.set();
 			add(map);
 
 			var date = new FlxText(526, 130 + (slotID * 70), 0, _dateAndTimeSaved);
 			date.setFormat("assets/fonts/trim.ttf", 20, FlxColor.WHITE);
+			date.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			date.scrollFactor.set();
 			add(date);			
 			
@@ -523,7 +528,7 @@ class GameSaveLoadParent extends FlxSubState
 			Reg._itemGotSkillDash = _gameLoad.data._itemGotSkillDash;
 			
 			Reg._dateAndTimeSaved = _gameLoad.data._dateAndTimeSaved;
-			
+			Reg._playingHouseMusic = _gameLoad.data._playingHouseMusic;			
 			var _mapsThatPlayerHasBeenToLength:Int = _gameLoad.data._mapsThatPlayerHasBeenToLength;
 
 			for (i in 0..._mapsThatPlayerHasBeenToLength)

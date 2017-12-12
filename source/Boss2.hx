@@ -96,11 +96,7 @@ class Boss2 extends EnemyParentClass
 		super(x, y, player, emitterMobsDamage, emitterDeath, emitterItemTriangle, emitterItemDiamond, emitterItemPowerUp, emitterItemNugget, emitterItemHeart, particleSmokeRight, particleSmokeLeft, bulletsMob, particleBulletHit, particleBulletMiss);
 	
 		loadGraphic("assets/images/boss2.png", true, 28, 28);
-		animation.add("fly", [0, 1, 2, 3], 15);		
-		animation.add("walking", [0, 1, 2, 1, 0, 1, 2, 1], 24);
-		animation.add("jumping", [0, 2, 1]);
-		animation.add("landing", [0, 1, 2, 1, 0, 1, 2, 1], 8, false);	
-		animation.add("standing", [0, 1], 3);
+		animation.add("fly", [0, 1, 0, 2], 27);		
 		
 		pixelPerfectPosition = false;		
 		

@@ -15,11 +15,6 @@ import flixel.util.FlxTimer;
 class Instructions extends FlxSubState
 {	
 	/*******************************************************************************************************
-	 * Used so that this subState does not start with a transparent background.
-	 */
-	private var screenBox:FlxSprite;
-	
-	/*******************************************************************************************************
 	 * This title text display near the top of the screen.
 	 */
 	private var title:FlxText;
@@ -33,64 +28,44 @@ class Instructions extends FlxSubState
 	{
 		super();
 		
-		screenBox = new FlxSprite(10, 10);
-		screenBox.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);		
-		screenBox.setPosition(0, 0); 
-		screenBox.scrollFactor.set(0, 0);
-		add(screenBox);
+		var background = new FlxSprite(0, 0, "assets/images/backgroundSubState1.jpg");
+		background.scrollFactor.set(0, 0);	
+		add(background);
 		
 		title = new FlxText(0, 50, 0, "Instructions");
-		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.BLUE);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
 		title.scrollFactor.set();
 		title.setPosition(0, 50);
 		title.screenCenter(X);
 		add(title);
 		
-		var Instructions1 :FlxText;
-		Instructions1 = new FlxText(50, 125, 0, "LEFT / RIGHT arrow keys moves player.");
-		Instructions1.color = FlxColor.WHITE;
-		Instructions1.size = 14;
-		Instructions1.scrollFactor.set();
-		add(Instructions1);
-		
-		var Instructions2 :FlxText;
-		Instructions2 = new FlxText(50, 150, 0, "DOWN arrow key: interact with objects such as characters, doors and dialogs.");
-		Instructions2.color = FlxColor.WHITE;
-		Instructions2.size = 14;
-		Instructions2.scrollFactor.set();
-		add(Instructions2);
-		
-		var Instructions3 :FlxText;
-		Instructions3 = new FlxText(50, 175, 0, "i: Access the inventory.");
-		Instructions3.color = FlxColor.WHITE;
-		Instructions3.size = 14;
-		Instructions3.scrollFactor.set();
-		add(Instructions3);	
-		
-		var Instructions4 :FlxText;
-		Instructions4 = new FlxText(50, 200, 0, "z, x, c: Action key for an item. Confirm.");
-		Instructions4.color = FlxColor.WHITE;
-		Instructions4.size = 14;
-		Instructions4.scrollFactor.set();
-		add(Instructions4);		
-		
-		var Instructions5 :FlxText;
-		Instructions5 = new FlxText(50, 225, 0, "m: Main menu.");
-		Instructions5.color = FlxColor.WHITE;
-		Instructions5.size = 14;
-		Instructions5.scrollFactor.set();
-		add(Instructions5);
-		
-		var Instructions6 :FlxText;
-		Instructions6 = new FlxText(50, 250, 0, "F12: Toggles full screen mode.");
-		Instructions6.color = FlxColor.WHITE;
-		Instructions6.size = 14;
-		Instructions6.scrollFactor.set();
-		add(Instructions6);
+		text(50, 125, "LEFT / RIGHT arrow keys moves player.");
+		text(50, 150, "DOWN arrow key: interact with objects such as characters, doors and dialogs.");
+		text(50, 175, "i: Access the inventory.");
+		text(50, 200, "z, x, c: Action key for an item. Confirm.");
+		text(50, 225, "m: Main menu.");
+		text(50, 250, "F12: Toggles full screen mode.");
 		
 		OKbutton = new Button(180, 300, "z: Back.", 160, 35, null, 16, 0xFFCCFF33, 0, OKbuttonClicked);	
 		OKbutton.screenCenter(X);
+		OKbutton.label.font = Reg.defaultFont;
 		add(OKbutton);
+	}
+	
+	/**
+	 * @param	_width	Width location of text on screen.
+	 * @param	_height	Height location of text on screen.
+	 * @param	_text	The text to place on screen.
+	 */
+	private function text(_width:Int, _height:Int, _text:String):Void
+	{
+		var _t:FlxText;
+		_t = new FlxText(_width, _height, 0, _text);
+		_t.setFormat(Reg.defaultFont, 14, FlxColor.BLACK);
+		_t.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.LIME, 1);
+		_t.scrollFactor.set();
+		add(_t);
 	}
 	
 	override public function update(elapsed:Float):Void 

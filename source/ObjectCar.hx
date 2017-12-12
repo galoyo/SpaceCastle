@@ -66,10 +66,12 @@ class ObjectCar extends FlxSprite
 			if (Reg.state.player.health <= 0) return;
 			
 			// player is entering the car.
-			if (Reg.mapXcoords == 22 && Reg.mapYcoords == 19 && InputControls.down.pressed && FlxG.overlap(this, Reg.state.player)
-			 || Reg.mapXcoords == 27 && Reg.mapYcoords == 19 && InputControls.down.pressed && FlxG.overlap(this, Reg.state.player))
+			if (Reg.mapXcoords == 22 && Reg.mapYcoords == 19 && InputControls.down.justPressed && FlxG.overlap(this, Reg.state.player) && Reg._keyOrButtonDown == false
+			 || Reg.mapXcoords == 27 && Reg.mapYcoords == 19 && InputControls.down.justPressed && FlxG.overlap(this, Reg.state.player) && Reg._keyOrButtonDown == false)
 			{
+				Reg._keyOrButtonDown = true;
 				Reg.state.player.visible = false;
+				
 				if (Reg._playerFeelsWeak == false) loadGraphic("assets/images/objectCar2.png", true, 150, 65); // player in car.
 				else loadGraphic("assets/images/objectCar3.png", true, 150, 65);
 				
@@ -82,6 +84,12 @@ class ObjectCar extends FlxSprite
 				animation.play("car");
 				Reg._playerInsideCar = true;
 			}
+			
+			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
+			{
+				Reg._keyOrButtonDown = false;
+			}
+	
 			
 			// at parallax car scene, car is moving in the direction of east.
 			if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19 && Reg.state.player.visible == true && Reg._playerInsideCar == true)

@@ -19,13 +19,14 @@ class HealthBar extends FlxBar
 	 * @param	min				The minimum var of the classes var to display?
 	 * @param	max				The maximum var of the classes var to display? Eg, Reg.state.player.health
 	 * @param	showBorder		Show a border for this FlxBar?
+	 * @param	position		The postion of the healthbar from the top of the mob.
 	 */
-	public function new(x:Float = 0, y:Float = 0, ?direction:FlxBarFillDirection, width:Int = 100, height:Int = 10, ?parentRef:Dynamic, variable:String = "", min:Float = 0, max:Float = 100, showBorder:Bool = false)
+	public function new(x:Float = 0, y:Float = 0, ?direction:FlxBarFillDirection, width:Int = 100, height:Int = 10, ?parentRef:Dynamic, variable:String = "", min:Float = 0, max:Float = 100, showBorder:Bool = false, position:Float)
 	{
 		super(x, y, direction, width, height, parentRef, variable, min, max, showBorder);
 	
 		createFilledBar(0xFF8f0f0f, 0xFF0000FF);
-		trackParent(0, Std.int(Reg._tileSize)); // below mob.
+		trackParent(0, Std.int(position + 4)); // below mob.
 	}
 	
 	override public function update(elapsed:Float):Void

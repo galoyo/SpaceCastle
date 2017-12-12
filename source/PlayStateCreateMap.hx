@@ -108,10 +108,11 @@ class PlayStateCreateMap
 		for (i in 281...295) Reg.state.tilemap.setTileProperties(i, FlxObject.ANY); 	// vertical tiles.
 		for (i in 304...736) Reg.state.tilemap.setTileProperties(i, FlxObject.ANY); 	// level 2 tiles.
 		for (i in 736...800) Reg.state.tilemap.setTileProperties(i, FlxObject.NONE);	// textures.
-
+		for (i in 800...861) Reg.state.tilemap.setTileProperties(i, FlxObject.ANY);		// tiles.
 		
-		var tempNW:Array<Int> = [8,9,10,11,57,59,248, 252,253, 260,262, 305,337,369,401,433,473,497,521,545,569,601,625,649,673,697];
-		var tempNE:Array<Int> = [12,13,14,15,58,60,249, 254,255, 261, 263, 306,338,370,402,434,474,498,522,546,570,602,626,650,674,698];		
+		
+		var tempNW:Array<Int> = [8,9,10,11,57,59,248, 252,253, 260,262, 305,337,369,401,433,473,497,521,545,569,601,625,649,673,697,841];
+		var tempNE:Array<Int> = [12,13,14,15,58,60,249, 254,255, 261, 263, 306,338,370,402,434,474,498,522,546,570,602,626,650,674,698,842];		
 		var tempSW:Array<Int> = [250, 256, 257, 264, 266, 313,345,377,409,441,481,505,529,553,577,609,633,657,681,705];
 		var tempSE:Array<Int> = [251, 258, 259, 265, 267, 314,346,378,410,442,482,506,530,554,578,610,634,658,682,706];
 		

@@ -24,11 +24,6 @@ class Inventory extends FlxSubState
 	private var _stopCloseSubState:Bool = true;
 	
 	/*******************************************************************************************************
-	 * Fill the screen with this image.
-	 */
-	private var backdropImage:FlxBackdrop;
-	
-	/*******************************************************************************************************
 	 * Stops the inventory Item Highlighted Square from moving quickly through the grid when holding down a key or button.
 	 */
 	private var _buttonDown:Bool;
@@ -82,12 +77,13 @@ class Inventory extends FlxSubState
 	{
 		super();
 		
+		var // Fill the screen with this tiled image.
 		backdropImage = new FlxBackdrop("assets/images/backgroundTiles3.png", 0, 0, true, true, 0, 0);
-		backdropImage.scrollFactor.set(0, 0);
 		add(backdropImage);
 		
 		title = new FlxText(0, 50, 0, "Inventory");
-		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.GREEN);
+		title.setFormat("assets/fonts/trim.ttf", 36, FlxColor.BLUE);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
 		title.scrollFactor.set();
 		title.setPosition(0, 50);
 		title.screenCenter(X);
@@ -119,6 +115,11 @@ class Inventory extends FlxSubState
 		_iconsGroup = new FlxGroup();
 		add(_iconsGroup);
 		
+		var slotBox = new FlxSprite(0, 0);
+		slotBox.makeGraphic(FlxG.width - 40, 54, 0xFF011f13);		
+		slotBox.setPosition(20, 123); 
+		slotBox.scrollFactor.set(0, 0);
+		add(slotBox);
 	
 		// add all the inventory items to the screen.
 		for (i in 0...Reg._inventoryIconNumberMaximum)
@@ -133,13 +134,17 @@ class Inventory extends FlxSubState
 		{
 			itemTitle = new FlxText(147, 122, 0, Reg._inventoryIconName[0]);
 			itemTitle.color = FlxColor.WHITE;
+			itemTitle.font = Reg.defaultFont;
 			itemTitle.size = 14;
+			itemTitle.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			itemTitle.scrollFactor.set();
 			add(itemTitle);
 			
 			itemDescription = new FlxText(147, 147, 0, Reg._inventoryIconDescription[0]);
 			itemDescription.color = FlxColor.WHITE;
+			itemDescription.font = Reg.defaultFont;
 			itemDescription.size = 14;
+			itemDescription.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 			itemDescription.scrollFactor.set();
 			add(itemDescription);			
 			

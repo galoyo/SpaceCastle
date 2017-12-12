@@ -19,14 +19,44 @@ class Reg
 {
 
 	//########################################################################
-	// these vars will NOT get saved by saving the game when playing the game.
-	//########################################################################
+	// Vars that need updated when a new map is in game.
+	// #######################################################################
+		
+	/*******************************************************************************************************
+	 *  This is the total playable outside map that is manually edited. House and bonus maps are not in this array. The first value is the part of a map name from the assets/data directory and the second value is the doorway number. Search for doorways at dev/README FIRST.html
+	 * The _maps_X_Y_OutsideTotalAutomatic var must have the same lenght as this var or else an error message will be displayed when you run the game. The reason is to verify that you have every map in the game in this var. Note, the doorway values will not be verified.
+	 */
+	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
 	
+	/**
+	 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
+ 	 */
+	public static var _mapsThatHaveAnItem:Array<String> = ["15-15", "15-15", "14-18", "12-19", "17-22", "20-19", "20-18", "19-20", "19-20", "23-18", "21-21"];
+	
+	/*******************************************************************************************************
+	 * If a map is within this var then the light will be displayed on that map. The map will be dark except for a light source that surrounds the player.
+	 */
+	public static var _displayLightCoords:String = "19-21,19-22";
+			 
 	/*******************************************************************************************************
 	* If a map coordinate are within this var then the rain will be displayed on that map.
 	*/
 	public static var _displayRainCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
+	/*******************************************************************************************************
+	* This var is used to play an outside house music. Malas usually are near a house. A house usually has a teleporter. Place a map coordinate that has a house here. 
+	*/
+	public static var _mapsThatHaveAhouse:String = "18-15,20-20";
+	
+	//########################################################################
+	// these vars will NOT get saved by saving the game when playing the game.
+	//########################################################################
+	
+	/**
+	 * Default font for the game.
+	 */
+	public static var defaultFont:String = "assets/fonts/trim.ttf";
+		
 	/*******************************************************************************************************
 	* If set to true then the Test-Items.map will be displayed. That map is used to test the game features. mapXcoords and mapYcoords vars do not need to be changed when setting this var to true.
 	*/
@@ -260,7 +290,7 @@ class Reg
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. Without this var, the player jumps down instead of walking down the tiled slope. This high value stops that from happening. Instead the player will seem to walk down the slope because of a high gravity.
 	 */
-	public static var _gravityOnSlopes:Int = 100000;
+	public static var _gravityOnSlopes:Int = 50000;
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. When value is true at playState.hx, this var is used to disable the transition effect when the recorded demo is playing. Recorded demos will be broken when played more than once if the transition effect is allowed to plays with the demos. At menuState, a demo will be played when the introduction music ends.
@@ -646,7 +676,7 @@ class Reg
 	
 	// HOUSE ###############################################################################################
 	/*******************************************************************************************************
-	 * Do NOT change the value of this var. Values are "house" and "". The house map will be displayed when value is house, 
+	 * Do NOT change the value of this var. Values are "-house" and "". The house map will be displayed when value is -house, 
 	 */
 	public static var _inHouse:String = "";
 	
@@ -773,6 +803,11 @@ class Reg
 	 */
 	public static var _maps_X_Y_OutsideTotalAutomatic:Array<String> = [];
 	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. When leaving a house map, this var is used to play an adventure music.
+	 */
+	public static var _playingHouseMusic:Bool = false;
+	
 	//##################################################################
 	//########## vars that WILL be saved when game is saved ############
 	//##################################################################
@@ -827,23 +862,7 @@ class Reg
 	public static var mapYcoords:Float = 20; // should be 20.
 	
 	//######################################################################################################
-		
-	/*******************************************************************************************************
-	 *  This is the total playable outside map that is manually edited. House and bonus maps are not in this array. The first value is the part of a map name from the assets/data directory and the second value is the doorway number. Search for doorways at dev/README FIRST.html
-	 * The _maps_X_Y_OutsideTotalAutomatic var must have the same lenght as this var or else an error message will be displayed when you run the game. The reason is to verify that you have every map in the game in this var. Note, the doorway values will not be verified.
-	 */
-	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
 	
-	/**
-	 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
- 	 */
-	public static var _mapsThatHaveAnItem:Array<String> = ["15-15", "15-15", "14-18", "12-19", "17-22", "20-19", "20-18", "19-20", "19-20", "23-18", "21-21"];
-	
-	/*******************************************************************************************************
-	 * If a map is within this var then the light will be displayed on that map. The map will be dark except for a light source that surrounds the player.
-	 */
-	public static var _displayLightCoords:String = "19-21,19-22";
-		
 	/*******************************************************************************************************
 	 * Light effect for the player. If the value is true then the player can see in dark places.
 	 */
@@ -946,7 +965,7 @@ class Reg
 	 * Description of the inventory item. Needs to be a short one-liner or else the text will run off of the screen.
 	 */
 	public static var _inventoryIconDescription:Array<String> = [
-	"Can jump a maximum distance of two tiles.", "Every outside map displayed as small maps on one screen.", "", "", "", "", "", "", "", "", "", "", "", "", 
+	"Can jump a maximum height of two tiles.", "Every outside map displayed as small maps on one screen.", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -1107,6 +1126,8 @@ class Reg
 		_keyOrButtonDown = false;
 		
 		Reg._mapsThatPlayerHasBeenTo.splice(0, Reg._mapsThatPlayerHasBeenTo.length);	
+		
+		_playingHouseMusic = false;
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################
@@ -1238,5 +1259,6 @@ class Reg
 		FlxG.camera.setScrollBoundsRect(0, -60, Reg.state.tilemap.width - Reg._tileSize + 32, Reg.state.tilemap.height - Reg._tileSize + 155, true);		
 
 	}
+
 	
 }

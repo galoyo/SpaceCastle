@@ -92,10 +92,10 @@ class PlayStateTouchObjects
 	public static function fireballBlockPlayer(b:FlxSprite, p:Player):Void 
 	{
 		// play a thump sound when mob lands on the floor.
-		if (p.justTouched(FlxObject.FLOOR)) 
+		/*if (p.justTouched(FlxObject.FLOOR)) 
 		{
 			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
-		}	
+		}*/	
 	}
 	
 	
@@ -260,12 +260,6 @@ class PlayStateTouchObjects
 	 */
 	public static function platformMovingPlayer(obj:FlxSprite, p:Player):Void 
 	{
-		// play a thump sound when mob lands on the floor.
-		if (p.justTouched(FlxObject.FLOOR) || p.justTouched(FlxObject.CEILING)) 
-		{
-			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);	
-		}
-		
 		if (!InputControls.left.pressed && !InputControls.right.pressed)
 		{
 			if (p.isTouching(FlxObject.CEILING))
@@ -286,7 +280,7 @@ class PlayStateTouchObjects
 	{
 		// play a thump sound when mob lands on the floor.
 		if (e.justTouched(FlxObject.FLOOR)) {
-			if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
+		//	if (Reg._soundEnabled == true) FlxG.sound.play("switch", 1, false);
 			e.y = obj.y - 29;
 		}	
 	}

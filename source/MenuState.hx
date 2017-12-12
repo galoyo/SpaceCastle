@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxBackdrop;
 import flixel.math.FlxMath;
+import flixel.system.FlxAssets;
 import flixel.system.scaleModes.FixedScaleMode;
 import flixel.system.scaleModes.RatioScaleMode;
 import flixel.system.scaleModes.RelativeScaleMode;
@@ -109,10 +110,12 @@ class MenuState extends FlxState
 		background.setPosition(0, 0);
 		add(background);	
 		
-		var title = new FlxSprite(); // Title image.
-		title.loadGraphic("assets/images/titleImage.png", false);
+		var title = new FlxText(0, 0, 0, "Space Castle");
+		title.setFormat("assets/fonts/blkChcry.ttf", 125, FlxColor.BLUE);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
 		title.scrollFactor.set();
-		title.setPosition(0, 0);
+		title.setPosition(0, 70);
+		title.screenCenter(X);
 		add(title);
 		
 		var titleOptionsBar = new FlxSprite(); // This image is displayed underneath the main buttons.
@@ -150,6 +153,14 @@ class MenuState extends FlxState
 		exitProgram = 		new Button(530, 394, "e: Exit.", 160, 35, null, 16, 0xFFCCFF33, 0, Reg.exitProgram);
 		scale = 			new Button(10, 280, "s: scale", 90, 35, null, 16, 0xFFCCFF33, 0, scaleClicked);
 		
+		button1.label.font = Reg.defaultFont;
+		button2.label.font = Reg.defaultFont;
+		button3.label.font = Reg.defaultFont;
+		button4.label.font = Reg.defaultFont;
+		toggleFullScreen.label.font = Reg.defaultFont;
+		exitProgram.label.font = Reg.defaultFont;
+		scale.label.font = Reg.defaultFont;
+		
 		add(button1);
 		add(button2);
 		add(button3);
@@ -161,12 +172,17 @@ class MenuState extends FlxState
 		var info:FlxText = new FlxText(115, 290, FlxG.width, "Press S key to change the scale mode.");
 		info.setFormat(null, 14, FlxColor.WHITE, LEFT);
 		info.alpha = 0.75;
+		info.font = Reg.defaultFont;
+		info.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		info.scrollFactor.set(0, 0);	
 		add(info);
 		
-		scaleModeCurrentText = new FlxText(452, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
+		scaleModeCurrentText = new FlxText(425, 290, FlxG.width, ScaleMode.RATIO_DEFAULT);
 		scaleModeCurrentText.alignment = LEFT;
+		scaleModeCurrentText.color = FlxColor.WHITE;
+		scaleModeCurrentText.font = Reg.defaultFont;
 		scaleModeCurrentText.size = 14;
+		scaleModeCurrentText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		scaleModeCurrentText.scrollFactor.set(0, 0);	
 		add(scaleModeCurrentText);		
 		

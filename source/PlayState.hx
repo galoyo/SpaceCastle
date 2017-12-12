@@ -852,8 +852,6 @@ class PlayState extends FlxUIState
 		_bullets = new FlxTypedGroup<Bullet>(0);
 		_bulletsMob = new FlxTypedGroup<BulletMob>(0);
 		_bulletsObject = new FlxTypedGroup<BulletObject>(0);								
-				
-		add(_healthBars);
 		
 		_objectCage = new FlxGroup();
 		_objectTube = new FlxGroup();
@@ -910,6 +908,10 @@ class PlayState extends FlxUIState
 		add(_overlayAirBubble);		
 		add(_overlayPipe);		
 				
+			
+		add(_healthBars);
+		add(_healthBarPlayer);
+	
 		// ---------------------------------- rain.		
 		var outside:Bool = displayRain();
 
@@ -921,7 +923,7 @@ class PlayState extends FlxUIState
 			_rain = new FlxTypedGroup<ObjectRain>();
 			add(_rain);
 		
-			for (i in 0...200)
+			for (i in 0...400)
 			{
 				_rain.add(new ObjectRain(i % 10));
 			}
@@ -997,6 +999,7 @@ class PlayState extends FlxUIState
 		
 		if (Reg._stopDreamsMusic == true) {FlxG.sound.music.stop(); Reg._stopDreamsMusic = false;}
 		
+		//-------------------music code block--------------------
 		if (Reg.mapXcoords == 23 && Reg.mapYcoords == 19)
 		{
 			if (FlxG.sound.music.playing == true) FlxG.sound.music.stop();
@@ -1004,19 +1007,42 @@ class PlayState extends FlxUIState
 			if (Reg._playerInsideCar == false) 
 			{
 				FlxG.sound.playMusic("dreams1", 1, false);
-				Reg._stopDreamsMusic = true;
+				Reg._stopDreamsMusic = true; 
 			}
 			else FlxG.sound.playMusic("dreams2", 1, false);
+			
+			Reg._playingHouseMusic = false; // this needs to be at every if statement at this code block.
 		}
 	
 		else if (Reg._musicEnabled == true) 
 		{
+			var nearHouse:Bool = playerOutsideOfHouse();
+			
 			if (Reg.mapXcoords == 24 && Reg.mapYcoords >= 21 && Reg.mapYcoords <= 24 ) 
 			{
+				Reg._playingHouseMusic = false;
 				FlxG.sound.music.persist = true;
 			}
-			else  PlayStateMiscellaneous.playMusicIntro(); // played when entering a house, cave, ect.			
+			
+			else if (Reg._inHouse == "-house")  
+			{
+				Reg._playingHouseMusic = false;
+				FlxG.sound.playMusic("houseInside", 1, false);
+			}
+			else if (nearHouse == true && Reg._playingHouseMusic == false) 
+			{
+				Reg._playingHouseMusic = true;
+				FlxG.sound.playMusic("houseOutside", 1, false);
+			}
+					
+			else if (Reg._playingHouseMusic == true && nearHouse == false || FlxG.sound.music.playing == false && nearHouse == false) 
+			{
+				Reg._playingHouseMusic = false;
+				PlayStateMiscellaneous.playMusic();
+			}
+			
 		}	
+		//----------------end of music code block---------------
 		
 		if (Reg.mapXcoords == 24 && Reg.mapYcoords >= 21 && Reg.mapYcoords <= 24)
 		{
@@ -1064,7 +1090,7 @@ class PlayState extends FlxUIState
 			init();
 		}
 		
-	
+			
 		super.create();
 	}
 	
@@ -1073,6 +1099,20 @@ class PlayState extends FlxUIState
 		var paragraph = Reg._displayRainCoords.split(",");
 		
 		// loop through the paragraph array. if there is a match then do not display the rain on the map.
+		for (i in 0...paragraph.length)
+		{	
+			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
+				return true;
+		}
+		
+		return false;
+	}	
+	
+	public function playerOutsideOfHouse():Bool
+	{
+		var paragraph = Reg._mapsThatHaveAhouse.split(",");
+		
+		// loop through the paragraph array. if there is a match then player is outside of house. house outside music can be played..
 		for (i in 0...paragraph.length)
 		{	
 			if (paragraph[i] == Reg.mapXcoords + "-" + Reg.mapYcoords)
@@ -1204,7 +1244,7 @@ class PlayState extends FlxUIState
 			if (FlxG.keys.anyJustReleased(["F12"])) FlxG.fullscreen = !FlxG.fullscreen; // toggles fullscreen mode.
 		#end
 		
-		// play another music if music is not player.
+		/*// play another music if music is not player.
 		if (Reg._musicEnabled == true || Reg._powerUpStopFlicker == true)
 		{
 			if (FlxG.sound.music.playing == false) 
@@ -1214,7 +1254,7 @@ class PlayState extends FlxUIState
 				Reg._powerUpStopFlicker = false;
 				FlxSpriteUtil.stopFlickering(Reg.state.player);
 			}
-		}
+		}*/
 	
 		// enter key was pressed after replying to a dialog question.
 		if (Reg.dialogIconFilename == "savePoint.png" && Reg._dialogAnsweredYes == true)
@@ -1586,14 +1626,14 @@ class PlayState extends FlxUIState
 		if (InputControls.up.pressed) 
 		{
 			p._yForce--;p._yForce = FlxMath.bound(p._yForce, -1, 1);		
-			p.acceleration.y = p._yForce * p._maxYacceleration; // How fast the object accelerates horizontally when the Y value of the object is changed.		
+			p.acceleration.y = p._yForce * p._maxYacceleration; // How fast the object accelerates vertically when the Y value of the object is changed.		
 				
 			p.animation.play("flyingHat");
 		}
 		else if (InputControls.down.pressed) 
 		{
 			p._yForce++;p._yForce = FlxMath.bound(p._yForce, -1, 1);		
-			p.acceleration.y = p._yForce * p._maxYacceleration; // How fast the object accelerates horizontally when the Y value of the object is changed.
+			p.acceleration.y = p._yForce * p._maxYacceleration;
 			
 			p.animation.play("flyingHat");
 		} else p.velocity.y = 300;

@@ -291,6 +291,11 @@ class Dialog extends FlxSubState
 			buttonExit = new Button(117, 350, "e: Exit", 160, 35, null, 16, 0xFFCCFF33, 0, buttonExitClicked);	
 			buttonTitle = new Button(317, 350, "t: Title", 160, 35, null, 16, 0xFFCCFF33, 0, buttonTitleClicked);	
 			buttonResume = new Button(517, 350, "r: Resume", 160, 35, null, 16, 0xFFCCFF33, 0, buttonResumeClicked);	
+			
+			buttonExit.label.font = Reg.defaultFont;
+			buttonTitle.label.font = Reg.defaultFont;
+			buttonResume.label.font = Reg.defaultFont;
+		
 			add(buttonExit);
 			add(buttonTitle);
 			add(buttonResume);
@@ -338,6 +343,7 @@ class Dialog extends FlxSubState
 			Reg._stopDemoFromPlaying = false;
 			Reg._keyOrButtonDownAtSubState = true;
 			Reg.state.persistentDraw = true;
+			Reg._keyOrButtonDown = false;
 			close(); 
 		}
 	}		
@@ -380,6 +386,7 @@ class Dialog extends FlxSubState
 						
 						Reg._stopDemoFromPlaying = false;
 						Reg.state.persistentDraw = true;
+						Reg._keyOrButtonDown = false;
 						close();
 					}
 				#else
@@ -412,6 +419,7 @@ class Dialog extends FlxSubState
 						
 						Reg._stopDemoFromPlaying = false;
 						Reg.state.persistentDraw = true;
+						Reg._keyOrButtonDown = false;
 						close();
 					}
 				#end
@@ -446,6 +454,7 @@ class Dialog extends FlxSubState
 		Reg._stopDemoFromPlaying = false; 
 		Reg._keyOrButtonDownAtSubState = true;
 		Reg.state.persistentDraw = true;
+		Reg._keyOrButtonDown = false;
 		close(); 
 	}
 	
@@ -516,6 +525,7 @@ class Dialog extends FlxSubState
 		buttonNo.set_visible(false);
 		Reg._keyOrButtonDownAtSubState = true;
 		Reg.state.persistentDraw = true;
+		Reg._keyOrButtonDown = false;
 		close();
 	}
 	
@@ -530,6 +540,7 @@ class Dialog extends FlxSubState
 		buttonNo.set_visible(false);
 		Reg._keyOrButtonDownAtSubState = true;
 		Reg.state.persistentDraw = true;
+		Reg._keyOrButtonDown = false;
 		close();
 	}
 }

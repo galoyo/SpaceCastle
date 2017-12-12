@@ -29,7 +29,7 @@ class Button extends FlxButton
 	/*******************************************************************************************************
 	 * This is the color of the border when the mouse is not overtop of the button.
 	 */
-	private var _borderColor:FlxColor = 0xFF008888;
+	private var _borderColor:FlxColor = 0xCCCC00FF;
 	
 	/** 
 	 * @param	x				The x location of the button on the screen?
@@ -82,7 +82,7 @@ class Button extends FlxButton
 			label.fieldWidth = buttonWidth - (textPadding * 2);
 			label.text = text;
 			label.x = textPadding;
-			label.y = ((buttonHeight - label.textField.textHeight) - (label.height - label.textField.textHeight)) / 2;
+			label.y = ((buttonHeight - label.textField.textHeight) - (label.height + 8 - label.textField.textHeight)) / 2;
 	#if (flash || html5)
 			label.y += 1;
 	#end

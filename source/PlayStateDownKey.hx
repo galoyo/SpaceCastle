@@ -18,7 +18,7 @@ class PlayStateDownKey
 		//######################## DOWN KEY PRESS #######################
 		var	_tileX = Std.int(Reg.state.player.x / 32);		
 		var	_tileY = Std.int(Reg.state.player.y / 32);
-		
+	
 		if (InputControls.down.justPressed && Reg._keyOrButtonDown == false)
 		{			
 			// save game is requested when down key is pressed at the save point.		
@@ -60,13 +60,15 @@ class PlayStateDownKey
 	
 			// emitter the "question mark if there is no action.
 			else if (InputControls.up.justPressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == true && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player)
-				  || InputControls.down.justPressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player)
-				  || InputControls.down.justPressed && Reg._antigravity == false && !FlxG.overlap(Reg.state._objectCar, Reg.state.player)) // for npcs overlapping, see an npcs class.
-			{
+				  || InputControls.down.justPressed && !FlxG.overlap(Reg.state._objectPlatformMoving, Reg.state.player) && Reg._antigravity == false && !FlxG.overlap(Reg.state._overlayPipe, Reg.state.player) && !FlxG.overlap(Reg.state._objectLadders, Reg.state.player) && !FlxG.overlap(Reg.state.npcs, Reg.state.player) && !FlxG.overlap(Reg.state._objectTeleporter, Reg.state.player) && !FlxG.overlap(Reg.state._objectSign, Reg.state.player))
+				{
 				if (!Reg.state.player.justTouched(FlxObject.FLOOR) && Reg.state.player.isTouching(FlxObject.FLOOR))
 				{
-					Reg.state._particleQuestionMark.focusOn(Reg.state.player);
-					Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
+					if (!FlxG.overlap(Reg.state._objectCar, Reg.state.player) || Reg.state._objectCar == null)
+					{
+						Reg.state._particleQuestionMark.focusOn(Reg.state.player);
+						Reg.state._questionMark.start(0.15, onTimerQuestionMark, 1);
+					}
 				}
 				
 				Reg._guildlineInUseTicks = 0;						

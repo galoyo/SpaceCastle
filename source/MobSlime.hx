@@ -91,7 +91,7 @@ class MobSlime extends EnemyParentClass
 		ID = id;
 		
 		// id 1 is the easy green mob while 2 is the hard red mob.
-		loadGraphic("assets/images/mobSlime.png", true, 28, 28);
+		loadGraphic("assets/images/mobSlime.png", true, 32, 32);
 		
 		// the animations used for this mob.
 		if (id == 1)
@@ -167,8 +167,10 @@ class MobSlime extends EnemyParentClass
 				_inAir = false;
 			} 
 			else if (!isTouching(FlxObject.FLOOR)) _inAir = true;
-		
-				
+								
+			if (x <= Reg.state.player.x) facing = FlxObject.RIGHT;
+				else facing = FlxObject.LEFT;
+			
 			//------------------ CONTINUE TO JUMP TOWARDS PLAYER
 			continueToJumpTowardsPlayer(_slowJumpingInWater, _mobInWater);
 		
