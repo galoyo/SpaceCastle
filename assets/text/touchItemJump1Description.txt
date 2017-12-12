@@ -1,1 +1,1 @@
-Super Jump 1.#jump/fall a distance of three blocks without receiving health damage.#@
+Super Jump 1.#Can jump a maximum height of three tiles.#@
