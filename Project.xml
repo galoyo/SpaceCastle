@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.7.1.1" company="" />
+	<app title="Space Castle" file="SpaceCastle" main="Main" version="0.7.2.5" company="" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -46,6 +46,7 @@
 	<assets path="assets" if="neko" exclude="*.mp3" embed="true" />
 	<assets path="assets" if="linux" exclude="*.mp3" embed="true" />
 	<assets path="assets" if="html5" exclude="*.mp3" embed="true" />
+	<assets path="assets/fonts" include="*.ttf" embed="true" />
 	
 	<assets path="assets/music" rename="music" if="flash" embed="true">
 		<music path="1.mp3" id="1" />
@@ -58,13 +59,8 @@
 		<music path="4.mp3" id="4" />
 		<music path="5.mp3" id="5" />
 		<music path="6.mp3" id="6" />
-		<music path="7.mp3" id="7" />
-		<music path="8.mp3" id="8" />
-		<music path="20.mp3" id="20" />
-		<music path="21.mp3" id="21" />
-		<music path="22.mp3" id="22" />
-		<music path="23.mp3" id="23" />
-		<music path="24.mp3" id="24" />
+		<music path="houseInside.mp3" id="houseInside" />
+		<music path="houseOutside.mp3" id="houseOutside" />
 		<music path="boss1.mp3" id="boss1" />
 		<music path="boss2.mp3" id="boss2" />
 		<music path="boss3.mp3" id="boss3" />
@@ -164,13 +160,8 @@
 		<music path="4.ogg" id="4" />
 		<music path="5.ogg" id="5" />
 		<music path="6.ogg" id="6" />
-		<music path="7.ogg" id="7" />
-		<music path="8.ogg" id="8" />
-		<music path="20.ogg" id="20" />
-		<music path="21.ogg" id="21" />
-		<music path="22.ogg" id="22" />
-		<music path="23.ogg" id="23" />
-		<music path="24.ogg" id="24" />
+		<music path="houseInside.ogg" id="houseInside" />
+		<music path="houseOutside.ogg" id="houseOutside" />
 		<music path="boss1.ogg" id="boss1" />
 		<music path="boss2.ogg" id="boss2" />
 		<music path="boss3.ogg" id="boss3" />
