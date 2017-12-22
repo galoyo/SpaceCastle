@@ -219,15 +219,6 @@ class PlayStateAdd
 	}
 	
 	/**
-	 * NPC. looks like the player but yellow color. weak from the virus in the air.
-	 */
-	public static function addNpcMalaUnhealthy(X:Float, Y:Float, id:Int):Void
-	{
-		Reg.state.npcMalaUnhealthy = new NpcMalaUnhealthy(X, Y, id);			
-		Reg.state.npcs.add(Reg.state.npcMalaUnhealthy);
-	}
-	
-	/**
 	 * moves back/forth by touching a wall. no bullets. different speeds.
 	 */
 	public static function addMobFish(X:Float, Y:Float, id:Int):Void
@@ -307,7 +298,9 @@ class PlayStateAdd
 	 */
 	public static function addBoss(X:Float, Y:Float, id:Int):Void
 	{
-		if (Reg._boss1ADefeated == false && id == 1)
+		var isEvent:Bool = PlayStateMiscellaneous.displayEvent(17, 21, 0);
+		
+		if (Reg._boss1ADefeated == false && id == 1 && isEvent == true)
 		{
 			Reg.state.boss1A = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1A);
@@ -316,8 +309,23 @@ class PlayStateAdd
 		_healthBar.offset.set( -3, -6);
 		Reg.state._healthBars.add(_healthBar);
 		}
+		else if (Reg._boss1ADefeated == true && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 || Reg._boss1ADefeated == false && id == 1 && isEvent == false) 
+		{
+			// remove block so that player can exit map.
+			var newindex:Int = 193;
+			for (j in 0...Reg.state.tilemap.heightInTiles)
+			{
+				for (i in 0...Reg.state.tilemap.widthInTiles - 1)
+				{
+					if (Reg.state.tilemap.getTile(i, j) == 177)
+					{
+						Reg.state.tilemap.setTile(i, j, newindex, true);
+					}	
+				}		
+			}	
+		}
 		
-		if (Reg._boss1BDefeated == false && id == 2)
+		else if (Reg._boss1BDefeated == false && id == 2)
 		{
 			Reg.state.boss1B = new Boss1(X, Y, id, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 			Reg.state.enemies.add(Reg.state.boss1B);
@@ -326,23 +334,94 @@ class PlayStateAdd
 		_healthBar.offset.set( -3, -30); // minus values = move down;
 		Reg.state._healthBars.add(_healthBar);
 		}
+		
+		else if (Reg._boss1BDefeated == true && Reg.mapXcoords == 12 && Reg.mapYcoords == 19) 
+		{
+			// remove block so that player can exit map.
+			var newindex:Int = 193;
+			for (j in 0...Reg.state.tilemap.heightInTiles)
+			{
+				for (i in 0...Reg.state.tilemap.widthInTiles - 1)
+				{
+					if (Reg.state.tilemap.getTile(i, j) == 177)
+					{
+						Reg.state.tilemap.setTile(i, j, newindex, true);
+					}	
+				}		
+			}	
+		}
 	}
 	
 	/**
 	 * NPC looks like the player. not sick from the bad air.
 	 */
 	public static function addNpcMalaHealthy(X:Float, Y:Float, id:Int):Void
-	{
+	{		
+		var isEvent:Bool = PlayStateMiscellaneous.displayEvent(20, 20, 2);
+							
+		// stan had given phone and air tank to player then mobBubble has taken Stan away. Therefore, do not display stan at this map.
+		if (Reg._numberOfBossesDefeated == 2 && isEvent == true && id == 10 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 ) return;
+		
+		// a green mala appears at house only if first boss was defeated.
+		if (id == 3 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1ADefeated == false) return;
+		if (id == 10 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._playerFeelsWeak == true) return;
+		
 		Reg.state.npcMalaHealthy = new NpcMalaHealthy(X, Y, id);
 		Reg.state.npcs.add(Reg.state.npcMalaHealthy);
+		
+		// add an exclamation point to the Mala that has an id of 10 or 11. Player needs to talk to these Malas to trigger an event or to get an item. These Malas have an exclamation point shown above their heads.
+		var isExclamationPointTrue = PlayStateMiscellaneous.shouldWeDisplayExclamationPoint();
+		
+		// returns true if player has talked to exclamation Mala at nao 17-21.
+		var isEvent:Bool = PlayStateMiscellaneous.displayEvent(17, 21, 1);
+		
+		// show exclmation point overtop of stan if talked to exclamation Mala at map 17-21
+		if (id == 10 && isEvent == true && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && isExclamationPointTrue == true && Reg._numberOfBossesDefeated == 1)
+		{
+			Reg.state._exclamationmPoint = new FlxSprite(X, Y-40);
+			Reg.state._exclamationmPoint.loadGraphic("assets/images/exclamationPoint.png", false);
+			Reg.state.add(Reg.state._exclamationmPoint);
+		}
+		
+		else if (id == 10 && isExclamationPointTrue == true && Reg._numberOfBossesDefeated != 1)
+		{
+			Reg.state._exclamationmPoint = new FlxSprite(X, Y-40);
+			Reg.state._exclamationmPoint.loadGraphic("assets/images/exclamationPoint.png", false);
+			Reg.state.add(Reg.state._exclamationmPoint);
+		}
 	}
 	
+	
+	/**
+	 * NPC. looks like the player but yellow color. weak from the virus in the air.
+	 */
+	public static function addNpcMalaUnhealthy(X:Float, Y:Float, id:Int):Void
+	{
+		// boss1b was defeated so remove all unhealthy malas from the screen because the doctor took them all away.
+		if (id == 1 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || id == 2 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || id == 3 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || id == 10 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true) return;
+			
+		if (id == 1 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || id == 2 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || id == 3 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || id == 8 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true) return;	
+		
+		Reg.state.npcMalaUnhealthy = new NpcMalaUnhealthy(X, Y, id);			
+		Reg.state.npcs.add(Reg.state.npcMalaUnhealthy);
+		
+		// add an exclamation point to the Mala that has an id of 10 or 11. Player needs to talk to these Malas to trigger an event or to get an item. These Malas have an exclamation point shown above their heads.
+		var isExclamationPointTrue = PlayStateMiscellaneous.shouldWeDisplayExclamationPoint();
+	
+		if (id == 10 && isExclamationPointTrue == true)
+		{
+			Reg.state._exclamationmPoint = new FlxSprite(X, Y-40);
+			Reg.state._exclamationmPoint.loadGraphic("assets/images/exclamationPoint.png", false);
+			Reg.state.add(Reg.state._exclamationmPoint);
+		}
+	}
+		
 	/**
 	 * Boss. ??? (doctors friend).
 	 */
 	public static function addMobBubble(X:Float, Y:Float):Void
 	{
-		if (Reg._boss1BDefeated == true && Reg.mapXcoords != 12 && Reg.mapYcoords != 19 || Reg._boss1BDefeated == false && Reg.mapXcoords == 12 && Reg.mapYcoords == 19)
+		if (Reg._boss1BDefeated == true && Reg.mapXcoords != 12 && Reg.mapYcoords != 19 || Reg._boss1BDefeated == false && Reg.mapXcoords == 12 && Reg.mapYcoords == 19 || Reg._boss1BDefeated == true && Reg.mapXcoords == 20 && Reg.mapYcoords == 20)
 		{
 			Reg.state.mobBubble = new MobBubble(X, Y, Reg.state.player, Reg.state._emitterMobsDamage, Reg.state._emitterDeath, Reg.state._emitterItemTriangle, Reg.state._emitterItemDiamond, Reg.state._emitterItemPowerUp, Reg.state._emitterItemNugget, Reg.state._emitterItemHeart, Reg.state._particleSmokeRight, Reg.state._particleSmokeLeft, Reg.state._bulletsMob, Reg.state._particleBulletHit, Reg.state._particleBulletMiss);
 		
@@ -372,6 +451,17 @@ class PlayStateAdd
 			Reg.state._healthBarMobBubble.offset.set( -3, 0);
 			Reg.state._healthBarMobBubble.visible = false;
 			Reg.state._healthBars.add(Reg.state._healthBarMobBubble);	
+			
+			if (Reg.mapXcoords == 20 && Reg.mapYcoords == 20)
+			{
+				Reg.state.mobBubble.visible = false;
+				Reg.state.mobBubble.alive = false;
+				Reg.state._healthBarMobBubble.kill();
+				Reg.state._defenseMobFireball1.visible = false;
+				Reg.state._defenseMobFireball2.visible = false;
+				Reg.state._defenseMobFireball3.visible = false;
+				Reg.state._defenseMobFireball4.visible = false;
+			}
 		}
 	}
 	
@@ -597,7 +687,9 @@ class PlayStateAdd
 	 */
 	public static function addItemGun(X:Float, Y:Float, id:Int = 1):Void
 	{
-		if (Reg._itemGotGun == false)
+		var isEvent:Bool = PlayStateMiscellaneous.displayEvent(17, 21, 0);
+		
+		if (Reg._itemGotGun == false && Reg._boss1ADefeated == false && isEvent == true)
 		{
 			Reg.state._itemGun.add(new ItemGun(X, Y, id));
 			Reg.state.add(Reg.state._itemGun);
@@ -798,8 +890,35 @@ class PlayStateAdd
 	 */
 	public static function addPlatformMoving(X:Float, Y:Float, id:Int):Void
 	{
-		var platform:ObjectPlatformMoving = new ObjectPlatformMoving(X, Y, id);
-		Reg.state._objectPlatformMoving.add(platform);
+		var isEvent:Bool = PlayStateMiscellaneous.displayEvent(20, 20, 0);
+		
+		// this condition myst be true for the first platform to be displayed at map 17-20
+		if (id == 2 && isEvent == true)
+		{
+			var platform:ObjectPlatformMoving = new ObjectPlatformMoving(X, Y, id);
+			Reg.state._objectPlatformMoving.add(platform);
+		}
+		
+		else 
+		{
+			var isEvent:Bool = PlayStateMiscellaneous.displayEvent(17, 21, 1);
+			var isEvent2:Bool = PlayStateMiscellaneous.displayEvent(20, 20, 1);
+			
+			// both conditions must be true for the second platform to be displayed at map 17-20.
+			if (id == 1 && isEvent == true && isEvent2 == true)
+			{
+				var platform:ObjectPlatformMoving = new ObjectPlatformMoving(X, Y, id);
+				Reg.state._objectPlatformMoving.add(platform);
+			}
+		}			
+			
+		// the platfrom conditions are false so do not display any platforms at map 17-20.
+		if (id > 2)
+		{
+			var platform:ObjectPlatformMoving = new ObjectPlatformMoving(X, Y, id);
+			Reg.state._objectPlatformMoving.add(platform);
+		}
+	
 	}
 		
 	/**
@@ -823,7 +942,9 @@ class PlayStateAdd
 			Reg.state.add(Reg.state._objectFireball);
 			
 		Reg.state._objectFireball.add(new ObjectFireball4(X, Y));
-			Reg.state.add(Reg.state._objectFireball);			
+			Reg.state.add(Reg.state._objectFireball);	
+			
+		Reg.state._objectFireball.visible = false;
 	}	
 	
 	/**

@@ -44,7 +44,7 @@ class Button extends FlxButton
 	 * @param	onClick			When button is clicked this is the function to go to. The function name without the ()?
 	 * @param	_innerColor		The color behind the text? Eg, 0x330000AA
 	 */
-	public function new(x:Float = 0, y:Float = 0, ?text:String, buttonWidth:Int = 80, buttonHeight:Int = 40, ?graphicAsset:FlxGraphicAsset, textSize:Int = 12, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, _innerColor:FlxColor = 0x330000AA)	
+	public function new(x:Float = 0, y:Float = 0, ?text:String, buttonWidth:Int = 80, buttonHeight:Int = 40, ?graphicAsset:FlxGraphicAsset, textSize:Int = 12, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, _innerColor:FlxColor = 0xCC0000AA)	
 	{	
 		super(x, y, text, onClick);
 

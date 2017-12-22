@@ -9,10 +9,11 @@ import flixel.group.FlxGroup;
 
 class InventoryIcons extends FlxSprite  
 {	
-	public function new(iconName:String, iconLocation:Int) 
+	public function new(iconName:String, iconLocation:Int, id:Int) 
 	{		
 		x = 150;
-		y = 189;
+		if (id == 1) y = 189;
+		if (id == 2) y = 366;
 		
 		findY(iconLocation);
 		

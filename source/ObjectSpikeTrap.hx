@@ -68,7 +68,7 @@ class ObjectSpikeTrap extends FlxSprite
 	{
 		// determine if player can take a hit.
 		if (FlxSpriteUtil.isFlickering(p) == false)
-			p.hurt(5);
+			p.kill();
 		
 		reset(_startX, _startY);
 	}
@@ -76,7 +76,7 @@ class ObjectSpikeTrap extends FlxSprite
 	private function mobCollide(t:FlxSprite, e:FlxSprite):Void 
 	{
 		if (FlxSpriteUtil.isFlickering(e) == false)
-			e.hurt(5);
+			e.kill();
 			
 		reset(_startX, _startY);
 	}

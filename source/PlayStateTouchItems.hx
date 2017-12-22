@@ -31,17 +31,17 @@ class PlayStateTouchItems
 				
 				if (i.ID == 1)
 				{
-					Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-					Reg.dialogCharacterTalk[1] = "";
-					Reg.dialogCharacterTalk[2] = ""; 
+
 					Reg.dialogIconFilename = "itemDoorKey1.png";
-					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDoorKey1.txt").split("#");			
+					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDoorKey1.txt").split("#");				
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				if (i.ID == 2)
 				{
 					Reg.dialogIconFilename = "itemDoorKey2.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDoorKey2.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 3)
@@ -49,6 +49,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemDoorKey3.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDoorKey3.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 4)
@@ -56,6 +57,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemDoorKey4.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemDoorKey4.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 					
 				Reg.dialogCharacterTalk[0] = "";
@@ -141,6 +143,7 @@ class PlayStateTouchItems
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());
 				Reg.state.removeItemFromMiniMap();
+				newInventoryItemAutomatic(Reg.dialogIconFilename);
 			}
 			
 			Reg._itemGotGunRapidFire = true;
@@ -236,17 +239,22 @@ class PlayStateTouchItems
 				if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1 , false);
 				i.kill();
 				
+								
+				Reg._itemGotSuperBlock[i.ID] = true;
+				
 				if (i.ID == 1)
 				{
 					Reg.dialogIconFilename = "itemSuperBlock1.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock1.txt").split("#");
 				
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				if (i.ID == 2)
 				{
 					Reg.dialogIconFilename = "itemSuperBlock2.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock2.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 3)
@@ -254,6 +262,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock3.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock3.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 4)
@@ -261,6 +270,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock4.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock4.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 5)
@@ -268,6 +278,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock5.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock5.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 6)
@@ -275,6 +286,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock6.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock6.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 7)
@@ -282,6 +294,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock7.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock7.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 				
 				if (i.ID == 8)
@@ -289,6 +302,7 @@ class PlayStateTouchItems
 					Reg.dialogIconFilename = "itemSuperBlock8.png";
 					Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemSuperBlock8.txt").split("#");
 					
+					newInventoryItemAutomatic(Reg.dialogIconFilename);
 				}
 					
 				Reg.dialogCharacterTalk[0] = "";
@@ -297,8 +311,7 @@ class PlayStateTouchItems
 				Reg.displayDialogYesNo = false;
 				Reg.state.openSubState(new Dialog());		
 				Reg.state.removeItemFromMiniMap();
-				
-				Reg._itemGotSuperBlock[i.ID] = true;
+
 			}
 		}
 	
@@ -349,6 +362,60 @@ class PlayStateTouchItems
 		}
 		
 	}
+				
+	/**
+	 * First gun in the game. normal basic pea shooter gun.
+	 */
+	public static function touchItemGun(item:FlxSprite, p:Player):Void 
+	{
+		
+		if (Reg._itemGotGun == false)
+		{
+			if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1, false);
+			item.kill();
+			
+			Reg.dialogIconFilename = "itemGun1.png";
+			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGun.txt").split("#");				
+			
+			newInventoryItem( openfl.Assets.getText("assets/text/touchItemGunDescription.txt"), Reg.dialogIconFilename);
+			Reg.dialogCharacterTalk[0] = "";
+			
+			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
+			Reg.displayDialogYesNo = false;
+			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
+			
+			Reg._itemGotGun = true;
+		}
+			
+		
+	}
+	
+	/**
+	 * Freeze weapon. When a mob is hit with this weapon, the mob will be frozen for a few seconds. At that time, the player can jump on top of the head of the mob without taking damage. The player can use the mob as a ladder to jump up to the next frozen mob.
+	 */
+	public static function touchItemGunFreeze(item:FlxSprite, p:Player):Void 
+	{
+		
+		if (Reg._itemGotGunFreeze == false)
+		{
+			if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1, false);
+			item.kill();
+			
+			Reg.dialogIconFilename = "itemGun2.png";
+			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGunFreeze.txt").split("#");
+				
+			newInventoryItem( openfl.Assets.getText("assets/text/touchItemGunFreezeDescription.txt"), Reg.dialogIconFilename);
+			Reg.dialogCharacterTalk[0] = "";
+			
+			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
+			Reg.displayDialogYesNo = false;
+			Reg.state.openSubState(new Dialog());	
+			Reg.state.removeItemFromMiniMap();
+			
+			Reg._itemGotGunFreeze = true;
+		}			
+	}	
 	
 	/**
 	 * This function is called when the player picks up the flame gun. The flame gun is a weapon that hits the mob then continues on through its path.
@@ -378,35 +445,6 @@ class PlayStateTouchItems
 		Reg.state._emitterBulletFlame.setPosition(Reg.playerXcoords, Reg.playerYcoords);
 		Reg.state.add(Reg.state._emitterBulletFlame);
 	}
-			
-	/**
-	 * First gun in the game. normal basic pea shooter gun.
-	 */
-	public static function touchItemGun(item:FlxSprite, p:Player):Void 
-	{
-		
-		if (Reg._itemGotGun == false)
-		{
-			if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1, false);
-			item.kill();
-			
-			Reg.dialogIconFilename = "itemGun1.png";
-			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGun.txt").split("#");				
-			
-			newInventoryItem( openfl.Assets.getText("assets/text/touchItemGunDescription.txt"), Reg.dialogIconFilename);
-			Reg.dialogCharacterTalk[0] = "";
-			
-			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-			Reg.displayDialogYesNo = false;
-			Reg.state.openSubState(new Dialog());	
-			Reg.state.removeItemFromMiniMap();
-			
-			Reg._itemGotGun = true;
-		}
-			
-		
-	}
-	
 	
 	/**
 	 * This function handles the saving of the game.
@@ -416,42 +454,23 @@ class PlayStateTouchItems
 		if (Std.is(item, SavePoint))
 		{
 			Reg._savingGame = true;
-			Reg.state.openSubState(new GameSave());
+			Reg.state.openSubState(new GameSave());			
 		}
 	}	
 
-	/**
-	 * Freeze weapon. When a mob is hit with this weapon, the mob will be frozen for a few seconds. At that time, the player can jump on top of the head of the mob without taking damage. The player can use the mob as a ladder to jump up to the next frozen mob.
-	 */
-	public static function touchItemGunFreeze(item:FlxSprite, p:Player):Void 
-	{
-		
-		if (Reg._itemGotGunFreeze == false)
-		{
-			if (Reg._soundEnabled == true) FlxG.sound.play("pickup", 1, false);
-			item.kill();
-			
-			Reg.dialogIconFilename = "itemGun2.png";
-			Reg.dialogIconText = openfl.Assets.getText("assets/text/touchItemGunFreeze.txt").split("#");
-				
-			newInventoryItem( openfl.Assets.getText("assets/text/touchItemGunFreezeDescription.txt"), Reg.dialogIconFilename);
-			Reg.dialogCharacterTalk[0] = "";
-			
-			// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-			Reg.displayDialogYesNo = false;
-			Reg.state.openSubState(new Dialog());	
-			Reg.state.removeItemFromMiniMap();
-			
-			Reg._itemGotGunFreeze = true;
-		}			
-	}
-
 	// when player picks up an item that uses the z, x or c key, add it to the inventory.
 	public static function newInventoryItem(iconName:String, iconFilemame:String):Void
-	{	var titleAndDescriptionText = iconName.split("#");
+	{	
+		var titleAndDescriptionText = iconName.split("#");
 		Reg._inventoryIconName[Reg._inventoryIconNumberMaximum] = titleAndDescriptionText[0];
 		Reg._inventoryIconDescription[Reg._inventoryIconNumberMaximum] = titleAndDescriptionText[1];
 		Reg._inventoryIconFilemame[Reg._inventoryIconNumberMaximum] = iconFilemame;
 		Reg._inventoryIconNumberMaximum++;
+	}
+	
+	public static function newInventoryItemAutomatic(iconFilemame:String):Void
+	{			
+		Reg._inventoryIconFilemameAutomatic[Reg._inventoryIconNumberMaximumAutomatic] = iconFilemame;
+		Reg._inventoryIconNumberMaximumAutomatic++;
 	}
 }

@@ -20,7 +20,7 @@ class ObjectFireball1 extends FlxSprite
 		x+8, 
 		y+8,
 		36, Reg.state._fireballPositionInDegrees,
-		true, Reg.fireballSpeed, true, { type: FlxTween.LOOPING });			
+		true, Reg.fireballSpeed, true, { type: FlxTween.LOOPING });	
 	}
 	
 	override public function update(elapsed:Float):Void

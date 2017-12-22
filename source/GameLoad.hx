@@ -29,7 +29,7 @@ class GameLoad extends GameSaveLoadParent
 		add(title);	
 		
 		// This var is used at the parent. 1 = user is at the save screen while 2 = load screen.
-		Reg._gameSaveOrLoad = 2;
+		Reg._whichSubStateIsThis = 2;
 	}
 	
 	override public function update(elapsed:Float):Void 

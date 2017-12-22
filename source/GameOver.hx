@@ -24,11 +24,11 @@ class GameOver extends FlxState
 		// set the properties of the font and then add the font to the screen.
 		var gameOverText = new FlxText();
 		gameOverText.text = "Game Over.";
-		gameOverText.color = FlxColor.GREEN;
-		gameOverText.size = 16;
+		gameOverText.setFormat("assets/fonts/blkChcry.ttf", 125, FlxColor.BLUE);
+		gameOverText.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
 		gameOverText.scrollFactor.set();
-		gameOverText.alignment = FlxTextAlign.CENTER;
-		gameOverText.screenCenter();
+		gameOverText.setPosition(0, 70);
+		gameOverText.screenCenter(X);
 		add(gameOverText);
 		
 		// start from the beginning.
@@ -39,6 +39,8 @@ class GameOver extends FlxState
 		Reg.playerYcoordsLast = 0;
 		
 		OKbutton = new Button(0, 0, "Z: OK", 100, 35, null, 16, 0xFFCCFF33, 0, OKbuttonClicked);
+		OKbutton.color = FlxColor.WHITE;
+		OKbutton.label.font = Reg.defaultFont;
 		OKbutton.setPosition(0, 500); 
 		OKbutton.screenCenter(X);
 		add(OKbutton);

@@ -473,6 +473,7 @@ class MobBubble extends EnemyParentClass
 	override public function kill():Void 
 	{
 		Reg._playerCanShootAndMove = false;
+		Reg._numberOfBossesDefeated += 1;
 		
 		super.kill();
 		new FlxTimer().start(0.50, PlayStateMiscellaneous.winState, 1);		

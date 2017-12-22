@@ -38,7 +38,7 @@ class Boss1 extends EnemyParentClass
 	/*******************************************************************************************************
 	 * This is the default health when mob is first displayed or reset on a map.
 	 */
-	public var defaultHealth:Int = 8;
+	public var defaultHealth:Int = 6;
 	
 	/*******************************************************************************************************
 	 * The X velocity of this mob. 
@@ -88,7 +88,7 @@ class Boss1 extends EnemyParentClass
 		
 		// ID is used here to give the second appearance of this boss a higher health than the first  appearance of this boss. The health is timed by the difficulty of the game. The game difficulty can be set when the program starts at the options screen.
 		if(id == 1) health = defaultHealth * Reg._difficultyLevel;
-			else health = Std.int((defaultHealth * 2.7) * Reg._difficultyLevel);
+			else health = Std.int((defaultHealth * 1.5) * Reg._difficultyLevel);
 		
 		// Initialize the cooldown so weapon can fire at this time.
 		_cooldown = FlxG.random.float(0.10, 0.60);		
@@ -322,7 +322,7 @@ class Boss1 extends EnemyParentClass
 			
 			}
 
-			if (ticksDelay >= 500)
+			if (ticksDelay >= 300)
 			{
 				ticksDelay = 51;
 				
@@ -397,7 +397,7 @@ class Boss1 extends EnemyParentClass
 				{
 					Reg._boss1ADefeated = true; 
 					
-					// remove block so that plater can get item.
+					// remove block so that player can exit map.
 					var newindex:Int = 193;
 					for (j in 0...Reg.state.tilemap.heightInTiles)
 					{
@@ -414,6 +414,7 @@ class Boss1 extends EnemyParentClass
 					Reg._playerHasTalkedToThisMob = false;
 					
 					PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
+					Reg._numberOfBossesDefeated += 1;
 					kill();
 				}
 
@@ -423,19 +424,20 @@ class Boss1 extends EnemyParentClass
 					{										
 						Reg._boss1BDefeated = true;
 						Reg._boss1BIsMala = true;
+						Reg._playerCanShootAndMove = false;
 					}
 					
 					if (ticksDialog == 8)
 					{
-						Reg.state.mobBubble.visible = true;	
+						Reg.state.mobBubble.visible = true;						
 					}
 					
 					ticksDialog = Reg.incrementTicks(ticksDialog, 60 / Reg._framerate);
 						
-					if (ticksDialog == 15)
+					if (ticksDialog == 30)
 					{
 						Reg.dialogIconText = openfl.Assets.getText("assets/text/boss1B-ID1-Map12-19C.txt").split("#");								
-							
+												
 						Reg.dialogCharacterTalk[0] = "talkBoss1.png";
 						Reg.dialogCharacterTalk[1] = "talkMobBubble.png";						
 						Reg._playerHasTalkedToThisMob = true;
@@ -443,7 +445,7 @@ class Boss1 extends EnemyParentClass
 						Reg.state.openSubState(new Dialog());									
 					}
 					
-					if (ticksDialog == 30)
+					if (ticksDialog == 45)
 					{
 						Reg.state.mobBubble.visible = false;
 						Reg.state.mobBubble.alive = false;
@@ -457,6 +459,7 @@ class Boss1 extends EnemyParentClass
 						Reg._playerHasTalkedToThisMob = false;
 						
 						PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated.
+						Reg._numberOfBossesDefeated += 1;
 						kill();
 						
 						// remove block barrier so that player can get item.

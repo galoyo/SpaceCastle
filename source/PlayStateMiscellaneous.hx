@@ -112,4 +112,59 @@ class PlayStateMiscellaneous
 		Reg.state.add(Reg.state.maximumJumpLine);
 
 	}
+	
+	/**
+	 * Loop through the array. if there is a match then this function will return true and if true then we can display an exclamation point at the map.
+	 * @return
+	 */
+	public static function shouldWeDisplayExclamationPoint():Bool
+	{		
+		for (i in 0...Reg._malasThatHaveAnExclamationPoint.length)
+		{	
+			if (Reg._malasThatHaveAnExclamationPoint[i][0] == Reg.mapXcoords + "-" + Reg.mapYcoords && Reg._malasThatHaveAnExclamationPoint[i][1] == Std.string(Reg._numberOfBossesDefeated))
+				return true;
+		}
+		
+		return false;
+	}	
+	
+	/**
+	 * The player has talked to an important Mala so we can delete an exclamation point element if any from the array.
+	 * @return
+	 */
+	public static function removeExclamationPointFromMala():Bool
+	{		
+		for (i in 0...Reg._malasThatHaveAnExclamationPoint.length)
+		{	
+			if (Reg._malasThatHaveAnExclamationPoint[i][0] == Reg.mapXcoords + "-" + Reg.mapYcoords && Reg._malasThatHaveAnExclamationPoint[i][1] == Std.string(Reg._numberOfBossesDefeated))
+			{
+				// no var.splice here because we need to save all 100 elements to the file. When the game is loading, all 100 elements from this var will be populated from the saved data. If one element is missing then there could be a load error.
+				Reg._malasThatHaveAnExclamationPoint[i][0] = "";
+				Reg._malasThatHaveAnExclamationPoint[i][1] = "";
+				return true;
+			}
+		}
+		
+		return false;
+	}	
+	
+	/**
+	 * Returns false then there is no event. Therefore, an exclamation point exists.
+	 * @param	_mapXcoords				The X map coordinate to check.
+	 * @param	_mapYcoords				The Y map coordinate to check.
+	 * @param	_bossesDefeatedTotal	The number of bosses that have been defeated. This var is needed because there could be two map X or map Y elements with the same value.	
+	 * @return
+	 */
+	public static function displayEvent(_mapXcoords:Float, _mapYcoords:Float, _bossesDefeatedTotal:Int):Bool
+	{		
+		for (i in 0...Reg._malasThatHaveAnExclamationPoint.length)
+		{	
+			if (Reg._malasThatHaveAnExclamationPoint[i][0] == _mapXcoords + "-" + _mapYcoords && Reg._malasThatHaveAnExclamationPoint[i][1] == Std.string(_bossesDefeatedTotal))
+			{
+				return false; // exclamation point exists. Therefore, do not trigger an event.
+			}
+		}
+		
+		return true;
+	}	
 }

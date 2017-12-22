@@ -264,6 +264,9 @@ class EnemyParentClass extends FlxSprite
 			}
 			//################### END LAVA BLOCK.
 		
+			if (ticks == 1 && Reg.state._objectFireball.visible == false) 
+				Reg.state._objectFireball.visible = true;
+			
 			super.update(elapsed);
 		}
 	}		
@@ -627,12 +630,7 @@ private function shoot():Void
 		
 		var _randomMusicNumber:Int = FlxG.random.int(1, 3); // random var for random music.
 
-		if ( _randomMusicNumber == 1 && Reg._musicEnabled == true) 
-		if (Reg._soundEnabled == true) FlxG.sound.playMusic("boss1", 0.80, true);
-		if ( _randomMusicNumber == 2 && Reg._musicEnabled == true) 
-		FlxG.sound.playMusic("boss2", 0.80, true);
-		if ( _randomMusicNumber == 3 && Reg._musicEnabled == true) 
-		FlxG.sound.playMusic("boss3", 0.80, true);		
+		if (Reg._musicEnabled == true)	FlxG.sound.playMusic("boss" + Std.string(_randomMusicNumber), 0.80, true);
 	}
 	
 	function flyUpThenDown(maxXSpeed:Int, maxYSpeed:Int):Void

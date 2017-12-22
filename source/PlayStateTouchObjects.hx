@@ -115,9 +115,59 @@ class PlayStateTouchObjects
 	 */
 	public static function fireballCollideEnemy(a:FlxSprite, e:FlxSprite):Void
 	{
-		if (FlxSpriteUtil.isFlickering(e) == false)
+		if(FlxSpriteUtil.isFlickering(e) == false && Reg.state._objectFireball.visible == true)
 		{
-			e.hurt(3);
+			if (Std.is(e, MobApple))
+			{
+				var mob:MobApple = cast(e, MobApple);
+				mob.hurt(3);
+			}
+			if (Std.is(e, MobCutter))
+			{
+				var mob:MobCutter = cast(e, MobCutter);
+				mob.hurt(3);	
+			}
+			if (Std.is(e, MobSlime))
+			{
+				var mob:MobSlime = cast(e, MobSlime);
+				mob.hurt(3);	
+			}
+			if (Std.is(e, MobBullet))
+			{
+				var mob:MobBullet = cast(e, MobBullet);
+				mob.hurt(3);		
+			}
+			if (Std.is(e, MobBat))
+			{
+				var mob:MobBat = cast(e, MobBat);
+				mob.hurt(3);		
+			}
+			
+			if (Std.is(e, MobSqu))
+			{
+				var mob:MobSqu = cast(e, MobSqu);
+				mob.hurt(3);		
+			}
+			
+			if (Std.is(e, MobFish))
+			{
+				var mob:MobFish = cast(e, MobFish);
+				mob.hurt(3);		
+			}
+			
+			if (Std.is(e, MobGlob))
+			{
+				var mob:MobGlob = cast(e, MobGlob);
+				mob.health = mob.health - 3;
+				
+				if (mob.health <= 0) mob.kill();
+			}
+
+			if (Std.is(e, MobWorm))
+			{
+				var mob:MobWorm = cast(e, MobWorm);
+				mob.hurt(3);		
+			}
 		}
 	}	
 		

@@ -84,11 +84,41 @@ class MenuState extends FlxState
 	 */
 	private var scaleModeIndex:Int = 0;
 	
-	private var _test:Array<Array<Int>> = [[0, 2], [3, 4]];
-	
 	override public function create():Void
 	{
 		super.create();
+		
+		//##################Delete this##########################
+		/*Reg._malasThatHaveAnExclamationPoint.splice(0, Reg._malasThatHaveAnExclamationPoint.length);
+		Reg._malasThatHaveAnExclamationPoint = 
+		[["17-21", "2"], ["20-20", "2"], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], []];
+		
+		Reg._boss1ADefeated = true;
+		Reg._boss1BDefeated = false;
+		Reg._boss2Defeated = false;
+		Reg._numberOfBossesDefeated = 1;
+		Reg._inventoryIconNumberMaximum = 3;
+		Reg.mapXcoords = 20;
+		Reg.mapYcoords = 20;
+	
+		Reg._itemGotGun = true;
+		
+		Reg._inventoryIconCNumber[2] = true;
+		Reg._itemCSelectedFromInventoryName = "Normal Gun.";
+		Reg._inventoryIconName[2] = "Normal Gun.";
+		Reg._inventoryIconDescription[2] = "Normal pea-shooer gun with limited bullet range.";
+		Reg._inventoryIconFilemame[2] = "itemGun1.png";*/
+		//#################Delete this########################
+		
 		//FlxG.switchState(new PlayState());
 		//FlxG.mouse.visible = false;
 		

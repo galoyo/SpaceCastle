@@ -346,6 +346,10 @@ class PlayStateCreateMap
 						case 31: PlayStateAdd.addNpcDog(x * Reg._tileSize, y * Reg._tileSize, Reg.state.player, 3);
 						case 32: PlayStateAdd.addNpcDog(x * Reg._tileSize, y * Reg._tileSize, Reg.state.player, 4);
 						case 33: PlayStateAdd.addNpcDoctor(x * Reg._tileSize, y * Reg._tileSize);
+						case 34: PlayStateAdd.addNpcMalaUnhealthy(x * Reg._tileSize, y * Reg._tileSize +4, 10);
+						
+						case 36: PlayStateAdd.addNpcMalaHealthy(x * Reg._tileSize, y * Reg._tileSize +4, 10);
+						
 						case 49: PlayStateAdd.addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 1);
 						case 50: PlayStateAdd.addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 2);
 						case 51: PlayStateAdd.addMobSlime(x * Reg._tileSize, y * Reg._tileSize, 3);
@@ -384,7 +388,7 @@ class PlayStateCreateMap
 						case 265: PlayStateAdd.addSavePoint(x * Reg._tileSize, y * Reg._tileSize);	
 						// horizontal for id 1 and 2. 3 is vertical.
 						case 266: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 1);
-						case 267: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, (y * Reg._tileSize) - Reg._tileSize, 2);
+						case 267: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, (y * Reg._tileSize) - Reg._tileSize, 3);
 						case 268: PlayStateAdd.addObjectFireballBlock(x * Reg._tileSize, y * Reg._tileSize);
 						case 269: PlayStateAdd.addWaterParameter(x * Reg._tileSize, y * Reg._tileSize);
 						case 270: PlayStateAdd.addLaserBeam(x * Reg._tileSize + 4, y * Reg._tileSize);
@@ -440,7 +444,7 @@ class PlayStateCreateMap
 						case 320: PlayStateAdd.addCannon(x * Reg._tileSize, y * Reg._tileSize - 5, 2);
 						case 321: PlayStateAdd.addItemGunFreeze(x * Reg._tileSize, y * Reg._tileSize);
 						case 322: PlayStateAdd.addBlockedCracked(x * Reg._tileSize, y * Reg._tileSize);
-						case 323: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 3);
+						case 323: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 4);
 						case 324: PlayStateAdd.addPlatformParameter(x * Reg._tileSize, y * Reg._tileSize);
 						
 						case 326: PlayStateAdd.addRock(x * Reg._tileSize, y * Reg._tileSize, 1);
@@ -467,6 +471,7 @@ class PlayStateCreateMap
 						case 347: PlayStateAdd.addItemSkillDash(x * Reg._tileSize, y * Reg._tileSize);
 						case 348: PlayStateAdd.addCar(x * Reg._tileSize, y * Reg._tileSize - 33);
 						case 349: PlayStateAdd.addRockFalling(x * Reg._tileSize, y * Reg._tileSize - 100);
+						case 350: PlayStateAdd.addPlatformMoving(x * Reg._tileSize, y * Reg._tileSize, 2);
 						
 						// id 1 to 8 is a teleporter outside of a house.
 						case 352: PlayStateAdd.addTeleporter(x * Reg._tileSize, y * Reg._tileSize, 1);

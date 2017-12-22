@@ -267,6 +267,8 @@ class Boss2 extends EnemyParentClass
 					Reg._dialogYesNoWasAnswered = false;
 					Reg._playerHasTalkedToThisMob = false;
 					PlayStateMiscellaneous.playMusic(); // back to the normal stage music because boss was defeated
+					
+					Reg._numberOfBossesDefeated += 1;
 					kill();
 				}
 			}

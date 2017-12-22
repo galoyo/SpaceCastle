@@ -19,18 +19,30 @@ class Reg
 {
 
 	//########################################################################
-	// Vars that need updated when a new map is in game.
+	// These vars need updating when a new map is in game. Also, update these vars at the resetRegVars() function.
 	// #######################################################################
 		
+	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>>  = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
+		
 	/*******************************************************************************************************
-	 *  This is the total playable outside map that is manually edited. House and bonus maps are not in this array. The first value is the part of a map name from the assets/data directory and the second value is the doorway number. Search for doorways at dev/README FIRST.html
-	 * The _maps_X_Y_OutsideTotalAutomatic var must have the same lenght as this var or else an error message will be displayed when you run the game. The reason is to verify that you have every map in the game in this var. Note, the doorway values will not be verified.
+	 * Player needs to talk to these Malas to trigger an event or to get an item. A mala will have an exclamation point when the player is at a map and that map exists in this var and the number of bosses defeated is the same as the value beside that map in this var. For example, the second value of this array refers to how many bosses have been defeated. At map 17-21 there is a mala with an ID od 10. That ID always places an exclamation point above the head of that Mala if that element is true. It is false when the player defeats the first boss because the element will be deleted as the value of zero will not be true anymore.
+	 * See PlaystateAdd.addNpcMalaUnhealthy() for an example about how an exclamation point is added and see NpcMalaUnhealthy() about how it is removed.
 	 */
-	public static var _maps_X_Y_OutsideTotalManual:Array<Array<String>> = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
+	public static var _malasThatHaveAnExclamationPoint:Array<Array<String>> = 
+		[["17-21", "0"], ["17-21", "1"], ["20-20", "0"], ["20-20", "1"], ["20-20", "2"], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], []];
 	
 	/**
 	 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
- 	 */
+	 */
 	public static var _mapsThatHaveAnItem:Array<String> = ["15-15", "15-15", "14-18", "12-19", "17-22", "20-19", "20-18", "19-20", "19-20", "23-18", "21-21"];
 	
 	/*******************************************************************************************************
@@ -44,15 +56,15 @@ class Reg
 	public static var _displayRainCoords:String = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
 	
 	/*******************************************************************************************************
-	* This var is used to play an outside house music. Malas usually are near a house. A house usually has a teleporter. Place a map coordinate that has a house here. 
+	* This var is used to play house music when player is near or outside of house. Malas usually are near a house. A house usually has a teleporter. Place a map coordinate that has a house here. 
 	*/
 	public static var _mapsThatHaveAhouse:String = "18-15,20-20";
-	
+		
 	//########################################################################
 	// these vars will NOT get saved by saving the game when playing the game.
 	//########################################################################
 	
-	/**
+	/*******************************************************************************************************
 	 * Default font for the game.
 	 */
 	public static var defaultFont:String = "assets/fonts/trim.ttf";
@@ -109,15 +121,15 @@ class Reg
 	/*******************************************************************************************************
 	 * how much maximum air the player can have in lungs.
 	 */
-	public static var _playerAirLeftInLungsMaximum:Int = 100;
+	public static var _playerAirLeftInLungsMaximum:Int = 75;
 	/*******************************************************************************************************
 	 * How much current air the player has left in lungs.
 	 */
-	public static var _playerAirLeftInLungsCurrent:Int = 100;
+	public static var _playerAirLeftInLungsCurrent:Int = 75;
 	/*******************************************************************************************************
 	 * Uued with the air timer to display the air remaining text. Value must be the same as the two values above.
 	 */
-	public static var _playerAirLeftInLungs:Int = 100;
+	public static var _playerAirLeftInLungs:Int = 75;
 	//######################################################################################################
 	
 	/*******************************************************************************************************
@@ -508,7 +520,7 @@ class Reg
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. At the inventory, the total number of vertical slots that make the inventory grid.
 	 */
-	public static var _inventoryGridYTotalSlots:Int = 7;
+	public static var _inventoryGridYTotalSlots:Int = 3;
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. If true then the player will take fall damage when falling to the ground if player falls pass the tile fall limit.
@@ -595,6 +607,18 @@ class Reg
 	public static var _itemGotJump:Array<Bool> = [
 	false, false, false, false
 	];
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. The player has 75 air in lungs when outside of water. Each of these air tanks will give an additional 25 air to that maximum 75 air total. That air is decreased when swimming.
+	 */
+	public static var _itemGotAirTank:Array<Bool> = [
+	false, false, false, false
+	];
+	
+	/*******************************************************************************************************
+	 * Do NOT change the value of this var. Stan gave this phone to player after the second boss is defeated. Now Stan can talk to player anywhere in the game. When a condition is true, player can talk to Stan. However, user cannot use this phone to call Stan beacuse it is an automatic item.
+	 */
+	public static var _itemGotPhone:Bool = false;
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. If a Map tile is made of any 1 of 8 super blocks then that tile can only be destroyed if the player has an item of that type. If player picks up a super block item then an array is true. If an array is true and its ID is the same as the super block ID then player is able to destroy that super block.
@@ -775,8 +799,9 @@ class Reg
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. This var is passed to the parent so that buttons can be shared between the child classes. This valie is set at the child classes. 0 = not set yet. 1 = saving the game. 2 = loading the game.
+	 * This var is also needed at the unhealthy and healthy Mala classes. The value is passed to the parant so that null animation errors are fixed when running the game in debug.
 	 */
-	public static var _gameSaveOrLoad:Int = 0;
+	public static var _whichSubStateIsThis:Int = 0;
 	
 	/*******************************************************************************************************
 	 * Do NOT change the value of this var. value is true if saving the game.
@@ -833,6 +858,11 @@ class Reg
 	 * For debugging only. Ghost mob.
 	 */
 	public static var _boss2Defeated:Bool = false;
+	
+	/*******************************************************************************************************
+	 * Number of bosses defeated. This value is used alone with other vars to determine if an exclamation point shound be displayed above a Mala's head.
+	 */
+	public static var _numberOfBossesDefeated:Int = 0;
 	
 	// ######################################################################################################
 	
@@ -900,9 +930,14 @@ class Reg
 	public static var _itemCSelectedFromInventoryName:String = "Mini Maps.";
 	
 	/*******************************************************************************************************
-	 * Currently a new game only has one item in the inventory, so this value must equal 1. If you add another item to the inventory list then change this value to 2 and add the data at the second field of _inventoryIconName, _inventoryIconDescription and _inventoryIconFilemame. 
+	 * Currently a new game only has two item in the inventory, so this value must equal 2. If you add another item to the inventory list then change this value to 3 and add the data at the second field of _inventoryIconName, _inventoryIconDescription and _inventoryIconFilemame. 
 	 */
 	public static var _inventoryIconNumberMaximum:Int = 2;
+	
+	/*******************************************************************************************************
+	 * Currently a new game only has no inventory items. Automatic inventory are items that cannot be selected when at inventory. A door key is automatic. No need to equip it. That key always opens a door of the same color as the key in use.
+	 */
+	public static var _inventoryIconNumberMaximumAutomatic:Int = 0;
 	
 	/*******************************************************************************************************
 	 * At default, when you start a new game, the "normal jump" at inventory is the only item that can be selected. If you want that item to be at the Z action key then change here the first false to value true.
@@ -912,22 +947,14 @@ class Reg
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
-	]; // 112
+	]; // 56
 	
 	/*******************************************************************************************************
 	 * If at the inventory screen there are two items displayed at slot one and two and you want the second item to be displayed at the navigation bar where the big X is displayed then change here the first value to false and then change the second value to true.
 	 */
 	public static var _inventoryIconXNumber:Array<Bool> = [
 	true, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
@@ -940,10 +967,6 @@ class Reg
 	false, true, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-	false, false, false, false, false, false, false, false, false, false, false, false, false, false,
 	false, false, false, false, false, false, false, false, false, false, false, false, false, false
 	]; // 112
 	
@@ -952,10 +975,6 @@ class Reg
 	 */
 	public static var _inventoryIconName:Array<String> = [
 	"Normal Jump.", "Mini Maps.", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
@@ -968,10 +987,6 @@ class Reg
 	"Can jump a maximum height of two tiles.", "Every outside map displayed as small maps on one screen.", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
 	];
 	
@@ -982,7 +997,13 @@ class Reg
 	"itemJumpNormal.png", "itemMiniMaps.png", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
+	"", "", "", "", "", "", "", "", "", "", "", "", "", ""
+	];	
+	
+	/*******************************************************************************************************
+	 * Same as the _inventoryIconFilemame var but this image cannot be selected at inventory.
+	 */
+	public static var _inventoryIconFilemameAutomatic:Array<String> = [
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
 	"", "", "", "", "", "", "", "", "", "", "", "", "", "", 
@@ -1002,11 +1023,59 @@ class Reg
 	* */
 	public static function resetRegVars():Void
 	{
-
+		//######################################################################################################
+		//######################################################################################################
+		// REMEMBER TO EDIT THESE VARS WHEN A NEW MAP IS IN THE GAME.
+		
+		_maps_X_Y_OutsideTotalManual.splice(0, _maps_X_Y_OutsideTotalManual.length);
+		_maps_X_Y_OutsideTotalManual = [["12-19", "4"], ["13-15", "4"], ["13-19", "5"], ["14-15", "5"], ["14-18", "10"], ["14-19", "11"], ["14-20", "14"], ["14-21", "6"], ["15-15", "5"], ["15-20", "13"], ["15-21", "3"], ["16-15", "5"], ["16-16", "12"], ["16-17", "14"], ["16-18", "6"], ["16-20", "5"], ["17-15", "13"], ["17-16", "15"], ["17-17", "15"], ["17-18", "7"], ["17-20", "13"], ["17-21", "10"], ["17-22", "2"], ["18-15", "1"], ["18-16", "9"], ["18-17", "3"], ["18-18", "9"], ["18-19", "10"], ["18-20", "7"], ["19-20", "13"], ["19-21", "10"], ["19-22", "2"], ["20-18", "4"], ["20-19", "8"], ["20-20", "7"], ["21-18", "13"], ["21-19", "10"], ["21-20", "11"], ["21-21", "2"], ["22-18", "5"], ["22-19", "5"], ["23-18", "1"], ["23-19", "5"], ["24-20", "12"], ["24-21", "10"], ["24-22", "10"], ["24-23", "10"], ["24-24", "10"], ["24-25", "2"], ["25-20", "1"], ["27-19", "5"]];
+		
+		/*******************************************************************************************************
+		 * Player needs to talk to these Malas to trigger an event or to get an item. A mala will have an exclamation point when the player is at a map and that map exists in this var and the number of bosses defeated is the same as the value beside that map in this var. For example, the second value of this array refers to how many bosses have been defeated. At map 17-21 there is a mala with an ID od 10. That ID always places an exclamation point above the head of that Mala if that element is true. It is false when the player defeats the first boss because the element will be deleted as the value of zero will not be true anymore.
+		 * See PlaystateAdd.addNpcMalaUnhealthy() for an example about how an exclamation point is added and see NpcMalaUnhealthy() about how it is removed.
+		 */
+		_malasThatHaveAnExclamationPoint.splice(0, _malasThatHaveAnExclamationPoint.length);
+		_malasThatHaveAnExclamationPoint = 
+		[["17-21", "0"], ["17-21", "1"], ["20-20", "0"], ["20-20", "1"], ["20-20", "2"], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], [],
+		[], [], [], [], [], [], [], [], [], []];
+		
+		/**
+		 * This var is for the mini maps screen. Every map the player can go to is displayed on that mini maps screen. All maps that have an item are in this var. If a map has two or more items then there exists a map with two or more array elements. At the mini map screen this var is searched to see if a map exists in this array. If the result is true then a circle will be drawn overtop of a small square. A small square represents a map and the circle represents an item.
+		 */
+		_mapsThatHaveAnItem.splice(0, _mapsThatHaveAnItem.length);
+		_mapsThatHaveAnItem = ["15-15", "15-15", "14-18", "12-19", "17-22", "20-19", "20-18", "19-20", "19-20", "23-18", "21-21"];
+		
+		/*******************************************************************************************************
+		 * If a map is within this var then the light will be displayed on that map. The map will be dark except for a light source that surrounds the player.
+		 */
+		_displayLightCoords = "19-21,19-22";
+				 
+		/*******************************************************************************************************
+		* If a map coordinate are within this var then the rain will be displayed on that map.
+		*/
+		_displayRainCoords = "17-15,16-20,14-15,20-20,21-19,21-20,20-19,19-20,18-20,18-19,18-15,24-21,22-19,27-19";
+		
+		/*******************************************************************************************************
+		* This var is used to play house music when player is near or outside of house. Malas usually are near a house. A house usually has a teleporter. Place a map coordinate that has a house here. 
+		*/
+		_mapsThatHaveAhouse = "18-15,20-20";
+				
+		//######################################################################################################
+		//######################################################################################################
+		
 		// this does not need to be changed.
 		_boss1ADefeated = false;
 		_boss1BDefeated = false;
 		_boss2Defeated = false;
+		_numberOfBossesDefeated = 0;
 		
 		mapXcoords = 20;
 		mapYcoords = 20;
@@ -1082,7 +1151,7 @@ class Reg
 	
 		//-----------------inventory menu.
 		_inventoryGridXTotalSlots = 13; // x coords system.
-		_inventoryGridYTotalSlots = 7;  // y coords system.
+		_inventoryGridYTotalSlots = 3;  // y coords system.
 		_itemZSelectedFromInventory = 0;
 		_itemXSelectedFromInventory = 0;
 		_itemCSelectedFromInventory = 0;
@@ -1099,6 +1168,7 @@ class Reg
 			_inventoryIconName[i] = "";
 			_inventoryIconDescription[i] = "";
 			_inventoryIconFilemame[i] = "";
+			_inventoryIconFilemameAutomatic[i] = "";
 		}
 		//------------------end of inventory menu.
 		
@@ -1116,6 +1186,8 @@ class Reg
 		_inventoryIconFilemame[1] = "itemMiniMaps.png";
 		
 		_inventoryIconNumberMaximum = 2;
+		_inventoryIconNumberMaximumAutomatic = 0;
+		
 		_deathWhenReachedZero = _deathWhenReachedZeroCurrent = 400;
 		
 		_changeToDayOrNightBgsAtPageLoadTicks = 0;
@@ -1125,9 +1197,12 @@ class Reg
 		
 		_keyOrButtonDown = false;
 		
+		// resetting map. Delete all elements.
 		Reg._mapsThatPlayerHasBeenTo.splice(0, Reg._mapsThatPlayerHasBeenTo.length);	
 		
 		_playingHouseMusic = false;
+		_whichSubStateIsThis = 0;
+
 	}
 	//################### end of resetRegVars function ###################
 	//#####################################################################

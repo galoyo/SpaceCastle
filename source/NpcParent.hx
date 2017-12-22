@@ -182,7 +182,7 @@ class NpcParent extends FlxSprite
 		var ra:Int = FlxG.random.int(0, 25);			
 		var ticksRandom:Int = FlxG.random.int(15, 40); // used to delay walking.	
 			
-		if (_isWalking == true && _usingShovel == false)
+		if (_isWalking == true && _usingShovel == false )
 		{
 			if (Reg.mapXcoords == 24 && Reg.mapYcoords == 25) return;
 			
@@ -190,7 +190,7 @@ class NpcParent extends FlxSprite
 			{					
 				if (ticksIdle == 0) 
 				{
-					animation.play("idle");
+					if (_usingWateringCan == false) animation.play("idle");
 					if (_usingWateringCan == true) animation.pause();						
 				}
 				
@@ -203,7 +203,6 @@ class NpcParent extends FlxSprite
 					ticksIdle = 0;
 					_makeMalaIdle = false;
 					
-					animation.play("walk");
 					if (_usingWateringCan == true) animation.play("watering");
 				}
 			} 
@@ -220,8 +219,6 @@ class NpcParent extends FlxSprite
 					_tileX = Std.int((x - 3) / 32);		
 					_tileY = Std.int(y / 32);
 				}
-				
-				if (ticksWalk == 0 && _usingWateringCan == false) animation.play("walk");
 				
 				if (ticksWalk >= 90) // 90... reset to 0.
 				{
@@ -253,10 +250,11 @@ class NpcParent extends FlxSprite
 				
 				if (_walking == false) // stop npc animation if object is not moving;
 				{
-					animation.play("idle");
+					if (_usingWateringCan == false) animation.play("idle");
 					if (_usingWateringCan == true) animation.pause();
+					
 				} else if (_usingWateringCan == true) animation.play("watering");
-				else animation.play("walk");
+				else if (_usingWateringCan == false) animation.play("walk");
 				
 				ticksWalk = Reg.incrementTicks(ticksWalk, 60 / Reg._framerate);		
 				_walking = false;
@@ -264,5 +262,8 @@ class NpcParent extends FlxSprite
 			}	
 		}
 		//################### END OF WALKING ##################
+		
+		set_width(28); // this will change the hitbox so that player cannot talk to this mala when player is overtop of a watering can or a shovel.
+		updateHitbox();
 	}
 }

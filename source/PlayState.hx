@@ -711,6 +711,11 @@ class PlayState extends FlxUIState
 	public var maximumJumpLine:FlxSprite;
 	
 	/*******************************************************************************************************
+	 * add an exclamation point to the mala that has an id of 10. Player needs to talk to these Malas to trigger an event or to get an item. These Malas have an exclamation point shown above their heads.
+	 */
+	public var _exclamationmPoint:FlxSprite;
+	
+	/*******************************************************************************************************
 	 * The constructor.
 	 */
 	override public function create():Void
@@ -1079,7 +1084,7 @@ class PlayState extends FlxUIState
 			Reg._playRecordedDemo = false;
 			Reg._noTransitionEffectDemoPlaying = true;
 			
-			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(), ["Z","X","C"], 0, replayCallback);
+			FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr"), new PlayState(), ["Z", "MOUSE"], 0, replayCallback);
 
 		}
 		//##################### END OF RECORDING CODE BLOCK ####################
@@ -1108,7 +1113,7 @@ class PlayState extends FlxUIState
 		return false;
 	}	
 	
-	public function playerOutsideOfHouse():Bool
+	public static function playerOutsideOfHouse():Bool
 	{
 		var paragraph = Reg._mapsThatHaveAhouse.split(",");
 		
@@ -1166,7 +1171,7 @@ class PlayState extends FlxUIState
 		if (FlxG.keys.anyJustPressed(["ZERO"])) FlxG.vcr.loadReplay(openfl.Assets.getText("assets/data/replay-"+Reg._framerate+".fgr")); */
 		//################ END RECORDING DEMO BLOCK #################
 				
-		if (Reg._gameSaveOrLoad == 1 && Reg._savingGame == true && Reg._gameSlotNumberSaved != 0)
+		if (Reg._whichSubStateIsThis == 1 && Reg._savingGame == true && Reg._gameSlotNumberSaved != 0)
 		{
 			Reg.dialogIconText = openfl.Assets.getText("assets/text/gameSaved.txt").split("#");
 			Reg.dialogCharacterTalk[0] = "";
@@ -1174,7 +1179,7 @@ class PlayState extends FlxUIState
 			Reg.state.openSubState(new Dialog());
 
 			Reg._savingGame = false;
-			Reg._gameSaveOrLoad = 0;
+			Reg._whichSubStateIsThis = 0;
 		}
 			
 		Reg._gameSlotNumberSaved = 0;

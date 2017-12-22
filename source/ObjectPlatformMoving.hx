@@ -20,9 +20,9 @@ class ObjectPlatformMoving extends FlxSprite
 	private var _startY:Float = 0;
 	
 	/*******************************************************************************************************
-	 * The X and/or Y velocity of this mob. Must be in integers of 32.
+	 * The X and/or Y velocity of this object. Must be in integers of 32.
 	 */	
-	public var maxSpeed:Int = 320;
+	public var maxSpeed:Int = 480;
 	
 	public function new(x:Float, y:Float, id:Int) 
 	{		
@@ -34,14 +34,14 @@ class ObjectPlatformMoving extends FlxSprite
 		// At PlayStateCreateMap.hx - createLayer3Sprites() function, an ID is sometimes passed to the PlayStateAdd.hx function. When passed, it then always passes its ID var to a class. In this example, the ID of 1 can be the first appearence of the mob while a value of 2 is the same mob but using a different image or other property. An ID within an "if command" can be used to give a mob a faster running ability or a different dialog than the same mob with a different ID.
 		ID = id;
 		
-		if (ID == 1)	 loadGraphic("assets/images/objectPlatformMovingLeftAndRight1.png", false, Reg._tileSize, Reg._tileSize);	
-		else if(ID == 2) loadGraphic("assets/images/objectPlatformMovingLeftAndRight2.png", false, 32, 96); // moving object with spikes.
-		else if(ID == 3) loadGraphic("assets/images/objectPlatformMovingUpAndDown.png", false, Reg._tileSize, Reg._tileSize);		
+		if (ID == 1 || ID == 2)	 loadGraphic("assets/images/objectPlatformMovingLeftAndRight1.png", false, Reg._tileSize, Reg._tileSize);	
+		else if(ID == 3) loadGraphic("assets/images/objectPlatformMovingLeftAndRight2.png", false, 32, 96); // moving object with spikes.
+		else if(ID == 4) loadGraphic("assets/images/objectPlatformMovingUpAndDown.png", false, Reg._tileSize, Reg._tileSize);		
 			
 		immovable = false;	
 		pixelPerfectPosition = true;
 		
-		if (id != 3)
+		if (id != 4)
 		{
 			velocity.x = -maxSpeed;
 			maxVelocity.x = maxSpeed;
@@ -55,7 +55,7 @@ class ObjectPlatformMoving extends FlxSprite
 	
 	override public function update(elapsed:Float):Void 
 	{		
-		if(ID == 1)
+		if(ID == 1 || ID == 2)
 		{							
 			immovable = true; // if bumping into this object, this object will not alter its path.
 			
@@ -70,7 +70,7 @@ class ObjectPlatformMoving extends FlxSprite
 			velocity.y = acceleration.y = 0;
 			y = _startY;
 		} 
-		else if(ID == 2)
+		else if(ID == 3)
 		{			
 
 			allowCollisions = FlxObject.ANY;
@@ -89,7 +89,7 @@ class ObjectPlatformMoving extends FlxSprite
 			y = _startY;
 		} 
 		
-		else if(ID == 3)
+		else if(ID == 4)
 		{
 			if(Reg._antigravity == false) allowCollisions = FlxObject.UP;
 				else allowCollisions = FlxObject.DOWN;

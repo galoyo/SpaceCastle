@@ -30,7 +30,7 @@ class Player extends FlxSprite
 	/*******************************************************************************************************
 	 * How fast the object can fall. 4000 is a medimum speed fall while 10000 is a fast fall.
 	 */
-	public var _gravity:Int = 3500;
+	public var _gravity:Int = 4400;
 		
 	/*******************************************************************************************************
 	 * How fast the object accelerates horizontally when the X value of the object is changed.
@@ -530,6 +530,8 @@ class Player extends FlxSprite
 			_cooldown += elapsed;
 			
 			if (alive && Reg._playerCanShootAndMove == true ) controls();
+			else acceleration.x = velocity.x = 0;
+			
 			animate();
 			levelConstraints();	
 			
@@ -648,7 +650,7 @@ class Player extends FlxSprite
 			|| InputControls.x.justPressed && Reg._inventoryIconXNumber[Reg._itemXSelectedFromInventory] == true && Reg._itemXSelectedFromInventoryName == "Super Jump 1."
 		    || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Super Jump 1.")
 		{
-			Reg._jumpForce = 820; Reg._fallAllowedDistanceInPixels = 96; 
+			Reg._jumpForce = 960; Reg._fallAllowedDistanceInPixels = 96; 
 			if (_inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;
@@ -659,7 +661,7 @@ class Player extends FlxSprite
 			 || InputControls.c.justPressed && Reg._inventoryIconCNumber[Reg._itemCSelectedFromInventory] == true && Reg._itemCSelectedFromInventoryName == "Normal Jump.")
 		{
 			// Reg._itemGotJump[0] refers to the first jump item obtained. which is set to true when the game starts. the _jumpForce is how high the player can jump. in this case, the player can jump up two tiles. the next jump item jumps for 3 items, ect. Since the jump force is set for 2 tiles, the _fallAllowedDistanceInPixels is also 2 tiles totaling 64 pixels.
-			Reg._jumpForce = 680; Reg._fallAllowedDistanceInPixels = 64;
+			Reg._jumpForce = 800; Reg._fallAllowedDistanceInPixels = 64;
 			if (_inAir == false ) _jumping = true;
 			
 			if (FlxG.overlap(Reg.state._objectQuickSand, this)) Reg._jumpForce = 300;

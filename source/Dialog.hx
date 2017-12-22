@@ -370,7 +370,7 @@ class Dialog extends FlxSubState
 									
 					// these keys are used to navigate the arrow at the yes / no answers.
 					if (InputControls.right.pressed && Reg.displayDialogYesNo == true)
-						yesNoArrow.setPosition(572, 283); 
+						yesNoArrow.setPosition(578, 283); 
 						
 					if (InputControls.left.pressed && Reg.displayDialogYesNo == true)
 						yesNoArrow.setPosition(457, 283); 
@@ -482,8 +482,9 @@ class Dialog extends FlxSubState
 		{	
 			dialogBoxYesNo.exists = true;
 			
-			dialogYesNoText = new FlxText(493, 280, 0, "Yes     No", 28, true);		
+			dialogYesNoText = new FlxText(500, 272, 0, "Yes    No", 28, true);		
 			dialogYesNoText.scrollFactor.set(0, 0);
+			dialogYesNoText.font = Reg.defaultFont;
 			dialogYesNoText.color = 0xFF00FF00;
 			add(dialogYesNoText);			
 			

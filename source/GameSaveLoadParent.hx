@@ -84,7 +84,7 @@ class GameSaveLoadParent extends FlxSubState
 			add(slotBox);
 		}		
 	
-		// Create the four slot buttons. 1 button displayed overtop of 1 text box. Positioned at the left side of the screen. If Reg._gameSaveOrLoad has a value of 1 then clicking these buttons will save the game, else a value of 2 will load a game.
+		// Create the four slot buttons. 1 button displayed overtop of 1 text box. Positioned at the left side of the screen. If Reg._whichSubStateIsThis has a value of 1 then clicking these buttons will save the game, else a value of 2 will load a game.
 		button1 = new Button(60, 130 + (1 * 70), "1", 70, 35, null, 16, 0xFFCCFF33, 0, button1Clicked);	
 		button2 = new Button(60, 130 + (2 * 70), "2", 70, 35, null, 16, 0xFFCCFF33, 0, button2Clicked);	
 		button3 = new Button(60, 130 + (3 * 70), "3", 70, 35, null, 16, 0xFFCCFF33, 0, button3Clicked);	
@@ -174,33 +174,33 @@ class GameSaveLoadParent extends FlxSubState
 	{
 		Reg._stopDemoFromPlaying = false;
 		
-		if (Reg._gameSaveOrLoad == 2) FlxG.switchState(new MenuState());
+		if (Reg._whichSubStateIsThis == 2) FlxG.switchState(new MenuState());
 		
 		close();
 	}
 	
 	private function button1Clicked():Void
 	{		
-		if (Reg._gameSaveOrLoad == 1) gameSave(1);				
-		if (Reg._gameSaveOrLoad == 2) gameLoad(1); 
+		if (Reg._whichSubStateIsThis == 1) gameSave(1);				
+		if (Reg._whichSubStateIsThis == 2) gameLoad(1); 
 	}
 	
 	private function button2Clicked():Void
 	{		
-		if (Reg._gameSaveOrLoad == 1) gameSave(2);
-		if (Reg._gameSaveOrLoad == 2) gameLoad(2); 
+		if (Reg._whichSubStateIsThis == 1) gameSave(2);
+		if (Reg._whichSubStateIsThis == 2) gameLoad(2); 
 	}
 	
 	private function button3Clicked():Void
 	{
-		if (Reg._gameSaveOrLoad == 1) gameSave(3);
-		if (Reg._gameSaveOrLoad == 2) gameLoad(3); 			
+		if (Reg._whichSubStateIsThis == 1) gameSave(3);
+		if (Reg._whichSubStateIsThis == 2) gameLoad(3); 			
 	}
 	
 	private function button4Clicked():Void
 	{
-		if (Reg._gameSaveOrLoad == 1) gameSave(4);			
-		if (Reg._gameSaveOrLoad == 2) gameLoad(4); 		
+		if (Reg._whichSubStateIsThis == 1) gameSave(4);			
+		if (Reg._whichSubStateIsThis == 2) gameLoad(4); 		
 	}
 	
 	/*******************************************************************************************************
@@ -208,7 +208,7 @@ class GameSaveLoadParent extends FlxSubState
 	 */
 	private function cancelSave():Void
 	{
-		Reg.playTwinkle();
+		FlxG.sound.play("twinkle", 1, false);	
 		new FlxTimer().start(0.15, delayChangeState,1);
 	}
 	
@@ -266,8 +266,9 @@ class GameSaveLoadParent extends FlxSubState
 		_gameSave.data._inventoryIconName = new Array<String>();
 		_gameSave.data._inventoryIconDescription = new Array<String>();
 		_gameSave.data._inventoryIconFilemame = new Array<String>();
-
-		for (i in 0...126)
+		_gameSave.data._inventoryIconFilemameAutomatic = new Array<String>();
+		
+		for (i in 0...56)
 		{
 			_gameSave.data._inventoryIconZNumber[i] = Reg._inventoryIconZNumber[i];
 			_gameSave.data._inventoryIconXNumber[i] = Reg._inventoryIconXNumber[i];
@@ -275,6 +276,7 @@ class GameSaveLoadParent extends FlxSubState
 			_gameSave.data._inventoryIconName[i] = Reg._inventoryIconName[i];
 			_gameSave.data._inventoryIconDescription[i] = Reg._inventoryIconDescription[i];
 			_gameSave.data._inventoryIconFilemame[i] = Reg._inventoryIconFilemame[i];
+			_gameSave.data._inventoryIconFilemameAutomatic[i] = Reg._inventoryIconFilemameAutomatic[i];
 		}
 		
 		_gameSave.data._fallAllowedDistanceInPixels = Reg._fallAllowedDistanceInPixels;
@@ -327,6 +329,8 @@ class GameSaveLoadParent extends FlxSubState
 		_gameSave.data._itemCSelectedFromInventory = Reg._itemCSelectedFromInventory;
 
 		_gameSave.data._inventoryIconNumberMaximum = Reg._inventoryIconNumberMaximum;
+		_gameSave.data._inventoryIconNumberMaximumAutomatic = Reg._inventoryIconNumberMaximumAutomatic;
+		
 		_gameSave.data._itemZSelectedFromInventoryName = Reg._itemZSelectedFromInventoryName;
 		_gameSave.data._itemXSelectedFromInventoryName = Reg._itemXSelectedFromInventoryName;
 		_gameSave.data._itemCSelectedFromInventoryName = Reg._itemCSelectedFromInventoryName;
@@ -340,23 +344,37 @@ class GameSaveLoadParent extends FlxSubState
 
 		_gameSave.data._dateAndTimeSaved = Date.now();
 		
-		var nearHouse:Bool = Reg.state.playerOutsideOfHouse();
+		var nearHouse:Bool = PlayState.playerOutsideOfHouse();
 		if (nearHouse == false) Reg._playingHouseMusic = true;
 		_gameSave.data._playingHouseMusic = Reg._playingHouseMusic;
 		
-		_gameSave.data._mapsThatPlayerHasBeenToLength = Reg._mapsThatPlayerHasBeenTo.length;
-					   
 		_gameSave.data._mapsThatPlayerHasBeenTo = new Array<String>();
+		
+		_gameSave.data._mapsThatPlayerHasBeenToLength = Reg._mapsThatPlayerHasBeenTo.length;
+				
 		for (i in 0...Reg._mapsThatPlayerHasBeenTo.length)
 		{
 			_gameSave.data._mapsThatPlayerHasBeenTo[i] = Reg._mapsThatPlayerHasBeenTo[i];
 		}
 		
+		_gameSave.data._numberOfBossesDefeated = Reg._numberOfBossesDefeated;
+		
+		_gameSave.data._malasThatHaveAnExclamationPoint1 = new Array<String>();
+		_gameSave.data._malasThatHaveAnExclamationPoint2 = new Array<String>();
+		
+		for (i in 0...100)
+		{
+			_gameSave.data._malasThatHaveAnExclamationPoint1[i] = Reg._malasThatHaveAnExclamationPoint[i][0]; // saves array<array<string>>
+			_gameSave.data._malasThatHaveAnExclamationPoint2[i] = Reg._malasThatHaveAnExclamationPoint[i][1];
+		}
+		
+		_gameSave.data._whichSubStateIsThis = Reg._whichSubStateIsThis;
+		
 		// save data
 		_gameSave.flush();
 		_gameSave.close;
 		
-		// The following in this function is used to highlight the text box that was saved and to set the cancel button as the OK button. When this subState is closed, if the button that has the text of "Back" now has the text of OK then the saved message will be displayed.
+		// The following in this function is used to highlight the text box that was saved and to set the cancel button as the OK button. When this subState is closed, when the button that has the text of "Back" now has the text of OK then the saved message will be displayed after this substate is closed.
 		Reg._gameSlotNumberSaved = slotID;
 		
 		button1.visible = false;
@@ -373,7 +391,7 @@ class GameSaveLoadParent extends FlxSubState
 		add(slotBox);
 			
 		gameSlotLoad(slotID);		
-		Reg.playTwinkle();
+		FlxG.sound.play("twinkle", 1, false);	
 	}
 	
 	public function gameSlotLoad(slotID:Int):Void
@@ -442,7 +460,7 @@ class GameSaveLoadParent extends FlxSubState
 		}
 		else
 		{
-			Reg.playTwinkle();
+			FlxG.sound.play("twinkle", 1, false);	
 			
 			// player is at a save point.
 			Reg.restoreGameState = true;
@@ -459,7 +477,7 @@ class GameSaveLoadParent extends FlxSubState
 				Reg._itemGotSuperBlock[i] = _gameLoad.data._itemGotSuperBlock[i]; 
 			}
 			
-			for (i in 0...126)
+			for (i in 0...54)
 			{
 				Reg._inventoryIconZNumber[i] = _gameLoad.data._inventoryIconZNumber[i];	
 				Reg._inventoryIconXNumber[i] = _gameLoad.data._inventoryIconXNumber[i];	
@@ -467,6 +485,7 @@ class GameSaveLoadParent extends FlxSubState
 				Reg._inventoryIconName[i] = _gameLoad.data._inventoryIconName[i];
 				Reg._inventoryIconDescription[i] = _gameLoad.data._inventoryIconDescription[i];
 				Reg._inventoryIconFilemame[i] = _gameLoad.data._inventoryIconFilemame[i];	
+				Reg._inventoryIconFilemameAutomatic[i] = _gameLoad.data._inventoryIconFilemameAutomatic[i];
 			}
 			
 			Reg._fallAllowedDistanceInPixels = _gameLoad.data._fallAllowedDistanceInPixels;	
@@ -521,6 +540,8 @@ class GameSaveLoadParent extends FlxSubState
 			Reg._itemCSelectedFromInventory = _gameLoad.data._itemCSelectedFromInventory;
 
 			Reg._inventoryIconNumberMaximum = _gameLoad.data._inventoryIconNumberMaximum;
+			Reg._inventoryIconNumberMaximumAutomatic = _gameLoad.data._inventoryIconNumberMaximumAutomatic;
+			
 			Reg._itemZSelectedFromInventoryName = _gameLoad.data._itemZSelectedFromInventoryName;
 			Reg._itemXSelectedFromInventoryName = _gameLoad.data._itemXSelectedFromInventoryName;
 			Reg._itemCSelectedFromInventoryName = _gameLoad.data._itemCSelectedFromInventoryName;
@@ -536,7 +557,28 @@ class GameSaveLoadParent extends FlxSubState
 				Reg._mapsThatPlayerHasBeenTo[i] = _gameLoad.data._mapsThatPlayerHasBeenTo[i];
 			}
 			
-			_gameLoad.close;		
+			Reg._numberOfBossesDefeated = _gameLoad.data._numberOfBossesDefeated;
+			
+			for (i in 0...100)
+			{
+				// zero is the map, eg, 20-19, and the one is the boss defeated total.
+				Reg._malasThatHaveAnExclamationPoint[i][0] = _gameLoad.data._malasThatHaveAnExclamationPoint1[i];
+				Reg._malasThatHaveAnExclamationPoint[i][1] = _gameLoad.data._malasThatHaveAnExclamationPoint2[i];
+			}
+			
+			Reg._whichSubStateIsThis = _gameLoad.data._whichSubStateIsThis;
+			
+			_gameLoad.close;	
+			
+			var nearHouse:Bool = PlayState.playerOutsideOfHouse();
+			
+			if (Reg._musicEnabled == true)
+			{
+				// needed so that music is played after PlayState displays from a loaded game.
+				if (nearHouse == true) 	Reg._playingHouseMusic = false;
+				else Reg._playingHouseMusic = true;
+
+			}
 			
 			FlxG.switchState(new PlayState());	
 		}

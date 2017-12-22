@@ -51,13 +51,8 @@ class NpcMalaUnhealthy extends NpcParent
 		
 		animation.add("walk", [11, 6, 7, 8, 9, 10], 16);			
 
-		// boss1b was defeated so remove all unhealthy malas from the screen because the doctor took them all away.
-		if (ID == 1 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 2 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 3 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true || ID == 4 && Reg.mapXcoords == 17 && Reg.mapYcoords == 21 && Reg._boss1BDefeated == true) kill();
-			
-		if (ID == 1 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || ID == 2 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || ID == 3 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true || ID == 8 && Reg.mapXcoords == 20 && Reg.mapYcoords == 20 && Reg._boss1BDefeated == true) kill();	
-
-		
 		Reg.ticksDoctor = 0;
+		
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -65,12 +60,16 @@ class NpcMalaUnhealthy extends NpcParent
 		if (isOnScreen())
 		{			
 			// InputControls class is used for most buttons and keys while playing the game. If device has keyboard then keyboard keys are used else if mobile without keyboard then buttons are enabled and used.
-			InputControls.checkInput();			
+			InputControls.checkInput();	
+			
+			if (ID == 10 && Reg.state._exclamationmPoint != null) Reg.state._exclamationmPoint.x = x;
 			
 			shovel(); //################### SHOVEL #####################	
 			wateringCan(); //################### WATERING CAN #####################						 
 			walking(); //###################### WALKING #######################
 				
+			if (ticks == 1 && _usingWateringCan == false && _usingShovel == false) facing = FlxObject.LEFT;
+			
 			//############### PLAYER CHATS WITH NPC ###############
 			if (InputControls.down.justReleased && Reg._keyOrButtonDown == true)
 			{
@@ -103,96 +102,37 @@ class NpcMalaUnhealthy extends NpcParent
 				{
 					if(Reg.mapXcoords == 17 && Reg.mapYcoords == 21)	
 					{
-						if (ID == 1)
+						if (ID == 1 || ID == 2 || ID == 3 || ID == 10)
 						{						
+												
 							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID1A-malaUnhealthy.txt").split("#");
-										
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}	
-						
-						if (ID == 2)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID2A-malaUnhealthy.txt").split("#");
-									
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}	
-
-						if (ID == 3)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID3A-malaUnhealthy.txt").split("#");
+						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID" + Std.string(ID) + "A-malaUnhealthy.txt").split("#");
 								
 							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
 							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 							Reg.displayDialogYesNo = false;
 							Reg.state.openSubState(new Dialog());
-						}	
-						
-						if (ID == 4)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID4A-malaUnhealthy.txt").split("#");
-								
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}	
+							
+							if (ID == 10)
+							{		
+								PlayStateMiscellaneous.removeExclamationPointFromMala();
+								if (Reg.state._exclamationmPoint != null) Reg.state._exclamationmPoint.kill();
+							}	
+						}
 					}
 					
 					if(Reg.mapXcoords == 20 && Reg.mapYcoords == 20)	
 					{
-						if (ID == 1)
+						if (ID == 1 || ID == 2 || ID == 3 || ID == 8)
 						{
 							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID1A-malaUnhealthy.txt").split("#");
+							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID" + Std.string(ID) + "A-malaUnhealthy.txt").split("#");
 								
 							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
 							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 							Reg.displayDialogYesNo = false;
 							Reg.state.openSubState(new Dialog());
-						}
-						
-						if (ID == 2)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID2A-malaUnhealthy.txt").split("#");
-								
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
-						
-						if (ID == 3)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID3A-malaUnhealthy.txt").split("#");
-							
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
-						
-						if (ID == 8)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID8A-malaUnhealthy.txt").split("#");
-							
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
+						}						
 					}
 				}
 				//##################### BOSS 1 DEFEATED ###############
@@ -200,56 +140,30 @@ class NpcMalaUnhealthy extends NpcParent
 				{
 					if(Reg.mapXcoords == 17 && Reg.mapYcoords == 21)	
 					{
-						if (ID == 1)
+						if (ID == 1 || ID == 2 || ID == 3 || ID == 10)
 						{						
 							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID1B-malaUnhealthy.txt").split("#");
+							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID10B-malaUnhealthy.txt").split("#");
 								
 							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
 							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 							Reg.displayDialogYesNo = false;
 							Reg.state.openSubState(new Dialog());
-						}	
-						
-						if (ID == 2)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID2B-malaUnhealthy.txt").split("#");
 							
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}	
-															
-						if (ID == 3)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID3B-malaUnhealthy.txt").split("#");
-								
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}	
-						
-						if (ID == 4)
-						{						
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map17-21-ID4B-malaUnhealthy.txt").split("#");
-								
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
+							if (ID == 10)
+							{
+								PlayStateMiscellaneous.removeExclamationPointFromMala();
+								if (Reg.state._exclamationmPoint != null) Reg.state._exclamationmPoint.kill();
+							}
 						}	
 					}
 					
 					if(Reg.mapXcoords == 20 && Reg.mapYcoords == 20)	
 					{
-						if (ID == 1)
+						if (ID == 1 || ID == 2 || ID == 3 || ID == 8)
 						{
 							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID1B-malaUnhealthy.txt").split("#");
+							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID" + Std.string(ID) + "B-malaUnhealthy.txt").split("#");
 								
 							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
 							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
@@ -257,38 +171,6 @@ class NpcMalaUnhealthy extends NpcParent
 							Reg.state.openSubState(new Dialog());
 						}
 						
-						if (ID == 2)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID2B-malaUnhealthy.txt").split("#");
-								
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
-						
-						if (ID == 3)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID3B-malaUnhealthy.txt").split("#");
-							
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
-						
-						if (ID == 8)
-						{
-							Reg.dialogIconFilename = "";
-							Reg.dialogIconText = openfl.Assets.getText("assets/text/Map20-20-ID8B-malaUnhealthy.txt").split("#");
-							
-							Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-							// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-							Reg.displayDialogYesNo = false;
-							Reg.state.openSubState(new Dialog());
-						}
 					}
 				}
 				//################### END BOSS 2 DEFEATED ##################
@@ -296,105 +178,18 @@ class NpcMalaUnhealthy extends NpcParent
 				//###################### WAITING ROOM ######################
 				if(Reg.mapXcoords == 24 && Reg.mapYcoords == 25)	
 				{
-					if (ID == 1)
+					if (ID > 0 && ID < 9)
 					{						
 						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID1A-malaUnhealthy.txt").split("#");
+						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID" + Std.string(ID) + "A-malaUnhealthy.txt").split("#");
 									
 						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
 						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
 						Reg.displayDialogYesNo = false;
 						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[0] = true;
-					}
-					
-					else if (ID == 2)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID2A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[1] = true;
-					}
-					
-					else if (ID == 3)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID3A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[2] = true;
-					}
-					
-					else if (ID == 4)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID4A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[3] = true;
-					}
-					
-					else if (ID == 5)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID5A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[4] = true;
-					}
-					
-					else if (ID == 6)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID6A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[5] = true;
-					}
-					
-					else if (ID == 7)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID7A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[6] = true;
-					}
-					
-					else if (ID == 8)
-					{						
-						Reg.dialogIconFilename = "";
-						Reg.dialogIconText = openfl.Assets.getText("assets/text/Map24-25-ID8A-malaUnhealthy.txt").split("#");
-									
-						Reg.dialogCharacterTalk[0] = "talkMobUnhealthy.png";
-						// see the top part of npcMalaUnhealthy.hx update to see how this yes/no question works when answered.
-						Reg.displayDialogYesNo = false;
-						Reg.state.openSubState(new Dialog());
-						Reg._talkedToMalaAtWaitingRoom[7] = true;
-					}
-				}
-				
-				
-				
+						Reg._talkedToMalaAtWaitingRoom[ID - 1] = true;
+					}					
+				}				
 			}
 			//###################### END CHAT #####################
 			
@@ -450,11 +245,10 @@ class NpcMalaUnhealthy extends NpcParent
 						FlxG.sound.playMusic("boss2", 1, true);
 						FlxG.sound.music.persist = true;
 					}
-					FlxG.cameras.shake(0.005, 999999);
 				}
 			} 
 			
-			// ############# TALK TO DOCTOR AFTER SHAKE SCREEN ##############
+			// ############# TALK TO DOCTOR AFTER SIREN SOUND ##############
 			if (Reg.state._talkToHowManyMoreMalas.visible == false && Reg.mapXcoords == 24 && Reg.mapYcoords == 25)
 			{
 				Reg.ticksDoctor = Reg.incrementTicks(Reg.ticksDoctor, 60 / Reg._framerate);
@@ -470,6 +264,8 @@ class NpcMalaUnhealthy extends NpcParent
 					
 				}
 				// Reg._talkToDoctorAt24_25Map = true;
+				
+				if (Reg.ticksDoctor == 470) FlxG.cameras.shake(0.005, 999999);
 				
 				var ex = FlxG.random.int(0, 300); // time it takes the doctor to teleport a mala (extra time).
 				

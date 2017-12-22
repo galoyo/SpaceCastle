@@ -121,12 +121,20 @@ class Inventory extends FlxSubState
 		slotBox.scrollFactor.set(0, 0);
 		add(slotBox);
 	
-		// add all the inventory items to the screen.
+		// add all the inventory items that can be selected to the screen.
 		for (i in 0...Reg._inventoryIconNumberMaximum)
 		{
 			
 			var iconFilename = Reg._inventoryIconFilemame[i];
 			addInventoryItem(iconFilename, i);
+		}
+		
+		// add all the inventory items that cannot be selected to the screen.
+		for (i in 0...Reg._inventoryIconNumberMaximumAutomatic)
+		{
+			
+			var iconFilename = Reg._inventoryIconFilemameAutomatic[i];
+			addInventoryItemAutomatic(iconFilename, i);
 		}
 		
 		// flashing square defaults to the top-left corner, so display the text of the first item if there is an item to display.
@@ -178,6 +186,9 @@ class Inventory extends FlxSubState
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x - 36;
 			_buttonDown = true;
 			itemNumberSelected--;
+			
+	trace ("yp", itemNumberSelected);
+			
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
@@ -186,14 +197,19 @@ class Inventory extends FlxSubState
 			inventoryItemHighlightedSquare.x = inventoryItemHighlightedSquare.x + 36;
 			_buttonDown = true;
 			itemNumberSelected++;
-			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
+	trace ("yp", itemNumberSelected);
+	
+		if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
 		if (InputControls.up.justReleased && inventoryItemHighlightedSquare.y > 186 ||  _buttonsNavigation.buttonUp.justPressed == true  && !_buttonDown && inventoryItemHighlightedSquare.y > 186)
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y - 36;
 			_buttonDown = true;
-			itemNumberSelected -= Reg._inventoryGridXTotalSlots;
+			itemNumberSelected -= Reg._inventoryGridXTotalSlots + 1;
+
+trace ("yp", itemNumberSelected);
+			
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 			
 		}
@@ -202,7 +218,10 @@ class Inventory extends FlxSubState
 		{
 			inventoryItemHighlightedSquare.y = inventoryItemHighlightedSquare.y + 36;
 			_buttonDown = true;
-			itemNumberSelected += Reg._inventoryGridXTotalSlots;
+			itemNumberSelected += Reg._inventoryGridXTotalSlots + 1;
+			
+trace ("yp", itemNumberSelected);
+			
 			if (Reg._soundEnabled == true) FlxG.sound.play("menuMove", 1, false);
 		}
 		
@@ -249,7 +268,15 @@ class Inventory extends FlxSubState
 	
 	public function addInventoryItem(iconFilename:String, iconLocation:Int):Void
 	{
-		_icons = new InventoryIcons(iconFilename, iconLocation);
+		var id = 1;
+		_icons = new InventoryIcons(iconFilename, iconLocation, id);
+		_iconsGroup.add(_icons);
+	}
+	
+	public function addInventoryItemAutomatic(iconFilename:String, iconLocation:Int):Void
+	{
+		var id = 2;
+		_icons = new InventoryIcons(iconFilename, iconLocation, id);
 		_iconsGroup.add(_icons);
 	}
 }
