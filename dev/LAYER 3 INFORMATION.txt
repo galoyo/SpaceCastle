@@ -22,6 +22,7 @@
 28: npcDogLady. Help find her dogs. She has an important story to tell the player.
 29-32: npc dogs. one dog id per map. all dogs collected will be displayed in id order beside the npc lady.
 33: doctor. The doctor is a mystery. Is the doctor trying to save the Malas from doom or does the doctor have a hidden agenda.
+34-36: Player needs to talk to these Malas to trigger an event or to get an item. These Malas have an exclamation point shown above their heads.
 49-51: mobSlime ID 1 and 2: This mob with an ID of 2 jumps faster than mob ID 1. Shoots no bullets.
 52-54: mobCutter. Walks left and right. Reverses direction when touching a wall. Jumps over holes. Shoots no bullets.
 57-59: mobApple. Walks left and right a platform. Reverses direction when at edge of platform. Shoots no bullet.
@@ -45,8 +46,8 @@
 263: flame weapon. one bullet hit all in its path.
 264: rapid normal gun fire.
 265: save game.
-266: moving platform vertical.
-267: moving platform horizontal.
+266: moving platform left and right. ID 1. Same as line 350 but different ID.
+267: moving platform left and right. ID 3.
 268: fireball block. fireball will rotate this block.
 269: water parameter. place horizontally above the water image. used to determine when something entered into the water.
 270: laser.
@@ -77,7 +78,7 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 319-320: cannon that fires right. cannon that fires left.
 321: can freeze some characters with this freeze gun.
 322: cracked block. destroyed with any gun.
-323: vertical moving platform. this platform will reverse direction once touching something or within 64 pixels of touching something.
+323: Moving platform up and down. ID 4. this platform will reverse direction once touching something or within 64 pixels of touching something.
 324: vertical platform parameter. used to reverse direction once the platform touches this tile.
 326-331: rocks.
 332-333: sign. text about the level is read by pressing the down arrow at a sign.
@@ -92,5 +93,6 @@ just place one vine underneath a block for the vine to work. swings 3 tiles left
 347: dash attack. the player will quickly dash to the left or right while the player is rising in the air.
 348: car. need car to make it to the other side of the boulevard (trees on both sides of the street).
 349: falling rock. currently at the parallax car scene. map 23-19.
+350: moving platform left and right. ID 2. Same as line 266 but different ID.
 
 352-359: teleporters that are outside of house. can teleport to another teleporter that must be at the same map. Id 1 to 8 is used outside of a house. If you have created only 3 teleporters on that map when the IDs must start with 1 but end in any ID value. No duplicate IDs are allowed on a map. Needs a teleporter key to use the teleporter. Press the action button that has the teleporter key. If player enters teleporter ID of 2 then the player will exit to the next higher ID value which in this case would be the teleporter with ID of 4. If at that map a teleporter of ID 3 does not exist then the player will exit the teleporter with an ID of 4. ID 7 is an invisible teleporter that the player can teleport to. ID 8 always teleports the player to the first teleporter at ID 1.
