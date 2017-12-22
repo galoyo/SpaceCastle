@@ -1,0 +1,1 @@
+The project is finished. The second moving platform at map 17-20 is now working. Be careful because there could be strong monsters that lurk to the west of that location.#@
