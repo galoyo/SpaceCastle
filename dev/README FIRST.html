@@ -136,7 +136,7 @@ when a collide check between a sprite that was tweened and a normal sprite, the 
 <br /><hr><br /><br />
 
 	set acceleration and velocity to a higher value to increase sprite speed.<br /><hr><br /><br />
-To make an item such as the "bullet speed increase". Do not be confused with increasing the speed of a bullet. I am talking about creating an item.
+To create an item...
 	
 put "public var _itemBulletSpeedIncrease:FlxGroup;" above create(); don't forget to add it at the create(), ex, "_itemBulletSpeedIncrease = new FlxGroup();". next add it at the function "createObjects():Void". next create the function. an example can be seen at "function addItemGun(X:Int, Y:Int):Void". create the collide at update(); at the class, for example, see the ItemGun class. at Reg.hx, add "public static var _itemGotBulletSpeedIncrease:Bool = false;".<br /><hr><br /><br />
 tiled map editor. download from http://www.mapeditor.org/at /assets/images/ there are six files that the map editor needs.and in the order of...map0Tiles.png, 
@@ -167,7 +167,7 @@ so the word override is to say that we add something else to the function that e
 <br /><hr><br /><br />
 	
 	set mobs health at mobs class and mobs hit value (hurt) and gun decrease value at the EnemyCastSpriteCollide function.
-<br /><hr><br /><br />Std converts int to float, etctype "Std." for more information. if nothing displays then click the mouse on the word Std then hold CTRL on the keyboard the hold SHIFT then press 1. an Std import code should now be near the top of the .hx page. the Std word should now be in a different color. type "Std." to see the pop up menu and read the information about convert int to float as an example.
+<br /><hr><br /><br />Std converts int to float, etc. type "Std." for more information. if nothing displays then click the mouse on the word Std then hold CTRL on the keyboard the hold SHIFT then press 1. an Std import code should now be near the top of the .hx page. the Std word should now be in a different color. type "Std." to see the pop up menu and read the information about convert int to float as an example.
 <br /><hr><br /><br />
 	
 	in case you didn't know, I find it quick and easy to check values with trace using array. trace("val1, val2 " + [val1, val2]; `as long as they are of the same type. if val1 is Float val2 is Int, do [val1, val2 / 1].
